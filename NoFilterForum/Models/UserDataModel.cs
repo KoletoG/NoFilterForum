@@ -15,8 +15,8 @@ namespace NoFilterForum.Models
         [EmailAddress]
         public override string? Email { get; set; }
         public int PostsCount { get; set; }
-        public List<PostDataModel> Posts { get; set; }
-        public List<ReplyDataModel> Replies { get; set; }
+        public Stack<PostDataModel> Posts { get; set; }
+        public Stack<ReplyDataModel> Replies { get; set; }
         public UserRoles Role { get; private init; }
         public byte Warnings { get; set; }
         public DateTime DateCreated { get; set; }
@@ -27,8 +27,8 @@ namespace NoFilterForum.Models
             UserName = userName;
             Email = email;
             PostsCount = 0;
-            Posts = new List<PostDataModel>();
-            Replies = new List<ReplyDataModel>();
+            Posts = new Stack<PostDataModel>();
+            Replies = new Stack<ReplyDataModel>();
             Role = UserRoles.Newbie;
             Warnings = 0;
             DateCreated = DateTime.Now;
