@@ -16,7 +16,19 @@ namespace NoFilterForum
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddDefaultIdentity<UserDataModel>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<UserDataModel>(
+                options => {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.SignIn.RequireConfirmedPhoneNumber = false;
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = true;
+                    options.User.RequireUniqueEmail = true;
+                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
