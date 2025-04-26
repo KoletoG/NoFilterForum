@@ -11,9 +11,7 @@ namespace NoFilterForum.Models
         public List<ReplyDataModel> Replies { get; set; }
         public DateTime DateCreated { get; set; }
         public string Title { get; set; }
-        [ForeignKey("UserId")]
         public UserDataModel User { get; set; }
-        public string UserId { get; set; }
         public PostDataModel(string title, string content, UserDataModel user)
         {
             Id = Guid.NewGuid().ToString();
