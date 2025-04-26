@@ -7,14 +7,14 @@ namespace NoFilterForum.Models
         [Key]
         public string Id { get; set; }
         public string Content { get; set; }
-        public List<ReplyDataModel> Replies { get; set; }
+        public Queue<ReplyDataModel> Replies { get; set; }
         public DateTime DateCreated { get; set; }
 
         public PostDataModel(string content)
         {
             Id = Guid.NewGuid().ToString();
             Content = content;
-            Replies = new List<ReplyDataModel>();
+            Replies = new Queue<ReplyDataModel>();
             DateCreated = DateTime.Now;
         }
     }
