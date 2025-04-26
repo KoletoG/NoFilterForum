@@ -8,12 +8,12 @@ namespace NoFilterForum.Models
     {
         [Key]
         [Required]
-        public string Id { get;}
+        public override string Id { get; set; }
         [Required]
-        public string UserName { get; set; }
+        public override string? UserName { get; set; }
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public override string? Email { get; set; }
         public int PostsCount { get; set; }
         public List<PostDataModel> Posts { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
