@@ -8,7 +8,7 @@ namespace NoFilterForum.Models
     {
         [Key]
         [Required]
-        public string Id { get; private init; }
+        public string Id { get;}
         [Required]
         public string UserName { get; set; }
         [Required]
@@ -21,6 +21,18 @@ namespace NoFilterForum.Models
         public byte Warnings { get; set; }
         public DateTime DateCreated { get; set; }
         
+        public UserDataModel(string userName,string email)
+        {
+            Id = Guid.NewGuid().ToString();
+            UserName = userName;
+            Email = email;
+            PostsCount = 0;
+            Posts = new List<PostDataModel>();
+            Replies = new List<ReplyDataModel>();
+            Role = UserRoles.Newbie;
+            Warnings = 0;
+            DateCreated = DateTime.Now;
+        }
     }
     public enum UserRoles
     {

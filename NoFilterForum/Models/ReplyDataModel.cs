@@ -9,5 +9,13 @@ namespace NoFilterForum.Models
         public PostDataModel ForPost { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public ReplyDataModel(PostDataModel post, string content)
+        {
+            Id = Guid.NewGuid().ToString();
+            ForPost = post;
+            Content = content;
+            DateCreated = DateTime.Now;
+        }
     }
 }
