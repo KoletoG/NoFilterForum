@@ -10,10 +10,9 @@ namespace NoFilterForum.Models
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
 
-        public ReplyDataModel(PostDataModel post, string content)
+        public ReplyDataModel(string content)
         {
             Id = Guid.NewGuid().ToString();
-            ForPost = post;
             Content = content;
             DateCreated = DateTime.Now;
         }
