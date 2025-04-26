@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NoFilterForum.Migrations
 {
     /// <inheritdoc />
-    public partial class New : Migration
+    public partial class NewStart : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -161,7 +161,7 @@ namespace NoFilterForum.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostDataModel",
+                name: "PostDataModels",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -172,16 +172,16 @@ namespace NoFilterForum.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostDataModel", x => x.Id);
+                    table.PrimaryKey("PK_PostDataModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostDataModel_AspNetUsers_UserId",
+                        name: "FK_PostDataModels_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReplyDataModel",
+                name: "ReplyDataModels",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -192,11 +192,11 @@ namespace NoFilterForum.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReplyDataModel", x => x.Id);
+                    table.PrimaryKey("PK_ReplyDataModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReplyDataModel_PostDataModel_PostDataModelId",
+                        name: "FK_ReplyDataModels_PostDataModels_PostDataModelId",
                         column: x => x.PostDataModelId,
-                        principalTable: "PostDataModel",
+                        principalTable: "PostDataModels",
                         principalColumn: "Id");
                 });
 
@@ -240,13 +240,13 @@ namespace NoFilterForum.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostDataModel_UserId",
-                table: "PostDataModel",
+                name: "IX_PostDataModels_UserId",
+                table: "PostDataModels",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReplyDataModel_PostDataModelId",
-                table: "ReplyDataModel",
+                name: "IX_ReplyDataModels_PostDataModelId",
+                table: "ReplyDataModels",
                 column: "PostDataModelId");
         }
 
@@ -269,13 +269,13 @@ namespace NoFilterForum.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ReplyDataModel");
+                name: "ReplyDataModels");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "PostDataModel");
+                name: "PostDataModels");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
