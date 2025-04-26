@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
 #nullable disable
 
-namespace NoFilterForum.Data.Migrations
+namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250426075057_ListStackQueue")]
-    partial class ListStackQueue
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,14 +171,19 @@ namespace NoFilterForum.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserDataModelId")
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserDataModelId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("PostDataModel");
+                    b.ToTable("PostDataModels");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
@@ -199,16 +201,15 @@ namespace NoFilterForum.Data.Migrations
                     b.Property<string>("PostDataModelId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserDataModelId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostDataModelId");
 
-                    b.HasIndex("UserDataModelId");
-
-                    b.ToTable("ReplyDataModel");
+                    b.ToTable("ReplyDataModels");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.UserDataModel", b =>
@@ -343,9 +344,13 @@ namespace NoFilterForum.Data.Migrations
 
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.UserDataModel", null)
-                        .WithMany("Posts")
-                        .HasForeignKey("UserDataModelId");
+                    b.HasOne("NoFilterForum.Models.UserDataModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
@@ -353,21 +358,10 @@ namespace NoFilterForum.Data.Migrations
                     b.HasOne("NoFilterForum.Models.PostDataModel", null)
                         .WithMany("Replies")
                         .HasForeignKey("PostDataModelId");
-
-                    b.HasOne("NoFilterForum.Models.UserDataModel", null)
-                        .WithMany("Replies")
-                        .HasForeignKey("UserDataModelId");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
-                    b.Navigation("Replies");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.UserDataModel", b =>
-                {
-                    b.Navigation("Posts");
-
                     b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618

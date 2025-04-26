@@ -9,11 +9,11 @@ using NoFilterForum.Data;
 
 #nullable disable
 
-namespace NoFilterForum.Data.Migrations
+namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250426133606_TitleForPost")]
-    partial class TitleForPost
+    [Migration("20250426152450_ased")]
+    partial class ased
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,14 +178,15 @@ namespace NoFilterForum.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserDataModelId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserDataModelId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("PostDataModel");
+                    b.ToTable("PostDataModels");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
@@ -203,9 +204,6 @@ namespace NoFilterForum.Data.Migrations
                     b.Property<string>("PostDataModelId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserDataModelId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -214,9 +212,7 @@ namespace NoFilterForum.Data.Migrations
 
                     b.HasIndex("PostDataModelId");
 
-                    b.HasIndex("UserDataModelId");
-
-                    b.ToTable("ReplyDataModel");
+                    b.ToTable("ReplyDataModels");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.UserDataModel", b =>
@@ -351,9 +347,13 @@ namespace NoFilterForum.Data.Migrations
 
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.UserDataModel", null)
-                        .WithMany("Posts")
-                        .HasForeignKey("UserDataModelId");
+                    b.HasOne("NoFilterForum.Models.UserDataModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
@@ -361,21 +361,10 @@ namespace NoFilterForum.Data.Migrations
                     b.HasOne("NoFilterForum.Models.PostDataModel", null)
                         .WithMany("Replies")
                         .HasForeignKey("PostDataModelId");
-
-                    b.HasOne("NoFilterForum.Models.UserDataModel", null)
-                        .WithMany("Replies")
-                        .HasForeignKey("UserDataModelId");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
-                    b.Navigation("Replies");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.UserDataModel", b =>
-                {
-                    b.Navigation("Posts");
-
                     b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618

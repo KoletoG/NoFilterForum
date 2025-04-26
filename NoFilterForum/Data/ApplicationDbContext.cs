@@ -10,7 +10,7 @@ namespace NoFilterForum.Data
             : base(options)
         {
         }
-        public DbSet<ReplyDataModel> ReplyDataModel { get; set; }
-        public DbSet<PostDataModel> PostDataModel { get; set; }
+        public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
+        public DbSet<PostDataModel> PostDataModels { get; set; }
     }
 }

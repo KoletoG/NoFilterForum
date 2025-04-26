@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NoFilterForum.Models
 {
@@ -7,15 +8,24 @@ namespace NoFilterForum.Models
         [Key]
         public string Id { get; set; }
         public string Content { get; set; }
-        public Queue<ReplyDataModel> Replies { get; set; }
+        public List<ReplyDataModel> Replies { get; set; }
         public DateTime DateCreated { get; set; }
         public string Title { get; set; }
-        public PostDataModel(string content)
+        [ForeignKey("UserId")]
+        public UserDataModel User { get; set; }
+        public string UserId { get; set; }
+        public PostDataModel(string title, string content, UserDataModel user)
         {
             Id = Guid.NewGuid().ToString();
             Content = content;
-            Replies = new Queue<ReplyDataModel>();
+            Title = title;
+            Replies = new List<ReplyDataModel>();
             DateCreated = DateTime.Now;
+            User = user;
+        }
+        public PostDataModel()
+        {
+
         }
     }
 }

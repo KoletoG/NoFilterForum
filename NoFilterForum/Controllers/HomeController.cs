@@ -33,8 +33,12 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(string title, string body)
         {
-            string userName = this.User.Identity.Name;
-            var user = await _ioService.GetUserByNameAsync(userName);
+            // Need custom exception for invalid user
+            string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
+            var user = await _ioService.GetUserByNameAsync(userName) ?? throw new Exception("Non-existent user");
+            _context.Attach(user);
+            await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user));
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
