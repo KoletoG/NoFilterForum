@@ -12,13 +12,15 @@ namespace NoFilterForum.Models
         [Required]
         public string UserName { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         public int PostsCount { get; set; }
         public List<PostDataModel> Posts { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
         public UserRoles Role { get; private init; }
-        public short Warnings { get; set; }
+        public byte Warnings { get; set; }
         public DateTime DateCreated { get; set; }
+        
     }
     public enum UserRoles
     {
