@@ -9,7 +9,7 @@ namespace NoFilterForum.Models
         public string Content { get; set; }
         public Queue<ReplyDataModel> Replies { get; set; }
         public DateTime DateCreated { get; set; }
-
+        public string Title { get; set; }
         public PostDataModel(string content)
         {
             Id = Guid.NewGuid().ToString();

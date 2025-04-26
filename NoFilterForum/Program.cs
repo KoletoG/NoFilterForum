@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
+using NoFilterForum.Interfaces;
 using NoFilterForum.Models;
+using NoFilterForum.Services;
 
 namespace NoFilterForum
 {
@@ -31,7 +33,7 @@ namespace NoFilterForum
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddScoped<IIOService, IOService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
