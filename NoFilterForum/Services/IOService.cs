@@ -33,7 +33,7 @@ namespace NoFilterForum.Services
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<List<T>> GetTByUser<T>(UserDataModel user) where T: class
+        public async Task<List<T>> GetTByUserAsync<T>(UserDataModel user) where T: class
         {
             if (typeof(T) == typeof(ReplyDataModel))
             {

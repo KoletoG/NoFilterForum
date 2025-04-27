@@ -1,3 +1,18 @@
-﻿@model UserDataModel
+﻿@using NoFilterForum.Models.ViewModels
+@model ProfileViewModel
 
-<h1>@Model.PostsCount</h1>
+<h1>@Model.User.UserName</h1>
+@{
+	// Need to combine them or separate them into different pages
+}
+<h5>Posts count: @Model.User.PostsCount</h5>
+@{
+	foreach(var post in Model.Posts)
+	{
+		<h5>@post.Title</h5>
+	}
+	foreach(var reply in Model.Replies)
+	{
+		<h5>@reply.Content</h5>
+	}
+}

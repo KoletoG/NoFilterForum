@@ -66,7 +66,9 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> Profile()
         {
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            return View(currentUser);
+            var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
+            var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
+            return View(new ProfileViewModel(currentUser,posts,replies));
         }
         [Authorize]
         [HttpPost]
