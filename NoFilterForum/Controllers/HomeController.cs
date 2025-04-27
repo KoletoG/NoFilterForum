@@ -26,7 +26,7 @@ namespace NoFilterForum.Controllers
         public IActionResult Index()
         {
             return View();
-        }
+        } 
         public async Task<IActionResult> PostView(string id)
         {
             var post = await _context.PostDataModels.FirstAsync(x => x.Id == id);
@@ -66,7 +66,7 @@ namespace NoFilterForum.Controllers
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             _context.Attach(user);
             var currentPost = await _context.PostDataModels.FirstAsync(x=>x.Id == postid);
-            var reply = new ReplyDataModel(content, user,currentPost);
+            var reply = new ReplyDataModel(content, user.UserName,currentPost);
             _context.ReplyDataModels.Add(reply);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView", "Home", new {id=postid});

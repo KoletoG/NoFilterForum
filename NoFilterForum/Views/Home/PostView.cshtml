@@ -11,6 +11,7 @@
 	</form>
 	@foreach(var reply in Model.Replies)
 	{
+		<h6>@reply.Username</h6>
 		<h5>@reply.Content</h5>
 	}
 }

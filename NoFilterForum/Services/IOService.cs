@@ -14,7 +14,7 @@ namespace NoFilterForum.Services
         }
         public async Task<UserDataModel?> GetUserByNameAsync(string username)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x=>x.UserName==username);
+            return await _context.Users.FirstOrDefaultAsync(x=>x.UserName==username);
         }
     }
 }
