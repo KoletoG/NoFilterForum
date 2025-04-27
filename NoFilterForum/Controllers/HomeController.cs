@@ -27,6 +27,7 @@ namespace NoFilterForum.Controllers
 
         public IActionResult Privacy()
         {
+
             return View();
         }
         [Authorize]
