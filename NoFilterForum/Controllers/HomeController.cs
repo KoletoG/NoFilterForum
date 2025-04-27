@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
@@ -25,7 +26,10 @@ namespace NoFilterForum.Controllers
         {
             return View();
         }
-
+        public IActionResult PostView(string id)
+        {
+            return View(new PostViewModel(id));
+        }
         public IActionResult Privacy()
         {
 
