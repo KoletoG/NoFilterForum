@@ -57,7 +57,7 @@ namespace NoFilterForum.Controllers
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
             _context.Entry(user).Property(x=>x.PostsCount).IsModified= true;
-            await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user));
+            await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user.UserName));
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

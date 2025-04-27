@@ -10,14 +10,14 @@ namespace NoFilterForum.Models
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
         public string Title { get; set; }
-        public UserDataModel User { get; set; }
-        public PostDataModel(string title, string content, UserDataModel user)
+        public string Username { get; set; }
+        public PostDataModel(string title, string content, string userName)
         {
             Id = Guid.NewGuid().ToString();
             Content = content;
             Title = title;
             DateCreated = DateTime.Now;
-            User = user;
+            Username = userName;
         }
         public PostDataModel()
         {

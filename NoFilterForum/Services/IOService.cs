@@ -41,7 +41,7 @@ namespace NoFilterForum.Services
             }
             else if (typeof(T) == typeof(PostDataModel))
             {
-                return await _context.PostDataModels.Where(x => x.User.Id == user.Id).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
+                return await _context.PostDataModels.Where(x => x.Username == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
             }
             else
             {
