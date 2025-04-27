@@ -54,6 +54,8 @@ namespace NoFilterForum.Controllers
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
             var user = await _ioService.GetUserByNameAsync(userName) ?? throw new Exception("Non-existent user");
             _context.Attach(user);
+            user.PostsCount++;
+            _context.Entry(user).Property(x=>x.PostsCount).IsModified= true;
             await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user));
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -67,6 +69,8 @@ namespace NoFilterForum.Controllers
             _context.Attach(user);
             var currentPost = await _context.PostDataModels.FirstAsync(x=>x.Id == postid);
             var reply = new ReplyDataModel(content, user.UserName,currentPost);
+            user.PostsCount++;
+            _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
             _context.ReplyDataModels.Add(reply);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView", "Home", new {id=postid});
