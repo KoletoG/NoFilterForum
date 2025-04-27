@@ -61,6 +61,7 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize]
         [Route("Profile")]
         public async Task<IActionResult> Profile()
         {
