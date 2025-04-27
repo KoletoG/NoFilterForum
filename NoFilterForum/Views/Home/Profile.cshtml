@@ -1,6 +1,11 @@
 ﻿@using NoFilterForum.Models.ViewModels
 @model ProfileViewModel
-
+@{
+	if (Model.IsSameUser)
+	{
+		<h1>Hello!</h1>
+	}
+}
 <h1>@Model.User.UserName</h1>
 @{
 	// Need to combine them or separate them into different pages
