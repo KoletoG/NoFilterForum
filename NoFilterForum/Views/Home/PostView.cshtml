@@ -11,7 +11,7 @@
 	</form>
 	@foreach(var reply in Model.Replies)
 	{
-		<h6>@reply.Username</h6>
+		<a asp-action="Profile" asp-route-userName="@reply.Username">@reply.Username</a>
 		<h5>@reply.Content</h5>
 	}
 }

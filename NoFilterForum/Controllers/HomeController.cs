@@ -63,9 +63,9 @@ namespace NoFilterForum.Controllers
         }
         [Authorize]
         [Route("Profile")]
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profile(string userName)
         {
-            var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var currentUser = await _ioService.GetUserByNameAsync(userName);
             var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
             var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
             return View(new ProfileViewModel(currentUser,posts,replies));
