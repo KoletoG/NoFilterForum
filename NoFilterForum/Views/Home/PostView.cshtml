@@ -3,9 +3,14 @@
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
 @{
+
 	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id">
-	@Html.AntiForgeryToken()
-	<input type="text" name="content" placeholder="Write a reply..."/>
-	<button type="submit">Create reply</button>
+		@Html.AntiForgeryToken()
+		<input type="text" name="content" placeholder="Write a reply..."/>
+		<button type="submit">Create reply</button>
 	</form>
+	@foreach(var reply in Model.Replies)
+	{
+		<h5>@reply.Content</h5>
+	}
 }

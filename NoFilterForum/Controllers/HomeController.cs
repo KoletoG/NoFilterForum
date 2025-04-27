@@ -30,7 +30,8 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> PostView(string id)
         {
             var post = await _context.PostDataModels.FirstAsync(x => x.Id == id);
-            return View(new PostViewModel(post));
+            var replies = await _context.ReplyDataModels.Where(x => x.Post == post).ToListAsync();
+            return View(new PostViewModel(post,replies));
         }
         public IActionResult Privacy()
         {
@@ -63,10 +64,12 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> CreateReply(string postid, string content)
         {
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            _context.Attach(user);
             var currentPost = await _context.PostDataModels.FirstAsync(x=>x.Id == postid);
             var reply = new ReplyDataModel(content, user,currentPost);
+            _context.ReplyDataModels.Add(reply);
             await _context.SaveChangesAsync();
-            return RedirectToPage(nameof(PostView), postid);
+            return RedirectToAction("PostView", "Home", new {id=postid});
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
