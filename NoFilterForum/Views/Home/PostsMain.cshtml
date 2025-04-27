@@ -1,0 +1,10 @@
+﻿@using NoFilterForum.Models.ViewModels
+@model PostsViewModel
+
+@{
+	foreach(var post in Model.Posts)
+	{
+		<h3>Title: @post.Title</h3>
+		<h6>Body: @post.Content</h6>
+	}
+}

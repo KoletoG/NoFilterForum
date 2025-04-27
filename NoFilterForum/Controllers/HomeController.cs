@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Models;
+using NoFilterForum.Models.ViewModels;
 
 namespace NoFilterForum.Controllers
 {
@@ -29,6 +30,13 @@ namespace NoFilterForum.Controllers
         {
 
             return View();
+        }
+        [Route("Posts")]
+        public async Task<IActionResult> PostsMain()
+        {
+            var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var posts = await _context.PostDataModels.ToListAsync();
+            return View(new PostsViewModel(currentUser,posts));
         }
         [Authorize]
         [HttpPost]
