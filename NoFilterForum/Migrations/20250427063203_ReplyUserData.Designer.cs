@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
@@ -11,9 +12,11 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427063203_ReplyUserData")]
+    partial class ReplyUserData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,8 +200,7 @@ namespace NoFilterForum.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PostId")
-                        .IsRequired()
+                    b.Property<string>("PostDataModelId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
@@ -206,7 +208,7 @@ namespace NoFilterForum.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("PostDataModelId");
 
                     b.HasIndex("UserId");
 
@@ -354,19 +356,20 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.PostDataModel", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("NoFilterForum.Models.PostDataModel", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("PostDataModelId");
 
                     b.HasOne("NoFilterForum.Models.UserDataModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Post");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
+                {
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

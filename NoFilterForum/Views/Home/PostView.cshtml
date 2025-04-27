@@ -1,4 +1,11 @@
 ﻿@using NoFilterForum.Models.ViewModels
 @model PostViewModel
 <h1>@Model.Post.Title</h1>
-<h6>@Model.Post.Content</h6>
+<h5>@Model.Post.Content</h5>
+@{
+	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id">
+	@Html.AntiForgeryToken()
+	<input type="text" name="content" placeholder="Write a reply..."/>
+	<button type="submit">Create reply</button>
+	</form>
+}

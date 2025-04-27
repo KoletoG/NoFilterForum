@@ -57,6 +57,17 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReply(string postid, string content)
+        {
+            var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var currentPost = await _context.PostDataModels.FirstAsync(x=>x.Id == postid);
+            var reply = new ReplyDataModel(content, user,currentPost);
+            await _context.SaveChangesAsync();
+            return RedirectToPage(nameof(PostView), postid);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

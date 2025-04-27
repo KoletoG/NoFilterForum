@@ -8,7 +8,6 @@ namespace NoFilterForum.Models
         [Key]
         public string Id { get; set; }
         public string Content { get; set; }
-        public List<ReplyDataModel> Replies { get; set; }
         public DateTime DateCreated { get; set; }
         public string Title { get; set; }
         public UserDataModel User { get; set; }
@@ -17,7 +16,6 @@ namespace NoFilterForum.Models
             Id = Guid.NewGuid().ToString();
             Content = content;
             Title = title;
-            Replies = new List<ReplyDataModel>();
             DateCreated = DateTime.Now;
             User = user;
         }
