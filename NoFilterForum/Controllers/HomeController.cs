@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
@@ -19,7 +20,6 @@ namespace NoFilterForum.Controllers
             _context = context;
             _ioService = iOService;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -29,6 +29,7 @@ namespace NoFilterForum.Controllers
         {
             return View();
         }
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(string title, string body)
