@@ -1,5 +1,6 @@
 ﻿@using NoFilterForum.Models.ViewModels
 @model PostViewModel
+<a asp-action="Profile" asp-route-userName="@Model.Post.Username">@Model.Post.Username</a>
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
 @{
