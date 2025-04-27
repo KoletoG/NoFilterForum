@@ -2,10 +2,10 @@
 {
     public class PostViewModel
     {
-        public string Id { get; set; }
-        public PostViewModel(string id)
+        public PostDataModel Post { get; set; }
+        public PostViewModel(PostDataModel post)
         {
-            Id = id;
+            Post = post;
         }
     }
 }

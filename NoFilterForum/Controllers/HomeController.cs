@@ -22,13 +22,15 @@ namespace NoFilterForum.Controllers
             _context = context;
             _ioService = iOService;
         }
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult PostView(string id)
+        public async Task<IActionResult> PostView(string id)
         {
-            return View(new PostViewModel(id));
+            var post = await _context.PostDataModels.FirstAsync(x => x.Id == id);
+            return View(new PostViewModel(post));
         }
         public IActionResult Privacy()
         {

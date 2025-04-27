@@ -5,7 +5,6 @@
 	foreach(var post in Model.Posts)
 	{
 		<h3>Title: @post.Title</h3>
-		<h6>Body: @post.Content</h6>
 		<form asp-action="PostView" asp-route-id="@post.Id">
 		<button type="submit">Go to view</button>
 		</form>
