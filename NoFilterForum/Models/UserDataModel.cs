@@ -29,6 +29,10 @@ namespace NoFilterForum.Models
             Warnings = 0;
             DateCreated = DateTime.Now;
         }
+        public UserDataModel()
+        {
+
+        }
     }
     public enum UserRoles
     {

@@ -8,16 +8,16 @@ namespace NoFilterForum.Models
         public string Id { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
-        public string Username { get; set; }
         public PostDataModel Post { get; set; }
+        public UserDataModel User { get; set; }
 
-        public ReplyDataModel(string content, string username, PostDataModel post)
+        public ReplyDataModel(string content, UserDataModel user, PostDataModel post)
         {
             Id = Guid.NewGuid().ToString();
             Content = content;
             DateCreated = DateTime.Now;
             Post = post;
-            Username = username;
+            User = user;
         }
         public ReplyDataModel()
         {

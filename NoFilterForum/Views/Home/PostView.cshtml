@@ -1,6 +1,6 @@
 ﻿@using NoFilterForum.Models.ViewModels
 @model PostViewModel
-<a asp-action="Profile" asp-route-userName="@Model.Post.Username">@Model.Post.Username</a>
+<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
 @{
@@ -12,7 +12,7 @@
 	</form>
 	@foreach(var reply in Model.Replies)
 	{
-		<a asp-action="Profile" asp-route-userName="@reply.Username">@reply.Username</a>
+		<a asp-action="Profile" asp-route-userName="@reply.User.UserName">@reply.User.UserName</a>
 		<h5>@reply.Content</h5>
 	}
 }
