@@ -61,6 +61,12 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Route("Profile")]
+        public async Task<IActionResult> Profile()
+        {
+            var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            return View(currentUser);
+        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
