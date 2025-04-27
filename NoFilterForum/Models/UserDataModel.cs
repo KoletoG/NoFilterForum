@@ -15,7 +15,7 @@ namespace NoFilterForum.Models
         [EmailAddress]
         public override string? Email { get; set; }
         public int PostsCount { get; set; }
-        public UserRoles Role { get; private init; }
+        public UserRoles Role { get; set; }
         public byte Warnings { get; set; }
         public DateTime DateCreated { get; set; }
         

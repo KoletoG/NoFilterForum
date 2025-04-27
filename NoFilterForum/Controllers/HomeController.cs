@@ -55,6 +55,7 @@ namespace NoFilterForum.Controllers
             var user = await _ioService.GetUserByNameAsync(userName) ?? throw new Exception("Non-existent user");
             _context.Attach(user);
             user.PostsCount++;
+            await _ioService.AdjustRoleByPostCount(user);
             _context.Entry(user).Property(x=>x.PostsCount).IsModified= true;
             await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user));
             await _context.SaveChangesAsync();
@@ -72,6 +73,7 @@ namespace NoFilterForum.Controllers
             user.PostsCount++;
             _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
             _context.ReplyDataModels.Add(reply);
+            await _ioService.AdjustRoleByPostCount(user);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView", "Home", new {id=postid});
         }
