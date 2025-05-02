@@ -18,26 +18,39 @@ namespace NoFilterForum.Services
         }
         public async Task AdjustRoleByPostCount(UserDataModel user)
         {
-            if (user.PostsCount > 500)
+
+            if(user.Role!=UserRoles.VIP || user.Role != UserRoles.Admin)
             {
-                user.Role = UserRoles.Dinosaur;
-                _context.Attach(user);
-                _context.Entry(user).Property(x => x.Role).IsModified = true;
-                await _context.SaveChangesAsync();
-            }
-            else if(user.PostsCount>20)
-            {
-                user.Role = UserRoles.Regular;
-                _context.Attach(user);
-                _context.Entry(user).Property(x => x.Role).IsModified = true;
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                user.Role = UserRoles.Newbie;
-                _context.Attach(user);
-                _context.Entry(user).Property(x=>x.Role).IsModified = true;
-                await _context.SaveChangesAsync();
+                if (user.PostsCount > 500)
+                {
+                    if (user.Role != UserRoles.Dinosaur)
+                    {
+                        user.Role = UserRoles.Dinosaur;
+                        _context.Attach(user);
+                        _context.Entry(user).Property(x => x.Role).IsModified = true;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else if (user.PostsCount > 20)
+                {
+                    if (user.Role != UserRoles.Regular)
+                    {
+                        user.Role = UserRoles.Regular;
+                        _context.Attach(user);
+                        _context.Entry(user).Property(x => x.Role).IsModified = true;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    if (user.Role != UserRoles.Newbie)
+                    {
+                        user.Role = UserRoles.Newbie;
+                        _context.Attach(user);
+                        _context.Entry(user).Property(x => x.Role).IsModified = true;
+                        await _context.SaveChangesAsync();
+                    }
+                }
             }
         }
         public async Task<List<T>> GetTByUserAsync<T>(UserDataModel user) where T: class
