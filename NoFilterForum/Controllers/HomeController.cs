@@ -42,7 +42,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> PostsMain()
         {
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            var posts = await _context.PostDataModels.ToListAsync();
+            var posts = await _context.PostDataModels.Include("User").ToListAsync();
             return View(new PostsViewModel(currentUser,posts));
         }
         [Authorize]
