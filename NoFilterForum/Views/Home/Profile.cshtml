@@ -14,7 +14,7 @@
 @{
 	foreach(var post in Model.Posts)
 	{
-		<h5>@post.Title</h5>
+		<a asp-action="PostView" asp-route-id="@post.Id"><h5>@post.Title</h5></a>
 	}
 	foreach(var reply in Model.Replies)
 	{
