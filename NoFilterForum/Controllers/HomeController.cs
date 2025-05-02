@@ -94,7 +94,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> DeletePost(string id)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).FirstAsync(x => x.Id == id);
-            var replies = await _context.ReplyDataModels.Where(x => x.Post == post).ToListAsync();
+            var replies = await _context.ReplyDataModels.Include(x=>x.User).Where(x => x.Post == post).ToListAsync();
             HashSet<UserDataModel> users = new HashSet<UserDataModel>();
             foreach (var rep in replies)
             {
