@@ -31,8 +31,19 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> PostView(string id)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Where(x => x.Id == id).FirstAsync();
-            var replies = await _context.ReplyDataModels.Where(x => x.Post == post).ToListAsync();
+            var replies = await _context.ReplyDataModels.Include(x=>x.User).Where(x => x.Post == post).ToListAsync();
             return View(new PostViewModel(post,replies));
+        }
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> DeleteReply(string id)
+        {
+            var reply = await _context.ReplyDataModels.Include(x=>x.Post).FirstAsync(x=>x.Id==id);
+            var postId = reply.Post.Id;
+            _context.ReplyDataModels.Remove(reply);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("PostView",new {id=postId});
         }
         public IActionResult Privacy()
         {

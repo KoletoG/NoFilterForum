@@ -14,5 +14,11 @@
 	{
 		<a asp-action="Profile" asp-route-userName="@reply.User.UserName">@reply.User.UserName</a>
 		<h5>@reply.Content</h5>
+		@if (reply.User.UserName == this.User.Identity.Name)
+		{
+			<form asp-action="DeleteReply" asp-route-id="@reply.Id" method="post">
+				<button type="submit">Delete Reply</button>
+			</form>
+		}
 	}
 }
