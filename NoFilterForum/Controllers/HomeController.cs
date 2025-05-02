@@ -30,8 +30,8 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> PostView(string id)
         {
-            var post = await _context.PostDataModels.Include(x=>x.User).Where(x => x.Id == id).FirstAsync();
-            var replies = await _context.ReplyDataModels.Include(x=>x.User).Where(x => x.Post == post).ToListAsync();
+            var post = await _context.PostDataModels.Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
+            var replies = post.Replies;
             return View(new PostViewModel(post,replies));
         }
         [Authorize]
@@ -123,8 +123,9 @@ namespace NoFilterForum.Controllers
         {
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             _context.Attach(user);
-            var currentPost = await _context.PostDataModels.FirstAsync(x=>x.Id == postid);
+            var currentPost = await _context.PostDataModels.Include(x=>x.Replies).FirstAsync(x=>x.Id == postid);
             var reply = new ReplyDataModel(content, user,currentPost);
+            currentPost.Replies.Add(reply);
             user.PostsCount++;
             _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
             _context.ReplyDataModels.Add(reply);
