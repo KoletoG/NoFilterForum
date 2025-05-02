@@ -5,13 +5,13 @@
 <h5>@Model.Post.Content</h5>
 @if (Model.Post.User.UserName == this.User.Identity.Name)
 {
-	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id">
+	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id" method="post">
 		@Html.AntiForgeryToken()
 		<button type="submit">Delete Post</button>
 	</form>
 }
 @{
-	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id">
+	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" method="post">
 		@Html.AntiForgeryToken()
 		<input type="text" name="content" placeholder="Write a reply..."/>
 		<button type="submit">Create reply</button>
