@@ -17,6 +17,7 @@
 		@if (reply.User.UserName == this.User.Identity.Name)
 		{
 			<form asp-action="DeleteReply" asp-route-id="@reply.Id" method="post">
+			@Html.AntiForgeryToken()
 				<button type="submit">Delete Reply</button>
 			</form>
 		}
