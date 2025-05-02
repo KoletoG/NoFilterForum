@@ -26,7 +26,8 @@ namespace NoFilterForum.Controllers
         public IActionResult Index()
         {
             return View();
-        } 
+        }
+        [Authorize]
         public async Task<IActionResult> PostView(string id)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Where(x => x.Id == id).FirstAsync();
@@ -39,6 +40,7 @@ namespace NoFilterForum.Controllers
             return View();
         }
         [Route("Posts")]
+        [Authorize]
         public async Task<IActionResult> PostsMain()
         {
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
