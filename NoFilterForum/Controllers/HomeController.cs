@@ -65,7 +65,7 @@ namespace NoFilterForum.Controllers
         {
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
-            var user = await _ioService.GetUserByNameAsync(userName) ?? throw new Exception("Non-existent user");
+            var user = await _ioService.GetUserByNameAsync(userName);
             _context.Attach(user);
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
