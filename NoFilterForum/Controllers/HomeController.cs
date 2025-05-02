@@ -39,15 +39,15 @@ namespace NoFilterForum.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteReply(string id)
         {
-            var reply = await _context.ReplyDataModels.Include(x=>x.Post).FirstAsync(x=>x.Id==id);
+            var reply = await _context.ReplyDataModels.Include(x=>x.Post).Include(x=>x.User).FirstAsync(x=>x.Id==id);
             var postId = reply.Post.Id;
+            reply.User.PostsCount--;
             _context.ReplyDataModels.Remove(reply);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView",new {id=postId});
         }
         public IActionResult Privacy()
         {
-
             return View();
         }
         [Route("Posts")]
