@@ -18,6 +18,6 @@
 	}
 	foreach(var reply in Model.Replies)
 	{
-		<h5>@reply.Content</h5>
+		<a asp-action="PostView" asp-route-id="@reply.Post.Id"><h5>@reply.Content</h5></a>
 	}
 }
