@@ -95,23 +95,12 @@ namespace NoFilterForum.Controllers
         {
             var post = await _context.PostDataModels.Include(x=>x.User).FirstAsync(x => x.Id == id);
             var replies = await _context.ReplyDataModels.Include(x=>x.User).Where(x => x.Post == post).ToListAsync();
-            HashSet<UserDataModel> users = new HashSet<UserDataModel>();
             foreach (var rep in replies)
             {
                 rep.User.PostsCount--;
-                if (!users.Contains(rep.User))
-                {
-                    users.Add(rep.User);
-                }
                 _context.ReplyDataModels.Remove(rep);
             }
             post.User.PostsCount--;
-            users.Add(post.User);
-            foreach(var user in users)
-            {
-                _context.Attach(user);
-                _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
-            }
             _context.PostDataModels.Remove(post);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostsMain");
