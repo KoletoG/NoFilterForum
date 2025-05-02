@@ -88,6 +88,13 @@ namespace NoFilterForum.Controllers
             var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
             return View(new ProfileViewModel(currentUser,posts,replies,same));
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost(string id)
+        {
+            return RedirectToAction("PostsMain");
+        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
