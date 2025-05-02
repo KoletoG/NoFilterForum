@@ -3,8 +3,14 @@
 <a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
+@if (Model.Post.User.UserName == this.User.Identity.Name)
+{
+	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id">
+		@Html.AntiForgeryToken()
+		<button type="submit">Delete Post</button>
+	</form>
+}
 @{
-
 	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id">
 		@Html.AntiForgeryToken()
 		<input type="text" name="content" placeholder="Write a reply..."/>

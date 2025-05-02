@@ -93,6 +93,14 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePost(string id)
         {
+            var post = await _context.PostDataModels.FirstAsync(x => x.Id == id);
+            var replies = await _context.ReplyDataModels.Where(x => x.Post == post).ToListAsync();
+            foreach (var rep in replies)
+            { 
+                _context.ReplyDataModels.Remove(rep);
+            }
+            _context.PostDataModels.Remove(post);
+            await _context.SaveChangesAsync();
             return RedirectToAction("PostsMain");
         }
         [Authorize]
