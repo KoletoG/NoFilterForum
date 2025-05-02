@@ -32,6 +32,13 @@ namespace NoFilterForum.Services
                 _context.Entry(user).Property(x => x.Role).IsModified = true;
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                user.Role = UserRoles.Newbie;
+                _context.Attach(user);
+                _context.Entry(user).Property(x=>x.Role).IsModified = true;
+                await _context.SaveChangesAsync();
+            }
         }
         public async Task<List<T>> GetTByUserAsync<T>(UserDataModel user) where T: class
         {
