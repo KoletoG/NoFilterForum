@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
@@ -11,9 +12,11 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250503171437_AddedSectionDataModel")]
+    partial class AddedSectionDataModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +177,6 @@ namespace NoFilterForum.Migrations
                     b.Property<short>("Likes")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("SectionDataModelId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -185,8 +185,6 @@ namespace NoFilterForum.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SectionDataModelId");
 
                     b.HasIndex("UserId");
 
@@ -222,24 +220,6 @@ namespace NoFilterForum.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ReplyDataModels");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.SectionDataModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SectionDataModels");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.UserDataModel", b =>
@@ -374,10 +354,6 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.SectionDataModel", null)
-                        .WithMany("Posts")
-                        .HasForeignKey("SectionDataModelId");
-
                     b.HasOne("NoFilterForum.Models.UserDataModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -405,11 +381,6 @@ namespace NoFilterForum.Migrations
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
                     b.Navigation("Replies");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.SectionDataModel", b =>
-                {
-                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

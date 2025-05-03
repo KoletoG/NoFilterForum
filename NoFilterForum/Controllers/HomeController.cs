@@ -74,6 +74,7 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        // Need to add likes with AJAX
         [Authorize]
         [Route("Profile")]
         public async Task<IActionResult> Profile(string userName)
