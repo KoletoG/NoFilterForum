@@ -72,7 +72,7 @@ namespace NoFilterForum.Controllers
             _context.Entry(user).Property(x=>x.PostsCount).IsModified= true;
             await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user));
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("PostsMain");
         }
         // Need to add likes with AJAX
         [Authorize]
