@@ -122,9 +122,10 @@ namespace NoFilterForum.Controllers
                 _context.ReplyDataModels.Remove(rep);
             }
             post.User.PostsCount--;
+            var section = await _context.SectionDataModels.FirstAsync(x => x.Posts.Contains(post));
             _context.PostDataModels.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction("PostsMain");
+            return RedirectToAction("PostsMain", new {title=section.Title});
         }
         [Authorize]
         [HttpPost]
