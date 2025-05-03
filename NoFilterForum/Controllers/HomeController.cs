@@ -23,9 +23,10 @@ namespace NoFilterForum.Controllers
             _ioService = iOService;
         }
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<SectionDataModel> sections = await _context.SectionDataModels.ToListAsync();
+            return View(sections);
         }
         [Authorize]
         [HttpPost]

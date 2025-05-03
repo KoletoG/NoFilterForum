@@ -1,14 +1,20 @@
-﻿@{
+﻿@model List<SectionDataModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 @{
     if (this.User.Identity.Name == "Admin")
     {
         <form asp-action="CreateSection" asp-controller="Home" method="post">
-        @Html.AntiForgeryToken()
+            @Html.AntiForgeryToken()
             <input name="title" placeholder="Title of the section" type="text" />
             <input name="description" placeholder="Description of the section" type="text" />
             <button type="submit">Create Section</button>
         </form>
+    }
+    foreach(var section1 in Model)
+    {
+        <h2>@section1.Title</h2>
+        <h4>@section1.Description</h4>
     }
 }
