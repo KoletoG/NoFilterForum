@@ -28,6 +28,21 @@ namespace NoFilterForum.Controllers
             return View();
         }
         [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateSection(string title, string description)
+        {
+            string currentUsername = this.User.Identity.Name;
+            if (currentUsername != "Admin")
+            {
+                return RedirectToAction("Index");
+            }
+            SectionDataModel sectionDataModel = new SectionDataModel(title,description);
+            _context.SectionDataModels.Add(sectionDataModel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        [Authorize]
         public async Task<IActionResult> PostView(string id)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
