@@ -33,7 +33,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> CreateSection(string title, string description)
         {
             string currentUsername = this.User.Identity.Name;
-            if (currentUsername != "Admin")
+            if (currentUsername != "Admin") // Change that to checking role
             {
                 return RedirectToAction("Index");
             }
