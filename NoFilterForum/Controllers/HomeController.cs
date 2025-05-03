@@ -31,7 +31,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> PostView(string id)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
-            var replies = post.Replies;
+            var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
             return View(new PostViewModel(post,replies));
         }
         [Authorize]

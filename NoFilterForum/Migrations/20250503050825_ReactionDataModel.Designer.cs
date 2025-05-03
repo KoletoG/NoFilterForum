@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
@@ -11,9 +12,11 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250503050825_ReactionDataModel")]
+    partial class ReactionDataModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,28 +186,6 @@ namespace NoFilterForum.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PostDataModels");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.ReactionDataModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<short>("Dislike")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("HighIQ")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("Like")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("LowIQ")
-                        .HasColumnType("smallint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReactionDataModels");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>

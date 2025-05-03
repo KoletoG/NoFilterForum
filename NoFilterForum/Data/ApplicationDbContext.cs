@@ -12,5 +12,6 @@ namespace NoFilterForum.Data
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }
+        public DbSet<ReactionDataModel> ReactionDataModels { get; set; }
     }
 }
