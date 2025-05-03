@@ -1,14 +1,3 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-<form asp-action="CreatePost" asp-controller="Home" method="post">
-    <input type="text" name="title" placeholder="Title of the post"/>
-    <input type="text" name="body" placeholder="Body of the post" />
-    @Html.AntiForgeryToken()
-    <button type="submit">Create post</button>
-</form>
