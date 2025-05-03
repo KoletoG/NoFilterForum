@@ -171,6 +171,9 @@ namespace NoFilterForum.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<short>("Likes")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -185,28 +188,6 @@ namespace NoFilterForum.Migrations
                     b.ToTable("PostDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.ReactionDataModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<short>("Dislike")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("HighIQ")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("Like")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("LowIQ")
-                        .HasColumnType("smallint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReactionDataModels");
-                });
-
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
                 {
                     b.Property<string>("Id")
@@ -218,6 +199,9 @@ namespace NoFilterForum.Migrations
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
+
+                    b.Property<short>("Likes")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("PostId")
                         .IsRequired()

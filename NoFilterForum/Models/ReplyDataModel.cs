@@ -10,6 +10,7 @@ namespace NoFilterForum.Models
         public DateTime DateCreated { get; set; }
         public PostDataModel Post { get; set; }
         public UserDataModel User { get; set; }
+        public short Likes { get; set; }
 
         public ReplyDataModel(string content, UserDataModel user, PostDataModel post)
         {
@@ -18,6 +19,7 @@ namespace NoFilterForum.Models
             DateCreated = DateTime.Now;
             Post = post;
             User = user;
+            Likes = 0;
         }
         public ReplyDataModel()
         {

@@ -168,7 +168,8 @@ namespace NoFilterForum.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Likes = table.Column<short>(type: "smallint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,17 +188,24 @@ namespace NoFilterForum.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostDataModelId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PostId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Likes = table.Column<short>(type: "smallint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReplyDataModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReplyDataModels_PostDataModels_PostDataModelId",
-                        column: x => x.PostDataModelId,
-                        principalTable: "PostDataModels",
+                        name: "FK_ReplyDataModels_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ReplyDataModels_PostDataModels_PostId",
+                        column: x => x.PostId,
+                        principalTable: "PostDataModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -245,9 +253,14 @@ namespace NoFilterForum.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReplyDataModels_PostDataModelId",
+                name: "IX_ReplyDataModels_PostId",
                 table: "ReplyDataModels",
-                column: "PostDataModelId");
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReplyDataModels_UserId",
+                table: "ReplyDataModels",
+                column: "UserId");
         }
 
         /// <inheritdoc />

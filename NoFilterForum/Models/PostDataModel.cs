@@ -11,6 +11,7 @@ namespace NoFilterForum.Models
         public DateTime DateCreated { get; set; }
         public string Title { get; set; }
         public UserDataModel User { get; set; }
+        public short Likes { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
         public PostDataModel(string title, string content, UserDataModel user)
         {
@@ -20,6 +21,7 @@ namespace NoFilterForum.Models
             DateCreated = DateTime.Now;
             User = user;
             Replies = new List<ReplyDataModel>();
+            Likes = 0;
         }
         public PostDataModel()
         {

@@ -12,8 +12,8 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250427162040_UsernamePost")]
-    partial class UsernamePost
+    [Migration("20250503170906_NewStart")]
+    partial class NewStart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,15 +174,19 @@ namespace NoFilterForum.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<short>("Likes")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PostDataModels");
                 });
@@ -199,17 +203,21 @@ namespace NoFilterForum.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<short>("Likes")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("PostId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ReplyDataModels");
                 });
@@ -344,15 +352,35 @@ namespace NoFilterForum.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
+                {
+                    b.HasOne("NoFilterForum.Models.UserDataModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NoFilterForum.Models.ReplyDataModel", b =>
                 {
                     b.HasOne("NoFilterForum.Models.PostDataModel", "Post")
-                        .WithMany()
+                        .WithMany("Replies")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NoFilterForum.Models.UserDataModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
+                {
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }
