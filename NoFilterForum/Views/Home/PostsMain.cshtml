@@ -2,6 +2,7 @@
 @model PostsViewModel
 
 <form asp-action="CreatePost" asp-controller="Home" method="post">
+	<input hidden type="text" name="titleOfSection" value="@Model.Title" />
 	<input type="text" name="title" placeholder="Title of the post" />
 	<input type="text" name="body" placeholder="Body of the post" />
 	@Html.AntiForgeryToken()

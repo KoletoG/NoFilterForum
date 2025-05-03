@@ -73,23 +73,26 @@ namespace NoFilterForum.Controllers
             var section = await _context.SectionDataModels.Include(x=>x.Posts).FirstAsync(x=>x.Title==title);
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             var posts = section.Posts;
-            return View(new PostsViewModel(currentUser,posts));
+            return View(new PostsViewModel(currentUser,posts,section.Title));
         }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(string title, string body)
+        public async Task<IActionResult> CreatePost(string title, string body, string titleOfSection)
         {
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
+            var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == titleOfSection);
             var user = await _ioService.GetUserByNameAsync(userName);
             _context.Attach(user);
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
             _context.Entry(user).Property(x=>x.PostsCount).IsModified= true;
-            await _context.PostDataModels.AddAsync(new PostDataModel(title,body,user));
+            var post = new PostDataModel(title, body, user);
+            await _context.PostDataModels.AddAsync(post);
+            section.Posts.Add(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction("PostsMain");
+            return RedirectToAction("PostsMain",new{title=titleOfSection });
         }
         // Need to add likes with AJAX
         [Authorize]
