@@ -12,7 +12,7 @@
 	foreach(var post in Model.Posts)
 	{
 		<h3>Title: @post.Title @post.User.Role.ToString()</h3>
-		<form asp-action="PostView" asp-route-id="@post.Id">
+		<form asp-action="PostView" asp-route-id="@post.Id" asp-route-titleOfSection="@Model.Title">
 		<button type="submit">Go to view</button>
 		</form>
 	}

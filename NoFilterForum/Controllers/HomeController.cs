@@ -44,23 +44,23 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Index");
         }
         [Authorize]
-        public async Task<IActionResult> PostView(string id)
+        public async Task<IActionResult> PostView(string id, string titleOfSection)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
-            return View(new PostViewModel(post,replies));
+            return View(new PostViewModel(post,replies,titleOfSection));
         }
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> DeleteReply(string id)
+        public async Task<IActionResult> DeleteReply(string id,string title)
         {
             var reply = await _context.ReplyDataModels.Include(x=>x.Post).Include(x=>x.User).FirstAsync(x=>x.Id==id);
             var postId = reply.Post.Id;
             reply.User.PostsCount--;
             _context.ReplyDataModels.Remove(reply);
             await _context.SaveChangesAsync();
-            return RedirectToAction("PostView",new {id=postId});
+            return RedirectToAction("PostView",new {id=postId,titleOfSection=title});
         }
         public IActionResult Privacy()
         {
@@ -112,7 +112,7 @@ namespace NoFilterForum.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePost(string id)
+        public async Task<IActionResult> DeletePost(string id, string titleOfSection)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).FirstAsync(x => x.Id == id);
             var replies = await _context.ReplyDataModels.Include(x=>x.User).Where(x => x.Post == post).ToListAsync();
@@ -122,15 +122,14 @@ namespace NoFilterForum.Controllers
                 _context.ReplyDataModels.Remove(rep);
             }
             post.User.PostsCount--;
-            var section = await _context.SectionDataModels.FirstAsync(x => x.Posts.Contains(post));
             _context.PostDataModels.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction("PostsMain", new {title=section.Title});
+            return RedirectToAction("PostsMain", new {title= titleOfSection });
         }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReply(string postid, string content)
+        public async Task<IActionResult> CreateReply(string postid, string content, string title)
         {
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             _context.Attach(user);
@@ -142,7 +141,7 @@ namespace NoFilterForum.Controllers
             _context.ReplyDataModels.Add(reply);
             await _ioService.AdjustRoleByPostCount(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction("PostView", "Home", new {id=postid});
+            return RedirectToAction("PostView", "Home", new {id=postid,titleOfSection=title});
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -4,10 +4,12 @@
     {
         public PostDataModel Post { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
-        public PostViewModel(PostDataModel post, List<ReplyDataModel> replies)
+        public string Title { get; init; }
+        public PostViewModel(PostDataModel post, List<ReplyDataModel> replies, string title)
         {
             Post = post;
             Replies = replies;
+            Title = title;
         }
     }
 }
