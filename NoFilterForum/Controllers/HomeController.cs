@@ -66,12 +66,13 @@ namespace NoFilterForum.Controllers
         {
             return View();
         }
-        [Route("Posts")]
+        [Route("Posts/{title}")]
         [Authorize]
-        public async Task<IActionResult> PostsMain()
+        public async Task<IActionResult> PostsMain(string title)
         {
+            var section = await _context.SectionDataModels.Include(x=>x.Posts).FirstAsync(x=>x.Title==title);
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            var posts = await _context.PostDataModels.Include("User").ToListAsync();
+            var posts = section.Posts;
             return View(new PostsViewModel(currentUser,posts));
         }
         [Authorize]

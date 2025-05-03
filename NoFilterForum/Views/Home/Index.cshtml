@@ -14,7 +14,7 @@
     }
     foreach(var section1 in Model)
     {
-        <h2>@section1.Title</h2>
+        <a asp-action="PostsMain" asp-route-title="@section1.Title"><h2>@section1.Title</h2></a>
         <h4>@section1.Description</h4>
     }
 }
