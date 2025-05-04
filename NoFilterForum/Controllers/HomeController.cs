@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
+using NoFilterForum.Global_variables;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Models;
 using NoFilterForum.Models.ViewModels;
@@ -25,7 +26,11 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SectionDataModels.ToListAsync());
+            if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), true));       
+            }
+            return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), false));
         }
         [Authorize]
         [HttpPost]

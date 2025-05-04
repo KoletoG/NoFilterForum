@@ -1,9 +1,10 @@
-﻿@model List<SectionDataModel>
+﻿@using NoFilterForum.Models.ViewModels
+@model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 @{
-    if (this.User.Identity.Name == "Admin")
+    if (Model.IsAdmin)
     {
         <form asp-action="CreateSection" asp-controller="Home" method="post">
             @Html.AntiForgeryToken()
@@ -12,11 +13,11 @@
             <button type="submit">Create Section</button>
         </form>
     }
-    foreach(var section1 in Model)
+    foreach(var section1 in Model.Sections)
     {
         <a asp-action="PostsMain" asp-route-title="@section1.Title"><h2>@section1.Title</h2></a>
         <h4>@section1.Description</h4>
-        if (this.User.Identity.Name == "Admin")
+        if (Model.IsAdmin)
         {
         <form asp-action="DeleteSection" asp-route-id="@section1.Id">
             <button type="submit">Delete Section</button>
