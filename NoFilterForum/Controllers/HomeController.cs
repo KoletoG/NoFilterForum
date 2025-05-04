@@ -136,15 +136,10 @@ namespace NoFilterForum.Controllers
         [Route("Profile")]
         public async Task<IActionResult> Profile(string userName)
         {
-            bool same = false;
-            if (userName == this.User.Identity.Name)
-            {
-                same = true;
-            }
             var currentUser = await _ioService.GetUserByNameAsync(userName);
             var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
             var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
-            return View(new ProfileViewModel(currentUser,posts,replies,same));
+            return View(new ProfileViewModel(currentUser,posts,replies,userName==this.User.Identity.Name));
         }
         [HttpPost]
         [Authorize]
