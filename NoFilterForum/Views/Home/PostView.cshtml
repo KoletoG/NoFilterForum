@@ -11,7 +11,7 @@ else
 }
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
-@if (Model.Post.User.UserName == this.User.Identity.Name)
+@if (Model.Post.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 {
 	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" method="post">
 		@Html.AntiForgeryToken()
@@ -35,7 +35,7 @@ else
 			<h5 style="text-decoration:line-through">@reply.User.UserName</h5>
 		}
 		<h5>@reply.Content</h5>
-		@if (reply.User.UserName == this.User.Identity.Name)
+		@if (reply.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 		{
 			<form asp-action="DeleteReply" asp-route-id="@reply.Id" asp-route-title="@Model.Title" method="post">
 			@Html.AntiForgeryToken()
