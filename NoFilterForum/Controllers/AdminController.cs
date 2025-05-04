@@ -17,7 +17,7 @@ namespace NoFilterForum.Controllers
             _logger = logger;
             _context = context;
         }
-        [Authorize]
+        [Authorize] // Add deleting replies, deleting posts as an admin
         public async Task<IActionResult> AdminPanel()
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))

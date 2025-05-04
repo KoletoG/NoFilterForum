@@ -7,7 +7,7 @@
 }
 else
 {
-	<h5>@Model.Post.User.UserName</h5>
+	<h5 style="text-decoration:line-through">@Model.Post.User.UserName</h5>
 }
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
@@ -32,7 +32,7 @@ else
 		}
 		else
 		{
-			<h5>@reply.User.UserName</h5>
+			<h5 style="text-decoration:line-through">@reply.User.UserName</h5>
 		}
 		<h5>@reply.Content</h5>
 		@if (reply.User.UserName == this.User.Identity.Name)
