@@ -124,7 +124,7 @@ namespace NoFilterForum.Controllers
         }
         // Need to add likes with AJAX
         [Authorize]
-        [Route("Profile")]
+        [Route("Profile/{userName}")]
         public async Task<IActionResult> Profile(string userName)
         {
             if (userName == GlobalVariables.DefaultUser.UserName)
