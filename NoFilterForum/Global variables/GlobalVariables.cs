@@ -9,10 +9,7 @@ namespace NoFilterForum.Global_variables
         {
             Id=Guid.NewGuid().ToString(),
             UserName="default",
-            DateCreated=DateTime.Now,
-            Email="null@email.c",
-            Role = UserRoles.Newbie,
-            Warnings=0
+            Role = UserRoles.Deleted
         };
     }
 }

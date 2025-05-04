@@ -40,6 +40,7 @@ namespace NoFilterForum.Models
         Regular,
         Dinosaur,
         VIP,
-        Admin
+        Admin,
+        Deleted
     }
 }
