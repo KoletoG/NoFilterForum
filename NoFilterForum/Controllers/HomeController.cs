@@ -38,8 +38,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            SectionDataModel sectionDataModel = new SectionDataModel(title,description);
-            _context.SectionDataModels.Add(sectionDataModel);
+            _context.SectionDataModels.Add(new SectionDataModel(title, description));
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
