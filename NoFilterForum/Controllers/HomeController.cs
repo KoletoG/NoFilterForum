@@ -25,8 +25,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            List<SectionDataModel> sections = await _context.SectionDataModels.ToListAsync();
-            return View(sections);
+            return View(await _context.SectionDataModels.ToListAsync());
         }
         [Authorize]
         [HttpPost]
@@ -34,7 +33,8 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> CreateSection(string title, string description)
         {
             string currentUsername = this.User.Identity.Name;
-            if (currentUsername != "Admin") // Change that to checking role
+            var currentUser = await _context.Users.FirstAsync(x=>x.UserName == currentUsername);
+            if (currentUser.Role != UserRoles.Admin)
             {
                 return RedirectToAction("Index");
             }

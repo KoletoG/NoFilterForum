@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using NoFilterForum.Global_variables;
 using NoFilterForum.Models;
 
 namespace NoFilterForum.Areas.Identity.Pages.Account
@@ -120,6 +121,10 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                 var user = new UserDataModel(Input.Username, Input.Email);
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                if (GlobalVariables.adminNames.Contains(user.UserName))
+                {
+                    user.Role = UserRoles.Admin;
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
