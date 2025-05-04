@@ -43,6 +43,29 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Index");
         }
         [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteSection(string id)
+        {
+            var currentUser = await _context.Users.FirstAsync(x => x.UserName == this.User.Identity.Name);
+            if(currentUser.Role != UserRoles.Admin) 
+            { 
+                return RedirectToAction("Index"); 
+            }
+            var section = await _context.SectionDataModels.FirstOrDefaultAsync(x => x.Id == id);
+            foreach(var post in section.Posts)
+            {
+                foreach(var reply in post.Replies)
+                {
+                    DeleteReply(reply);
+                }
+                DeletePost(post);
+            }
+            _context.SectionDataModels.Remove(section);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        [Authorize]
         public async Task<IActionResult> PostView(string id, string titleOfSection)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
@@ -60,6 +83,16 @@ namespace NoFilterForum.Controllers
             _context.ReplyDataModels.Remove(reply);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView",new {id=postId,titleOfSection=title});
+        }
+        public void DeleteReply(ReplyDataModel replyDataModel)
+        {
+            replyDataModel.User.PostsCount--;
+            _context.ReplyDataModels.Remove(replyDataModel);
+        }
+        public void DeletePost(PostDataModel postDataModel)
+        {
+            postDataModel.User.PostsCount--;
+            _context.PostDataModels.Remove(postDataModel);
         }
         public IActionResult Privacy()
         {
