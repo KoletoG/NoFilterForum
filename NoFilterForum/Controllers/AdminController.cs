@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
+using NoFilterForum.Models;
 using NoFilterForum.Models.ViewModels;
 
 namespace NoFilterForum.Controllers
@@ -23,7 +24,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users.Where(x=>x.UserName!=GlobalVariables.DefaultUser.UserName).ToListAsync();
             return View(new AdminPanelViewModel(users));
         }
         [Authorize]
@@ -36,6 +37,16 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var user = await _context.Users.FirstAsync(x => x.Id == id);
+            var posts = await _context.PostDataModels.Where(x=>x.User==user).ToListAsync();
+            var replies = await _context.ReplyDataModels.Where(x=>x.User==user).ToListAsync();
+            foreach(var reply in replies)
+            {
+                reply.User = GlobalVariables.DefaultUser;
+            }
+            foreach(var post in posts)
+            {
+                post.User = GlobalVariables.DefaultUser;
+            }
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(AdminPanel));

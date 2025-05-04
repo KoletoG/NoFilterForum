@@ -1,6 +1,14 @@
-﻿@using NoFilterForum.Models.ViewModels
+﻿@using NoFilterForum.Global_variables
+@using NoFilterForum.Models.ViewModels
 @model PostViewModel
-<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
+@if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
+{
+	<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
+}
+else
+{
+	<h5>@Model.Post.User.UserName</h5>
+}
 <h1>@Model.Post.Title</h1>
 <h5>@Model.Post.Content</h5>
 @if (Model.Post.User.UserName == this.User.Identity.Name)
@@ -18,7 +26,14 @@
 	</form>
 	@foreach(var reply in Model.Replies)
 	{
-		<a asp-action="Profile" asp-route-userName="@reply.User.UserName">@reply.User.UserName</a>
+		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)
+		{
+			<a asp-action="Profile" asp-route-userName="@reply.User.UserName">@reply.User.UserName</a>
+		}
+		else
+		{
+			<h5>@reply.User.UserName</h5>
+		}
 		<h5>@reply.Content</h5>
 		@if (reply.User.UserName == this.User.Identity.Name)
 		{

@@ -127,7 +127,10 @@ namespace NoFilterForum.Controllers
         [Route("Profile")]
         public async Task<IActionResult> Profile(string userName)
         {
-            
+            if (userName == GlobalVariables.DefaultUser.UserName)
+            {
+                return RedirectToAction("Index");
+            }
             Dictionary <string,DateTime> dateOrder = new Dictionary<string,DateTime>();
             var currentUser = await _ioService.GetUserByNameAsync(userName);
             var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
