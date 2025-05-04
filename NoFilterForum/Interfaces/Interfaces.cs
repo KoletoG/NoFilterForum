@@ -7,5 +7,7 @@ namespace NoFilterForum.Interfaces
         Task<UserDataModel?> GetUserByNameAsync(string username);
         Task AdjustRoleByPostCount(UserDataModel user);
         Task<List<T>> GetTByUserAsync<T>(UserDataModel user) where T : class;
+        void DeleteReply(ReplyDataModel replyDataModel);
+        void DeletePost(PostDataModel postDataModel);
     }
 }

@@ -62,9 +62,9 @@ namespace NoFilterForum.Controllers
             {
                 foreach(var reply in post.Replies)
                 {
-                    DeleteReply(reply);
+                    _ioService.DeleteReply(reply);
                 }
-                DeletePost(post);
+                _ioService.DeletePost(post);
             }
             _context.SectionDataModels.Remove(section);
             await _context.SaveChangesAsync();
@@ -88,16 +88,6 @@ namespace NoFilterForum.Controllers
             _context.ReplyDataModels.Remove(reply);
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView",new {id=postId,titleOfSection=title});
-        }
-        public void DeleteReply(ReplyDataModel replyDataModel)
-        {
-            replyDataModel.User.PostsCount--;
-            _context.ReplyDataModels.Remove(replyDataModel);
-        }
-        public void DeletePost(PostDataModel postDataModel)
-        {
-            postDataModel.User.PostsCount--;
-            _context.PostDataModels.Remove(postDataModel);
         }
         public IActionResult Privacy()
         {

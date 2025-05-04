@@ -68,5 +68,15 @@ namespace NoFilterForum.Services
                 throw new Exception("Invalid datamodel");
             }
         }
+        public void DeleteReply(ReplyDataModel replyDataModel)
+        {
+            replyDataModel.User.PostsCount--;
+            _context.ReplyDataModels.Remove(replyDataModel);
+        }
+        public void DeletePost(PostDataModel postDataModel)
+        {
+            postDataModel.User.PostsCount--;
+            _context.PostDataModels.Remove(postDataModel);
+        }
     }
 }
