@@ -25,6 +25,14 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
+            if (Global_variables.GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+                _context.Attach(user);
+                user.Role = UserRoles.Admin;
+                _context.Entry(user).Property(x=>x.Role).IsModified = true;
+                await _context.SaveChangesAsync();
+            }
             return View(await _context.SectionDataModels.ToListAsync());
         }
         [Authorize]
@@ -52,7 +60,7 @@ namespace NoFilterForum.Controllers
             { 
                 return RedirectToAction("Index"); 
             }
-            var section = await _context.SectionDataModels.FirstOrDefaultAsync(x => x.Id == id);
+            var section = await _context.SectionDataModels.Include(x=>x.Posts).ThenInclude(x=>x.Replies).ThenInclude(x=>x.User).FirstOrDefaultAsync(x => x.Id == id);
             foreach(var post in section.Posts)
             {
                 foreach(var reply in post.Replies)
