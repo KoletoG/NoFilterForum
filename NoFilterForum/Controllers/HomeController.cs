@@ -136,10 +136,20 @@ namespace NoFilterForum.Controllers
         [Route("Profile")]
         public async Task<IActionResult> Profile(string userName)
         {
+            
+            Dictionary <string,DateTime> dateOrder = new Dictionary<string,DateTime>();
             var currentUser = await _ioService.GetUserByNameAsync(userName);
             var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
             var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
-            return View(new ProfileViewModel(currentUser,posts,replies,userName==this.User.Identity.Name));
+            foreach(var post in posts)
+            {
+                dateOrder[post.Id] = post.DateCreated;
+            }
+            foreach (var reply in replies) 
+            {
+                dateOrder[reply.Id] = reply.DateCreated;
+            }
+            return View(new ProfileViewModel(currentUser,posts,replies,userName==this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).ToDictionary()));
         }
         [HttpPost]
         [Authorize]

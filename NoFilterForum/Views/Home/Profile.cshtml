@@ -12,14 +12,25 @@
 }
 <h5>Posts count: @Model.User.PostsCount</h5>
 @{
-	foreach(var post in Model.Posts)
+	foreach(var key in Model.userDate.Keys)
 	{
-		<a asp-action="PostView" asp-route-id="@post.Id"><h4 style="font-weight:bold">@post.Title</h4></a>
-		<br />
-	}
-	foreach(var reply in Model.Replies)
-	{
-		<a asp-action="PostView" asp-route-id="@reply.Post.Id"><h5>@reply.Content</h5></a>
-		<br />
+		foreach(var post in Model.Posts)
+		{
+			if (post.Id == key)
+			{
+				<a asp-action="PostView" asp-route-id="@post.Id"><h4 style="font-weight:bold">@post.Title</h4></a>
+				<br />
+				break;
+			}
+		}
+		foreach(var reply in Model.Replies)
+		{
+			if (reply.Id == key)
+			{
+				<a asp-action="PostView" asp-route-id="@reply.Post.Id"><h5>@reply.Content</h5></a>
+				<br />
+				break;
+			}
+		}
 	}
 }
