@@ -1,0 +1,30 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Data;
+using NoFilterForum.Global_variables;
+using NoFilterForum.Models.ViewModels;
+
+namespace NoFilterForum.Controllers
+{
+    public class AdminController : Controller
+    {
+        private readonly ILogger<AdminController> _logger;
+        private readonly ApplicationDbContext _context;
+        public AdminController(ILogger<AdminController> logger, ApplicationDbContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
+        [Authorize]
+        public async Task<IActionResult> AdminPanel()
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var users = await _context.Users.ToListAsync();
+            return View(new AdminPanelViewModel(users));
+        }
+    }
+}

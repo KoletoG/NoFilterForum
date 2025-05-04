@@ -70,16 +70,7 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        [Authorize]
-        public async Task<IActionResult> AdminPanel()
-        {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
-            {
-                return RedirectToAction("Index");
-            }
-            var users = await _context.Users.ToListAsync();
-            return View(new AdminPanelViewModel(users));
-        }
+        
         [Authorize]
         public async Task<IActionResult> PostView(string id, string titleOfSection)
         {
