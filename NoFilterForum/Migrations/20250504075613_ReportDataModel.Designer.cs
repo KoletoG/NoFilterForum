@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
@@ -11,9 +12,11 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504075613_ReportDataModel")]
+    partial class ReportDataModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,25 +227,6 @@ namespace NoFilterForum.Migrations
                     b.ToTable("ReplyDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.ReportDataModel", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ReportDataModels");
-                });
-
             modelBuilder.Entity("NoFilterForum.Models.SectionDataModel", b =>
                 {
                     b.Property<string>("Id")
@@ -417,15 +401,6 @@ namespace NoFilterForum.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.ReportDataModel", b =>
-                {
-                    b.HasOne("NoFilterForum.Models.UserDataModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
