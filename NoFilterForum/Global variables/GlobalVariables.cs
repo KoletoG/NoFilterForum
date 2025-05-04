@@ -8,6 +8,7 @@ namespace NoFilterForum.Global_variables
         public static UserDataModel DefaultUser = new UserDataModel() 
         {
             Id=Guid.NewGuid().ToString(),
+            Email="null@email.c",
             UserName="default",
             Role = UserRoles.Deleted
         };

@@ -27,6 +27,7 @@ namespace NoFilterForum.Controllers
             var users = await _context.Users.Where(x=>x.UserName!=GlobalVariables.DefaultUser.UserName).ToListAsync();
             return View(new AdminPanelViewModel(users));
         }
+        // Add ModelError if something went wrong, that's for every method including creating post and reply
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
