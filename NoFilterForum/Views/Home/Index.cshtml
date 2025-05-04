@@ -20,6 +20,7 @@
         if (Model.IsAdmin)
         {
         <form asp-action="DeleteSection" asp-route-id="@section1.Id">
+        @Html.AntiForgeryToken()
             <button type="submit">Delete Section</button>
         </form>
         }
