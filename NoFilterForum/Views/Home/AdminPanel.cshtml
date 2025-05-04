@@ -1,0 +1,9 @@
+﻿@using NoFilterForum.Models.ViewModels
+@model AdminPanelViewModel
+
+@{
+	foreach(var user in Model.Users)
+	{
+		<h2>@user.UserName</h2>
+	}
+}

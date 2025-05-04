@@ -71,6 +71,16 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Index");
         }
         [Authorize]
+        public async Task<IActionResult> AdminPanel()
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var users = await _context.Users.ToListAsync();
+            return View(new AdminPanelViewModel(users));
+        }
+        [Authorize]
         public async Task<IActionResult> PostView(string id, string titleOfSection)
         {
             var post = await _context.PostDataModels.Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
