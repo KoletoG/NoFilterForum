@@ -26,5 +26,19 @@ namespace NoFilterForum.Controllers
             var users = await _context.Users.ToListAsync();
             return View(new AdminPanelViewModel(users));
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BanUser(string id)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var user = await _context.Users.FirstAsync(x => x.Id == id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AdminPanel));
+        }
     }
 }

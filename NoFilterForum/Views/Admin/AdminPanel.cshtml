@@ -5,5 +5,9 @@
 	foreach(var user in Model.Users)
 	{
 		<h2>@user.UserName</h2>
+		<form asp-controller="Admin" asp-action="BanUser" asp-route-id="@user.Id" method="post">
+		@Html.AntiForgeryToken()
+		<button type="submit">Ban user</button>
+		</form>
 	}
 }
