@@ -19,7 +19,7 @@ namespace NoFilterForum.Services
         public async Task AdjustRoleByPostCount(UserDataModel user)
         {
 
-            if(user.Role!=UserRoles.VIP || user.Role != UserRoles.Admin)
+            if(user.Role!=UserRoles.VIP && user.Role != UserRoles.Admin)
             {
                 if (user.PostsCount > 500)
                 {
