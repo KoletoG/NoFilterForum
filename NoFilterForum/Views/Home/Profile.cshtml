@@ -5,11 +5,11 @@
 	if (Model.IsSameUser)
 	{
 		<h1>Hello!</h1>
-		<h6>You have: @Model.User.Warnings warnings</h6>
+		<h6>You have: @Model.User.Warnings.Count warnings</h6>
 	}
 	if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 	{
-		<h6>The user has: @Model.User.Warnings warnings</h6>
+		<h6>The user has: @Model.User.Warnings.Count warnings</h6>
 		<form method="post" asp-action="GiveWarning" asp-controller="Admin" asp-route-userid="@Model.User.Id">
 		@Html.AntiForgeryToken()
 		<input type="text" name="content" placeholder="Reason for warning..."/>

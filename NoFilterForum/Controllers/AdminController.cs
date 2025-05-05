@@ -48,7 +48,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).ToListAsync();
+            var users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u=>u.Warnings).ToListAsync();
             bool hasReports = false;
             if (await _context.ReportDataModels.AnyAsync())
             {
@@ -65,10 +65,8 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var user = await _context.Users.AsNoTracking().FirstAsync(x => x.Id == userid);
+            var user = await _context.Users.Include(x=>x.Warnings).FirstAsync(x => x.Id == userid);
             user.Warnings.Add(new WarningDataModel(content));
-            _context.Attach(user);
-            _context.Entry(user).Property(x => x.Warnings).IsModified = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }
