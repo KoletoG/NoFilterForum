@@ -181,6 +181,17 @@ namespace NoFilterForum.Controllers
             return View(new ProfileViewModel(currentUser,posts,replies,userName==this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).ToDictionary()));
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> AcceptWarning(string id)
+        {
+            var warning = await _context.WarningDataModels.AsNoTracking().FirstAsync(x => x.Id == id);
+            _context.Attach(warning);
+            _context.Entry(warning).Property(x => x.IsAccepted).IsModified = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePost(string id, string titleOfSection)
