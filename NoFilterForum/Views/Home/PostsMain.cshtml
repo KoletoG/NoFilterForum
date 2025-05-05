@@ -12,5 +12,6 @@
 	foreach(var post in Model.Posts)
 	{
 		<a asp-action="PostView" asp-route-id="@post.Id" asp-route-titleOfSection="@Model.Title"><h3>@post.Title | @post.User.Role.ToString()</h3></a>
+		<br />
 	}
 }

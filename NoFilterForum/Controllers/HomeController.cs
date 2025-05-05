@@ -127,7 +127,7 @@ namespace NoFilterForum.Controllers
         {
             var section = await _context.SectionDataModels.AsNoTracking().Include(x=>x.Posts).ThenInclude(x=>x.User).FirstAsync(x=>x.Title==title);
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            var posts = section.Posts;
+            var posts = section.Posts.OrderByDescending(x=>x.DateCreated).ToList();
             return View(new PostsViewModel(currentUser,posts,title));
         }
         [Authorize]
