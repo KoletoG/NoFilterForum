@@ -117,10 +117,6 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView",new {id=postId,titleOfSection=title});
         }
-        public IActionResult Privacy()
-        {
-            return View();
-        }
         [Route("Posts/{title}")]
         [Authorize]
         public async Task<IActionResult> PostsMain(string title)
