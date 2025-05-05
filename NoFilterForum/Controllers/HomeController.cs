@@ -10,6 +10,7 @@ using NoFilterForum.Interfaces;
 using NoFilterForum.Models;
 using NoFilterForum.Models.ViewModels;
 using Ganss.Xss;
+using System.Text.RegularExpressions;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -97,6 +98,11 @@ namespace NoFilterForum.Controllers
             var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
             post.Content=sanitizer.Sanitize(post.Content);
+            post.Content = Regex.Replace(post.Content, @"(https?://[^\s]+)", "<a href=\"$1\" target=\"_blank\">$1</a>");
+            foreach(var rep in replies)
+            {
+                rep.Content=sanitizer.Sanitize(rep.Content);
+            }
             return View(new PostViewModel(post,replies,titleOfSection));
         }
         [Authorize]
