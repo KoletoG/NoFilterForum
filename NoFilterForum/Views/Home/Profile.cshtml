@@ -1,9 +1,19 @@
-﻿@using NoFilterForum.Models.ViewModels
+﻿@using NoFilterForum.Global_variables
+@using NoFilterForum.Models.ViewModels
 @model ProfileViewModel
 @{
 	if (Model.IsSameUser)
 	{
 		<h1>Hello!</h1>
+		<h6>You have: @Model.User.Warnings warnings</h6>
+	}
+	if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+	{
+		<h6>The user has: @Model.User.Warnings warnings</h6>
+		<form method="post" asp-action="GiveWarning" asp-controller="Admin" asp-route-userid="@Model.User.Id">
+		@Html.AntiForgeryToken()
+		<button type="submit">Give Warning</button>
+		</form>
 	}
 }
 <h1>@Model.User.UserName</h1>

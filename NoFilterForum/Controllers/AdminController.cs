@@ -30,7 +30,7 @@ namespace NoFilterForum.Controllers
         // Add ModelError if something went wrong, that's for every method including creating post and reply
         [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] // Check default user instances in sql database tomorrow
         public async Task<IActionResult> BanUser(string id)
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
