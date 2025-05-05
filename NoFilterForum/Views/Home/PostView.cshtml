@@ -42,7 +42,7 @@ else
 		{
 			<h5 style="text-decoration:line-through">@reply.User.UserName</h5>
 		}
-		<h5>@reply.Content</h5>
+		<h5 class="haha">@reply.Content</h5>
 		@if (reply.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 		{
 			<form asp-action="DeleteReply" asp-route-id="@reply.Id" asp-route-title="@Model.Title" method="post">
