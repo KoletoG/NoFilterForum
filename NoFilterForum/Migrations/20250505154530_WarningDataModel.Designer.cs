@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
@@ -11,9 +12,11 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505154530_WarningDataModel")]
+    partial class WarningDataModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,6 +334,9 @@ namespace NoFilterForum.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<byte>("Warnings")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -353,12 +359,7 @@ namespace NoFilterForum.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserDataModelId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserDataModelId");
 
                     b.ToTable("WarningDataModels");
                 });
@@ -453,13 +454,6 @@ namespace NoFilterForum.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.WarningDataModel", b =>
-                {
-                    b.HasOne("NoFilterForum.Models.UserDataModel", null)
-                        .WithMany("Warnings")
-                        .HasForeignKey("UserDataModelId");
-                });
-
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>
                 {
                     b.Navigation("Replies");
@@ -468,11 +462,6 @@ namespace NoFilterForum.Migrations
             modelBuilder.Entity("NoFilterForum.Models.SectionDataModel", b =>
                 {
                     b.Navigation("Posts");
-                });
-
-            modelBuilder.Entity("NoFilterForum.Models.UserDataModel", b =>
-                {
-                    b.Navigation("Warnings");
                 });
 #pragma warning restore 612, 618
         }

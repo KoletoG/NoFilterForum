@@ -66,7 +66,7 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var user = await _context.Users.AsNoTracking().FirstAsync(x => x.Id == userid);
-            user.Warnings++;
+            user.Warnings.Add(new WarningDataModel("Testing"));
             _context.Attach(user);
             _context.Entry(user).Property(x => x.Warnings).IsModified = true;
             await _context.SaveChangesAsync();

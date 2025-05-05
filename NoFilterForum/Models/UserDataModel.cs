@@ -16,7 +16,7 @@ namespace NoFilterForum.Models
         public override string? Email { get; set; }
         public int PostsCount { get; set; }
         public UserRoles Role { get; set; }
-        public byte Warnings { get; set; }
+        public List<WarningDataModel> Warnings { get; set; }
         public DateTime DateCreated { get; set; }
         
         public UserDataModel(string userName,string email)
@@ -26,7 +26,7 @@ namespace NoFilterForum.Models
             Email = email;
             PostsCount = 0;
             Role = UserRoles.Newbie;
-            Warnings = 0;
+            Warnings = new List<WarningDataModel>();
             DateCreated = DateTime.Now;
         }
         public UserDataModel()

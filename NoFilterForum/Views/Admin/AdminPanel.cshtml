@@ -9,7 +9,7 @@
 	foreach(var user in Model.Users)
 	{
 		<a asp-action="Profile" asp-controller="Home" asp-route-userName="@user.UserName"><h4>@user.UserName</h4></a>
-		@if (user.Warnings >= 3)
+		@if (user.Warnings.Count >= 3)
 		{
 			<p style="color:red">@user.UserName has more than 2 warnings {@user.Warnings}</p>
 		}
