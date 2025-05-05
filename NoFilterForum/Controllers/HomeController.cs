@@ -102,6 +102,7 @@ namespace NoFilterForum.Controllers
             foreach(var rep in replies)
             {
                 rep.Content=sanitizer.Sanitize(rep.Content);
+                rep.Content= Regex.Replace(rep.Content, @"(https?://[^\s]+)", "<a href=\"$1\" target=\"_blank\">$1</a>");
             }
             return View(new PostViewModel(post,replies,titleOfSection));
         }
