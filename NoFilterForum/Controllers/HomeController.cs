@@ -26,6 +26,8 @@ namespace NoFilterForum.Controllers
             _context = context;
             _ioService = iOService;
             _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
+            _htmlSanitizer.AllowedTags.Add("a");
             _nonIOService = nonIOService;
         }
         [Authorize] // If issued a warning, show it here
@@ -167,6 +169,7 @@ namespace NoFilterForum.Controllers
             }
             foreach (var reply in replies) 
             {
+                reply.Content=_nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
             return View(new ProfileViewModel(currentUser,posts,replies,userName==this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).ToDictionary()));

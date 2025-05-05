@@ -28,7 +28,7 @@
 		{
 			if (post.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@post.Id"><h4 style="font-weight:bold">@post.Title</h4></a>
+				<a asp-action="PostView" asp-route-id="@post.Id"><h4 style="font-weight:bold">Post: post.Title</h4></a>
 				<br />
 				break;
 			}
@@ -37,7 +37,7 @@
 		{
 			if (reply.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@reply.Post.Id"><h5>@reply.Content</h5></a>
+				<a asp-action="PostView" asp-route-id="@reply.Post.Id"><h5>Reply: @reply.Content</h5></a>
 				<br />
 				break;
 			}

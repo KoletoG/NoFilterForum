@@ -15,5 +15,9 @@ namespace NoFilterForum.Services
         {
             return Regex.Replace(text, @"(https?://[^\s]+)", "<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">$1</a>");
         }
+        public string ReplaceLinkText(string text)
+        {
+            return Regex.Replace(text, "<a[^>]*>(.*?)</a>", "$1", RegexOptions.IgnoreCase);
+        }
     }
 }
