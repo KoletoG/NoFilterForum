@@ -20,7 +20,7 @@ else
 }
 else
 {
-	<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true" asp-route-userid="@Model.Post.User.Id">
+	<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true" asp-route-userid="@Model.Post.User.Id" asp-route-title="@Model.Title">
 		@Html.AntiForgeryToken()
 		<input type="text" name="content" placeholder="Please specify the reason for the report..." />
 		<button type="submit">Send Report</button>
@@ -52,7 +52,7 @@ else
 		}
 		else
 		{
-			<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-userid="@reply.User.Id" asp-route-isPost="false">
+			<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-userid="@reply.User.Id" asp-route-isPost="false" asp-route-title="@Model.Title">
 				@Html.AntiForgeryToken()
 				<input type="text" name="content" placeholder="Please specify the reason for the report..." />
 				<button type="submit">Send Report</button>

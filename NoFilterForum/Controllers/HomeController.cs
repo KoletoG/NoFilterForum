@@ -73,11 +73,21 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendReport(string id, string content, bool isPost, string userid)
+        public async Task<IActionResult> SendReport(string id, string content, bool isPost, string userid,string title)
         {
+            var user = await _context.Users.FirstAsync(x => x.Id == userid);
+            ReportDataModel report = new ReportDataModel(user,content,id,isPost);
+            _context.ReportDataModels.Add(report);
+            await _context.SaveChangesAsync();
             if (isPost)
             {
-
+                string idToReturn = id;
+                return RedirectToAction("PostView", new { id = idToReturn, titleOfSection = title });
+            }
+            else
+            {
+                var reply = await _context.ReplyDataModels.Include(x=>x.Post).FirstAsync(x => x.Id == id);
+                return RedirectToAction("PostView", new {id=reply.Post.Id, titleOfSection = title});
             }
         }
         [Authorize]
