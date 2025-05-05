@@ -5,6 +5,10 @@
 	foreach(var user in Model.Users)
 	{
 		<a asp-action="Profile" asp-controller="Home" asp-route-userName="@user.UserName"><h4>@user.UserName</h4></a>
+		@if (user.Warnings >= 3)
+		{
+			<p style="color:red">@user.UserName has more than 2 warnings {@user.Warnings}</p>
+		}
 		<h5>@user.Email</h5>
 		<h5>@user.Role</h5>
 		<form asp-controller="Admin" asp-action="BanUser" asp-route-id="@user.Id" method="post">
