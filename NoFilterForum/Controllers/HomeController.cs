@@ -185,9 +185,8 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> AcceptWarning(string id)
         {
-            var warning = await _context.WarningDataModels.AsNoTracking().FirstAsync(x => x.Id == id);
-            _context.Attach(warning);
-            _context.Entry(warning).Property(x => x.IsAccepted).IsModified = true;
+            var warning = await _context.WarningDataModels.FirstAsync(x => x.Id == id);
+            warning.IsAccepted = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
