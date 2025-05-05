@@ -24,8 +24,13 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var users = await _context.Users.Where(x=>x.UserName!=GlobalVariables.DefaultUser.UserName).ToListAsync();
-            return View(new AdminPanelViewModel(users));
+            var users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).ToListAsync();
+            bool hasReports = false;
+            if (await _context.ReportDataModels.AnyAsync())
+            {
+                hasReports = true;
+            }
+            return View(new AdminPanelViewModel(users,hasReports));
         }
         [HttpPost]
         [Authorize]
@@ -36,12 +41,12 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var user = await _context.Users.AsNoTracking().FirstAsync(x=>x.Id==userid);
+            var user = await _context.Users.AsNoTracking().FirstAsync(x => x.Id == userid);
             user.Warnings++;
             _context.Attach(user);
             _context.Entry(user).Property(x => x.Warnings).IsModified = true;
             await _context.SaveChangesAsync();
-            return RedirectToAction("Profile", "Home", new {userName=user.UserName});
+            return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }
         // Add ModelError if something went wrong, that's for every method including creating post and reply
         [Authorize]
@@ -54,13 +59,13 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var user = await _context.Users.FirstAsync(x => x.Id == id);
-            var posts = await _context.PostDataModels.Where(x=>x.User==user).ToListAsync();
-            var replies = await _context.ReplyDataModels.Where(x=>x.User==user).ToListAsync();
-            foreach(var reply in replies)
+            var posts = await _context.PostDataModels.Where(x => x.User == user).ToListAsync();
+            var replies = await _context.ReplyDataModels.Where(x => x.User == user).ToListAsync();
+            foreach (var reply in replies)
             {
                 reply.User = GlobalVariables.DefaultUser;
             }
-            foreach(var post in posts)
+            foreach (var post in posts)
             {
                 post.User = GlobalVariables.DefaultUser;
             }

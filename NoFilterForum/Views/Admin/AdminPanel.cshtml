@@ -2,6 +2,10 @@
 @model AdminPanelViewModel
 
 @{
+	if (Model.HasReports)
+	{
+		<a asp-action="GoToReports" asp-controller="Admin"><h2 style="color:red">You have pending reports...</h2></a>
+	}
 	foreach(var user in Model.Users)
 	{
 		<a asp-action="Profile" asp-controller="Home" asp-route-userName="@user.UserName"><h4>@user.UserName</h4></a>
