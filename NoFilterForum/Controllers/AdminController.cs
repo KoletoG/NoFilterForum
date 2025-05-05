@@ -27,6 +27,22 @@ namespace NoFilterForum.Controllers
             var users = await _context.Users.Where(x=>x.UserName!=GlobalVariables.DefaultUser.UserName).ToListAsync();
             return View(new AdminPanelViewModel(users));
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GiveWarning(string userid)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var user = await _context.Users.AsNoTracking().FirstAsync(x=>x.Id==userid);
+            user.Warnings++;
+            _context.Attach(user);
+            _context.Entry(user).Property(x => x.Warnings).IsModified = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Profile", "Home", new {userName=user.UserName});
+        }
         // Add ModelError if something went wrong, that's for every method including creating post and reply
         [Authorize]
         [HttpPost]
