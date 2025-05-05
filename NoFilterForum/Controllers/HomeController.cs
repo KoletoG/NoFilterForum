@@ -70,7 +70,16 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendReport(string id, string content, bool isPost, string userid)
+        {
+            if (isPost)
+            {
+
+            }
+        }
         [Authorize]
         public async Task<IActionResult> PostView(string id, string titleOfSection)
         {

@@ -18,6 +18,14 @@ else
 		<button type="submit">Delete Post</button>
 	</form>
 }
+else
+{
+	<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true" asp-route-userid="@Model.Post.User.Id">
+		@Html.AntiForgeryToken()
+		<input type="text" name="content" placeholder="Please specify the reason for the report..." />
+		<button type="submit">Send Report</button>
+	</form>
+}
 @{
 	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
 		@Html.AntiForgeryToken()
@@ -38,8 +46,16 @@ else
 		@if (reply.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 		{
 			<form asp-action="DeleteReply" asp-route-id="@reply.Id" asp-route-title="@Model.Title" method="post">
-			@Html.AntiForgeryToken()
+				@Html.AntiForgeryToken()
 				<button type="submit">Delete Reply</button>
+			</form>
+		}
+		else
+		{
+			<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-userid="@reply.User.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="text" name="content" placeholder="Please specify the reason for the report..." />
+				<button type="submit">Send Report</button>
 			</form>
 		}
 	}
