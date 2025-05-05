@@ -1,0 +1,9 @@
+﻿@using NoFilterForum.Models.ViewModels
+@model ReportsViewModel
+
+@foreach(var report in Model.Reports)
+{
+	<h4>@report.IdOfPostReply</h4>
+	<h5>@report.User.UserName</h5>	
+	<h3>@report.Content</h3>
+}

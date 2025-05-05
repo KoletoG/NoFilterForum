@@ -17,6 +17,11 @@ namespace NoFilterForum.Controllers
             _logger = logger;
             _context = context;
         }
+        public async Task<IActionResult> Reports()
+        {
+            var reports = await _context.ReportDataModels.Include(x=>x.User).ToListAsync();
+            return View(new ReportsViewModel(reports));
+        }
         [Authorize] // Add deleting replies, deleting posts as an admin
         public async Task<IActionResult> AdminPanel()
         {
