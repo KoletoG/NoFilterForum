@@ -10,4 +10,8 @@ namespace NoFilterForum.Interfaces
         void DeleteReply(ReplyDataModel replyDataModel);
         void DeletePost(PostDataModel postDataModel);
     }
+    public interface INonIOService
+    {
+        public string LinkCheckText(string text);
+    }
 }

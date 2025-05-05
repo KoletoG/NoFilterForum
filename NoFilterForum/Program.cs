@@ -1,3 +1,4 @@
+using Ganss.Xss;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
@@ -34,6 +35,8 @@ namespace NoFilterForum
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IIOService, IOService>();
+            builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
+            builder.Services.AddScoped<INonIOService,NonIOService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

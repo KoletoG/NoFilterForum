@@ -1,0 +1,19 @@
+﻿using Microsoft.Extensions.Hosting;
+using NoFilterForum.Interfaces;
+using System.Text.RegularExpressions;
+
+namespace NoFilterForum.Services
+{
+    public class NonIOService : INonIOService
+    {
+        private readonly ILogger<NonIOService> _logger;
+        public NonIOService(ILogger<NonIOService> logger)
+        {
+            _logger = logger;
+        }
+        public string LinkCheckText(string text)
+        {
+            return Regex.Replace(text, @"(https?://[^\s]+)", "<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">$1</a>");
+        }
+    }
+}

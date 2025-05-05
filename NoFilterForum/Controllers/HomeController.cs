@@ -18,11 +18,15 @@ namespace NoFilterForum.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IIOService _ioService;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IIOService iOService)
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        private readonly INonIOService _nonIOService;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IIOService iOService,IHtmlSanitizer htmlSanitizer, INonIOService nonIOService)
         {
             _logger = logger;
             _context = context;
             _ioService = iOService;
+            _htmlSanitizer = htmlSanitizer;
+            _nonIOService = nonIOService;
         }
         [Authorize] // If issued a warning, show it here
         public async Task<IActionResult> Index()
@@ -44,6 +48,8 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
+            description=_htmlSanitizer.Sanitize(description);
+            title=_htmlSanitizer.Sanitize(title);
             _context.SectionDataModels.Add(new SectionDataModel(title, description));
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -77,6 +83,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> SendReport(string id, string content, bool isPost, string userid,string title)
         {
             var user = await _context.Users.FirstAsync(x => x.Id == userid);
+            content = _htmlSanitizer.Sanitize(content);
             ReportDataModel report = new ReportDataModel(user,content,id,isPost);
             _context.ReportDataModels.Add(report);
             await _context.SaveChangesAsync();
@@ -94,15 +101,14 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> PostView(string id, string titleOfSection)
         {
-            HtmlSanitizer sanitizer = new HtmlSanitizer();
             var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
-            post.Content=sanitizer.Sanitize(post.Content);
-            post.Content = Regex.Replace(post.Content, @"(https?://[^\s]+)", "<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">$1</a>");
+            post.Content= _htmlSanitizer.Sanitize(post.Content);
+            post.Content = _nonIOService.LinkCheckText(post.Content);
             foreach(var rep in replies)
             {
-                rep.Content=sanitizer.Sanitize(rep.Content);
-                rep.Content= Regex.Replace(rep.Content, @"(https?://[^\s]+)", "<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">$1</a>");
+                rep.Content= _htmlSanitizer.Sanitize(rep.Content);
+                rep.Content=_nonIOService.LinkCheckText(rep.Content);
             }
             return View(new PostViewModel(post,replies,titleOfSection));
         }
@@ -144,6 +150,9 @@ namespace NoFilterForum.Controllers
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
             _context.Entry(user).Property(x=>x.PostsCount).IsModified= true;
+            title=_htmlSanitizer.Sanitize(title);
+            body=_htmlSanitizer.Sanitize(body);
+            body=_nonIOService.LinkCheckText(body);
             var post = new PostDataModel(title, body, user);
             await _context.PostDataModels.AddAsync(post);
             section.Posts.Add(post);
@@ -198,6 +207,8 @@ namespace NoFilterForum.Controllers
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             _context.Attach(user);
             var currentPost = await _context.PostDataModels.Include(x=>x.Replies).FirstAsync(x=>x.Id == postid);
+            content = _htmlSanitizer.Sanitize(content);
+            content= _nonIOService.LinkCheckText(content);
             var reply = new ReplyDataModel(content, user,currentPost);
             currentPost.Replies.Add(reply);
             user.PostsCount++;
