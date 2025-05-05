@@ -103,13 +103,6 @@ namespace NoFilterForum.Controllers
         {
             var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
-            post.Content= _htmlSanitizer.Sanitize(post.Content);
-            post.Content = _nonIOService.LinkCheckText(post.Content);
-            foreach(var rep in replies)
-            {
-                rep.Content= _htmlSanitizer.Sanitize(rep.Content);
-                rep.Content=_nonIOService.LinkCheckText(rep.Content);
-            }
             return View(new PostViewModel(post,replies,titleOfSection));
         }
         [Authorize]
@@ -135,7 +128,7 @@ namespace NoFilterForum.Controllers
             var section = await _context.SectionDataModels.AsNoTracking().Include(x=>x.Posts).ThenInclude(x=>x.User).FirstAsync(x=>x.Title==title);
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             var posts = section.Posts;
-            return View(new PostsViewModel(currentUser,posts,section.Title));
+            return View(new PostsViewModel(currentUser,posts,title));
         }
         [Authorize]
         [HttpPost]
