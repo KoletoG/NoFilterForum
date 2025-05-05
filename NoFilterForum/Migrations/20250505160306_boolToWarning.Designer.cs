@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoFilterForum.Data;
 
@@ -11,9 +12,11 @@ using NoFilterForum.Data;
 namespace NoFilterForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505160306_boolToWarning")]
+    partial class boolToWarning
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,13 +359,12 @@ namespace NoFilterForum.Migrations
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
+                    b.Property<string>("UserDataModelId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserDataModelId");
 
                     b.ToTable("WarningDataModels");
                 });
@@ -459,13 +461,9 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("NoFilterForum.Models.WarningDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.UserDataModel", "User")
+                    b.HasOne("NoFilterForum.Models.UserDataModel", null)
                         .WithMany("Warnings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserDataModelId");
                 });
 
             modelBuilder.Entity("NoFilterForum.Models.PostDataModel", b =>

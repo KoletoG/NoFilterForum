@@ -11,6 +11,7 @@ using NoFilterForum.Models;
 using NoFilterForum.Models.ViewModels;
 using Ganss.Xss;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -33,9 +34,14 @@ namespace NoFilterForum.Controllers
         [Authorize] // If issued a warning, show it here
         public async Task<IActionResult> Index()
         {
+            List<WarningDataModel> warnings = new List<WarningDataModel>();
+            if (await _context.WarningDataModels.Where(x=>x.User.UserName==this.User.Identity.Name).AnyAsync(x=>!x.IsAccepted))
+            {
+
+            }
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
-                return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), true));       
+                return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), true));
             }
             return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), false));
         }

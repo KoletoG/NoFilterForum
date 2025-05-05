@@ -66,7 +66,7 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var user = await _context.Users.Include(x=>x.Warnings).FirstAsync(x => x.Id == userid);
-            user.Warnings.Add(new WarningDataModel(content));
+            user.Warnings.Add(new WarningDataModel(content, user));
             await _context.SaveChangesAsync();
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }

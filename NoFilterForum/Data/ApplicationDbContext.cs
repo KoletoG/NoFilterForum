@@ -10,6 +10,10 @@ namespace NoFilterForum.Data
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }
         public DbSet<SectionDataModel> SectionDataModels { get; set; }
