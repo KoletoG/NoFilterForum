@@ -17,8 +17,27 @@ namespace NoFilterForum.Controllers
             _logger = logger;
             _context = context;
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReport(string id)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var report = await _context.ReportDataModels.FirstAsync(x => x.Id == id);
+            _context.ReportDataModels.Remove(report);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Reports");
+        }
+        [Authorize]
         public async Task<IActionResult> Reports()
         {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
             var reports = await _context.ReportDataModels.Include(x=>x.User).ToListAsync();
             return View(new ReportsViewModel(reports));
         }
