@@ -37,13 +37,13 @@ namespace NoFilterForum.Controllers
             List<WarningDataModel> warnings = new List<WarningDataModel>();
             if (await _context.WarningDataModels.Where(x=>x.User.UserName==this.User.Identity.Name).AnyAsync(x=>!x.IsAccepted))
             {
-
+                warnings.AddRange(await _context.WarningDataModels.Where(x=>x.User.UserName==this.User.Identity.Name && !x.IsAccepted).ToListAsync());
             }
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
-                return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), true));
+                return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), true,warnings));
             }
-            return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), false));
+            return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), false,warnings));
         }
         [Authorize]
         [HttpPost]

@@ -4,6 +4,16 @@
     ViewData["Title"] = "Home Page";
 }
 @{
+    foreach(var warning in Model.Warnings)
+    {
+        <form asp-action="AcceptWarning" asp-route-id="@warning.Id" asp-controller="Home" method="post">
+        <h4 style="color:red">You have been given a warning with the message: <br /> @warning.Content</h4>
+        @Html.AntiForgeryToken()
+        <button type="submit">I understand</button>
+        </form>
+    }
+}
+@{
     if (Model.IsAdmin)
     {
         <form asp-action="CreateSection" asp-controller="Home" method="post">
