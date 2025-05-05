@@ -10,7 +10,7 @@ else
 	<h5 style="text-decoration:line-through">@Model.Post.User.UserName</h5>
 }
 <h1>@Model.Post.Title</h1>
-<h5>@Model.Post.Content</h5>
+<h5>@Html.Raw(Model.Post.Content)</h5>
 @if (Model.Post.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 {
 	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" method="post">

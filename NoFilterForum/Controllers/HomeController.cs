@@ -9,7 +9,7 @@ using NoFilterForum.Global_variables;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Models;
 using NoFilterForum.Models.ViewModels;
-
+using Ganss.Xss;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -93,8 +93,10 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> PostView(string id, string titleOfSection)
         {
+            HtmlSanitizer sanitizer = new HtmlSanitizer();
             var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
+            post.Content=sanitizer.Sanitize(post.Content);
             return View(new PostViewModel(post,replies,titleOfSection));
         }
         [Authorize]
