@@ -6,6 +6,9 @@
 	{
 		<h1>Hello!</h1>
 		<h6>You have: @Model.User.Warnings.Count warnings</h6>
+		<h2>Your info (This information is only visible by you): </h2>
+		<h3>Email: @Model.User.Email</h3>
+		<h3>Your account was created on @Model.User.DateCreated.ToLongDateString()</h3>
 	}
 	if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 	{
@@ -22,9 +25,6 @@
 	}
 }
 <h1>@Model.User.UserName</h1>
-@{
-	// Need to combine them or separate them into different pages
-}
 <h5>Posts count: @Model.User.PostsCount</h5>
 @{
 	foreach(var key in Model.userDate.Keys)
