@@ -133,6 +133,7 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("PostView",new {id=postId,titleOfSection=title});
         }
         [Route("Posts/{title}")]
+        [Route("Posts/{title}/error-{errorTime}")]
         [Authorize]
         public async Task<IActionResult> PostsMain(string title, bool errorTime=false)
         {
