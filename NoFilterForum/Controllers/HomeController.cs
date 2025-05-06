@@ -107,11 +107,11 @@ namespace NoFilterForum.Controllers
             }
         }
         [Authorize]
-        public async Task<IActionResult> PostView(string id, string titleOfSection)
+        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId="")
         {
             var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
-            return View(new PostViewModel(post,replies,titleOfSection));
+            return View(new PostViewModel(post,replies,titleOfSection,isFromProfile,replyId));
         }
         [Authorize]
         [ValidateAntiForgeryToken]

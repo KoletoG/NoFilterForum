@@ -38,7 +38,7 @@
 		{
 			if (reply.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@reply.Post.Id"><h5>Reply: @reply.Content</h5></a>
+				<a asp-action="PostView" asp-route-id="@reply.Post.Id" asp-route-isFromProfile="true" asp-route-replyId="@reply.Id"><h5>Reply: @reply.Content</h5></a>
 				<br />
 				break;
 			}
