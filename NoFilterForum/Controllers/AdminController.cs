@@ -70,10 +70,46 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRepliesAndPosts(string userid)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var count = 0;
+            if (await _context.ReplyDataModels.Where(x => x.User.Id == userid).AnyAsync())
+            {
+                var replies = await _context.ReplyDataModels.Where(x => x.User.Id == userid).ToListAsync();
+                count += replies.Count();
+                _context.RemoveRange(replies);
+            }
+            if(await _context.PostDataModels.Where(x => x.User.Id == userid).AnyAsync())
+            {
+                var posts = await _context.PostDataModels.Where(x => x.User.Id == userid).ToListAsync();
+                count += posts.Count();
+                foreach (var post in posts)
+                {
+                    if (post.Replies != null)
+                    {
+                        _context.RemoveRange(post.Replies);
+                    }
+                }
+                _context.RemoveRange(posts);
+            }
+            var user = await _context.Users.Where(x => x.Id == userid).FirstOrDefaultAsync();
+            user.PostsCount -= count;
+            _context.Attach(user);
+            _context.Entry(user).Property(x=>x.PostsCount).IsModified = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Profile","Home",new { userName = user.UserName });
+        }
         // Add ModelError if something went wrong, that's for every method including creating post and reply
         [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken] // Check default user instances in sql database tomorrow
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> BanUser(string id)
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
