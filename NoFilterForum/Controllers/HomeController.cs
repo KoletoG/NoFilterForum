@@ -107,6 +107,7 @@ namespace NoFilterForum.Controllers
             }
         }
         [Authorize]
+        [Route("Post/{id}")]
         public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId="", bool errorTime=false)
         {
             if (errorTime)
