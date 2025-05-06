@@ -11,7 +11,8 @@
 		<a asp-action="Profile" asp-controller="Home" asp-route-userName="@user.UserName"><h4>@user.UserName</h4></a>
 		@if (user.Warnings.Count >= 3)
 		{
-			<p style="color:red">@user.UserName has more than 2 warnings {@user.Warnings}</p>
+			<p style="color:red"><a asp-action="ShowWarnings" asp-controller="Admin" asp-route-id="@user.Id">@user.UserName has more than 2 warnings {@user.Warnings.Count} (Click to view them)</a></p>
+			
 		}
 		<h5>@user.Email</h5>
 		<h5>@user.Role</h5>

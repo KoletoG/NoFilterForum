@@ -95,5 +95,15 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(AdminPanel));
         }
+        [Authorize]
+        public async Task<IActionResult> ShowWarnings(string id)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var warnignsList = await _context.WarningDataModels.Where(x=>x.User.Id==id).ToListAsync();
+            return View(warnignsList);
+        }
     }
 }
