@@ -16,6 +16,10 @@ namespace NoFilterForum.Services
         {
             return await _context.Users.Include(x=>x.Warnings).FirstOrDefaultAsync(x=>x.UserName==username);
         }
+        public async Task<UserDataModel> GetUserByIdAsync(string id)
+        {
+            return await _context.Users.Include(x => x.Warnings).FirstAsync(x => x.Id == id);
+        }
         public async Task AdjustRoleByPostCount(UserDataModel user)
         {
 

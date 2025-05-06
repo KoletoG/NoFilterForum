@@ -165,8 +165,8 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Dictionary <string,DateTime> dateOrder = new Dictionary<string,DateTime>();
             var currentUser = await _ioService.GetUserByNameAsync(userName);
+            Dictionary <string,DateTime> dateOrder = new Dictionary<string,DateTime>();
             var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
             var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
             foreach(var post in posts)
@@ -178,7 +178,7 @@ namespace NoFilterForum.Controllers
                 reply.Content=_nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
-            return View(new ProfileViewModel(currentUser,posts,replies,userName==this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).ToDictionary()));
+            return View(new ProfileViewModel(currentUser,posts,replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).ToDictionary()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
