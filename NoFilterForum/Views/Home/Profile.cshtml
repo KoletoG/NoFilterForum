@@ -9,23 +9,15 @@
 		<h2>Your info (This information is only visible by you): </h2>
 		<h3>Email: @Model.User.Email</h3>
 		<h3>Your account was created on @Model.User.DateCreated.ToLongDateString()</h3>
-		if (string.IsNullOrEmpty(Model.User.Bio))
-		{
-			<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
-				@Html.AntiForgeryToken()
-				<input name="bio" placeholder="Your bio..." type="text"/>
-				<button type="submit">Save Bio</button>
-			</form>
-		}
-		else
+		if (!string.IsNullOrEmpty(Model.User.Bio))
 		{
 			<h3>Your bio: @Model.User.Bio</h3>
-			<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
-				@Html.AntiForgeryToken()
-				<input name="bio" placeholder="Your bio..." type="text" />
-				<button type="submit">Save Bio</button>
-			</form>
 		}
+		<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
+			@Html.AntiForgeryToken()
+			<input name="bio" placeholder="Your bio..." type="text" />
+			<button type="submit">Save Bio</button>
+		</form>
 	}
 	else
 	{
