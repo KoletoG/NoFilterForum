@@ -18,16 +18,17 @@ namespace NoFilterForum.Models
         public UserRoles Role { get; set; }
         public List<WarningDataModel> Warnings { get; set; }
         public DateTime DateCreated { get; set; }
-        
+        public string Bio {  get; set; }
         public UserDataModel(string userName,string email)
         {
-            Id=Guid.NewGuid().ToString();
+            Id = Guid.NewGuid().ToString();
             UserName = userName;
             Email = email;
             PostsCount = 0;
             Role = UserRoles.Newbie;
             Warnings = new List<WarningDataModel>();
             DateCreated = DateTime.Now;
+            Bio = "";
         }
         public UserDataModel()
         {
