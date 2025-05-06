@@ -32,6 +32,7 @@ else
 		<input type="text" name="content" placeholder="Write a reply..."/>
 		<button type="submit">Create reply</button>
 	</form>
+	<h2 style="color:red">@ViewBag.ErrorTime</h2>
 	@foreach(var reply in Model.Replies)
 	{
 		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)

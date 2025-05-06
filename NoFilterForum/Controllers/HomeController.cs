@@ -107,8 +107,12 @@ namespace NoFilterForum.Controllers
             }
         }
         [Authorize]
-        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId="")
+        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId="", bool errorTime=false)
         {
+            if (errorTime)
+            {
+                ViewBag.ErrorTime = "Replies can be created once every 30 seconds!";
+            }
             var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
             return View(new PostViewModel(post,replies,titleOfSection,isFromProfile,replyId));
@@ -131,7 +135,7 @@ namespace NoFilterForum.Controllers
         {
             if (errorTime)
             {
-                ViewBag.ErrorTime = "Posts can be created once every 15 minutes";
+                ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
             }
             var section = await _context.SectionDataModels.AsNoTracking().Include(x=>x.Posts).ThenInclude(x=>x.User).FirstAsync(x=>x.Title==title);
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
@@ -228,7 +232,16 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReply(string postid, string content, string title)
         {
-            var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var userName = this.User.Identity.Name;
+            var user = await _ioService.GetUserByNameAsync(userName); 
+            if (!GlobalVariables.adminNames.Contains(userName) && await _context.ReplyDataModels.Where(x => x.User == user).AnyAsync())
+            {
+                var lastReplyOfUser = await _context.ReplyDataModels.Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                if (lastReplyOfUser.AddSeconds(30)> DateTime.UtcNow)
+                {
+                    return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title, errorTime = true });
+                }
+            }
             _context.Attach(user);
             var currentPost = await _context.PostDataModels.Include(x=>x.Replies).FirstAsync(x=>x.Id == postid);
             content = _htmlSanitizer.Sanitize(content);
