@@ -179,6 +179,9 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> SetBio(string bio, string userId)
         {
             var user = await _context.Users.FirstAsync(x => x.Id == userId);
+            bio=_htmlSanitizer.Sanitize(bio);
+            bio= _nonIOService.LinkCheckText(bio);
+            bio = _nonIOService.CheckForHashTags(bio);
             if (string.IsNullOrWhiteSpace(bio))
             {
                 return RedirectToAction("Profile", "Home", new { userName = user.UserName, error="Setting bio cannot be empty!" });

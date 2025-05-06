@@ -13,16 +13,16 @@
 		<h2>Your info (This information is only visible by you): </h2>
 		<h3>Email: @Model.User.Email</h3>
 		<h3>Your account was created on @Model.User.DateCreated.ToLongDateString()</h3>
-		<h3>Your bio: @Model.User.Bio</h3>
+		<h3>Your bio: @Html.Raw(Model.User.Bio)</h3>
 		<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
 			@Html.AntiForgeryToken()
-			<input name="bio" placeholder="Your bio..." value="@Model.User.Bio" type="text" />
+			<input name="bio" placeholder="Your bio..." type="text" />
 			<button type="submit">Save Bio</button>
 		</form>
 	}
 	else
 	{
-		<h3>@Model.User.UserName's bio: @Model.User.Bio</h3>
+		<h3>@Model.User.UserName's bio: @Html.Raw(Model.User.Bio)</h3>
 	}
 	if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 	{
