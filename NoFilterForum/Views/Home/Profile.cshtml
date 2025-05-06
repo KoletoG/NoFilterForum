@@ -4,7 +4,10 @@
 @{
 	if (Model.IsSameUser)
 	{
-		<h1 style="color:red">@ViewBag.Error</h1>
+		if (!string.IsNullOrEmpty(ViewBag.Error))
+		{
+			<h1 style="color:red">@ViewBag.Error</h1>
+		}
 		<h1>Hello!</h1>
 		<h6>You have: @Model.User.Warnings.Count warnings</h6>
 		<h2>Your info (This information is only visible by you): </h2>
