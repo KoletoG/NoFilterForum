@@ -37,8 +37,16 @@ namespace NoFilterForum
             builder.Services.AddScoped<IIOService, IOService>();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
             builder.Services.AddScoped<INonIOService,NonIOService>();
+            builder.Services.ConfigureApplicationCookie(c =>
+            {
+                c.Cookie.HttpOnly = true;
+                c.Cookie.SameSite = SameSiteMode.Strict;
+                c.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                c.SlidingExpiration = true;
+                c.ExpireTimeSpan= TimeSpan.FromDays(7);
+                c.Cookie.MaxAge= TimeSpan.FromDays(14);
+            });
             var app = builder.Build();
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
