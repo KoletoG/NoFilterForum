@@ -12,11 +12,24 @@
 		if (string.IsNullOrEmpty(Model.User.Bio))
 		{
 			<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
-			@Html.AntiForgeryToken()
-			<input name="bio" placeholder="Your bio..." type="text"/>
-			<button type="submit">Save Bio</button>
+				@Html.AntiForgeryToken()
+				<input name="bio" placeholder="Your bio..." type="text"/>
+				<button type="submit">Save Bio</button>
 			</form>
 		}
+		else
+		{
+			<h3>Your bio: @Model.User.Bio</h3>
+			<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
+				@Html.AntiForgeryToken()
+				<input name="bio" placeholder="Your bio..." type="text" />
+				<button type="submit">Save Bio</button>
+			</form>
+		}
+	}
+	else
+	{
+		<h3>@Model.User.UserName's bio: @Model.User.Bio</h3>
 	}
 	if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 	{
