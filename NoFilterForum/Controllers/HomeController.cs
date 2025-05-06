@@ -183,10 +183,8 @@ namespace NoFilterForum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AcceptWarning(string id)
+        public async Task<IActionResult> AcceptWarnings()
         {
-            var warning = await _context.WarningDataModels.FirstAsync(x => x.Id == id);
-            warning.IsAccepted = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
