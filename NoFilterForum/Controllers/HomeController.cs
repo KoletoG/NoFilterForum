@@ -150,6 +150,7 @@ namespace NoFilterForum.Controllers
             title=_htmlSanitizer.Sanitize(title);
             body=_htmlSanitizer.Sanitize(body);
             body=_nonIOService.LinkCheckText(body);
+            body = _nonIOService.CheckForHashTags(body);
             var post = new PostDataModel(title, body, user);
             await _context.PostDataModels.AddAsync(post);
             section.Posts.Add(post);
@@ -220,6 +221,7 @@ namespace NoFilterForum.Controllers
             var currentPost = await _context.PostDataModels.Include(x=>x.Replies).FirstAsync(x=>x.Id == postid);
             content = _htmlSanitizer.Sanitize(content);
             content= _nonIOService.LinkCheckText(content);
+            content = _nonIOService.CheckForHashTags(content);
             var reply = new ReplyDataModel(content, user,currentPost);
             currentPost.Replies.Add(reply);
             user.PostsCount++;

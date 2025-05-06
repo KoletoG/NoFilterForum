@@ -14,6 +14,7 @@ namespace NoFilterForum.Interfaces
     public interface INonIOService
     {
         public string LinkCheckText(string text);
-        public string ReplaceLinkText(string text);
+        public string ReplaceLinkText(string text); 
+        public string CheckForHashTags(string text);
     }
 }
