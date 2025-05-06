@@ -1,6 +1,6 @@
 ﻿@using NoFilterForum.Models.ViewModels
 @model PostsViewModel
-
+<h2 style="color:red">@ViewBag.ErrorTime</h2>
 <form asp-action="CreatePost" asp-controller="Home" method="post">
 	<input hidden type="text" name="titleOfSection" value="@Model.Title" />
 	<input type="text" name="title" placeholder="Title of the post" />

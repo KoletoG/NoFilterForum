@@ -127,8 +127,12 @@ namespace NoFilterForum.Controllers
         }
         [Route("Posts/{title}")]
         [Authorize]
-        public async Task<IActionResult> PostsMain(string title)
+        public async Task<IActionResult> PostsMain(string title, bool errorTime=false)
         {
+            if (errorTime)
+            {
+                ViewBag.ErrorTime = "Posts can be created once every 15 minutes";
+            }
             var section = await _context.SectionDataModels.AsNoTracking().Include(x=>x.Posts).ThenInclude(x=>x.User).FirstAsync(x=>x.Title==title);
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             var posts = section.Posts.OrderByDescending(x=>x.DateCreated).ToList();
@@ -141,8 +145,16 @@ namespace NoFilterForum.Controllers
         {
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
-            var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == titleOfSection);
             var user = await _ioService.GetUserByNameAsync(userName);
+            if (!GlobalVariables.adminNames.Contains(userName))
+            {
+                var lastPostOfUser = await _context.PostDataModels.Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                if (lastPostOfUser.AddMinutes(15) > DateTime.UtcNow)
+                {
+                    return RedirectToAction("PostsMain", new { title = titleOfSection, errorTime = true });
+                }
+            }
+            var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == titleOfSection);
             _context.Attach(user);
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
