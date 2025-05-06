@@ -15,12 +15,15 @@
     for(int i =0;i<Model.Warnings.Count;i++)
     {
         <h4 style="color:red">Warning @(i + 1): <br /> @Model.Warnings[i].Content</h4>
-        
+
     }
-    <form asp-action="AcceptWarnings" asp-controller="Home" method="post">
-        @Html.AntiForgeryToken()
-        <button type="submit">I understand</button>
-    </form>
+    if (Model.Warnings.Count > 0)
+    {
+        <form asp-action="AcceptWarnings" asp-controller="Home" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit">I understand</button>
+        </form>
+    }
 }
 @{
     if (Model.IsAdmin)
