@@ -16,7 +16,7 @@
 		<h3>Your bio: @Model.User.Bio</h3>
 		<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
 			@Html.AntiForgeryToken()
-			<input name="bio" placeholder="Your bio..." type="text" />
+			<input name="bio" placeholder="Your bio..." value="@Model.User.Bio" type="text" />
 			<button type="submit">Save Bio</button>
 		</form>
 	}
