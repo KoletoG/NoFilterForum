@@ -179,6 +179,14 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> SetBio(string bio, string userId)
         {
             var user = await _context.Users.FirstAsync(x => x.Id == userId);
+            if (string.IsNullOrWhiteSpace(bio))
+            {
+                return RedirectToAction("Profile", "Home", new { userName = user.UserName, error="Setting bio cannot be empty!" });
+            }
+            else if (bio == user.Bio)
+            {
+                return RedirectToAction("Profile", "Home", new { userName = user.UserName });
+            }
             user.Bio = bio;
             await _context.SaveChangesAsync();
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
@@ -186,8 +194,12 @@ namespace NoFilterForum.Controllers
         // Need to add likes with AJAX
         [Authorize]
         [Route("Profile/{userName}")]
-        public async Task<IActionResult> Profile(string userName)
+        public async Task<IActionResult> Profile(string userName, string error="")
         {
+            if (!string.IsNullOrEmpty(error))
+            {
+                ViewBag.Error = error;
+            }
             if (userName == GlobalVariables.DefaultUser.UserName)
             {
                 return RedirectToAction("Index");
