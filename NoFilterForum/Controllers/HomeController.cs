@@ -173,6 +173,16 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("PostsMain",new{title=titleOfSection });
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetBio(string bio, string userId)
+        {
+            var user = await _context.Users.FirstAsync(x => x.Id == userId);
+            user.Bio = bio;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Profile", "Home", new { userName = user.UserName });
+        }
         // Need to add likes with AJAX
         [Authorize]
         [Route("Profile/{userName}")]
