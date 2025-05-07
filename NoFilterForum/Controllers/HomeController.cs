@@ -324,12 +324,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReadNotifications()
         {
-            var notifications = await _context.NotificationDataModels.Where(x => !x.IsRead).ToListAsync();
-            foreach (var notification in notifications)
-            {
-                notification.IsRead = true;
-            }
-            await _context.SaveChangesAsync();
+            await _context.NotificationDataModels.Where(x => !x.IsRead).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsRead,true));
             return RedirectToAction("Notifications", "Home");
         }
         [Authorize]
