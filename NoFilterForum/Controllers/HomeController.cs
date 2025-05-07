@@ -129,7 +129,11 @@ namespace NoFilterForum.Controllers
             {
                 ViewBag.ErrorTime = "Replies can be created once every 30 seconds!";
             }
-            var post = await _context.PostDataModels.AsNoTracking().Include(x=>x.User).Include(x=>x.Replies).ThenInclude(x=>x.User).Where(x => x.Id == id).FirstAsync();
+            if(!_memoryCache.TryGetValue($"post_{id}",out PostDataModel post))
+            {
+                post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Include(x => x.Replies).ThenInclude(x => x.User).Where(x => x.Id == id).FirstAsync();
+                _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(5));
+            }
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
             return View(new PostViewModel(post,replies,titleOfSection,isFromProfile,replyId));
         }
@@ -160,7 +164,7 @@ namespace NoFilterForum.Controllers
                 _memoryCache.Set($"sec_{title}", section,TimeSpan.FromSeconds(15));
             }
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            if(!_memoryCache.TryGetValue($"posts_sec_{section.Id}",out List <PostDataModel> posts))
+            if(!_memoryCache.TryGetValue($"posts_sec_{section.Id}",out List<PostDataModel> posts))
             {
                 posts = section.Posts.OrderByDescending(x => x.DateCreated).ToList();
                 _memoryCache.Set($"posts_sec_{section.Id}", posts, TimeSpan.FromSeconds(15));
