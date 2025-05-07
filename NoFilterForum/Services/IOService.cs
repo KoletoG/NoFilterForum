@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Models.DataModels;
@@ -72,14 +73,23 @@ namespace NoFilterForum.Services
                 throw new Exception("Invalid datamodel");
             }
         }
-        public void DeleteReply(ReplyDataModel replyDataModel)
+        public async Task DeleteReply(ReplyDataModel replyDataModel)
         {
-            replyDataModel.User.PostsCount--;
+            replyDataModel.User.PostsCount--; 
+            var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == replyDataModel.Id).ToListAsync();
+            foreach (var notification in notifications)
+            {
+                _context.NotificationDataModels.Remove(notification);
+            }
             _context.ReplyDataModels.Remove(replyDataModel);
         }
-        public void DeletePost(PostDataModel postDataModel)
+        public async Task DeletePost(PostDataModel postDataModel)
         {
             postDataModel.User.PostsCount--;
+            foreach(var reply in postDataModel.Replies)
+            {
+                await DeleteReply(reply);
+            }
             _context.PostDataModels.Remove(postDataModel);
         }
     }
