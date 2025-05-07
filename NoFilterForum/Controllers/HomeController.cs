@@ -34,6 +34,7 @@ namespace NoFilterForum.Controllers
             _nonIOService = nonIOService;
             _memoryCache = memoryCache;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             List<WarningDataModel> warnings = new List<WarningDataModel>();
