@@ -62,6 +62,7 @@ namespace NoFilterForum
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Frame-Options", "DENY");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                 await next();
             });
             app.UseHttpsRedirection();
