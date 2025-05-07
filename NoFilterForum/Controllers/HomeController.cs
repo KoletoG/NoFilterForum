@@ -12,6 +12,7 @@ using NoFilterForum.Models.ViewModels;
 using Ganss.Xss;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Caching.Memory;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -21,7 +22,8 @@ namespace NoFilterForum.Controllers
         private readonly IIOService _ioService;
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly INonIOService _nonIOService;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IIOService iOService,IHtmlSanitizer htmlSanitizer, INonIOService nonIOService)
+        private readonly IMemoryCache _memoryCache;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IIOService iOService,IHtmlSanitizer htmlSanitizer, INonIOService nonIOService, IMemoryCache memoryCache)
         {
             _logger = logger;
             _context = context;
@@ -30,6 +32,7 @@ namespace NoFilterForum.Controllers
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
             _nonIOService = nonIOService;
+            _memoryCache = memoryCache;
         }
         public async Task<IActionResult> Index()
         {

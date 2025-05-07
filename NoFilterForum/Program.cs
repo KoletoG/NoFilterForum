@@ -34,6 +34,7 @@ namespace NoFilterForum
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IIOService, IOService>();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
             builder.Services.AddScoped<INonIOService,NonIOService>();
