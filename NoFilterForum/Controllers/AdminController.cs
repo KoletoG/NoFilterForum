@@ -65,12 +65,7 @@ namespace NoFilterForum.Controllers
                 users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
                 _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
             }
-            bool hasReports = false;
-            if (await _context.ReportDataModels.AnyAsync())
-            {
-                hasReports = true;
-            }
-            return View(new AdminPanelViewModel(users,hasReports));
+            return View(new AdminPanelViewModel(users,await _context.ReportDataModels.AnyAsync()));
         }
         [HttpPost]
         [Authorize]
