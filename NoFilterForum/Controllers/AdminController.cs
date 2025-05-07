@@ -32,6 +32,7 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Reports");
         }
         [Authorize]
+        [ResponseCache(Duration =60,Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> Reports()
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
@@ -42,6 +43,7 @@ namespace NoFilterForum.Controllers
             return View(new ReportsViewModel(reports));
         }
         [Authorize] // Add deleting replies, deleting posts as an admin
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> AdminPanel()
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))

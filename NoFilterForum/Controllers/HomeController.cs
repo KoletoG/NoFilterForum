@@ -31,7 +31,6 @@ namespace NoFilterForum.Controllers
             _htmlSanitizer.AllowedTags.Add("a");
             _nonIOService = nonIOService;
         }
-        [Authorize] // If issued a warning, show it here
         public async Task<IActionResult> Index()
         {
             List<WarningDataModel> warnings = new List<WarningDataModel>();
