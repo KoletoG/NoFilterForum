@@ -293,13 +293,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> AcceptWarnings()
         {
-            var listWarnings = await _context.WarningDataModels.Where(x => x.User.UserName == this.User.Identity.Name).ToListAsync();
-
-            foreach (var warning in listWarnings)
-            {
-                warning.IsAccepted = true;
-            }
-            await _context.SaveChangesAsync();
+            await _context.WarningDataModels.Where(x => x.User.UserName == this.User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsAccepted, true));
             return RedirectToAction("Notifications");
         }
         [HttpPost]
