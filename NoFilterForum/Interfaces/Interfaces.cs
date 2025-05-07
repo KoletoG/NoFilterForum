@@ -16,5 +16,6 @@ namespace NoFilterForum.Interfaces
         public string LinkCheckText(string text);
         public string ReplaceLinkText(string text); 
         public string CheckForHashTags(string text);
+        public string[] CheckForTags(string text);
     }
 }

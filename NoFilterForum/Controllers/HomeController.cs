@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Models.DataModels;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.IdentityModel.Tokens;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -322,6 +324,15 @@ namespace NoFilterForum.Controllers
             content= _nonIOService.LinkCheckText(content);
             content = _nonIOService.CheckForHashTags(content);
             var reply = new ReplyDataModel(content, user,currentPost);
+            string[] names = _nonIOService.CheckForTags(content);
+            if (!names.IsNullOrEmpty())
+            {
+                foreach (var name in names)
+                {
+                    var userTo = await _ioService.GetUserByNameAsync(name);
+                    _context.NotificationDataModels.Add(new(reply, user, userTo));
+                }
+            }
             currentPost.Replies.Add(reply);
             user.PostsCount++;
             _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
