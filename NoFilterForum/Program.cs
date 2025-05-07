@@ -44,7 +44,7 @@ namespace NoFilterForum
                 c.Cookie.SameSite = SameSiteMode.Strict;
                 c.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 c.SlidingExpiration = true;
-                c.ExpireTimeSpan= TimeSpan.FromDays(7);
+                c.ExpireTimeSpan= TimeSpan.FromDays(14);
                 c.Cookie.MaxAge= TimeSpan.FromDays(14);
             });
             var app = builder.Build();
