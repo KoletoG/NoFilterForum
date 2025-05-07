@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Models;
@@ -12,10 +13,12 @@ namespace NoFilterForum.Controllers
     {
         private readonly ILogger<AdminController> _logger;
         private readonly ApplicationDbContext _context;
-        public AdminController(ILogger<AdminController> logger, ApplicationDbContext context)
+        private readonly IMemoryCache _memoryCache;
+        public AdminController(ILogger<AdminController> logger, ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _logger = logger;
             _context = context;
+            _memoryCache = memoryCache;
         }
         [Authorize]
         [HttpPost]
@@ -32,7 +35,7 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Reports");
         }
         [Authorize]
-        [ResponseCache(Duration =60,Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration =30,Location = ResponseCacheLocation.Any)]
         [Route("Reports")]
         public async Task<IActionResult> Reports()
         {
@@ -43,8 +46,7 @@ namespace NoFilterForum.Controllers
             var reports = await _context.ReportDataModels.Include(x=>x.User).ToListAsync();
             return View(new ReportsViewModel(reports));
         }
-        [Authorize] // Add deleting replies, deleting posts as an admin
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Authorize]
         [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
         {
@@ -52,7 +54,17 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u=>u.Warnings).ToListAsync();
+            if(!_memoryCache.TryGetValue($"usersList",out List<UserDataModel> users))
+            {
+                users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
+                _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
+            }
+            else if(users.Count!=await _context.Users.CountAsync())
+            {
+                _memoryCache.Remove($"usersList");
+                users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
+                _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
+            }
             bool hasReports = false;
             if (await _context.ReportDataModels.AnyAsync())
             {
@@ -137,6 +149,7 @@ namespace NoFilterForum.Controllers
         }
         [Authorize]
         [Route("WarningsOfUserId-{id}")]
+        [ResponseCache(Duration =60,Location =ResponseCacheLocation.Any)]
         public async Task<IActionResult> ShowWarnings(string id)
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
