@@ -154,9 +154,17 @@ namespace NoFilterForum.Controllers
             {
                 ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
             }
-            var section = await _context.SectionDataModels.AsNoTracking().Include(x=>x.Posts).ThenInclude(x=>x.User).FirstAsync(x=>x.Title==title);
+            if(!_memoryCache.TryGetValue($"sec_{title}",out SectionDataModel section))
+            {
+                section = await _context.SectionDataModels.AsNoTracking().Include(x => x.Posts).ThenInclude(x => x.User).FirstAsync(x => x.Title == title);
+                _memoryCache.Set($"sec_{title}", section,TimeSpan.FromSeconds(15));
+            }
             var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            var posts = section.Posts.OrderByDescending(x=>x.DateCreated).ToList();
+            if(!_memoryCache.TryGetValue($"posts_sec_{section.Id}",out List <PostDataModel> posts))
+            {
+                posts = section.Posts.OrderByDescending(x => x.DateCreated).ToList();
+                _memoryCache.Set($"posts_sec_{section.Id}", posts, TimeSpan.FromSeconds(15));
+            }
             return View(new PostsViewModel(currentUser,posts,title));
         }
         [Authorize]
