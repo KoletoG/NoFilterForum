@@ -9,9 +9,50 @@
 	<button type="submit">Create post</button>
 </form>
 @{
-	foreach(var post in Model.Posts)
+	void ShowTime(TimeSpan timediff)
+	{
+		if ((timediff.TotalDays / 31) < 12)
+		{
+			if (timediff.TotalDays <= 31)
+			{
+				if (timediff.TotalDays < 1)
+				{
+					if (timediff.TotalHours < 1)
+					{
+						if (timediff.TotalMinutes < 1)
+						{
+							<h6>@timediff.TotalSeconds.ToString("0") seconds ago</h6>
+						}
+						else
+						{
+							<h6>@timediff.TotalMinutes.ToString("0") minutes ago</h6>
+						}
+					}
+					else
+					{
+						<h6>@timediff.TotalHours.ToString("0") hours ago</h6>
+					}
+				}
+				else
+				{
+					<h6>@timediff.TotalDays.ToString("0") days ago</h6>
+				}
+			}
+			else
+			{
+				<h6>@((timediff.TotalDays / 31).ToString("0")) months ago</h6>
+			}
+		}
+		else
+		{
+			<h6>@((timediff.TotalDays / 31 / 12).ToString("0")) years ago</h6>
+		}
+	}
+	foreach (var post in Model.Posts)
 	{
 		<a asp-action="PostView" asp-route-id="@post.Id" asp-route-titleOfSection="@Model.Title"><h3>@post.Title | @post.User.Role.ToString()</h3></a>
+		var timeDiff = DateTime.UtcNow - post.DateCreated;
+		ShowTime(timeDiff);
 		<br />
 	}
 }
