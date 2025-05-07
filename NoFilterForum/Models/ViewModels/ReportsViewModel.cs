@@ -1,4 +1,6 @@
-﻿namespace NoFilterForum.Models.ViewModels
+﻿using NoFilterForum.Models.DataModels;
+
+namespace NoFilterForum.Models.ViewModels
 {
     public class ReportsViewModel
     {

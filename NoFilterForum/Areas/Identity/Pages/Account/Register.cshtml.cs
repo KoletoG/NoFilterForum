@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Global_variables;
-using NoFilterForum.Models;
+using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Areas.Identity.Pages.Account
 {

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace NoFilterForum.Models
+namespace NoFilterForum.Models.DataModels
 {
     public class UserDataModel : IdentityUser
     {

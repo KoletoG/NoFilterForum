@@ -1,29 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace NoFilterForum.Models
+namespace NoFilterForum.Models.DataModels
 {
-    public class PostDataModel
+    public class ReplyDataModel
     {
         [Key]
         public string Id { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
-        public string Title { get; set; }
+        public PostDataModel Post { get; set; }
         public UserDataModel User { get; set; }
         public short Likes { get; set; }
-        public List<ReplyDataModel> Replies { get; set; }
-        public PostDataModel(string title, string content, UserDataModel user)
+
+        public ReplyDataModel(string content, UserDataModel user, PostDataModel post)
         {
             Id = Guid.NewGuid().ToString();
             Content = content;
-            Title = title;
             DateCreated = DateTime.Now;
+            Post = post;
             User = user;
-            Replies = new List<ReplyDataModel>();
             Likes = 0;
         }
-        public PostDataModel()
+        public ReplyDataModel()
         {
 
         }

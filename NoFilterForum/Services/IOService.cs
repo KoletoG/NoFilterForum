@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
-using NoFilterForum.Models;
+using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Services
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
+using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Models.ViewModels
 {

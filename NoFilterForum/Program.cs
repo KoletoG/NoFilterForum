@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
-using NoFilterForum.Models;
+using NoFilterForum.Models.DataModels;
 using NoFilterForum.Services;
 
 namespace NoFilterForum

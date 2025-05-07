@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Models;
+using NoFilterForum.Models.DataModels;
 using NoFilterForum.Models.ViewModels;
 
 namespace NoFilterForum.Controllers

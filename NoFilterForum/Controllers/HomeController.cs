@@ -13,6 +13,7 @@ using Ganss.Xss;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Caching.Memory;
+using NoFilterForum.Models.DataModels;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller

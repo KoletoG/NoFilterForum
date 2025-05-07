@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NoFilterForum.Models;
+using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Data
 {

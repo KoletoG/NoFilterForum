@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NoFilterForum.Models
+namespace NoFilterForum.Models.DataModels
 {
     public class ReportDataModel
     {
