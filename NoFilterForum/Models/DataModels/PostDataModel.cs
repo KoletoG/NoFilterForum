@@ -18,7 +18,7 @@ namespace NoFilterForum.Models.DataModels
             Id = Guid.NewGuid().ToString();
             Content = content;
             Title = title;
-            DateCreated = DateTime.Now;
+            DateCreated = DateTime.UtcNow;
             User = user;
             Replies = new List<ReplyDataModel>();
             Likes = 0;

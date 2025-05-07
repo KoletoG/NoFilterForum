@@ -319,6 +319,41 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("PostsMain", new { title = titleOfSection });
         }
+        /*
+         * Avoid Redundant Queries:
+
+    Use projection to fetch only the necessary data (Select instead of loading entire entities).
+
+    Combine multiple queries into one where possible.
+
+Eager vs. Lazy Loading:
+
+    Be mindful of when to use each, especially with related entities.
+
+    Use Include() and ThenInclude() only when necessary to prevent loading large, unnecessary data sets.
+
+Batch Operations:
+
+    Perform bulk updates or deletions using EF Core’s ExecuteSqlRawAsync() when appropriate.
+
+    Use SaveChangesAsync() once after batch modifications instead of calling it inside loops.
+
+AsNoTracking for Read-Only Data:
+
+    Use AsNoTracking() for queries where you don’t plan to update entities. This avoids unnecessary change tracking.
+
+Caching Data:
+
+    Store frequently accessed but rarely changing data (like section lists) in memory cache.
+
+    Use appropriate cache invalidation to keep data up to date.
+
+Efficient Querying:
+
+    Prefer AnyAsync() over CountAsync() when just checking for the existence of data.
+
+    Use indexes on frequently queried columns for better performance.
+         */
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]

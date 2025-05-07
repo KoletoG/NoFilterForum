@@ -27,7 +27,7 @@ namespace NoFilterForum.Models.DataModels
             PostsCount = 0;
             Role = UserRoles.Newbie;
             Warnings = new List<WarningDataModel>();
-            DateCreated = DateTime.Now;
+            DateCreated = DateTime.UtcNow;
             Bio = "";
         }
         public UserDataModel()
