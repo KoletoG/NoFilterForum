@@ -41,11 +41,21 @@ namespace NoFilterForum.Controllers
             {
                 warnings.AddRange(await _context.WarningDataModels.Where(x=>x.User.UserName==this.User.Identity.Name && !x.IsAccepted).ToListAsync());
             }
+            if(!_memoryCache.TryGetValue("sections",out List<SectionDataModel> sections))
+            {
+                sections = await _context.SectionDataModels.ToListAsync();
+                MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow=TimeSpan.FromMinutes(15),
+                    SlidingExpiration=TimeSpan.FromMinutes(5)
+                };
+                _memoryCache.Set("sections", sections,memoryCacheOptions);
+            }
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
-                return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), true,warnings));
+                return View(new IndexViewModel(sections, true,warnings));
             }
-            return View(new IndexViewModel(await _context.SectionDataModels.ToListAsync(), false,warnings));
+            return View(new IndexViewModel(sections, false,warnings));
         }
         [Authorize]
         [HttpPost]
