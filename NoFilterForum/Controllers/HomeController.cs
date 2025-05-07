@@ -160,6 +160,11 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> DeleteReply(string id,string title)
         {
             var reply = await _context.ReplyDataModels.Include(x=>x.Post).Include(x=>x.User).FirstAsync(x=>x.Id==id);
+            var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == id).ToListAsync();
+            foreach (var notification in notifications)
+            {
+                _context.NotificationDataModels.Remove(notification);
+            }
             var postId = reply.Post.Id;
             reply.User.PostsCount--;
             _context.ReplyDataModels.Remove(reply);
@@ -307,7 +312,12 @@ namespace NoFilterForum.Controllers
             var replies = await _context.ReplyDataModels.Include(x=>x.User).Where(x => x.Post == post).ToListAsync();
             foreach (var rep in replies)
             {
-                rep.User.PostsCount--;
+                rep.User.PostsCount--; 
+                var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == rep.Id).ToListAsync();
+                foreach (var notification in notifications)
+                {
+                    _context.NotificationDataModels.Remove(notification);
+                }
                 _context.ReplyDataModels.Remove(rep);
             }
             post.User.PostsCount--;
