@@ -243,20 +243,18 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetBio(string bio, string userId)
         {
-            var user = await _context.Users.FirstAsync(x => x.Id == userId);
             bio = _htmlSanitizer.Sanitize(bio);
             bio = _nonIOService.LinkCheckText(bio);
             bio = _nonIOService.CheckForHashTags(bio);
+            var user = await _context.Users.AsNoTracking().Where(x => x.Id == userId).Select(x => new {x.UserName,x.Bio}).FirstAsync();
             if (string.IsNullOrWhiteSpace(bio))
             {
                 return RedirectToAction("Profile", "Home", new { userName = user.UserName, error = "Setting bio cannot be empty!" });
             }
-            else if (bio == user.Bio)
+            else if(user.Bio!=bio)
             {
-                return RedirectToAction("Profile", "Home", new { userName = user.UserName });
+                await _context.Users.Where(x=>x.Id==userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.Bio, bio));
             }
-            user.Bio = bio;
-            await _context.SaveChangesAsync();
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }
         // Need to add likes with AJAX
@@ -358,6 +356,7 @@ Efficient Querying:
             await _context.NotificationDataModels.Where(x => x.UserTo.UserName == this.User.Identity.Name).ExecuteDeleteAsync();
             return RedirectToAction("Notifications", "Home");
         }
+        // Cache Service NEED! / Singleton
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
