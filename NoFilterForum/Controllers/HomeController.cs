@@ -52,6 +52,17 @@ namespace NoFilterForum.Controllers
                 };
                 _memoryCache.Set("sections", sections,memoryCacheOptions);
             }
+            else if(sections.Count!=await _context.SectionDataModels.CountAsync())
+            {
+                _memoryCache.Remove("sections"); 
+                sections = await _context.SectionDataModels.ToListAsync();
+                MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
+                    SlidingExpiration = TimeSpan.FromMinutes(5)
+                };
+                _memoryCache.Set("sections", sections, memoryCacheOptions);
+            }
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
                 return View(new IndexViewModel(sections, true,warnings));
