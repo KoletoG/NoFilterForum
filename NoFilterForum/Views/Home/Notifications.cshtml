@@ -36,7 +36,13 @@
 			</h3>
 			<h4><i>@notification.Reply.Content</i></h4>
 		}
-	
+	}
+	if (Model.Notifications.Any(x => !x.IsRead))
+	{
+		<form asp-action="ReadNotifications" asp-controller="Home" method="post">
+			@Html.AntiForgeryToken()
+			<button type="submit">Mark as read</button>
+		</form>
 	}
 
 }

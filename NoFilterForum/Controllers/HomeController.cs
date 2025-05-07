@@ -315,6 +315,19 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("PostsMain", new {title= titleOfSection });
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReadNotifications()
+        {
+            var notifications = await _context.NotificationDataModels.Where(x => !x.IsRead).ToListAsync();
+            foreach (var notification in notifications)
+            {
+                notification.IsRead = true;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Notifications","Home");
+        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
