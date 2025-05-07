@@ -1,22 +1,24 @@
 ﻿@using NoFilterForum.Models.ViewModels
 @model NotificationViewModel
-@if (Model.Warnings.Count > 1)
-{
-	<h3 style="color:red; font-weight:bold">You have been given couple warnings with the messages:</h3>
-}
-else if (Model.Warnings.Count == 1)
-{
-	<h3 style="color:red; font-weight:bold">You have been given a warning with the message:</h3>
-}
-@for (int i = 0; i < Model.Warnings.Count; i++)
-{
-	<h4 style="color:red">Warning @(i + 1): <br /> @Model.Warnings[i].Content</h4>
-
-}
-@if (Model.Warnings.Count > 0)
-{
-	<form asp-action="AcceptWarnings" asp-controller="Home" method="post">
-		@Html.AntiForgeryToken()
-		<button type="submit">I understand</button>
-	</form>
+@{
+	int warningsCount = Model.Warnings.Count;
+	@if (warningsCount > 1)
+	{
+		<h3 style="color:red; font-weight:bold">You have been given couple warnings with the messages:</h3>
+	}
+	else if (warningsCount == 1)
+	{
+		<h3 style="color:red; font-weight:bold">You have been given a warning with the message:</h3>
+	}
+	@for (int i = 0; i < warningsCount; i++)
+	{
+		<h4 style="color:red">Warning @(i + 1): <br /> @Model.Warnings[i].Content</h4>
+	}
+	@if (warningsCount > 0)
+	{
+		<form asp-action="AcceptWarnings" asp-controller="Home" method="post">
+			@Html.AntiForgeryToken()
+			<button type="submit">I understand</button>
+		</form>
+	}
 }
