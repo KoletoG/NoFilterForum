@@ -16,6 +16,7 @@ using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Models.DataModels;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.IdentityModel.Tokens;
+using SQLitePCL;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -359,7 +360,18 @@ Efficient Querying:
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReadNotifications()
         {
-            await _context.NotificationDataModels.Where(x => !x.IsRead).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsRead,true));
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _context.NotificationDataModels.Where(x => !x.IsRead).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsRead, true));
+                await _context.NotificationDataModels.Where(x => x.IsRead).ExecuteDeleteAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
             return RedirectToAction("Notifications", "Home");
         }
         [Authorize]
