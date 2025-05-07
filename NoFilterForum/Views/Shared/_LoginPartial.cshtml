@@ -4,7 +4,10 @@
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
-{
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Notifications">Notifications</a>
+        </li>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-controller="Home" asp-action="Profile" asp-route-userName="@this.User.Identity.Name">Your Profile</a>
     </li>
