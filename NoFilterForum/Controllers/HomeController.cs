@@ -184,6 +184,13 @@ namespace NoFilterForum.Controllers
             return View(new PostsViewModel(currentUser,posts,title));
         }
         [Authorize]
+        public async Task<IActionResult> Notifications()
+        {
+            var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var warnings = await _context.WarningDataModels.Where(x =>x.User==user && !x.IsAccepted).ToListAsync();
+            return View(new NotificationViewModel(warnings));
+        }
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost(string title, string body, string titleOfSection)
