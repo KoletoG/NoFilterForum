@@ -294,6 +294,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> AcceptWarnings()
         {
             var listWarnings = await _context.WarningDataModels.Where(x => x.User.UserName == this.User.Identity.Name).ToListAsync();
+
             foreach (var warning in listWarnings)
             {
                 warning.IsAccepted = true;
@@ -360,18 +361,7 @@ Efficient Querying:
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReadNotifications()
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
-            {
-                await _context.NotificationDataModels.Where(x => !x.IsRead).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsRead, true));
-                await _context.NotificationDataModels.Where(x => x.IsRead).ExecuteDeleteAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            await _context.NotificationDataModels.Where(x => x.UserTo.UserName == this.User.Identity.Name).ExecuteDeleteAsync();
             return RedirectToAction("Notifications", "Home");
         }
         [Authorize]
