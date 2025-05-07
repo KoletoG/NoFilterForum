@@ -135,14 +135,21 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}/{titleOfSection}/error-{errorTime}")]
         public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId="", bool errorTime=false)
         {
-            if (errorTime)
-            {
-                ViewBag.ErrorTime = "Replies can be created once every 30 seconds!";
-            }
-            if(!_memoryCache.TryGetValue($"post_{id}",out PostDataModel post))
+            if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Include(x => x.Replies).ThenInclude(x => x.User).Where(x => x.Id == id).FirstAsync();
                 _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(5));
+            }
+            if (string.IsNullOrEmpty(titleOfSection))
+            {
+                titleOfSection = await _context.SectionDataModels.Where(x =>
+                    x.Posts.Contains(post))
+                    .Select(x=>x.Title)
+                    .FirstAsync();
+            }
+            if (errorTime)
+            {
+                ViewBag.ErrorTime = "Replies can be created once every 30 seconds!";
             }
             var replies = post.Replies.OrderBy(x=>x.DateCreated).ToList();
             return View(new PostViewModel(post,replies,titleOfSection,isFromProfile,replyId));
@@ -185,12 +192,17 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> Notifications()
         {
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var notifications = new List<NotificationDataModel>();
+            if(await _context.NotificationDataModels.AnyAsync(x => x.UserTo == user))
+            {
+                notifications=await _context.NotificationDataModels.Include(x=>x.UserTo).Include(x=>x.UserFrom).Include(x=>x.Reply).ThenInclude(x=>x.Post).Where(x=>x.UserTo == user).ToListAsync();
+            }
             var warnings = new List<WarningDataModel>();
             if(await _context.WarningDataModels.AnyAsync(x=>x.User==user && !x.IsAccepted))
             {
                 warnings = await _context.WarningDataModels.Where(x => x.User == user && !x.IsAccepted).ToListAsync();
             }
-            return View(new NotificationViewModel(warnings));
+            return View(new NotificationViewModel(warnings,notifications));
         }
         [Authorize]
         [HttpPost]
