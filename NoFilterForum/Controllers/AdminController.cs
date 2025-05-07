@@ -33,6 +33,7 @@ namespace NoFilterForum.Controllers
         }
         [Authorize]
         [ResponseCache(Duration =60,Location = ResponseCacheLocation.Any)]
+        [Route("Reports")]
         public async Task<IActionResult> Reports()
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
@@ -44,6 +45,7 @@ namespace NoFilterForum.Controllers
         }
         [Authorize] // Add deleting replies, deleting posts as an admin
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
@@ -134,6 +136,7 @@ namespace NoFilterForum.Controllers
             return RedirectToAction(nameof(AdminPanel));
         }
         [Authorize]
+        [Route("WarningsOfUserId-{id}")]
         public async Task<IActionResult> ShowWarnings(string id)
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))

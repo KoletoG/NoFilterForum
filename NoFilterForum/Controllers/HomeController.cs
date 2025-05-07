@@ -123,6 +123,7 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}")]
         [Route("Post/{id}/{titleOfSection}")]
         [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
+        [Route("Post/{id}/{titleOfSection}/error-{errorTime}")]
         public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId="", bool errorTime=false)
         {
             if (errorTime)
@@ -226,6 +227,7 @@ namespace NoFilterForum.Controllers
         // Need to add likes with AJAX
         [Authorize]
         [Route("Profile/{userName}")]
+        [Route("Profile/{userName}/error-{error}")]
         public async Task<IActionResult> Profile(string userName, string error="")
         {
             if (!string.IsNullOrEmpty(error))
