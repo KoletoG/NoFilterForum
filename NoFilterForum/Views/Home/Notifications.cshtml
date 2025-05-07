@@ -28,7 +28,7 @@
 		</h3>
 		<h4><i>@notification.Reply.Content</i></h4>
 	}
-	if (Model.Notifications.Any(x => !x.IsRead))
+	if (Model.Notifications.Any())
 	{
 		<form asp-action="ReadNotifications" asp-controller="Home" method="post">
 			@Html.AntiForgeryToken()
