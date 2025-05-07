@@ -37,11 +37,6 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            List<WarningDataModel> warnings = new List<WarningDataModel>();
-            if (await _context.WarningDataModels.Where(x=>x.User.UserName==this.User.Identity.Name).AnyAsync(x=>!x.IsAccepted))
-            {
-                warnings.AddRange(await _context.WarningDataModels.Where(x=>x.User.UserName==this.User.Identity.Name && !x.IsAccepted).ToListAsync());
-            }
             if(!_memoryCache.TryGetValue("sections",out List<SectionDataModel> sections))
             {
                 sections = await _context.SectionDataModels.ToListAsync();
@@ -65,9 +60,9 @@ namespace NoFilterForum.Controllers
             }
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
-                return View(new IndexViewModel(sections, true,warnings));
+                return View(new IndexViewModel(sections, true));
             }
-            return View(new IndexViewModel(sections, false,warnings));
+            return View(new IndexViewModel(sections, false));
         }
         [Authorize]
         [HttpPost]
@@ -187,7 +182,11 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> Notifications()
         {
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
-            var warnings = await _context.WarningDataModels.Where(x =>x.User==user && !x.IsAccepted).ToListAsync();
+            var warnings = new List<WarningDataModel>();
+            if(await _context.WarningDataModels.AnyAsync(x=>x.User==user && !x.IsAccepted))
+            {
+                warnings = await _context.WarningDataModels.Where(x => x.User == user && !x.IsAccepted).ToListAsync();
+            }
             return View(new NotificationViewModel(warnings));
         }
         [Authorize]
@@ -282,7 +281,7 @@ namespace NoFilterForum.Controllers
                 warning.IsAccepted = true;
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Notifications");
         }
         [HttpPost]
         [Authorize]
