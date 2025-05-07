@@ -15,7 +15,7 @@ namespace NoFilterForum.Services
         }
         public async Task<UserDataModel?> GetUserByNameAsync(string username)
         {
-            return await _context.Users.Include(x=>x.Warnings).FirstOrDefaultAsync(x=>x.UserName==username);
+            return await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.UserName == username);
         }
         public async Task<UserDataModel> GetUserByIdAsync(string id)
         {
@@ -24,7 +24,7 @@ namespace NoFilterForum.Services
         public async Task AdjustRoleByPostCount(UserDataModel user)
         {
 
-            if(user.Role!=UserRoles.VIP && user.Role != UserRoles.Admin)
+            if (user.Role != UserRoles.VIP && user.Role != UserRoles.Admin)
             {
                 if (user.PostsCount > 500)
                 {
@@ -58,11 +58,11 @@ namespace NoFilterForum.Services
                 }
             }
         }
-        public async Task<List<T>> GetTByUserAsync<T>(UserDataModel user) where T: class
+        public async Task<List<T>> GetTByUserAsync<T>(UserDataModel user) where T : class
         {
             if (typeof(T) == typeof(ReplyDataModel))
             {
-                return await _context.ReplyDataModels.Include(x=>x.Post).Where(x => x.User.UserName == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
+                return await _context.ReplyDataModels.Include(x => x.Post).Where(x => x.User.UserName == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
             }
             else if (typeof(T) == typeof(PostDataModel))
             {
@@ -75,18 +75,15 @@ namespace NoFilterForum.Services
         }
         public async Task DeleteReply(ReplyDataModel replyDataModel)
         {
-            replyDataModel.User.PostsCount--; 
+            replyDataModel.User.PostsCount--;
             var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == replyDataModel.Id).ToListAsync();
-            foreach (var notification in notifications)
-            {
-                _context.NotificationDataModels.Remove(notification);
-            }
+            _context.NotificationDataModels.RemoveRange(notifications);
             _context.ReplyDataModels.Remove(replyDataModel);
         }
         public async Task DeletePost(PostDataModel postDataModel)
         {
             postDataModel.User.PostsCount--;
-            foreach(var reply in postDataModel.Replies)
+            foreach (var reply in postDataModel.Replies)
             {
                 await DeleteReply(reply);
             }

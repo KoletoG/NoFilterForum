@@ -99,7 +99,7 @@ namespace NoFilterForum.Controllers
             {
                 foreach (var reply in post.Replies)
                 {
-                   await _ioService.DeleteReply(reply);
+                    await _ioService.DeleteReply(reply);
                 }
                 await _ioService.DeletePost(post);
             }
@@ -161,10 +161,7 @@ namespace NoFilterForum.Controllers
         {
             var reply = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).FirstAsync(x => x.Id == id);
             var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == id).ToListAsync();
-            foreach (var notification in notifications)
-            {
-                _context.NotificationDataModels.Remove(notification);
-            }
+            _context.NotificationDataModels.RemoveRange(notifications);
             var postId = reply.Post.Id;
             reply.User.PostsCount--;
             _context.ReplyDataModels.Remove(reply);
@@ -314,10 +311,7 @@ namespace NoFilterForum.Controllers
             {
                 rep.User.PostsCount--;
                 var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == rep.Id).ToListAsync();
-                foreach (var notification in notifications)
-                {
-                    _context.NotificationDataModels.Remove(notification);
-                }
+                _context.NotificationDataModels.RemoveRange(notifications);
                 _context.ReplyDataModels.Remove(rep);
             }
             post.User.PostsCount--;
