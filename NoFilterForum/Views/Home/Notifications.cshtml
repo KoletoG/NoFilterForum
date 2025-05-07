@@ -21,21 +21,12 @@
 			<button type="submit">I understand</button>
 		</form>
 	}
-	foreach(var notification in Model.Notifications)
+	foreach (var notification in Model.Notifications)
 	{
-		if(notification.IsRead)
-		{
-			<h4>@notification.UserFrom.UserName tagged you in</h4> 
-			<a asp-action="PostView" asp-controller="Home" asp-route-replyId="@notification.Reply.Id" asp-route-titleOfSection="" asp-route-id="@notification.Reply.Post.Id">@notification.Reply.Post.Title</a>
-			<h5><i>@notification.Reply.Content</i></h5>
-		}
-		else
-		{
-			<h3>
-				@notification.UserFrom.UserName tagged you in <a asp-action="PostView" asp-controller="Home" asp-route-replyId="@notification.Reply.Id" asp-route-titleOfSection="" asp-route-id="@notification.Reply.Post.Id">@notification.Reply.Post.Title</a>
-			</h3>
-			<h4><i>@notification.Reply.Content</i></h4>
-		}
+		<h3>
+			@notification.UserFrom.UserName tagged you in <a asp-action="PostView" asp-controller="Home" asp-route-replyId="@notification.Reply.Id" asp-route-titleOfSection="" asp-route-id="@notification.Reply.Post.Id">@notification.Reply.Post.Title</a>
+		</h3>
+		<h4><i>@notification.Reply.Content</i></h4>
 	}
 	if (Model.Notifications.Any(x => !x.IsRead))
 	{

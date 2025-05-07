@@ -112,4 +112,10 @@ else
 			</form>
 		}
 	}
+	<br />
+	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
+		@Html.AntiForgeryToken()
+		<input type="text" name="content" placeholder="Write a reply..." />
+		<button type="submit">Create reply</button>
+	</form>
 }

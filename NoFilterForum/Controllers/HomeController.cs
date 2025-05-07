@@ -195,9 +195,9 @@ namespace NoFilterForum.Controllers
         {
             var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
             var notifications = new List<NotificationDataModel>();
-            if (await _context.NotificationDataModels.AnyAsync(x => x.UserTo == user))
+            if (await _context.NotificationDataModels.AnyAsync(x => x.UserTo == user && !x.IsRead))
             {
-                notifications = await _context.NotificationDataModels.Include(x => x.UserTo).Include(x => x.UserFrom).Include(x => x.Reply).ThenInclude(x => x.Post).Where(x => x.UserTo == user).ToListAsync();
+                notifications = await _context.NotificationDataModels.Include(x => x.UserTo).Include(x => x.UserFrom).Include(x => x.Reply).ThenInclude(x => x.Post).Where(x => x.UserTo == user && !x.IsRead).ToListAsync();
             }
             var warnings = new List<WarningDataModel>();
             if (await _context.WarningDataModels.AnyAsync(x => x.User == user && !x.IsAccepted))
