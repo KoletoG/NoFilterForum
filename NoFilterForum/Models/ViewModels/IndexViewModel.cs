@@ -7,10 +7,12 @@ namespace NoFilterForum.Models.ViewModels
     {
         public List<SectionDataModel> Sections { get; set; }
         public bool IsAdmin { get; set; }
+        public SectionDataModel Section { get; set; }
         public IndexViewModel(List<SectionDataModel> sections,bool isAdmin) 
         {
             Sections = sections;
             IsAdmin = isAdmin;
+            Section = new SectionDataModel();
         }
     }
 }

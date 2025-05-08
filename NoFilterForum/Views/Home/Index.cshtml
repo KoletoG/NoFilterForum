@@ -8,8 +8,8 @@
     {
         <form asp-action="CreateSection" asp-controller="Home" method="post">
             @Html.AntiForgeryToken()
-            <input name="title" placeholder="Title of the section" type="text" />
-            <input name="description" placeholder="Description of the section" type="text" />
+            <input asp-for="Section.Title" placeholder="Title of the section" type="text" />
+            <input asp-for="Section.Description" placeholder="Description of the section" type="text" />
             <button type="submit">Create Section</button>
         </form>
     }

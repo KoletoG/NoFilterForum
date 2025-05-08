@@ -71,7 +71,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSection(string title, string description)
+        public async Task<IActionResult> CreateSection(SectionDataModel section)
         {
             string currentUsername = this.User.Identity.Name;
             var currentUser = await _context.Users.FirstAsync(x => x.UserName == currentUsername);
@@ -79,10 +79,15 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            description = _htmlSanitizer.Sanitize(description);
-            title = _htmlSanitizer.Sanitize(title);
-            _context.SectionDataModels.Add(new SectionDataModel(title, description));
-            await _context.SaveChangesAsync();
+            ModelState.Remove("Section.Id");
+            if (ModelState.IsValid)
+            {
+                section.Id = Guid.NewGuid().ToString();
+                section.Description = _htmlSanitizer.Sanitize(section.Description);
+                section.Title = _htmlSanitizer.Sanitize(section.Title);
+                _context.SectionDataModels.Add(section);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction("Index");
         }
         [Authorize]
@@ -365,15 +370,14 @@ Efficient Querying:
         {
             var userName = this.User.Identity.Name;
             var user = await _ioService.GetUserByNameAsync(userName);
-            if (!GlobalVariables.adminNames.Contains(userName) && await _context.ReplyDataModels.Where(x => x.User == user).AnyAsync())
+            if (!GlobalVariables.adminNames.Contains(userName) && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
             {
-                var lastReplyOfUser = await _context.ReplyDataModels.Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
                 {
                     return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title, errorTime = true });
                 }
             }
-            _context.Attach(user);
             var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == postid);
             content = _htmlSanitizer.Sanitize(content);
             content = _nonIOService.LinkCheckText(content);
@@ -390,7 +394,6 @@ Efficient Querying:
             }
             currentPost.Replies.Add(reply);
             user.PostsCount++;
-            _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
             _context.ReplyDataModels.Add(reply);
             await _ioService.AdjustRoleByPostCount(user);
             await _context.SaveChangesAsync();
