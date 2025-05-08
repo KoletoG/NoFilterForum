@@ -134,7 +134,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var warnignsList = await _context.WarningDataModels.Where(x=>x.User.Id==id).ToListAsync();
+            var warnignsList = await _context.WarningDataModels.AsNoTracking().Where(x=>x.User.Id==id).ToListAsync();
             return View(warnignsList);
         }
     }
