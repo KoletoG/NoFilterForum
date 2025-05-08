@@ -63,10 +63,12 @@ else
 }
 else
 {
-	<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true" asp-route-userid="@Model.Post.User.Id" asp-route-title="@Model.Title">
+	<form asp-action="SendReportModel" asp-route-title="@Model.Title" asp-controller="Home" asp-route-userid="@Model.Post.User.Id" method="post">
 		@Html.AntiForgeryToken()
-		<input type="text" name="content" placeholder="Please specify the reason for the report..." />
-		<button type="submit">Send Report</button>
+		<input asp-for="@Model.Report.Content" type="text" placeholder="Reason for report..."/>
+		<input type="hidden" asp-for="Report.IsPost" value="true"/>
+		<input asp-for="@Model.Report.IdOfPostReply" type="hidden" value="@Model.Post.Id" />
+		<button type="submit">Send Report Model</button>
 	</form>
 }
 @{

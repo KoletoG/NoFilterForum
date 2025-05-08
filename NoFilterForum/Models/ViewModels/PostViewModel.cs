@@ -9,6 +9,7 @@ namespace NoFilterForum.Models.ViewModels
         public string Title { get; init; }
         public bool IsFromProfile { get; set; }
         public string ReplyId {  get; set; }
+        public ReportDataModel Report { get; set; }
         public PostViewModel(PostDataModel post, List<ReplyDataModel> replies, string title, bool isFromProfile, string replyId)
         {
             Post = post;
@@ -16,6 +17,7 @@ namespace NoFilterForum.Models.ViewModels
             Title = title;
             IsFromProfile = isFromProfile;
             ReplyId = replyId;
+            Report = new ReportDataModel();
         }
     }
 }

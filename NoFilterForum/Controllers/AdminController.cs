@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Web;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -109,6 +110,7 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Profile","Home",new { userName = user.UserName });
         }
         // Add ModelError if something went wrong, that's for every method including creating post and reply
+        // ADD ENCODING
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

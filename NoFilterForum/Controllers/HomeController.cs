@@ -140,6 +140,38 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
             }
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendReportModel(ReportDataModel report, string title, string userid)
+        {
+            var user = await _context.Users.FirstAsync(x => x.Id == userid);
+            report.User = user;
+            ModelState.Remove("Report.Id");
+            ModelState.Remove("Report.User");
+            if (ModelState.IsValid)
+            {
+                report.Id = Guid.NewGuid().ToString();
+                report.Content = _htmlSanitizer.Sanitize(report.Content);
+                _context.ReportDataModels.Add(report);
+                await _context.SaveChangesAsync();
+                if (report.IsPost)
+                {
+                    return RedirectToAction("PostView", new { id = report.IdOfPostReply, titleOfSection = title });
+                }
+                else
+                {
+                    var postId = await _context.ReplyDataModels.AsNoTracking()
+                        .Where(x => x.Id == report.IdOfPostReply)
+                        .Include(x => x.Post)
+                        .Select(x => x.Post)
+                        .Select(x => x.Id)
+                        .FirstAsync();
+                    return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
+                }
+            }
+            return RedirectToAction("PostView", new { id = report.IdOfPostReply, titleOfSection = title });
+        }
         [HttpGet]
         [Authorize]
         [Route("Post/{id}")]
