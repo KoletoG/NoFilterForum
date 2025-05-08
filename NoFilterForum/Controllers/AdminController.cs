@@ -42,7 +42,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var reports = await _context.ReportDataModels.Include(x=>x.User).ToListAsync();
+            var reports = await _context.ReportDataModels.AsNoTracking().Include(x => x.User).ToListAsync();
             return View(new ReportsViewModel(reports));
         }
         [Authorize]
@@ -55,13 +55,7 @@ namespace NoFilterForum.Controllers
             }
             if(!_memoryCache.TryGetValue($"usersList",out List<UserDataModel> users))
             {
-                users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
-                _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
-            }
-            else if(users.Count!=await _context.Users.CountAsync())
-            {
-                _memoryCache.Remove($"usersList");
-                users = await _context.Users.Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
+                users = await _context.Users.AsNoTracking().Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
                 _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
             }
             return View(new AdminPanelViewModel(users,await _context.ReportDataModels.AnyAsync()));

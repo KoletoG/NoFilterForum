@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Models.DataModels;
@@ -31,13 +32,14 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<UserDataModel> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly IMemoryCache _memoryCache;
         public RegisterModel(
             UserManager<UserDataModel> userManager,
             IUserStore<UserDataModel> userStore,
             SignInManager<UserDataModel> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +47,7 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -153,6 +156,7 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                     }
                     else
                     {
+                        _memoryCache.Remove($"usersList");
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
