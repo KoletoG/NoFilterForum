@@ -40,6 +40,7 @@ namespace NoFilterForum.Controllers
             _nonIOService = nonIOService;
             _memoryCache = memoryCache;
         }
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> Index(string errors=null)
         {
@@ -49,7 +50,7 @@ namespace NoFilterForum.Controllers
             }
             if (!_memoryCache.TryGetValue("sections", out List<SectionDataModel> sections))
             {
-                sections = await _context.SectionDataModels.ToListAsync();
+                sections = await _context.SectionDataModels.AsNoTracking().ToListAsync();
                 MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
@@ -60,7 +61,7 @@ namespace NoFilterForum.Controllers
             else if (sections.Count != await _context.SectionDataModels.CountAsync())
             {
                 _memoryCache.Remove("sections");
-                sections = await _context.SectionDataModels.ToListAsync();
+                sections = await _context.SectionDataModels.AsNoTracking().ToListAsync();
                 MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
@@ -148,6 +149,7 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
             }
         }
+        [HttpGet]
         [Authorize]
         [Route("Post/{id}")]
         [Route("Post/{id}/{titleOfSection}")]
@@ -188,6 +190,7 @@ namespace NoFilterForum.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
         }
+        [HttpGet]
         [Route("Posts/{title}")]
         [Route("Posts/{title}/error-{errorTime}")]
         [Authorize]
@@ -210,6 +213,7 @@ namespace NoFilterForum.Controllers
             }
             return View(new PostsViewModel(currentUser, posts, title));
         }
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> Notifications()
         {
@@ -278,6 +282,7 @@ namespace NoFilterForum.Controllers
         }
         // Need to add likes with AJAX
         [Authorize]
+        [HttpGet]
         [Route("Profile/{userName}")]
         [Route("Profile/{userName}/error-{error}")]
         public async Task<IActionResult> Profile(string userName, string error = "")
