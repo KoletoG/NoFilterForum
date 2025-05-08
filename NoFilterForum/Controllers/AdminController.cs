@@ -93,7 +93,7 @@ namespace NoFilterForum.Controllers
             if(await _context.PostDataModels.Where(x => x.User.Id == userid).AnyAsync())
             {
                 var posts = await _context.PostDataModels.Where(x => x.User.Id == userid).ToListAsync();
-                count += posts.Count();
+                count += posts.Count;
                 foreach (var post in posts)
                 {
                     if (post.Replies != null)
@@ -103,10 +103,8 @@ namespace NoFilterForum.Controllers
                 }
                 _context.RemoveRange(posts);
             }
-            var user = await _context.Users.Where(x => x.Id == userid).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == userid).FirstAsync();
             user.PostsCount -= count;
-            _context.Attach(user);
-            _context.Entry(user).Property(x=>x.PostsCount).IsModified = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("Profile","Home",new { userName = user.UserName });
         }
@@ -121,16 +119,8 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var user = await _context.Users.FirstAsync(x => x.Id == id);
-            var posts = await _context.PostDataModels.Where(x => x.User == user).ToListAsync();
-            var replies = await _context.ReplyDataModels.Where(x => x.User == user).ToListAsync();
-            foreach (var reply in replies)
-            {
-                reply.User = GlobalVariables.DefaultUser;
-            }
-            foreach (var post in posts)
-            {
-                post.User = GlobalVariables.DefaultUser;
-            }
+            await _context.ReplyDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, GlobalVariables.DefaultUser));
+            await _context.PostDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, GlobalVariables.DefaultUser));
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(AdminPanel));
