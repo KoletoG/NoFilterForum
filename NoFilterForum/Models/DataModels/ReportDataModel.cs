@@ -6,7 +6,7 @@ namespace NoFilterForum.Models.DataModels
     {
         [Key]
         public string Id { get; set; }
-        public UserDataModel User { get; set; }
+        public UserDataModel? User { get; set; }
         public string Content { get; set; }
         public string IdOfPostReply { get; set; }
         public bool IsPost {  get; set; }

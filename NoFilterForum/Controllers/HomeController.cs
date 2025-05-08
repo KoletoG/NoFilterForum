@@ -140,17 +140,18 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
             }
         }
+        // REMOVE SENDREPORT IN REPLIES AND HERE
+        // VIEWMODELS FOR INPUT
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendReportModel(ReportDataModel report, string title, string userid)
+        public async Task<IActionResult> SendReportModel([Bind("IsPost,IdOfPostReply,Content")]ReportDataModel report, string title, string userid)
         {
             var user = await _context.Users.FirstAsync(x => x.Id == userid);
-            report.User = user;
             ModelState.Remove("Report.Id");
-            ModelState.Remove("Report.User");
             if (ModelState.IsValid)
             {
+                report.User = user;
                 report.Id = Guid.NewGuid().ToString();
                 report.Content = _htmlSanitizer.Sanitize(report.Content);
                 _context.ReportDataModels.Add(report);
