@@ -238,7 +238,7 @@ namespace NoFilterForum.Controllers
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
             var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role!=UserRoles.Admin && await _context.PostDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
+            if (user.Role!=UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
             {
                 var lastPostOfUser = await _context.PostDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastPostOfUser.AddMinutes(15) > DateTime.UtcNow)
@@ -247,10 +247,8 @@ namespace NoFilterForum.Controllers
                 }
             }
             var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == titleOfSection);
-            _context.Attach(user);
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
-            _context.Entry(user).Property(x => x.PostsCount).IsModified = true;
             title = _htmlSanitizer.Sanitize(title);
             body = _htmlSanitizer.Sanitize(body);
             body = _nonIOService.LinkCheckText(body);
