@@ -139,8 +139,13 @@ namespace NoFilterForum.Controllers
             }
             else
             {
-                var reply = await _context.ReplyDataModels.Include(x => x.Post).FirstAsync(x => x.Id == id);
-                return RedirectToAction("PostView", new { id = reply.Post.Id, titleOfSection = title });
+                var postId = await _context.ReplyDataModels.AsNoTracking()
+                    .Where(x=>x.Id==id)
+                    .Include(x => x.Post)
+                    .Select(x=>x.Post)
+                    .Select(x=>x.Id)
+                    .FirstAsync();
+                return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
             }
         }
         [Authorize]
