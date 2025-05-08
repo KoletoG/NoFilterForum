@@ -155,10 +155,18 @@ namespace NoFilterForum.Controllers
             }
             if (string.IsNullOrEmpty(titleOfSection))
             {
-                titleOfSection = await _context.SectionDataModels.AsNoTracking().Where(x =>
-                    x.Posts.Contains(post))
-                    .Select(x => x.Title)
-                    .FirstAsync();
+                if (!_memoryCache.TryGetValue($"title_for_{id}", out string title))
+                {
+                    titleOfSection = await _context.SectionDataModels.AsNoTracking().Where(x =>
+                        x.Posts.Contains(post))
+                        .Select(x => x.Title)
+                        .FirstAsync();
+                    _memoryCache.Set($"title_for_{id}", titleOfSection, TimeSpan.FromMinutes(30));
+                }
+                else
+                {
+                    titleOfSection = title;
+                }
             }
             if (errorTime)
             {
