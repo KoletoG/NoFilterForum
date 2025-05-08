@@ -29,13 +29,7 @@
 		<h6>The user has: @Model.User.Warnings.Count warnings</h6>
 		<form method="post" asp-action="GiveWarning" asp-controller="Admin" asp-route-userid="@Model.User.Id">
 		@Html.AntiForgeryToken()
-		<input type="text" name="content" placeholder="Reason for warning..."/>
-		<button type="submit">Give Warning</button>
-		</form>
-		<form method="post" asp-action="GiveWarning" asp-controller="Admin" asp-antiforgery="true">
-		@Html.AntiForgeryToken()
-			<input asp-for="Warning.User.Id" hidden value="@Model.User.Id"/>
-			<input asp-for="Warning.Content" placeholder="Reason for warning..." type="text"/>
+			<input name="content" placeholder="Reason for warning..." type="text"/>
 			<button type="submit">Give warning</button>
 		</form>
 		<form asp-action="DeleteRepliesAndPosts" asp-route-userid="@Model.User.Id" asp-controller="Admin" method="post">

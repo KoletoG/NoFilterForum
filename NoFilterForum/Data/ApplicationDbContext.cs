@@ -13,6 +13,7 @@ namespace NoFilterForum.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<WarningDataModel>().Property(x => x.IsAccepted).HasDefaultValue(false);
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }
