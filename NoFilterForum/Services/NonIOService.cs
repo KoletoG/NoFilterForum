@@ -21,6 +21,7 @@ namespace NoFilterForum.Services
         }
         public string CheckForHashTags(string text)
         {
+            text = Regex.Replace(text, "#.#", "&bull;");
             text = Regex.Replace(text, "##(.+?)##", "<h3>$1</h3>");
             text = Regex.Replace(text, "#(.+?)#", "<b>$1</b>");
             return text;
