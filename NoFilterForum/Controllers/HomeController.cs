@@ -234,7 +234,7 @@ namespace NoFilterForum.Controllers
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
             var user = await _ioService.GetUserByNameAsync(userName);
-            if (!GlobalVariables.adminNames.Contains(userName) && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
+            if (user.Role!=UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
             {
                 var lastPostOfUser = await _context.PostDataModels.Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastPostOfUser.AddMinutes(15) > DateTime.UtcNow)
@@ -384,7 +384,7 @@ Efficient Querying:
         {
             var userName = this.User.Identity.Name;
             var user = await _ioService.GetUserByNameAsync(userName);
-            if (!GlobalVariables.adminNames.Contains(userName) && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
+            if (user.Role!=UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
             {
                 var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
