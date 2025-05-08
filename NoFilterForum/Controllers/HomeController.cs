@@ -58,17 +58,6 @@ namespace NoFilterForum.Controllers
                 };
                 _memoryCache.Set("sections", sections, memoryCacheOptions);
             }
-            else if (sections.Count != await _context.SectionDataModels.CountAsync())
-            {
-                _memoryCache.Remove("sections");
-                sections = await _context.SectionDataModels.AsNoTracking().ToListAsync();
-                MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
-                    SlidingExpiration = TimeSpan.FromMinutes(5)
-                };
-                _memoryCache.Set("sections", sections, memoryCacheOptions);
-            }
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
                 return View(new IndexViewModel(sections, true));
@@ -94,6 +83,7 @@ namespace NoFilterForum.Controllers
                 section.Title = _htmlSanitizer.Sanitize(section.Title);
                 _context.SectionDataModels.Add(section);
                 await _context.SaveChangesAsync();
+                _memoryCache.Remove("sections");
                 return RedirectToAction("Index");
             }
             List<string> errorsList = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
