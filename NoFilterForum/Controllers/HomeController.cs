@@ -111,6 +111,7 @@ namespace NoFilterForum.Controllers
             }
             _context.SectionDataModels.Remove(section);
             await _context.SaveChangesAsync();
+            _memoryCache.Remove("sections");
             return RedirectToAction("Index");
         }
         [Authorize]
@@ -150,7 +151,7 @@ namespace NoFilterForum.Controllers
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Include(x => x.Replies).ThenInclude(x => x.User).Where(x => x.Id == id).FirstAsync();
-                _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(5));
+                _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(15));
             }
             if (string.IsNullOrEmpty(titleOfSection))
             {
@@ -165,6 +166,43 @@ namespace NoFilterForum.Controllers
             }
             var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReply(string postid, string content, string title)
+        {
+            var userName = this.User.Identity.Name;
+            var user = await _ioService.GetUserByNameAsync(userName);
+            if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
+            {
+                var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
+                {
+                    return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title, errorTime = true });
+                }
+            }
+            var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == postid);
+            content = _htmlSanitizer.Sanitize(content);
+            content = _nonIOService.LinkCheckText(content);
+            content = _nonIOService.CheckForHashTags(content);
+            var reply = new ReplyDataModel(content, user, currentPost);
+            string[] names = _nonIOService.CheckForTags(content);
+            if (!names.IsNullOrEmpty())
+            {
+                foreach (var name in names)
+                {
+                    var userTo = await _ioService.GetUserByNameAsync(name);
+                    _context.NotificationDataModels.Add(new(reply, user, userTo));
+                }
+            }
+            currentPost.Replies.Add(reply);
+            user.PostsCount++;
+            _context.ReplyDataModels.Add(reply);
+            await _ioService.AdjustRoleByPostCount(user);
+            await _context.SaveChangesAsync();
+            _memoryCache.Remove($"post_{postid}");
+            return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title });
         }
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -370,42 +408,7 @@ Efficient Querying:
         }
         // Cache Service NEED! / Singleton
         //MODEL STATE TOO ADD FOR INPUTS
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReply(string postid, string content, string title)
-        {
-            var userName = this.User.Identity.Name;
-            var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role!=UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
-            {
-                var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
-                if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
-                {
-                    return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title, errorTime = true });
-                }
-            }
-            var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == postid);
-            content = _htmlSanitizer.Sanitize(content);
-            content = _nonIOService.LinkCheckText(content);
-            content = _nonIOService.CheckForHashTags(content);
-            var reply = new ReplyDataModel(content, user, currentPost);
-            string[] names = _nonIOService.CheckForTags(content);
-            if (!names.IsNullOrEmpty())
-            {
-                foreach (var name in names)
-                {
-                    var userTo = await _ioService.GetUserByNameAsync(name);
-                    _context.NotificationDataModels.Add(new(reply, user, userTo));
-                }
-            }
-            currentPost.Replies.Add(reply);
-            user.PostsCount++;
-            _context.ReplyDataModels.Add(reply);
-            await _ioService.AdjustRoleByPostCount(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title });
-        }
+       
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
