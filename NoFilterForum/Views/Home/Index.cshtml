@@ -3,13 +3,22 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+@if (ViewBag.Errors != null)
+{
+    foreach(var error in ViewBag.Errors)
+    {
+        <h6 class="text-danger">@error</h6>
+    }
+}
 @{
     if (Model.IsAdmin)
     {
         <form asp-action="CreateSection" asp-controller="Home" method="post">
             @Html.AntiForgeryToken()
             <input asp-for="Section.Title" placeholder="Title of the section" type="text" />
+            <span asp-validation-for="Section.Title" class="text-danger"></span>
             <input asp-for="Section.Description" placeholder="Description of the section" type="text" />
+            <span asp-validation-for="Section.Description" class="text-danger"></span>
             <button type="submit">Create Section</button>
         </form>
     }

@@ -17,6 +17,8 @@ using NoFilterForum.Models.DataModels;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.IdentityModel.Tokens;
 using SQLitePCL;
+using System.Text;
+using System.Runtime.InteropServices;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -39,8 +41,12 @@ namespace NoFilterForum.Controllers
             _memoryCache = memoryCache;
         }
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string errors=null)
         {
+            if (!string.IsNullOrEmpty(errors))
+            {
+                ViewBag.Errors = System.Text.Json.JsonSerializer.Deserialize<List<string>>(errors);
+            }
             if (!_memoryCache.TryGetValue("sections", out List<SectionDataModel> sections))
             {
                 sections = await _context.SectionDataModels.ToListAsync();
@@ -87,8 +93,11 @@ namespace NoFilterForum.Controllers
                 section.Title = _htmlSanitizer.Sanitize(section.Title);
                 _context.SectionDataModels.Add(section);
                 await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            List<string> errorsList = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+            var errorJson = System.Text.Json.JsonSerializer.Serialize(errorsList);
+            return RedirectToAction("Index", new {errors= errorJson });
         }
         [Authorize]
         [HttpPost]
