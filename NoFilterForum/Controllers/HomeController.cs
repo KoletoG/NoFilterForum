@@ -201,7 +201,10 @@ namespace NoFilterForum.Controllers
                 foreach (var name in names)
                 {
                     var userTo = await _ioService.GetUserByNameAsync(name);
-                    _context.NotificationDataModels.Add(new(reply, user, userTo));
+                    if (userTo != default)
+                    {
+                        _context.NotificationDataModels.Add(new(reply, user, userTo));
+                    }
                 }
             }
             currentPost.Replies.Add(reply);
