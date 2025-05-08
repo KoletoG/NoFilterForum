@@ -62,11 +62,11 @@ namespace NoFilterForum.Services
         {
             if (typeof(T) == typeof(ReplyDataModel))
             {
-                return await _context.ReplyDataModels.Include(x => x.Post).Where(x => x.User.UserName == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
+                return await _context.ReplyDataModels.AsNoTracking().Include(x => x.Post).Where(x => x.User.UserName == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
             }
             else if (typeof(T) == typeof(PostDataModel))
             {
-                return await _context.PostDataModels.Where(x => x.User.UserName == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
+                return await _context.PostDataModels.AsNoTracking().Where(x => x.User.UserName == user.UserName).OrderByDescending(x => x.DateCreated).ToListAsync() as List<T> ?? new List<T>();
             }
             else
             {
