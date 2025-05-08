@@ -32,6 +32,12 @@
 		<input type="text" name="content" placeholder="Reason for warning..."/>
 		<button type="submit">Give Warning</button>
 		</form>
+		<form method="post" asp-action="GiveWarning" asp-controller="Admin" asp-antiforgery="true">
+		@Html.AntiForgeryToken()
+			<input asp-for="Warning.User.Id" hidden value="@Model.User.Id"/>
+			<input asp-for="Warning.Content" placeholder="Reason for warning..." type="text"/>
+			<button type="submit">Give warning</button>
+		</form>
 		<form asp-action="DeleteRepliesAndPosts" asp-route-userid="@Model.User.Id" asp-controller="Admin" method="post">
 		@Html.AntiForgeryToken()
 		<button type="submit">Delete Posts And Replies of User</button>

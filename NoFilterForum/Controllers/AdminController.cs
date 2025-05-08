@@ -71,14 +71,16 @@ namespace NoFilterForum.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GiveWarning(string userid, string content)
+        public async Task<IActionResult> GiveWarning(WarningDataModel warning)
         {
             if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
-            var user = await _context.Users.Include(x=>x.Warnings).FirstAsync(x => x.Id == userid);
-            user.Warnings.Add(new WarningDataModel(content, user));
+            var user = await _context.Users.Include(x=>x.Warnings).Where(x=>x.Id==warning.User.Id).FirstAsync();
+            warning.IsAccepted = false;
+            warning.Id = Guid.NewGuid().ToString();
+            user.Warnings.Add(warning);
             await _context.SaveChangesAsync();
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }
