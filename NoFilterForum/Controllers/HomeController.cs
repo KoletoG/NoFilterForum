@@ -164,7 +164,7 @@ namespace NoFilterForum.Controllers
             }
             if (string.IsNullOrEmpty(titleOfSection))
             {
-                titleOfSection = await _context.SectionDataModels.Where(x =>
+                titleOfSection = await _context.SectionDataModels.AsNoTracking().Where(x =>
                     x.Posts.Contains(post))
                     .Select(x => x.Title)
                     .FirstAsync();
@@ -205,7 +205,7 @@ namespace NoFilterForum.Controllers
                 section = await _context.SectionDataModels.AsNoTracking().Include(x => x.Posts).ThenInclude(x => x.User).FirstAsync(x => x.Title == title);
                 _memoryCache.Set($"sec_{title}", section, TimeSpan.FromSeconds(5));
             }
-            var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var currentUser = await _context.Users.AsNoTracking().Where(x => x.UserName == this.User.Identity.Name).FirstAsync();
             if (!_memoryCache.TryGetValue($"posts_sec_{section.Id}", out List<PostDataModel> posts))
             {
                 posts = section.Posts.OrderByDescending(x => x.DateCreated).ToList();
@@ -221,12 +221,12 @@ namespace NoFilterForum.Controllers
             var notifications = new List<NotificationDataModel>();
             if (await _context.NotificationDataModels.AnyAsync(x => x.UserTo == user))
             {
-                notifications = await _context.NotificationDataModels.Include(x => x.UserTo).Include(x => x.UserFrom).Include(x => x.Reply).ThenInclude(x => x.Post).Where(x => x.UserTo == user).ToListAsync();
+                notifications = await _context.NotificationDataModels.AsNoTracking().Include(x => x.UserTo).Include(x => x.UserFrom).Include(x => x.Reply).ThenInclude(x => x.Post).Where(x => x.UserTo == user).ToListAsync();
             }
             var warnings = new List<WarningDataModel>();
             if (await _context.WarningDataModels.AnyAsync(x => x.User == user && !x.IsAccepted))
             {
-                warnings = await _context.WarningDataModels.Where(x => x.User == user && !x.IsAccepted).ToListAsync();
+                warnings = await _context.WarningDataModels.AsNoTracking().Where(x => x.User == user && !x.IsAccepted).ToListAsync();
             }
             return View(new NotificationViewModel(warnings, notifications));
         }
@@ -238,9 +238,9 @@ namespace NoFilterForum.Controllers
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
             var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role!=UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
+            if (user.Role!=UserRoles.Admin && await _context.PostDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
             {
-                var lastPostOfUser = await _context.PostDataModels.Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                var lastPostOfUser = await _context.PostDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastPostOfUser.AddMinutes(15) > DateTime.UtcNow)
                 {
                     return RedirectToAction("PostsMain", new { title = titleOfSection, errorTime = true });
