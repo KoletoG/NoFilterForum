@@ -72,11 +72,11 @@ else
 @{
 	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
 		@Html.AntiForgeryToken()
-		<input type="text" name="content" placeholder="Write a reply..."/>
+		<input type="text" name="content" placeholder="Write a reply..." />
 		<button type="submit">Create reply</button>
 	</form>
 	<h2 style="color:red">@ViewBag.ErrorTime</h2>
-	@foreach(var reply in Model.Replies)
+	@foreach (var reply in Model.Replies)
 	{
 		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)
 		{
@@ -88,7 +88,7 @@ else
 		}
 		if (reply.Id == Model.ReplyId)
 		{
-			<h5 style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
+			<h5 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
 		}
 		else
 		{
@@ -111,6 +111,11 @@ else
 				<button type="submit">Send Report</button>
 			</form>
 		}
+		<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
+			@Html.AntiForgeryToken()
+			<input type="text" name="content" value="@($"@{reply.User.UserName}")" placeholder="Write a reply..." />
+			<button type="submit">Reply to @reply.User.UserName</button>
+		</form>
 	}
 	<br />
 	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
@@ -119,3 +124,12 @@ else
 		<button type="submit">Create reply</button>
 	</form>
 }
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+			var targetLabel = document.getElementById("idrep_@Model.ReplyId");
+			if (targetLabel)
+			{
+				targetLabel.scrollIntoView({ behavior: "smooth", block: "start" });
+			}
+	});
+</script>
