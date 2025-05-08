@@ -30,9 +30,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var report = await _context.ReportDataModels.FirstAsync(x => x.Id == id);
-            _context.ReportDataModels.Remove(report);
-            await _context.SaveChangesAsync();
+            await _context.ReportDataModels.Where(x => x.Id == id).ExecuteDeleteAsync();
             return RedirectToAction("Reports");
         }
         [Authorize]
