@@ -81,7 +81,13 @@ else
 		<input type="hidden" name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Create reply</button>
 	</form>
-	<h2 style="color:red">@ViewBag.ErrorTime</h2>
+	if (ViewBag.ErrorsList != null)
+	{
+		foreach (var error in ViewBag.ErrorsList)
+		{
+			<h5 class="text-danger">@error</h5>
+		}
+	}
 	@foreach (var reply in Model.Replies)
 	{
 		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)

@@ -20,6 +20,9 @@ using SQLitePCL;
 using System.Text;
 using System.Runtime.InteropServices;
 using NoFilterForum.Models.GetViewModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -154,7 +157,7 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}/{titleOfSection}")]
         [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
         [Route("Post/{id}/{titleOfSection}/error-{errorTime}")]
-        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", bool errorTime = false)
+        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", string errors="")
         {
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
@@ -176,9 +179,10 @@ namespace NoFilterForum.Controllers
                     titleOfSection = title;
                 }
             }
-            if (errorTime)
+            if (!string.IsNullOrEmpty(errors))
             {
-                ViewBag.ErrorTime = "Replies can be created once every 30 seconds!";
+                List<string> errorsList = JsonSerializer.Deserialize<List<string>>(errors);
+                ViewBag.ErrorsList = errorsList;
             }
             var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
@@ -188,18 +192,18 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReply(GetReplyViewModel replyViewModel)
         {
+            var userName = this.User.Identity.Name;
+            var user = await _ioService.GetUserByNameAsync(userName);
+            if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
+            {
+                var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
+                {
+                    ModelState.AddModelError("errorReplyTime","Replies can be made once every 30 seconds.");
+                }
+            }
             if (ModelState.IsValid)
             {
-                var userName = this.User.Identity.Name;
-                var user = await _ioService.GetUserByNameAsync(userName);
-                if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
-                {
-                    var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
-                    if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
-                    {
-                        return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title, errorTime = true });
-                    }
-                }
                 var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == replyViewModel.PostId);
                 replyViewModel.Content = _htmlSanitizer.Sanitize(replyViewModel.Content);
                 replyViewModel.Content = _nonIOService.LinkCheckText(replyViewModel.Content);
@@ -227,7 +231,8 @@ namespace NoFilterForum.Controllers
             }
             else
             {
-                return View("Error");
+                string errorsJson = System.Text.Json.JsonSerializer.Serialize(ModelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
+                return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title,errors= errorsJson});
             }
         }
         [Authorize]
