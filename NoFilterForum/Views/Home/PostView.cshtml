@@ -74,9 +74,11 @@ else
 	</form>
 }
 @{
-	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
+	<form asp-action="CreateReply" asp-controller="Home" method="post">
 		@Html.AntiForgeryToken()
-		<input type="text" name="content" placeholder="Write a reply..." />
+		<input type="text" name="Content" placeholder="Write a reply..." />
+		<input type="hidden" name="Title" value="@Model.Title" />
+		<input type="hidden" name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Create reply</button>
 	</form>
 	<h2 style="color:red">@ViewBag.ErrorTime</h2>
@@ -119,16 +121,20 @@ else
 				<button type="submit">Send Report Model</button>
 			</form>
 		}
-		<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
+		<form asp-action="CreateReply" asp-controller="Home" method="post">
 			@Html.AntiForgeryToken()
-			<input type="text" name="content" value="@($"@{reply.User.UserName}")" placeholder="Write a reply..." />
-			<button type="submit">Reply to @reply.User.UserName</button>
+			<input type="text" name="Content" value="@($"@{reply.User.UserName}")" placeholder="Write a reply..." />
+			<input type="hidden" name="Title" value="@Model.Title" />
+			<input type="hidden" name="PostId" value="@Model.Post.Id" />
+			<button type="submit">Create reply</button>
 		</form>
 	}
 	<br />
-	<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
+	<form asp-action="CreateReply" asp-controller="Home" method="post">
 		@Html.AntiForgeryToken()
-		<input type="text" name="content" placeholder="Write a reply..." />
+		<input type="text" name="Content" placeholder="Write a reply..." />
+		<input type="hidden" name="Title" value="@Model.Title" />
+		<input type="hidden" name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Create reply</button>
 	</form>
 }

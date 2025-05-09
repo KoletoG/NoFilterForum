@@ -186,42 +186,49 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReply(string postid, string content, string title)
+        public async Task<IActionResult> CreateReply(GetReplyViewModel replyViewModel)
         {
-            var userName = this.User.Identity.Name;
-            var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
+            if (ModelState.IsValid)
             {
-                var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
-                if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
+                var userName = this.User.Identity.Name;
+                var user = await _ioService.GetUserByNameAsync(userName);
+                if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
                 {
-                    return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title, errorTime = true });
-                }
-            }
-            var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == postid);
-            content = _htmlSanitizer.Sanitize(content);
-            content = _nonIOService.LinkCheckText(content);
-            content = _nonIOService.CheckForHashTags(content);
-            var reply = new ReplyDataModel(content, user, currentPost);
-            string[] names = _nonIOService.CheckForTags(content);
-            if (!names.IsNullOrEmpty())
-            {
-                foreach (var name in names)
-                {
-                    var userTo = await _ioService.GetUserByNameAsync(name);
-                    if (userTo != default)
+                    var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
+                    if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
                     {
-                        _context.NotificationDataModels.Add(new(reply, user, userTo));
+                        return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title, errorTime = true });
                     }
                 }
+                var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == replyViewModel.PostId);
+                replyViewModel.Content = _htmlSanitizer.Sanitize(replyViewModel.Content);
+                replyViewModel.Content = _nonIOService.LinkCheckText(replyViewModel.Content);
+                replyViewModel.Content = _nonIOService.CheckForHashTags(replyViewModel.Content);
+                var reply = new ReplyDataModel(replyViewModel.Content, user, currentPost);
+                string[] names = _nonIOService.CheckForTags(replyViewModel.Content);
+                if (!names.IsNullOrEmpty())
+                {
+                    foreach (var name in names)
+                    {
+                        var userTo = await _ioService.GetUserByNameAsync(name);
+                        if (userTo != default)
+                        {
+                            _context.NotificationDataModels.Add(new(reply, user, userTo));
+                        }
+                    }
+                }
+                currentPost.Replies.Add(reply);
+                user.PostsCount++;
+                _context.ReplyDataModels.Add(reply);
+                await _ioService.AdjustRoleByPostCount(user);
+                await _context.SaveChangesAsync();
+                _memoryCache.Remove($"post_{replyViewModel.PostId}");
+                return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title });
             }
-            currentPost.Replies.Add(reply);
-            user.PostsCount++;
-            _context.ReplyDataModels.Add(reply);
-            await _ioService.AdjustRoleByPostCount(user);
-            await _context.SaveChangesAsync();
-            _memoryCache.Remove($"post_{postid}");
-            return RedirectToAction("PostView", "Home", new { id = postid, titleOfSection = title });
+            else
+            {
+                return View("Error");
+            }
         }
         [Authorize]
         [ValidateAntiForgeryToken]
