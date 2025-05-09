@@ -186,6 +186,10 @@ namespace NoFilterForum.Controllers
                     titleOfSection = title;
                 }
             }
+            else
+            {
+                titleOfSection = HttpUtility.UrlDecode(titleOfSection);
+            }
             if (!string.IsNullOrEmpty(errors))
             {
                 errors = HttpUtility.UrlDecode(errors);
@@ -264,6 +268,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> PostsMain(string title, bool errorTime = false)
         {
+            title=HttpUtility.UrlDecode(title);
             if (errorTime)
             {
                 ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
@@ -279,6 +284,7 @@ namespace NoFilterForum.Controllers
                 posts = section.Posts.OrderByDescending(x => x.DateCreated).ToList();
                 _memoryCache.Set($"posts_sec_{section.Id}", posts, TimeSpan.FromSeconds(5));
             }
+            title = HttpUtility.UrlEncode(title);
             return View(new PostsViewModel(currentUser, posts, title));
         }
         [HttpGet]
@@ -314,6 +320,7 @@ namespace NoFilterForum.Controllers
                     return RedirectToAction("PostsMain", new { title = titleOfSection, errorTime = true });
                 }
             }
+            titleOfSection = HttpUtility.UrlDecode(titleOfSection);
             var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == titleOfSection);
             user.PostsCount++;
             await _ioService.AdjustRoleByPostCount(user);
@@ -325,6 +332,7 @@ namespace NoFilterForum.Controllers
             await _context.PostDataModels.AddAsync(post);
             section.Posts.Add(post);
             await _context.SaveChangesAsync();
+            titleOfSection = HttpUtility.UrlEncode(titleOfSection);
             return RedirectToAction("PostsMain", new { title = titleOfSection });
         }
         [Authorize]

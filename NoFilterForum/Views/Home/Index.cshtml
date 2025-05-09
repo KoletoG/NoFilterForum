@@ -1,4 +1,5 @@
 ﻿@using NoFilterForum.Models.ViewModels
+@using System.Web
 @model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
@@ -22,7 +23,7 @@
     }
     foreach(var section1 in Model.Sections)
     {
-        <a asp-action="PostsMain" asp-route-title="@section1.Title"><h2>@section1.Title</h2></a>
+        <a asp-action="PostsMain" asp-route-title="@HttpUtility.UrlEncode(section1.Title)"><h2>@section1.Title</h2></a>
         <h4>@section1.Description</h4>
         if (Model.IsAdmin)
         {
