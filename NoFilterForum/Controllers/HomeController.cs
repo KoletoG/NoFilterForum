@@ -160,44 +160,40 @@ namespace NoFilterForum.Controllers
         }
         [HttpGet]
         [Authorize]
-        [Route("Post/{id}")]
-        [Route("Post/{id}/{titleOfSection}")]
-        [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
-        [Route("Post/{id}/{titleOfSection}/error-{errors}")]
-        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", string errors="")
+        [Route("Post/{getPostViewModel.PostId}")]
+        [Route("Post/{getPostViewModel.PostId}/{getPostViewModel.TitleOfSection}")]
+        [Route("Post/{getPostViewModel.PostId}/redirected-{getPostViewModel.IsFromProfile}/replyId-{getPostViewModel.ReplyId}")]
+        [Route("Post/{getPostViewModel.PostId}/{getPostViewModel.TitleOfSection}/error-{getPostViewModel.Errors}")]
+        public async Task<IActionResult> PostView(GetPostViewModel getPostViewModel)
         {
-            if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
+            if (!_memoryCache.TryGetValue($"post_{getPostViewModel.PostId}", out PostDataModel post))
             {
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Include(x => x.Replies).ThenInclude(x => x.User).Where(x => x.Id == id).FirstAsync();
-                _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(15));
+                _memoryCache.Set($"post_{getPostViewModel.PostId}", post, TimeSpan.FromSeconds(15));
             }
-            if (string.IsNullOrEmpty(titleOfSection))
+            if (string.IsNullOrEmpty(getPostViewModel.TitleOfSection))
             {
-                if (!_memoryCache.TryGetValue($"title_for_{id}", out string title))
+                if (!_memoryCache.TryGetValue($"title_for_{getPostViewModel.PostId}", out string title))
                 {
-                    titleOfSection = await _context.SectionDataModels.AsNoTracking().Where(x =>
+                    getPostViewModel.TitleOfSection = await _context.SectionDataModels.AsNoTracking().Where(x =>
                         x.Posts.Contains(post))
                         .Select(x => x.Title)
                         .FirstAsync();
-                    _memoryCache.Set($"title_for_{id}", titleOfSection, TimeSpan.FromMinutes(30));
+                    _memoryCache.Set($"title_for_{getPostViewModel.PostId}", getPostViewModel.TitleOfSection, TimeSpan.FromMinutes(30));
                 }
                 else
                 {
-                    titleOfSection = title;
+                    getPostViewModel.TitleOfSection = title;
                 }
             }
-            if (!string.IsNullOrEmpty(errors))
+            if (!string.IsNullOrEmpty(getPostViewModel.Errors))
             {
-                errors = HttpUtility.UrlDecode(errors);
-                List<string> errorsList = JsonSerializer.Deserialize<List<string>>(errors);
+                getPostViewModel.Errors = HttpUtility.UrlDecode(getPostViewModel.Errors);
+                List<string> errorsList = JsonSerializer.Deserialize<List<string>>(getPostViewModel.Errors);
                 ViewBag.ErrorsList = errorsList;
             }
             var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
-            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
-        }
-        private void ChangeString(string text)
-        {
-            text = "textTest";
+            return View(new PostViewModel(post, replies, getPostViewModel.TitleOfSection,getPostViewModel.IsFromProfile ?? false,getPostViewModel.ReplyId ?? ""));
         }
         [Authorize]
         [HttpPost]
