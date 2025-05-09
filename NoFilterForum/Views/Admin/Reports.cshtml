@@ -4,7 +4,8 @@
 @foreach(var report in Model.Reports)
 {
 	<h4>@report.IdOfPostReply</h4>
-	<h5>@report.User.UserName</h5>	
+	<h5>@report.UserTo.UserName</h5>
+	<h5>@report.UserFrom.UserName</h5>
 	<h3>@report.Content</h3>
 	<form asp-action="DeleteReport" asp-route-id="@report.Id" asp-controller="Admin" method="post">
 		@Html.AntiForgeryToken()

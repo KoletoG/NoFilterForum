@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using SQLitePCL;
 using System.Text;
 using System.Runtime.InteropServices;
+using NoFilterForum.Models.GetViewModels;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -114,51 +115,29 @@ namespace NoFilterForum.Controllers
             _memoryCache.Remove("sections");
             return RedirectToAction("Index");
         }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendReport(string id, string content, bool isPost, string userid, string title)
-        {
-            var user = await _context.Users.FirstAsync(x => x.Id == userid);
-            content = _htmlSanitizer.Sanitize(content);
-            ReportDataModel report = new ReportDataModel(user, content, id, isPost);
-            _context.ReportDataModels.Add(report);
-            await _context.SaveChangesAsync();
-            if (isPost)
-            {
-                string idToReturn = id;
-                return RedirectToAction("PostView", new { id = idToReturn, titleOfSection = title });
-            }
-            else
-            {
-                var postId = await _context.ReplyDataModels.AsNoTracking()
-                    .Where(x=>x.Id==id)
-                    .Include(x => x.Post)
-                    .Select(x=>x.Post)
-                    .Select(x=>x.Id)
-                    .FirstAsync();
-                return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
-            }
-        }
         // REMOVE SENDREPORT IN REPLIES AND HERE
         // VIEWMODELS FOR INPUT
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendReportModel([Bind("IsPost,IdOfPostReply,Content")]ReportDataModel report, string title, string userid)
+        public async Task<IActionResult> SendReportModel(GetReportViewModel reportViewModel)
         {
-            var user = await _context.Users.FirstAsync(x => x.Id == userid);
-            ModelState.Remove("Report.Id");
+            // Validation that report isn't made from user to himself
+            if(await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == this.User.Identity.Name)
+            {
+                ModelState.AddModelError("sameUserError", "You can't send a report to yourself!");
+            }
             if (ModelState.IsValid)
             {
-                report.User = user;
-                report.Id = Guid.NewGuid().ToString();
-                report.Content = _htmlSanitizer.Sanitize(report.Content);
+                var userTo = await _context.Users.FirstAsync(x => x.Id == reportViewModel.UserIdTo);
+                var userFrom = await _context.Users.FirstAsync(x => x.UserName == this.User.Identity.Name);
+                reportViewModel.Content = _htmlSanitizer.Sanitize(reportViewModel.Content);
+                var report = new ReportDataModel(userTo,reportViewModel.Content,reportViewModel.IdOfPostReply,reportViewModel.IsPost,userFrom);
                 _context.ReportDataModels.Add(report);
                 await _context.SaveChangesAsync();
-                if (report.IsPost)
+                if (reportViewModel.IsPost)
                 {
-                    return RedirectToAction("PostView", new { id = report.IdOfPostReply, titleOfSection = title });
+                    return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title });
                 }
                 else
                 {
@@ -168,10 +147,10 @@ namespace NoFilterForum.Controllers
                         .Select(x => x.Post)
                         .Select(x => x.Id)
                         .FirstAsync();
-                    return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
+                    return RedirectToAction("PostView", new { id = postId, titleOfSection = reportViewModel.Title });
                 }
             }
-            return RedirectToAction("PostView", new { id = report.IdOfPostReply, titleOfSection = title });
+            return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title });
         }
         [HttpGet]
         [Authorize]

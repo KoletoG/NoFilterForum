@@ -43,7 +43,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var reports = await _context.ReportDataModels.AsNoTracking().Include(x => x.User).ToListAsync();
+            var reports = await _context.ReportDataModels.AsNoTracking().Include(x => x.UserTo).Include(x=>x.UserFrom).ToListAsync();
             return View(new ReportsViewModel(reports));
         }
         [Authorize]
