@@ -71,8 +71,8 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> CreateSection(GetSectionViewModel sectionViewModel)
         {
             string currentUsername = this.User.Identity.Name;
-            var currentUser = await _context.Users.FirstAsync(x => x.UserName == currentUsername);
-            if (currentUser.Role != UserRoles.Admin)
+            var currentUserRole = await _context.Users.AsNoTracking().Where(x => x.UserName == currentUsername).Select(x => x.Role).FirstAsync();
+            if (currentUserRole != UserRoles.Admin)
             {
                 return RedirectToAction("Index");
             }
