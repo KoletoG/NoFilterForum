@@ -68,7 +68,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSection(SectionDataModel section)
+        public async Task<IActionResult> CreateSection(GetSectionViewModel sectionViewModel)
         {
             string currentUsername = this.User.Identity.Name;
             var currentUser = await _context.Users.FirstAsync(x => x.UserName == currentUsername);
@@ -76,12 +76,11 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            ModelState.Remove("Section.Id");
             if (ModelState.IsValid)
             {
-                section.Id = Guid.NewGuid().ToString();
-                section.Description = _htmlSanitizer.Sanitize(section.Description);
-                section.Title = _htmlSanitizer.Sanitize(section.Title);
+                sectionViewModel.Title = _htmlSanitizer.Sanitize(sectionViewModel.Title);
+                sectionViewModel.Description = _htmlSanitizer.Sanitize(sectionViewModel.Description);
+                SectionDataModel section = new SectionDataModel(sectionViewModel.Title,sectionViewModel.Description);
                 _context.SectionDataModels.Add(section);
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove("sections");
@@ -89,7 +88,7 @@ namespace NoFilterForum.Controllers
             }
             List<string> errorsList = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
             var errorJson = System.Text.Json.JsonSerializer.Serialize(errorsList);
-            return RedirectToAction("Index", new {errors= errorJson });
+            return RedirectToAction("Index", new { errors = errorJson });
         }
         [Authorize]
         [HttpPost]
@@ -115,8 +114,6 @@ namespace NoFilterForum.Controllers
             _memoryCache.Remove("sections");
             return RedirectToAction("Index");
         }
-        // REMOVE SENDREPORT IN REPLIES AND HERE
-        // VIEWMODELS FOR INPUT
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

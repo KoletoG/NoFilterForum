@@ -15,7 +15,7 @@ namespace NoFilterForum.Models.DataModels
         public string Description { get; set; }
         public SectionDataModel()
         {
-            Posts = new List<PostDataModel>();
+
         }
         public SectionDataModel(string title, string description)
         {
