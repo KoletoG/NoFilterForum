@@ -23,7 +23,8 @@
     }
     foreach(var section1 in Model.Sections)
     {
-        <a asp-action="PostsMain" asp-route-title="@HttpUtility.UrlEncode(section1.Title)"><h2>@section1.Title</h2></a>
+        var endodedSection = HttpUtility.UrlEncode(section1.Title);
+        <a asp-action="PostsMain" asp-route-title="@endodedSection"><h2>@section1.Title</h2></a>
         <h4>@section1.Description</h4>
         if (Model.IsAdmin)
         {
