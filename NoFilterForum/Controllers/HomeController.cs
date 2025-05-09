@@ -135,22 +135,21 @@ namespace NoFilterForum.Controllers
                 var report = new ReportDataModel(userTo,reportViewModel.Content,reportViewModel.IdOfPostReply,reportViewModel.IsPost,userFrom);
                 _context.ReportDataModels.Add(report);
                 await _context.SaveChangesAsync();
-                if (reportViewModel.IsPost)
-                {
-                    return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title });
-                }
-                else
-                {
-                    var postId = await _context.ReplyDataModels.AsNoTracking()
-                        .Where(x => x.Id == report.IdOfPostReply)
-                        .Include(x => x.Post)
-                        .Select(x => x.Post)
-                        .Select(x => x.Id)
-                        .FirstAsync();
-                    return RedirectToAction("PostView", new { id = postId, titleOfSection = reportViewModel.Title });
-                }
             }
-            return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title });
+            if (reportViewModel.IsPost)
+            {
+                return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title });
+            }
+            else
+            {
+                var postId = await _context.ReplyDataModels.AsNoTracking()
+                    .Where(x => x.Id == reportViewModel.IdOfPostReply)
+                    .Include(x => x.Post)
+                    .Select(x => x.Post)
+                    .Select(x => x.Id)
+                    .FirstAsync();
+                return RedirectToAction("PostView", new { id = postId, titleOfSection = reportViewModel.Title });
+            }
         }
         [HttpGet]
         [Authorize]

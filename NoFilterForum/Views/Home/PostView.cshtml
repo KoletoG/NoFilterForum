@@ -63,11 +63,13 @@ else
 }
 else
 {
-	<form asp-action="SendReportModel" asp-route-title="@Model.Title" asp-controller="Home" asp-route-userid="@Model.Post.User.Id" method="post">
+	<form asp-action="SendReportModel"asp-controller="Home" method="post">
 		@Html.AntiForgeryToken()
-		<input asp-for="@Model.Report.Content" type="text" placeholder="Reason for report..."/>
-		<input type="hidden" asp-for="Report.IsPost" value="true"/>
-		<input asp-for="@Model.Report.IdOfPostReply" type="hidden" value="@Model.Post.Id" />
+		<input name="Content" type="text" placeholder="Reason for report..."/>
+		<input type="hidden" name="IsPost" value="true"/>
+		<input name="IdOfPostReply" type="hidden" value="@Model.Post.Id" />
+		<input name="UserIdTo" type="hidden" value="@Model.Post.User.Id" />
+		<input name="Title" type="hidden" value="@Model.Title" />
 		<button type="submit">Send Report Model</button>
 	</form>
 }
@@ -107,10 +109,14 @@ else
 		}
 		else
 		{
-			<form asp-action="SendReport" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-userid="@reply.User.Id" asp-route-isPost="false" asp-route-title="@Model.Title">
+			<form asp-action="SendReportModel" asp-controller="Home" method="post">
 				@Html.AntiForgeryToken()
-				<input type="text" name="content" placeholder="Please specify the reason for the report..." />
-				<button type="submit">Send Report</button>
+				<input name="Content" type="text" placeholder="Reason for report..." />
+				<input type="hidden" name="IsPost" value="false" />
+				<input name="IdOfPostReply" type="hidden" value="@reply.Id" />
+				<input name="UserIdTo" type="hidden" value="@reply.User.Id" />
+				<input name="Title" type="hidden" value="@Model.Title" />
+				<button type="submit">Send Report Model</button>
 			</form>
 		}
 		<form asp-action="CreateReply" asp-controller="Home" asp-route-postid="@Model.Post.Id" asp-route-title="@Model.Title" method="post">
