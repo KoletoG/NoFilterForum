@@ -136,9 +136,14 @@ namespace NoFilterForum.Controllers
                 _context.ReportDataModels.Add(report);
                 await _context.SaveChangesAsync();
             }
+            var errorsList = "";
+            if (ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).Any())
+            {
+                errorsList = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
             if (reportViewModel.IsPost)
             {
-                return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title });
+                return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title, errors= errorsList});
             }
             else
             {
@@ -148,7 +153,7 @@ namespace NoFilterForum.Controllers
                     .Select(x => x.Post)
                     .Select(x => x.Id)
                     .FirstAsync();
-                return RedirectToAction("PostView", new { id = postId, titleOfSection = reportViewModel.Title });
+                return RedirectToAction("PostView", new { id = postId, titleOfSection = reportViewModel.Title, errors = errorsList });
             }
         }
         [HttpGet]
