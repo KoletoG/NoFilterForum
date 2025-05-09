@@ -23,6 +23,7 @@ using NoFilterForum.Models.GetViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+using System.Web;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -140,6 +141,7 @@ namespace NoFilterForum.Controllers
             if (ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).Any())
             {
                 errorsList = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                errorsList = HttpUtility.UrlEncode(errorsList);
             }
             if (reportViewModel.IsPost)
             {
@@ -161,7 +163,7 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}")]
         [Route("Post/{id}/{titleOfSection}")]
         [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
-        [Route("Post/{id}/{titleOfSection}/error-{errorTime}")]
+        [Route("Post/{id}/{titleOfSection}/error-{errors}")]
         public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", string errors="")
         {
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
@@ -186,6 +188,7 @@ namespace NoFilterForum.Controllers
             }
             if (!string.IsNullOrEmpty(errors))
             {
+                errors = HttpUtility.UrlDecode(errors);
                 List<string> errorsList = JsonSerializer.Deserialize<List<string>>(errors);
                 ViewBag.ErrorsList = errorsList;
             }
