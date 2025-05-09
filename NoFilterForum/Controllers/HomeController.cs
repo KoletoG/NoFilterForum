@@ -51,7 +51,7 @@ namespace NoFilterForum.Controllers
         {
             if (!string.IsNullOrEmpty(errors))
             {
-                ViewBag.Errors = System.Text.Json.JsonSerializer.Deserialize<List<string>>(errors);
+                ViewBag.Errors = JsonSerializer.Deserialize<List<string>>(errors);
             }
             if (!_memoryCache.TryGetValue("sections", out List<SectionDataModel> sections))
             {
@@ -91,7 +91,7 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             List<string> errorsList = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
-            var errorJson = System.Text.Json.JsonSerializer.Serialize(errorsList);
+            var errorJson = JsonSerializer.Serialize(errorsList);
             return RedirectToAction("Index", new { errors = errorJson });
         }
         [Authorize]
@@ -195,6 +195,10 @@ namespace NoFilterForum.Controllers
             var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
         }
+        private void ChangeString(string text)
+        {
+            text = "textTest";
+        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -239,7 +243,8 @@ namespace NoFilterForum.Controllers
             }
             else
             {
-                string errorsJson = System.Text.Json.JsonSerializer.Serialize(ModelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
+                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
+                errorsJson = HttpUtility.HtmlEncode(errorsJson);
                 return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title,errors= errorsJson});
             }
         }
