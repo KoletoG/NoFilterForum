@@ -26,6 +26,10 @@ namespace NoFilterForum.Services
             text = Regex.Replace(text, "#(.+?)#", "<b>$1</b>");
             return text;
         }
+        public string MarkTags(string text)
+        {
+            return Regex.Replace(text, @"(@\w+)", "<span style=\"background-color: #e0e0e0;\">$1</span>");
+        }
         public string[] CheckForTags(string text)
         {
             if (Regex.IsMatch(text, @"@\w+"))

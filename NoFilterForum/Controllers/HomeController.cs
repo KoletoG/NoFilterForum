@@ -197,6 +197,11 @@ namespace NoFilterForum.Controllers
                 ViewBag.ErrorsList = errorsList;
             }
             var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
+            string currentUsername = this.User.Identity.Name;
+            foreach (var reply in replies) 
+            {
+                string text = reply.Content;
+            }
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
         }
         [Authorize]
