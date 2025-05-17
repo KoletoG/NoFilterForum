@@ -197,8 +197,9 @@ namespace NoFilterForum.Controllers
                 List<string> errorsList = JsonSerializer.Deserialize<List<string>>(errors);
                 ViewBag.ErrorsList = errorsList;
             }
-            var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
             string currentUsername = this.User.Identity.Name;
+            post.Content = string.Join(" ", post.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
+            var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
             foreach (var reply in replies) 
             {
                 reply.Content=string.Join(" ",reply.Content.Split(' ').Select(x=>_nonIOService.MarkTags(x, currentUsername)));
