@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using System.Web;
+using Microsoft.CodeAnalysis.Scripting.Hosting;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -200,7 +201,12 @@ namespace NoFilterForum.Controllers
             string currentUsername = this.User.Identity.Name;
             foreach (var reply in replies) 
             {
-                string text = reply.Content;
+                string[] replySplit = reply.Content.Split(' ');
+                for(int i=0;i< replySplit.Length; i++)
+                {
+                    replySplit[i] = _nonIOService.MarkTags(replySplit[i]);
+                }
+                reply.Content = string.Join(" ", replySplit);
             }
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
         }
