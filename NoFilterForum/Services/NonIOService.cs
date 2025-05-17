@@ -26,9 +26,9 @@ namespace NoFilterForum.Services
             text = Regex.Replace(text, "#(.+?)#", "<b>$1</b>");
             return text;
         }
-        public string MarkTags(string text)
+        public string MarkTags(string text, string username)
         {
-            return Regex.Replace(text, @"(@\w+)", "<span style=\"background-color: #e0e0e0;\">$1</span>");
+            return Regex.Replace(text, $@"(@{username})", "<span style=\"background-color: #e0e0e0;\">$1</span>");
         }
         public string[] CheckForTags(string text)
         {

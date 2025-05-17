@@ -17,6 +17,6 @@ namespace NoFilterForum.Interfaces
         public string ReplaceLinkText(string text); 
         public string CheckForHashTags(string text);
         public string[] CheckForTags(string text); 
-        public string MarkTags(string text);
+        public string MarkTags(string text, string username);
     }
 }

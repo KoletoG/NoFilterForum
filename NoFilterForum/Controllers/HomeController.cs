@@ -204,7 +204,7 @@ namespace NoFilterForum.Controllers
                 string[] replySplit = reply.Content.Split(' ');
                 for(int i=0;i< replySplit.Length; i++)
                 {
-                    replySplit[i] = _nonIOService.MarkTags(replySplit[i]);
+                    replySplit[i] = _nonIOService.MarkTags(replySplit[i], currentUsername);
                 }
                 reply.Content = string.Join(" ", replySplit);
             }
