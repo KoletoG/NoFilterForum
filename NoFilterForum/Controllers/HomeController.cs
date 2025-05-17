@@ -201,12 +201,7 @@ namespace NoFilterForum.Controllers
             string currentUsername = this.User.Identity.Name;
             foreach (var reply in replies) 
             {
-                string[] replySplit = reply.Content.Split(' ');
-                for(int i=0;i< replySplit.Length; i++)
-                {
-                    replySplit[i] = _nonIOService.MarkTags(replySplit[i], currentUsername);
-                }
-                reply.Content = string.Join(" ", replySplit);
+                reply.Content=string.Join(" ",reply.Content.Split(' ').Select(x=>_nonIOService.MarkTags(x, currentUsername)));
             }
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
         }
