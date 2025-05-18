@@ -3,9 +3,9 @@
 @model PostsViewModel
 <h2 style="color:red">@ViewBag.ErrorTime</h2>
 <form asp-action="CreatePost" asp-controller="Home" method="post">
-	<input hidden type="text" name="titleOfSection" value="@Model.Title" />
-	<input type="text" name="title" placeholder="Title of the post" />
-	<input type="text" name="body" placeholder="Body of the post" />
+	<input hidden type="text" name="TitleOfSection" value="@Model.Title" />
+	<input type="text" name="Title" placeholder="Title of the post" />
+	<input type="text" name="Body" placeholder="Body of the post" />
 	@Html.AntiForgeryToken()
 	<button type="submit">Create post</button>
 </form>
