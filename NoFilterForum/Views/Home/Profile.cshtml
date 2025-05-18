@@ -25,6 +25,11 @@
 			<input name="username" type="text" placeholder="New username..."/>
 			<button type="submit">Change username</button>
 		</form>
+		<form asp-action="ChangeEmail" asp-controller="Home" method="post">
+			@Html.AntiForgeryToken()
+			<input name="email" type="text" placeholder="New email..." />
+			<button type="submit">Change Email</button>
+		</form>
 	}
 	else
 	{
