@@ -12,6 +12,14 @@
 	{
 		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-warning">@Model.Post.User.UserName</a>
 	}
+	else if (Model.Post.User.Role == UserRoles.Regular)
+	{
+		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-light">@Model.Post.User.UserName</a>
+	}
+	else if (Model.Post.User.Role == UserRoles.Dinosaur)
+	{
+		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-primary">@Model.Post.User.UserName</a>
+	}
 	else
 	{
 		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-dark">@Model.Post.User.UserName</a>
@@ -111,6 +119,14 @@ else
 			else if (reply.User.Role == UserRoles.VIP)
 			{
 				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-warning">@reply.User.UserName</a>
+			}
+			else if (Model.Post.User.Role == UserRoles.Regular)
+			{
+				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-light">@reply.User.UserName</a>
+			}
+			else if (Model.Post.User.Role == UserRoles.Dinosaur)
+			{
+				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-primary">@reply.User.UserName</a>
 			}
 			else
 			{
