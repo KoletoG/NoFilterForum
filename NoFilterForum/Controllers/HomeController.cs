@@ -327,6 +327,12 @@ namespace NoFilterForum.Controllers
                     return RedirectToAction("PostsMain", new { title = viewModel.TitleOfSection, errorTime = true });
                 }
             }
+            if (!ModelState.IsValid)
+            {
+                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                errorsJson = HttpUtility.HtmlEncode(errorsJson);
+                return RedirectToAction("Index", "Home", new { errors = errorsJson });
+            }
             viewModel.TitleOfSection = HttpUtility.UrlDecode(viewModel.TitleOfSection);
             var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == viewModel.TitleOfSection);
             user.PostsCount++;
@@ -347,6 +353,12 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetBio(string bio, string userId)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                errorsJson = HttpUtility.HtmlEncode(errorsJson);
+                return RedirectToAction("Index", "Home", new { errors = errorsJson });
+            }
             bio = _htmlSanitizer.Sanitize(bio);
             bio = _nonIOService.LinkCheckText(bio);
             bio = _nonIOService.CheckForHashTags(bio);
@@ -404,6 +416,12 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePost(string id, string titleOfSection)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                errorsJson = HttpUtility.HtmlEncode(errorsJson);
+                return RedirectToAction("Index", "Home", new { errors = errorsJson });
+            }
             var post = await _context.PostDataModels.Include(x => x.User).FirstAsync(x => x.Id == id);
             var replies = await _context.ReplyDataModels.Include(x => x.User).Where(x => x.Post == post).ToListAsync();
             foreach (var rep in replies)
