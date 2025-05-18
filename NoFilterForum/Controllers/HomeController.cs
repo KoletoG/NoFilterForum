@@ -471,7 +471,25 @@ namespace NoFilterForum.Controllers
             var result = await _userManager.UpdateAsync(currentUser); 
             if (result.Succeeded)
             {
-                // 🔄 Refresh sign-in cookie
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(currentUser, isPersistent: false);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail(string email)
+        {
+            var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            currentUser.Email = email;
+            var result = await _userManager.UpdateAsync(currentUser);
+            if (result.Succeeded)
+            {
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(currentUser, isPersistent: false);
             }
