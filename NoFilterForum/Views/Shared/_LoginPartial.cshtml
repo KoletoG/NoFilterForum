@@ -2,7 +2,6 @@
 @using NoFilterForum.Models.DataModels
 @inject SignInManager<UserDataModel> SignInManager
 @inject UserManager<UserDataModel> UserManager
-
 <ul class="navbar-nav">
 	@if (SignInManager.IsSignedIn(User))
 	{

@@ -1,4 +1,5 @@
 ﻿@using NoFilterForum.Global_variables
+@using NoFilterForum.Models.DataModels
 @using NoFilterForum.Models.ViewModels
 @model PostViewModel
 @if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
@@ -92,7 +93,18 @@ else
 	{
 		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)
 		{
-			<a asp-action="Profile" asp-route-userName="@reply.User.UserName">@reply.User.UserName</a>
+			if (reply.User.Role == UserRoles.Admin)
+			{
+				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-danger">@reply.User.UserName</a>
+			}
+			else if (reply.User.Role == UserRoles.VIP)
+			{
+				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-warning">@reply.User.UserName</a>
+			}
+			else
+			{
+				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-dark">@reply.User.UserName</a>
+			}
 		}
 		else
 		{
