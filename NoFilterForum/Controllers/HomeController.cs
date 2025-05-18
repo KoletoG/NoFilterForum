@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +25,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using System.Web;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
+using Microsoft.AspNetCore.Identity;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -35,8 +36,18 @@ namespace NoFilterForum.Controllers
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly INonIOService _nonIOService;
         private readonly IMemoryCache _memoryCache;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IIOService iOService, IHtmlSanitizer htmlSanitizer, INonIOService nonIOService, IMemoryCache memoryCache)
+        private readonly UserManager<UserDataModel> _userManager;
+        private readonly SignInManager<UserDataModel> _signInManager;
+        public HomeController(ILogger<HomeController> logger,
+            ApplicationDbContext context,
+            IIOService iOService,
+            IHtmlSanitizer htmlSanitizer,
+            INonIOService nonIOService, 
+            IMemoryCache memoryCache,
+            UserManager<UserDataModel> userManager,
+            SignInManager<UserDataModel> signInManager)
         {
+            _userManager = userManager;
             _logger = logger;
             _context = context;
             _ioService = iOService;
@@ -45,6 +56,7 @@ namespace NoFilterForum.Controllers
             _htmlSanitizer.AllowedTags.Add("a");
             _nonIOService = nonIOService;
             _memoryCache = memoryCache;
+            _signInManager = signInManager;
         }
         [HttpGet]
         [Authorize]
@@ -450,14 +462,20 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeUsername(string username)
         {
-            var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
             if (currentUser == null)
             {
                 return RedirectToAction("Index","Home");
             }
             currentUser.UserName = username;
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Profile", "Home");
+            var result = await _userManager.UpdateAsync(currentUser); 
+            if (result.Succeeded)
+            {
+                // 🔄 Refresh sign-in cookie
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(currentUser, isPersistent: false);
+            }
+            return RedirectToAction("Index", "Home");
         }
         // Cache Service NEED! / Singleton
         // MODEL STATE TOO ADD FOR INPUTS
