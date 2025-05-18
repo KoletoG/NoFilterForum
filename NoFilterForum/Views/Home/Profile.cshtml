@@ -1,4 +1,5 @@
 ﻿@using NoFilterForum.Global_variables
+@using NoFilterForum.Models.DataModels
 @using NoFilterForum.Models.ViewModels
 @model ProfileViewModel
 @{
@@ -23,6 +24,27 @@
 	else
 	{
 		<h3>@Model.User.UserName's bio: @Html.Raw(Model.User.Bio)</h3>
+	}
+	<h4>Role: @Model.User.Role</h4>
+	if (Model.User.Role == UserRoles.Admin)
+	{
+		<h3 class="text-danger">@Model.User.UserName</h3>
+	}
+	else if (Model.User.Role == UserRoles.VIP)
+	{
+		<h3 class="text-warning">@Model.User.UserName</h3>
+	}
+	else if (Model.User.Role == UserRoles.Regular)
+	{
+		<h3 class="text-light">@Model.User.UserName</h3>
+	}
+	else if (Model.User.Role == UserRoles.Dinosaur)
+	{
+		<h3 class="text-primary">@Model.User.UserName</h3>
+	}
+	else
+	{
+		<h3 class="text-dark">@Model.User.UserName</h3>
 	}
 	if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 	{
