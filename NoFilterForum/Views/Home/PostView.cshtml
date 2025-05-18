@@ -4,7 +4,18 @@
 @model PostViewModel
 @if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
 {
-	<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
+	if (Model.Post.User.Role == UserRoles.Admin)
+	{
+		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-danger">@Model.Post.User.UserName</a>
+	}
+	else if (Model.Post.User.Role == UserRoles.VIP)
+	{
+		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-warning">@Model.Post.User.UserName</a>
+	}
+	else
+	{
+		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-dark">@Model.Post.User.UserName</a>
+	}
 }
 else
 {
