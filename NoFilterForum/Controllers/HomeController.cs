@@ -445,9 +445,22 @@ namespace NoFilterForum.Controllers
             await _context.NotificationDataModels.Where(x => x.UserTo.UserName == this.User.Identity.Name).ExecuteDeleteAsync();
             return RedirectToAction("Notifications", "Home");
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUsername(string username)
+        {
+            var currentUser = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            currentUser.UserName = username;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Profile", "Home");
+        }
         // Cache Service NEED! / Singleton
-        //MODEL STATE TOO ADD FOR INPUTS
-       
+        // MODEL STATE TOO ADD FOR INPUTS
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
