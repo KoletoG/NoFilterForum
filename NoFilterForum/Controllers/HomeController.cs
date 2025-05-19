@@ -38,11 +38,12 @@ namespace NoFilterForum.Controllers
         private readonly IMemoryCache _memoryCache;
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
+        private readonly static int countPerPage = 5;
         public HomeController(ILogger<HomeController> logger,
             ApplicationDbContext context,
             IIOService iOService,
             IHtmlSanitizer htmlSanitizer,
-            INonIOService nonIOService, 
+            INonIOService nonIOService,
             IMemoryCache memoryCache,
             UserManager<UserDataModel> userManager,
             SignInManager<UserDataModel> signInManager)
@@ -60,7 +61,7 @@ namespace NoFilterForum.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string errors=null)
+        public async Task<IActionResult> Index(string errors = null)
         {
             if (!string.IsNullOrEmpty(errors))
             {
@@ -97,7 +98,7 @@ namespace NoFilterForum.Controllers
             {
                 sectionViewModel.Title = _htmlSanitizer.Sanitize(sectionViewModel.Title);
                 sectionViewModel.Description = _htmlSanitizer.Sanitize(sectionViewModel.Description);
-                SectionDataModel section = new SectionDataModel(sectionViewModel.Title,sectionViewModel.Description);
+                SectionDataModel section = new SectionDataModel(sectionViewModel.Title, sectionViewModel.Description);
                 _context.SectionDataModels.Add(section);
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove("sections");
@@ -137,7 +138,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> SendReportModel(GetReportViewModel reportViewModel)
         {
             // Validation that report isn't made from user to himself
-            if(await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == this.User.Identity.Name)
+            if (await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == this.User.Identity.Name)
             {
                 ModelState.AddModelError("sameUserError", "You can't send a report to yourself!");
             }
@@ -146,7 +147,7 @@ namespace NoFilterForum.Controllers
                 var userTo = await _context.Users.FirstAsync(x => x.Id == reportViewModel.UserIdTo);
                 var userFrom = await _context.Users.FirstAsync(x => x.UserName == this.User.Identity.Name);
                 reportViewModel.Content = _htmlSanitizer.Sanitize(reportViewModel.Content);
-                var report = new ReportDataModel(userTo,reportViewModel.Content,reportViewModel.IdOfPostReply,reportViewModel.IsPost,userFrom);
+                var report = new ReportDataModel(userTo, reportViewModel.Content, reportViewModel.IdOfPostReply, reportViewModel.IsPost, userFrom);
                 _context.ReportDataModels.Add(report);
                 await _context.SaveChangesAsync();
             }
@@ -158,7 +159,7 @@ namespace NoFilterForum.Controllers
             }
             if (reportViewModel.IsPost)
             {
-                return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title, errors= errorsList});
+                return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title, errors = errorsList });
             }
             else
             {
@@ -177,7 +178,7 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}/{titleOfSection}")]
         [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
         [Route("Post/{id}/{titleOfSection}/error-{errors}")]
-        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", string errors="")
+        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", string errors = "")
         {
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
@@ -212,9 +213,9 @@ namespace NoFilterForum.Controllers
             string currentUsername = this.User.Identity.Name;
             post.Content = string.Join(" ", post.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
             var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
-            foreach (var reply in replies) 
+            foreach (var reply in replies)
             {
-                reply.Content=string.Join(" ",reply.Content.Split(' ').Select(x=>_nonIOService.MarkTags(x, currentUsername)));
+                reply.Content = string.Join(" ", reply.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
             }
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
         }
@@ -230,7 +231,7 @@ namespace NoFilterForum.Controllers
                 var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
                 {
-                    ModelState.AddModelError("errorReplyTime","Replies can be made once every 30 seconds.");
+                    ModelState.AddModelError("errorReplyTime", "Replies can be made once every 30 seconds.");
                 }
             }
             if (ModelState.IsValid)
@@ -262,9 +263,9 @@ namespace NoFilterForum.Controllers
             }
             else
             {
-                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
+                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
                 errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title,errors= errorsJson});
+                return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title, errors = errorsJson });
             }
         }
         [Authorize]
@@ -287,7 +288,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> PostsMain(string title, bool errorTime = false)
         {
-            title=HttpUtility.UrlDecode(title);
+            title = HttpUtility.UrlDecode(title);
             if (errorTime)
             {
                 ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
@@ -331,7 +332,7 @@ namespace NoFilterForum.Controllers
             // Need custom exception for invalid user
             string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
             var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role!=UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
+            if (user.Role != UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
             {
                 var lastPostOfUser = await _context.PostDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
                 if (lastPostOfUser.AddMinutes(15) > DateTime.UtcNow)
@@ -374,14 +375,14 @@ namespace NoFilterForum.Controllers
             bio = _htmlSanitizer.Sanitize(bio);
             bio = _nonIOService.LinkCheckText(bio);
             bio = _nonIOService.CheckForHashTags(bio);
-            var user = await _context.Users.AsNoTracking().Where(x => x.Id == userId).Select(x => new {x.UserName,x.Bio}).FirstAsync();
+            var user = await _context.Users.AsNoTracking().Where(x => x.Id == userId).Select(x => new { x.UserName, x.Bio }).FirstAsync();
             if (string.IsNullOrWhiteSpace(bio))
             {
                 return RedirectToAction("Profile", "Home", new { userName = user.UserName, error = "Setting bio cannot be empty!" });
             }
-            else if(user.Bio!=bio)
+            else if (user.Bio != bio)
             {
-                await _context.Users.Where(x=>x.Id==userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.Bio, bio));
+                await _context.Users.Where(x => x.Id == userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.Bio, bio));
             }
             return RedirectToAction("Profile", "Home", new { userName = user.UserName });
         }
@@ -390,7 +391,7 @@ namespace NoFilterForum.Controllers
         [HttpGet]
         [Route("Profile/{userName}")]
         [Route("Profile/{userName}/error-{error}")]
-        public async Task<IActionResult> Profile(string userName, string error = "")
+        public async Task<IActionResult> Profile(string userName, int page = 1, string error = "")
         {
             if (!string.IsNullOrEmpty(error))
             {
@@ -401,9 +402,27 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var currentUser = await _ioService.GetUserByNameAsync(userName);
+            var postsCount = await _context.PostDataModels.CountAsync();
+            var repliesCount = await _context.ReplyDataModels.CountAsync();
+            var allCount = postsCount + repliesCount;
+            var allPages = Math.Ceiling((double)allCount / countPerPage);
+            if (page < 1)
+            {
+                page = 1;
+            }
+            else if (page > allPages)
+            {
+                page = (int)allPages;
+            }
+            if (!_memoryCache.TryGetValue($"postsUser_{this.User.Identity.Name}", out List<PostDataModel> posts))
+            {
+                posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
+            }
+            if (!_memoryCache.TryGetValue($"repliesUser_{this.User.Identity.Name}", out List<ReplyDataModel> replies))
+            {
+                replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
+            }
             Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
-            var posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
-            var replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
             foreach (var post in posts)
             {
                 dateOrder[post.Id] = post.DateCreated;
@@ -413,7 +432,7 @@ namespace NoFilterForum.Controllers
                 reply.Content = _nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
-            return View(new ProfileViewModel(currentUser, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).ToDictionary()));
+            return View(new ProfileViewModel(currentUser, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page-1)*countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -465,10 +484,10 @@ namespace NoFilterForum.Controllers
             var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
             if (currentUser == null)
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             currentUser.UserName = username;
-            var result = await _userManager.UpdateAsync(currentUser); 
+            var result = await _userManager.UpdateAsync(currentUser);
             if (result.Succeeded)
             {
                 await _signInManager.SignOutAsync();
