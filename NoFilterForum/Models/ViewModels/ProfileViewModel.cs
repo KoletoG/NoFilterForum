@@ -8,9 +8,11 @@ namespace NoFilterForum.Models.ViewModels
         public List<PostDataModel> Posts { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
         public bool IsSameUser { get; set; }
+        public int Page { get; set; }
         public Dictionary<string,DateTime> userDate { get; set; }
-        public ProfileViewModel(UserDataModel user, List<PostDataModel> posts, List<ReplyDataModel> replies, bool isSameUser, Dictionary<string, DateTime> userDate)
+        public ProfileViewModel(UserDataModel user, int page, List<PostDataModel> posts, List<ReplyDataModel> replies, bool isSameUser, Dictionary<string, DateTime> userDate)
         {
+            Page = page;
             User = user;
             Posts = posts;
             Replies = replies;

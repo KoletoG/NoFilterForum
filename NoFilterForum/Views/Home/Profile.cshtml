@@ -60,13 +60,13 @@
 	{
 		<h6>The user has: @Model.User.Warnings.Count warnings</h6>
 		<form method="post" asp-action="GiveWarning" asp-controller="Admin" asp-route-userid="@Model.User.Id">
-		@Html.AntiForgeryToken()
+			@Html.AntiForgeryToken()
 			<input name="content" placeholder="Reason for warning..." type="text"/>
 			<button type="submit">Give warning</button>
 		</form>
 		<form asp-action="DeleteRepliesAndPosts" asp-route-userid="@Model.User.Id" asp-controller="Admin" method="post">
-		@Html.AntiForgeryToken()
-		<button type="submit">Delete Posts And Replies of User</button>
+			@Html.AntiForgeryToken()
+			<button type="submit">Delete Posts And Replies of User</button>
 		</form>
 	}
 }
@@ -94,4 +94,13 @@
 			}
 		}
 	}
+	int previousPage = Model.Page - 1;
+	int nextPage = Model.Page + 1;
+	<a asp-action="Profile" asp-route-userName="@Model.User.UserName" asp-route-page="@previousPage" asp-controller="Home">
+	Previous page
+	</a>
+
+	<a asp-action="Profile" asp-route-userName="@Model.User.UserName" asp-route-page="@nextPage" asp-controller="Home">
+		Next page
+	</a>
 }

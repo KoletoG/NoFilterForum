@@ -390,7 +390,9 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [HttpGet]
         [Route("Profile/{userName}")]
+        [Route("Profile/{userName}/page-{page}")]
         [Route("Profile/{userName}/error-{error}")]
+        [Route("Profile/{userName}/error-{error}/page-{page}")]
         public async Task<IActionResult> Profile(string userName, int page = 1, string error = "")
         {
             if (!string.IsNullOrEmpty(error))
@@ -432,7 +434,7 @@ namespace NoFilterForum.Controllers
                 reply.Content = _nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
-            return View(new ProfileViewModel(currentUser, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page-1)*countPerPage).Take(countPerPage).ToDictionary()));
+            return View(new ProfileViewModel(currentUser,page, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page-1)*countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
