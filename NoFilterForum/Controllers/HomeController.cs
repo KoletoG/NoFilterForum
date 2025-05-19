@@ -404,8 +404,8 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var currentUser = await _ioService.GetUserByNameAsync(userName);
-            var postsCount = await _context.PostDataModels.CountAsync();
-            var repliesCount = await _context.ReplyDataModels.CountAsync();
+            var postsCount = await _context.PostDataModels.Where(x=>x.User== currentUser).CountAsync();
+            var repliesCount = await _context.ReplyDataModels.Where(x => x.User == currentUser).CountAsync();
             var allCount = postsCount + repliesCount;
             var allPages = Math.Ceiling((double)allCount / countPerPage);
             if (page < 1)
