@@ -412,7 +412,7 @@ namespace NoFilterForum.Controllers
             {
                 page = 1;
             }
-            else if (page > allPages)
+            else if (page >= allPages)
             {
                 page = (int)allPages;
             }
@@ -434,7 +434,7 @@ namespace NoFilterForum.Controllers
                 reply.Content = _nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
-            return View(new ProfileViewModel(currentUser,page, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page-1)*countPerPage).Take(countPerPage).ToDictionary()));
+            return View(new ProfileViewModel(currentUser,page,allPages, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page-1)*countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
