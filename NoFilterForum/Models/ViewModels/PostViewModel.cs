@@ -1,4 +1,5 @@
-﻿using NoFilterForum.Models.DataModels;
+﻿using System.Reflection;
+using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Models.ViewModels
 {
@@ -10,7 +11,9 @@ namespace NoFilterForum.Models.ViewModels
         public bool IsFromProfile { get; set; }
         public string ReplyId {  get; set; }
         public ReportDataModel Report { get; set; }
-        public PostViewModel(PostDataModel post, List<ReplyDataModel> replies, string title, bool isFromProfile, string replyId)
+        public int Page { get; set; }
+        public double TotalPages { get; set; }
+        public PostViewModel(PostDataModel post, List<ReplyDataModel> replies, string title, bool isFromProfile, string replyId, double totalPages, int page)
         {
             Post = post;
             Replies = replies;
@@ -18,6 +21,8 @@ namespace NoFilterForum.Models.ViewModels
             IsFromProfile = isFromProfile;
             ReplyId = replyId;
             Report = new ReportDataModel();
+            TotalPages = totalPages;
+            Page = page;
         }
     }
 }

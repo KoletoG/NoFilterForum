@@ -187,10 +187,10 @@ namespace NoFilterForum.Controllers
             }
             var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
             var replies = new List<ReplyDataModel>();
+            double allPages=1;
             if (repCount > 0)
             {
-
-                var allPages = Math.Ceiling((double)repCount / countPerPage);
+                allPages = Math.Ceiling((double)repCount / countPerPage);
                 if (page < 1)
                 {
                     page = 1;
@@ -200,7 +200,6 @@ namespace NoFilterForum.Controllers
                     page = (int)allPages;
                 }
                 replies = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).Where(x => x.Post == post).OrderBy(x => x.DateCreated).Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
-
             }
             if (string.IsNullOrEmpty(titleOfSection))
             {
@@ -233,7 +232,7 @@ namespace NoFilterForum.Controllers
             {
                 reply.Content = string.Join(" ", reply.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
             }
-            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId));
+            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId,allPages,page));
         }
         [Authorize]
         [HttpPost]
