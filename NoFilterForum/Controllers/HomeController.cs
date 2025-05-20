@@ -334,17 +334,27 @@ namespace NoFilterForum.Controllers
             {
                 ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
             }
-            if (!_memoryCache.TryGetValue($"sec_{title}", out SectionDataModel section))
+            var postsCount = await _context.SectionDataModels.Where(x=>x.Title == title).SelectMany(x=>x.Posts).CountAsync();
+            var allPages = Math.Ceiling((double)postsCount / countPerPage);
+            if (page < 1)
             {
-                section = await _context.SectionDataModels.AsNoTracking().Include(x => x.Posts).ThenInclude(x => x.User).FirstAsync(x => x.Title == title);
-                _memoryCache.Set($"sec_{title}", section, TimeSpan.FromSeconds(5));
+                page = 1;
             }
-            var currentUser = await _context.Users.AsNoTracking().Where(x => x.UserName == this.User.Identity.Name).FirstAsync();
-            if (!_memoryCache.TryGetValue($"posts_sec_{section.Id}", out List<PostDataModel> posts))
+            else if (page > allPages)
             {
-                posts = section.Posts.OrderByDescending(x => x.DateCreated).ToList();
-                _memoryCache.Set($"posts_sec_{section.Id}", posts, TimeSpan.FromSeconds(5));
+                page = (int)allPages;
             }
+            var posts = await _context.SectionDataModels.AsNoTracking()
+                .Where(x=>x.Title==title)
+                .Include(x=>x.Posts)
+                .ThenInclude(x=>x.User)
+                .SelectMany(x => x.Posts)
+                .Skip((page-1)*countPerPage)
+                .Take(countPerPage)
+                .ToListAsync();
+            var currentUser = await _context.Users.AsNoTracking()
+                .Where(x => x.UserName == this.User.Identity.Name)
+                .FirstAsync();
             title = HttpUtility.UrlEncode(title);
             return View(new PostsViewModel(currentUser, posts, title));
         }
