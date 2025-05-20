@@ -184,19 +184,24 @@ else
 	</form>
 	int previousPage = Model.Page - 1;
 	int nextPage = Model.Page + 1;
-	if (Model.Page <= 1)
+	if(Model.Page==1 && Model.TotalPages == 1)
 	{
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
+		
 	}
-	else if (Model.Page >= Model.TotalPages)
-	{
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
-	}
-	else if(Model.Page<Model.TotalPages && Model.Page > 1)
+	else if (Model.Page < Model.TotalPages && Model.Page > 1)
 	{
 		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
 		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
 	}
+	else if (Model.Page < Model.TotalPages)
+	{
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
+	}
+	else if (Model.Page >= 1)
+	{
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
+	}
+	
 }
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
