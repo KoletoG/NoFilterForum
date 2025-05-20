@@ -423,10 +423,12 @@ namespace NoFilterForum.Controllers
             if (!_memoryCache.TryGetValue($"postsUser_{userName}", out List<PostDataModel> posts))
             {
                 posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
+                _memoryCache.Set($"postsUser_{userName}", posts, TimeSpan.FromMinutes(240));
             }
             if (!_memoryCache.TryGetValue($"repliesUser_{userName}", out List<ReplyDataModel> replies))
             {
                 replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
+                _memoryCache.Set($"postsUser_{userName}", replies, TimeSpan.FromMinutes(240));
             }
             Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
             foreach (var post in posts)
