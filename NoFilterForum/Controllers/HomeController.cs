@@ -176,6 +176,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [Route("Post/{id}")]
         [Route("Post/{id}/{titleOfSection}")]
+        [Route("Post/{id}/{titleOfSection}/page-{page}")]
         [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
         [Route("Post/{id}/{titleOfSection}/error-{errors}")]
         public async Task<IActionResult> PostView(string id, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "", string errors = "")
