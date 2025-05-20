@@ -96,7 +96,11 @@
 	}
 	int previousPage = Model.Page - 1;
 	int nextPage = Model.Page + 1;
-	if (Model.Page==1)
+	if (Model.AllPages == 1)
+	{
+		
+	}
+	else if (Model.Page==1)
 	{
 		<a asp-action="Profile" asp-route-userName="@Model.User.UserName" asp-route-page="@nextPage" asp-controller="Home">
 			Next page

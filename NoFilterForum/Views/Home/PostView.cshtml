@@ -188,18 +188,18 @@ else
 	{
 		
 	}
-	else if (Model.Page < Model.TotalPages && Model.Page > 1)
-	{
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
-	}
-	else if (Model.Page < Model.TotalPages)
+	else if (Model.Page == 1)
 	{
 		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
 	}
-	else if (Model.Page >= 1)
+	else if (Model.Page == Model.TotalPages)
 	{
 		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
+	}
+	else
+	{
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
 	}
 	
 }
