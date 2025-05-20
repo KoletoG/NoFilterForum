@@ -178,12 +178,29 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}/{titleOfSection}")]
         [Route("Post/{id}/redirected-{isFromProfile}/replyId-{replyId}")]
         [Route("Post/{id}/{titleOfSection}/error-{errors}")]
-        public async Task<IActionResult> PostView(string id, string titleOfSection, bool isFromProfile = false, string replyId = "", string errors = "")
+        public async Task<IActionResult> PostView(string id, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "", string errors = "")
         {
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
-                post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Include(x => x.Replies).ThenInclude(x => x.User).Where(x => x.Id == id).FirstAsync();
+                post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Where(x => x.Id == id).FirstAsync();
                 _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(15));
+            }
+            var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
+            var replies = new List<ReplyDataModel>();
+            if (repCount > 0)
+            {
+
+                var allPages = Math.Ceiling((double)repCount / countPerPage);
+                if (page < 1)
+                {
+                    page = 1;
+                }
+                else if (page > allPages)
+                {
+                    page = (int)allPages;
+                }
+                replies = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).Where(x => x.Post == post).OrderBy(x => x.DateCreated).Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
+
             }
             if (string.IsNullOrEmpty(titleOfSection))
             {
@@ -212,7 +229,6 @@ namespace NoFilterForum.Controllers
             }
             string currentUsername = this.User.Identity.Name;
             post.Content = string.Join(" ", post.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
-            var replies = post.Replies.OrderBy(x => x.DateCreated).ToList();
             foreach (var reply in replies)
             {
                 reply.Content = string.Join(" ", reply.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
@@ -287,9 +303,11 @@ namespace NoFilterForum.Controllers
         }
         [HttpGet]
         [Route("Posts/{title}")]
+        [Route("Posts/{title}/page-{page}")]
         [Route("Posts/{title}/error-{errorTime}")]
+        [Route("Posts/{title}/error-{errorTime}/page-{page}")]
         [Authorize]
-        public async Task<IActionResult> PostsMain(string title, bool errorTime = false)
+        public async Task<IActionResult> PostsMain(string title, int page = 1, bool errorTime = false)
         {
             title = HttpUtility.UrlDecode(title);
             if (errorTime)
@@ -408,7 +426,7 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var currentUser = await _ioService.GetUserByNameAsync(userName);
-            var postsCount = await _context.PostDataModels.Where(x=>x.User== currentUser).CountAsync();
+            var postsCount = await _context.PostDataModels.Where(x => x.User == currentUser).CountAsync();
             var repliesCount = await _context.ReplyDataModels.Where(x => x.User == currentUser).CountAsync();
             var allCount = postsCount + repliesCount;
             var allPages = Math.Ceiling((double)allCount / countPerPage);
@@ -440,7 +458,7 @@ namespace NoFilterForum.Controllers
                 reply.Content = _nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
-            return View(new ProfileViewModel(currentUser,page,allPages, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page-1)*countPerPage).Take(countPerPage).ToDictionary()));
+            return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
