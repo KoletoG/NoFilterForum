@@ -194,7 +194,7 @@ namespace NoFilterForum.Controllers
                 allPages = Math.Ceiling((double)repCount / countPerPage); 
                 if (isFromProfile)
                 {
-                    var replyIDs = await _context.ReplyDataModels.OrderBy(x => x.DateCreated).Select(x => x.Id).ToListAsync();
+                    var replyIDs = await _context.ReplyDataModels.Where(x=>x.Post.Id==id).OrderBy(x => x.DateCreated).Select(x => x.Id).ToListAsync();
                     page = 1;
                     for (int i = 0; i < replyIDs.Count; i++)
                     {
