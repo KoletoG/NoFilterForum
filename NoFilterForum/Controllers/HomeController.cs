@@ -356,7 +356,7 @@ namespace NoFilterForum.Controllers
                 .Where(x => x.UserName == this.User.Identity.Name)
                 .FirstAsync();
             title = HttpUtility.UrlEncode(title);
-            return View(new PostsViewModel(currentUser, posts, title));
+            return View(new PostsViewModel(currentUser, posts, title, page,allPages));
         }
         [HttpGet]
         [Authorize]

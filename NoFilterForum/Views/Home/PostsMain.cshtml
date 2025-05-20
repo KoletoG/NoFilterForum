@@ -79,5 +79,25 @@
 		ShowTime(timeDiff);
 		<br />
 	}
-	<a asp-action="PostsMain" asp-controller="Home" asp-route-page=""></a>
+	int prevPage = Model.Page - 1;
+	int nextPage = Model.Page + 1;
+	if (Model.TotalPages == 1)
+	{
+
+	}
+	else if (Model.Page == 1)
+	{
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.Title">Next page</a>
+	}
+	else if (Model.Page == Model.TotalPages)
+	{
+
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.Title">Previous page</a>
+	}
+	else if(Model.Page>1 && Model.Page<Model.TotalPages)
+	{
+
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.Title">Next page</a>
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.Title">Previous page</a>
+	}
 }
