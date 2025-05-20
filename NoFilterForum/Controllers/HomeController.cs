@@ -358,6 +358,7 @@ namespace NoFilterForum.Controllers
             await _context.PostDataModels.AddAsync(post);
             section.Posts.Add(post);
             await _context.SaveChangesAsync();
+            _memoryCache.Remove($"postsUser_{}")
             viewModel.TitleOfSection = HttpUtility.UrlEncode(viewModel.TitleOfSection);
             return RedirectToAction("PostsMain", new { title = viewModel.TitleOfSection });
         }
@@ -416,11 +417,11 @@ namespace NoFilterForum.Controllers
             {
                 page = (int)allPages;
             }
-            if (!_memoryCache.TryGetValue($"postsUser_{this.User.Identity.Name}", out List<PostDataModel> posts))
+            if (!_memoryCache.TryGetValue($"postsUser_{userName}", out List<PostDataModel> posts))
             {
                 posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
             }
-            if (!_memoryCache.TryGetValue($"repliesUser_{this.User.Identity.Name}", out List<ReplyDataModel> replies))
+            if (!_memoryCache.TryGetValue($"repliesUser_{userName}", out List<ReplyDataModel> replies))
             {
                 replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
             }
