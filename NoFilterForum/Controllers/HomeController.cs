@@ -187,20 +187,40 @@ namespace NoFilterForum.Controllers
                 _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(15));
             }
             var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
-            var replies = new List<ReplyDataModel>();
-            double allPages=1;
+            double allPages = 1;
+            List<ReplyDataModel> replies = new List<ReplyDataModel>();
             if (repCount > 0)
             {
-                allPages = Math.Ceiling((double)repCount / countPerPage);
-                if (page < 1)
+                allPages = Math.Ceiling((double)repCount / countPerPage); 
+                if (isFromProfile)
                 {
+                    var replyIDs = await _context.ReplyDataModels.OrderBy(x => x.DateCreated).Select(x => x.Id).ToListAsync();
                     page = 1;
+                    for (int i = 0; i < replyIDs.Count; i++)
+                    {
+                        if (replyIDs[i] == replyId)
+                        {
+                            break;
+                        }
+                        if ((i + 1) % countPerPage == 0)
+                        {
+                            page++;
+                        }
+                    }
+                    replies = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).Where(x => x.Post == post).OrderBy(x => x.DateCreated).Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
                 }
-                else if (page > allPages)
+                else
                 {
-                    page = (int)allPages;
+                    if (page < 1)
+                    {
+                        page = 1;
+                    }
+                    else if (page > allPages)
+                    {
+                        page = (int)allPages;
+                    }
+                    replies = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).Where(x => x.Post == post).OrderBy(x => x.DateCreated).Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
                 }
-                replies = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).Where(x => x.Post == post).OrderBy(x => x.DateCreated).Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
             }
             if (string.IsNullOrEmpty(titleOfSection))
             {
@@ -233,7 +253,7 @@ namespace NoFilterForum.Controllers
             {
                 reply.Content = string.Join(" ", reply.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
             }
-            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId,allPages,page));
+            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId, allPages, page));
         }
         [Authorize]
         [HttpPost]
