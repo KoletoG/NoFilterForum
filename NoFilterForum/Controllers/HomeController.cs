@@ -259,6 +259,7 @@ namespace NoFilterForum.Controllers
                 await _ioService.AdjustRoleByPostCount(user);
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove($"post_{replyViewModel.PostId}");
+                _memoryCache.Remove($"repliesUser_{this.User.Identity.Name}");
                 return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title });
             }
             else
@@ -278,8 +279,10 @@ namespace NoFilterForum.Controllers
             _context.NotificationDataModels.RemoveRange(notifications);
             var postId = reply.Post.Id;
             reply.User.PostsCount--;
+            var user = reply.User;
             _context.ReplyDataModels.Remove(reply);
             await _context.SaveChangesAsync();
+            _memoryCache.Remove($"repliesUser_{user.UserName}");
             return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
         }
         [HttpGet]
@@ -358,7 +361,7 @@ namespace NoFilterForum.Controllers
             await _context.PostDataModels.AddAsync(post);
             section.Posts.Add(post);
             await _context.SaveChangesAsync();
-            _memoryCache.Remove($"postsUser_{}")
+            _memoryCache.Remove($"postsUser_{this.User.Identity.Name}");
             viewModel.TitleOfSection = HttpUtility.UrlEncode(viewModel.TitleOfSection);
             return RedirectToAction("PostsMain", new { title = viewModel.TitleOfSection });
         }
@@ -467,8 +470,10 @@ namespace NoFilterForum.Controllers
             }
             _memoryCache.Remove($"title_for_{post.Id}");
             post.User.PostsCount--;
+            var user = post.User;
             _context.PostDataModels.Remove(post);
             await _context.SaveChangesAsync();
+            _memoryCache.Remove($"repliesUser_{user.UserName}");
             return RedirectToAction("PostsMain", new { title = titleOfSection });
         }
         [HttpPost]
