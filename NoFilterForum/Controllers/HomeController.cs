@@ -586,7 +586,6 @@ namespace NoFilterForum.Controllers
             {
                 string randomImgUrl = (NanoidDotNet.Nanoid.Generate()+image.FileName);
                 var filePath = Path.Combine("wwwroot/images", randomImgUrl);
-
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
