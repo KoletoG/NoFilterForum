@@ -1,5 +1,6 @@
 ﻿@using NoFilterForum.Models.DataModels
 @using NoFilterForum.Models.ViewModels
+@using System.Web
 @model PostsViewModel
 <h2 style="color:red">@ViewBag.ErrorTime</h2>
 <form asp-action="CreatePost" asp-controller="Home" method="post">
@@ -51,7 +52,7 @@
 	}
 	foreach (var post in Model.Posts)
 	{
-		<a asp-action="PostView" asp-route-id="@post.Id" asp-route-titleOfSection="@Model.Title">
+		<a asp-action="PostView" asp-route-id="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.Title">
 			<h3>
 				@post.Title @if (post.User.Role == UserRoles.Admin)
 				{

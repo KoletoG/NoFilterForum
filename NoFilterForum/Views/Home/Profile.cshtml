@@ -1,6 +1,7 @@
 ﻿@using NoFilterForum.Global_variables
 @using NoFilterForum.Models.DataModels
 @using NoFilterForum.Models.ViewModels
+@using System.Web
 @model ProfileViewModel
 @{
 	<img src="@Model.User.ImageUrl" width="200" height="200" />
@@ -94,7 +95,7 @@
 		{
 			if (reply.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@reply.Post.Id" asp-route-isFromProfile="true" asp-route-replyId="@reply.Id"><h5>Reply: @reply.Content</h5></a>
+				<a asp-action="PostView" asp-route-id="@reply.Post.Id" asp-route-isFromProfile="true" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
 				<br />
 				break;
 			}

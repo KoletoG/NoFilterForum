@@ -181,6 +181,8 @@ namespace NoFilterForum.Controllers
         [Route("Post/{id}/{titleOfSection}/error-{errors}")]
         public async Task<IActionResult> PostView(string id, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "", string errors = "")
         {
+            id = HttpUtility.UrlDecode(id);
+            replyId= HttpUtility.UrlDecode(replyId);
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Where(x => x.Id == id).FirstAsync();
