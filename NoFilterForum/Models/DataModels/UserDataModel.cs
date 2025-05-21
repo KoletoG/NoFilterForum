@@ -19,6 +19,8 @@ namespace NoFilterForum.Models.DataModels
         public List<WarningDataModel> Warnings { get; set; }
         public DateTime DateCreated { get; set; }
         public string Bio {  get; set; }
+        [DataType(DataType.ImageUrl)]
+        public string ImageUrl { get; set; }
         public UserDataModel(string userName,string email)
         {
             Id = Guid.NewGuid().ToString();
