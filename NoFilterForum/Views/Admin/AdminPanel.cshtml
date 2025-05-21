@@ -2,9 +2,13 @@
 @using System.Web
 @model AdminPanelViewModel
 @{
+	if (Model.NotConfirmedExist)
+	{
+		<a asp-action="Reasons"><h2 style="color:red" class="font-monospace">You have non-confirmed users...</h2></a>
+	}
 	if (Model.HasReports)
 	{
-		<a asp-action="Reports" asp-controller="Admin"><h2 style="color:red">You have pending reports...</h2></a>
+		<a asp-action="Reports" asp-controller="Admin"><h2 style="color:red" class="font-monospace">You have pending reports...</h2></a>
 	}
 	foreach(var user in Model.Users)
 	{

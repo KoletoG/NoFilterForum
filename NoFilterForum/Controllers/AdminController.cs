@@ -57,6 +57,18 @@ namespace NoFilterForum.Controllers
             var users = await _context.Users.Where(x => !x.IsConfirmed).ToListAsync();
             return View(new ReasonsViewModel(users));
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmUser(string userId)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            await _context.Users.Where(x => x.Id == userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsConfirmed, true));
+            return RedirectToAction("Reasons");
+        }
         [Authorize]
         [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
@@ -70,7 +82,8 @@ namespace NoFilterForum.Controllers
                 users = await _context.Users.AsNoTracking().Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
                 _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
             }
-            return View(new AdminPanelViewModel(users,await _context.ReportDataModels.AnyAsync()));
+            var notConfirmedExist = await _context.Users.AnyAsync(x => !x.IsConfirmed);
+            return View(new AdminPanelViewModel(users,await _context.ReportDataModels.AnyAsync(),notConfirmedExist));
         }
         [HttpPost]
         [Authorize]
