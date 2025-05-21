@@ -129,19 +129,23 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
             }
             if (ModelState.IsValid)
             {
-                
                 var user = new UserDataModel(Input.Username, Input.Email);
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 if (GlobalVariables.adminNames.Contains(user.UserName))
                 {
                     user.Role = UserRoles.Admin;
+                    user.IsConfirmed = true;
+                    user.Reason = "Admin";
                 }
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                else
+                {
+                    user.Reason=Input.Reason;
+                }
+                    var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -161,7 +165,6 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                     else
                     {
                         _memoryCache.Remove($"usersList");
-                        await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }

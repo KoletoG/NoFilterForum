@@ -16,9 +16,11 @@ namespace NoFilterForum.Models.DataModels
         [EmailAddress]
         public override string? Email { get; set; }
         public int PostsCount { get; set; }
+        public bool IsConfirmed { get; set; }
         public UserRoles Role { get; set; }
         public List<WarningDataModel> Warnings { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Reason { get; set; }
         public string Bio {  get; set; }
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
@@ -29,6 +31,7 @@ namespace NoFilterForum.Models.DataModels
             Email = email;
             PostsCount = 0;
             Role = UserRoles.Newbie;
+            IsConfirmed = false;
             Warnings = new List<WarningDataModel>();
             DateCreated = DateTime.UtcNow;
             Bio = "";
