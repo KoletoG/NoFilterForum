@@ -584,13 +584,14 @@ namespace NoFilterForum.Controllers
             }
             if (image != null)
             {
-                var filePath = Path.Combine("wwwroot/images", image.FileName);
+                string randomImgUrl = (NanoidDotNet.Nanoid.Generate()+image.FileName);
+                var filePath = Path.Combine("wwwroot/images", randomImgUrl);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
-                string imageUrl = $"/images/{image.FileName}";
+                string imageUrl = $"/images/{randomImgUrl}";
                 await _context.Users.Where(x => x.UserName == this.User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.ImageUrl, imageUrl));
                 return NoContent();
             }
