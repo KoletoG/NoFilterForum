@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NoFilterForum.Models.DataModels
 {
@@ -31,6 +32,7 @@ namespace NoFilterForum.Models.DataModels
             Warnings = new List<WarningDataModel>();
             DateCreated = DateTime.UtcNow;
             Bio = "";
+            ImageUrl = @"..\wwwroot\images\DefaultImage.png";
         }
         public UserDataModel()
         {
