@@ -182,7 +182,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> PostView(string id, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "", string errors = "")
         {
             id = HttpUtility.UrlDecode(id);
-            replyId= HttpUtility.UrlDecode(replyId);
+            replyId = HttpUtility.UrlDecode(replyId);
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Where(x => x.Id == id).FirstAsync();
@@ -193,10 +193,10 @@ namespace NoFilterForum.Controllers
             List<ReplyDataModel> replies = new List<ReplyDataModel>();
             if (repCount > 0)
             {
-                allPages = Math.Ceiling((double)repCount / countPerPage); 
+                allPages = Math.Ceiling((double)repCount / countPerPage);
                 if (isFromProfile)
                 {
-                    var replyIDs = await _context.ReplyDataModels.Where(x=>x.Post.Id==id).OrderBy(x => x.DateCreated).Select(x => x.Id).ToListAsync();
+                    var replyIDs = await _context.ReplyDataModels.Where(x => x.Post.Id == id).OrderBy(x => x.DateCreated).Select(x => x.Id).ToListAsync();
                     page = 1;
                     for (int i = 0; i < replyIDs.Count; i++)
                     {
@@ -336,7 +336,7 @@ namespace NoFilterForum.Controllers
             {
                 ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
             }
-            var postsCount = await _context.SectionDataModels.Where(x=>x.Title == title).SelectMany(x=>x.Posts).CountAsync();
+            var postsCount = await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x => x.Posts).CountAsync();
             var allPages = Math.Ceiling((double)postsCount / countPerPage);
             if (page < 1)
             {
@@ -346,19 +346,23 @@ namespace NoFilterForum.Controllers
             {
                 page = (int)allPages;
             }
-            var posts = await _context.SectionDataModels.AsNoTracking()
-                .Where(x=>x.Title==title)
-                .Include(x=>x.Posts)
-                .ThenInclude(x=>x.User)
-                .SelectMany(x => x.Posts)
-                .Skip((page-1)*countPerPage)
-                .Take(countPerPage)
-                .ToListAsync();
+            List<PostDataModel> posts = new List<PostDataModel>();
+            if (await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x=>x.Posts).AnyAsync())
+            {
+                posts = await _context.SectionDataModels.AsNoTracking()
+                    .Where(x => x.Title == title)
+                    .Include(x => x.Posts)
+                    .ThenInclude(x => x.User)
+                    .SelectMany(x => x.Posts)
+                    .Skip((page - 1) * countPerPage)
+                    .Take(countPerPage)
+                    .ToListAsync();
+            }
             var currentUser = await _context.Users.AsNoTracking()
                 .Where(x => x.UserName == this.User.Identity.Name)
                 .FirstAsync();
             title = HttpUtility.UrlEncode(title);
-            return View(new PostsViewModel(currentUser, posts, title, page,allPages));
+            return View(new PostsViewModel(currentUser, posts, title, page, allPages));
         }
         [HttpGet]
         [Authorize]
@@ -449,7 +453,7 @@ namespace NoFilterForum.Controllers
         [Route("Profile/{userName}/error-{error}/page-{page}")]
         public async Task<IActionResult> Profile(string userName, int page = 1, string error = "")
         {
-            userName=HttpUtility.UrlDecode(userName);
+            userName = HttpUtility.UrlDecode(userName);
             if (!string.IsNullOrEmpty(error))
             {
                 ViewBag.Error = error;
@@ -587,7 +591,7 @@ namespace NoFilterForum.Controllers
             }
             if (image != null)
             {
-                string randomImgUrl = (NanoidDotNet.Nanoid.Generate()+image.FileName);
+                string randomImgUrl = (NanoidDotNet.Nanoid.Generate() + image.FileName);
                 var filePath = Path.Combine("wwwroot/images", randomImgUrl);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -595,9 +599,9 @@ namespace NoFilterForum.Controllers
                 }
                 string imageUrl = $"/images/{randomImgUrl}";
                 var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
-                if(currentUser.ImageUrl!= "\\images\\defaultimage.gif")
+                if (currentUser.ImageUrl != "\\images\\defaultimage.gif")
                 {
-                    System.IO.File.Delete("wwwroot"+currentUser.ImageUrl);
+                    System.IO.File.Delete("wwwroot" + currentUser.ImageUrl);
                 }
                 currentUser.ImageUrl = imageUrl;
                 await _context.SaveChangesAsync();
