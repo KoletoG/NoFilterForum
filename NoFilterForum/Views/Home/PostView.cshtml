@@ -24,6 +24,7 @@
 	{
 		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-dark">@Model.Post.User.UserName</a>
 	}
+	<img src="@Model.Post.User.ImageUrl" width="125" height="125" />
 }
 else
 {
@@ -132,6 +133,7 @@ else
 			{
 				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-dark">@reply.User.UserName</a>
 			}
+			<img src="@reply.User.ImageUrl" width="125" height="125" />
 		}
 		else
 		{

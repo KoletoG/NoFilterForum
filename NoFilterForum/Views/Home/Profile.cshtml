@@ -3,7 +3,7 @@
 @using NoFilterForum.Models.ViewModels
 @model ProfileViewModel
 @{
-	<img src="@Model.User.ImageUrl" width="150" height="150" />
+	<img src="@Model.User.ImageUrl" width="200" height="200" />
 	if (Model.IsSameUser)
 	{
 		if (!string.IsNullOrEmpty(ViewBag.Error))
