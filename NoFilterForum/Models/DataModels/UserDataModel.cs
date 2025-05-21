@@ -32,7 +32,7 @@ namespace NoFilterForum.Models.DataModels
             Warnings = new List<WarningDataModel>();
             DateCreated = DateTime.UtcNow;
             Bio = "";
-            ImageUrl = @"..\wwwroot\images\defaultimage.gif";
+            ImageUrl = @"\images\defaultimage.gif";
         }
         public UserDataModel()
         {

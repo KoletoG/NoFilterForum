@@ -591,7 +591,13 @@ namespace NoFilterForum.Controllers
                     await image.CopyToAsync(stream);
                 }
                 string imageUrl = $"/images/{randomImgUrl}";
-                await _context.Users.Where(x => x.UserName == this.User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.ImageUrl, imageUrl));
+                var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+                if(currentUser.ImageUrl!= "\\images\\defaultimage.gif")
+                {
+                    System.IO.File.Delete("wwwroot"+currentUser.ImageUrl);
+                }
+                currentUser.ImageUrl = imageUrl;
+                await _context.SaveChangesAsync();
                 return NoContent();
             }
             return BadRequest();
