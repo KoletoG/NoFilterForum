@@ -572,6 +572,30 @@ namespace NoFilterForum.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ChangeImage(IFormFile image)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorsList = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                return BadRequest(errorsList);
+            }
+            if (image != null)
+            {
+                var filePath = Path.Combine("wwwroot/images", image.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                string imageUrl = $"/images/{image.FileName}";
+                await _context.Users.Where(x => x.UserName == this.User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.ImageUrl, imageUrl));
+                return NoContent();
+            }
+            return BadRequest();
+        }
         // Cache Service NEED! / Singleton
         // MODEL STATE TOO ADD FOR INPUTS
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
