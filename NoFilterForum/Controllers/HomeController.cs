@@ -449,6 +449,7 @@ namespace NoFilterForum.Controllers
         [Route("Profile/{userName}/error-{error}/page-{page}")]
         public async Task<IActionResult> Profile(string userName, int page = 1, string error = "")
         {
+            userName=HttpUtility.UrlDecode(userName);
             if (!string.IsNullOrEmpty(error))
             {
                 ViewBag.Error = error;

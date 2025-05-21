@@ -1,28 +1,30 @@
 ﻿@using NoFilterForum.Global_variables
 @using NoFilterForum.Models.DataModels
 @using NoFilterForum.Models.ViewModels
+@using System.Web
 @model PostViewModel
 @if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
 {
+	var encodedPostUser = HttpUtility.UrlEncode(Model.Post.User.UserName);
 	if (Model.Post.User.Role == UserRoles.Admin)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-danger">@Model.Post.User.UserName</a>
+		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-danger">@Model.Post.User.UserName</a>
 	}
 	else if (Model.Post.User.Role == UserRoles.VIP)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-warning">@Model.Post.User.UserName</a>
+		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-warning">@Model.Post.User.UserName</a>
 	}
 	else if (Model.Post.User.Role == UserRoles.Regular)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-light">@Model.Post.User.UserName</a>
+		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-light">@Model.Post.User.UserName</a>
 	}
 	else if (Model.Post.User.Role == UserRoles.Dinosaur)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-primary">@Model.Post.User.UserName</a>
+		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-primary">@Model.Post.User.UserName</a>
 	}
 	else
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.Post.User.UserName" class="text-dark">@Model.Post.User.UserName</a>
+		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-dark">@Model.Post.User.UserName</a>
 	}
 	<img src="@Model.Post.User.ImageUrl" width="125" height="125" />
 }
@@ -113,25 +115,26 @@ else
 	{
 		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)
 		{
+			var encodedUsername = HttpUtility.UrlEncode(reply.User.UserName);
 			if (reply.User.Role == UserRoles.Admin)
 			{
-				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-danger">@reply.User.UserName</a>
+				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-danger">@reply.User.UserName</a>
 			}
 			else if (reply.User.Role == UserRoles.VIP)
 			{
-				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-warning">@reply.User.UserName</a>
+				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-warning">@reply.User.UserName</a>
 			}
 			else if (Model.Post.User.Role == UserRoles.Regular)
 			{
-				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-light">@reply.User.UserName</a>
+				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-light">@reply.User.UserName</a>
 			}
 			else if (Model.Post.User.Role == UserRoles.Dinosaur)
 			{
-				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-primary">@reply.User.UserName</a>
+				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-primary">@reply.User.UserName</a>
 			}
 			else
 			{
-				<a asp-action="Profile" asp-route-userName="@reply.User.UserName" class="text-dark">@reply.User.UserName</a>
+				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-dark">@reply.User.UserName</a>
 			}
 			<img src="@reply.User.ImageUrl" width="125" height="125" />
 		}
