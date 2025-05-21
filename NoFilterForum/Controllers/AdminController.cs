@@ -47,6 +47,17 @@ namespace NoFilterForum.Controllers
             return View(new ReportsViewModel(reports));
         }
         [Authorize]
+        [Route("Reasons")]
+        public async Task<IActionResult> Reasons()
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var users = await _context.Users.Where(x => !x.IsConfirmed).ToListAsync();
+            return View(new ReasonsViewModel(users));
+        }
+        [Authorize]
         [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
         {
