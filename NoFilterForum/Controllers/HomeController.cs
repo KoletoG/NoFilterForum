@@ -187,7 +187,7 @@ namespace NoFilterForum.Controllers
             if (!_memoryCache.TryGetValue($"post_{id}", out PostDataModel post))
             {
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Where(x => x.Id == id).FirstAsync();
-                _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(15));
+                _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(1));
             }
             var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
             double allPages = 1;
