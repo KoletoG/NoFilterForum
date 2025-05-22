@@ -26,6 +26,7 @@ using System.Text.Json;
 using System.Web;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -609,8 +610,44 @@ namespace NoFilterForum.Controllers
             }
             return BadRequest();
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LikeDislike(bool like, string id, bool isPost)
+        {
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest();
+            }
+            if (isPost)
+            {
+                if (like)
+                {
+                    await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                }
+                else
+                {
+                    await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+
+                }
+            }
+            else
+            {
+                if (like)
+                {
+                    await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x=>x.Likes+1));
+                }
+                else
+                {
+                    await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+
+                }
+            }
+            return NoContent();
+        }
         // Cache Service NEED! / Singleton
         // MODEL STATE TOO ADD FOR INPUTS
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
