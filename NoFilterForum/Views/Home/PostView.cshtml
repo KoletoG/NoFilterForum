@@ -77,6 +77,11 @@ else
 	}
 	ShowTime(timeDiff);
 }
+<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+	@Html.AntiForgeryToken()
+	<input type="hidden" name="like" value="true"/>
+	<button type="submit">Like</button>
+</form>
 @if (Model.Post.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 {
 	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" method="post">
