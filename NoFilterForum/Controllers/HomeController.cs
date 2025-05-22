@@ -190,6 +190,7 @@ namespace NoFilterForum.Controllers
                 _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(1));
             }
             string currentUsername = this.User.Identity.Name;
+            var currentUser = await _userManager.FindByNameAsync(currentUsername);
             var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
             double allPages = 1;
             List<ReplyDataModel> replies = new List<ReplyDataModel>();
@@ -256,7 +257,7 @@ namespace NoFilterForum.Controllers
             {
                 reply.Content = string.Join(" ", reply.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
             }
-            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId, allPages, page));
+            return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId, allPages, page, currentUser));
         }
         [Authorize]
         [HttpPost]
