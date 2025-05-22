@@ -348,7 +348,7 @@ namespace NoFilterForum.Controllers
                 page = (int)allPages;
             }
             List<PostDataModel> posts = new List<PostDataModel>();
-            if (await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x=>x.Posts).AnyAsync())
+            if (await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x => x.Posts).AnyAsync())
             {
                 posts = await _context.SectionDataModels.AsNoTracking()
                     .Where(x => x.Title == title)
@@ -615,9 +615,14 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LikeDislike(bool like, string id, bool isPost)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
+            }
+            var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            if (currentUser.ReactionsPostRepliesIds.Contains(id))
+            {
+                return Forbid();
             }
             if (isPost)
             {
@@ -635,14 +640,15 @@ namespace NoFilterForum.Controllers
             {
                 if (like)
                 {
-                    await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x=>x.Likes+1));
+                    await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
                 }
                 else
                 {
                     await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
-
                 }
             }
+            currentUser.ReactionsPostRepliesIds.Add(id);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
         // Cache Service NEED! / Singleton
