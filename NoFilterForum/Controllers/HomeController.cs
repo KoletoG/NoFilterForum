@@ -189,6 +189,7 @@ namespace NoFilterForum.Controllers
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Where(x => x.Id == id).FirstAsync();
                 _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(1));
             }
+            string currentUsername = this.User.Identity.Name;
             var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
             double allPages = 1;
             List<ReplyDataModel> replies = new List<ReplyDataModel>();
@@ -250,7 +251,6 @@ namespace NoFilterForum.Controllers
                 List<string> errorsList = JsonSerializer.Deserialize<List<string>>(errors);
                 ViewBag.ErrorsList = errorsList;
             }
-            string currentUsername = this.User.Identity.Name;
             post.Content = string.Join(" ", post.Content.Split(' ').Select(x => _nonIOService.MarkTags(x, currentUsername)));
             foreach (var reply in replies)
             {

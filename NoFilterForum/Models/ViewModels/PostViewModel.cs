@@ -13,8 +13,7 @@ namespace NoFilterForum.Models.ViewModels
         public ReportDataModel Report { get; set; }
         public int Page { get; set; }
         public double TotalPages { get; set; }
-        public Dictionary<string,bool> RPIdIsLikedDisliked { get; set; }
-        public PostViewModel(PostDataModel post, List<ReplyDataModel> replies, string title, bool isFromProfile, string replyId, double totalPages, int page, Dictionary<string,bool> keyValuePairs)
+        public PostViewModel(PostDataModel post, List<ReplyDataModel> replies, string title, bool isFromProfile, string replyId, double totalPages, int page)
         {
             Post = post;
             Replies = replies;
@@ -24,7 +23,6 @@ namespace NoFilterForum.Models.ViewModels
             Report = new ReportDataModel();
             TotalPages = totalPages;
             Page = page;
-            RPIdIsLikedDisliked = keyValuePairs;
         }
     }
 }
