@@ -623,13 +623,28 @@ namespace NoFilterForum.Controllers
             if (currentUser.LikesPostRepliesIds.Contains(id))
             {
                 currentUser.LikesPostRepliesIds.Remove(id);
-                if (isPost)
+                if (like)
                 {
-                    await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+                    if (isPost)
+                    {
+                        await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+                    }
+                    else
+                    {
+                        await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+                    }
                 }
                 else
                 {
-                    await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+                    if (isPost)
+                    {
+                        await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 2));
+                    }
+                    else
+                    {
+                        await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 2));
+                    }
+                    currentUser.DislikesPostRepliesIds.Add(id);
                 }
                 await _context.SaveChangesAsync();
                 return NoContent();
@@ -637,13 +652,28 @@ namespace NoFilterForum.Controllers
             else if (currentUser.DislikesPostRepliesIds.Contains(id))
             {
                 currentUser.DislikesPostRepliesIds.Remove(id);
-                if (isPost)
+                if (like)
                 {
-                    await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                    if (isPost)
+                    {
+                        await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 2));
+                    }
+                    else
+                    {
+                        await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 2));
+                    }
+                    currentUser.LikesPostRepliesIds.Add(id);
                 }
                 else
                 {
-                    await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                    if (isPost)
+                    {
+                        await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                    }
+                    else
+                    {
+                        await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                    }
                 }
                 await _context.SaveChangesAsync();
                 return NoContent();
