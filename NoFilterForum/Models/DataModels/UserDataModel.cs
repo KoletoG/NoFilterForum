@@ -18,7 +18,8 @@ namespace NoFilterForum.Models.DataModels
         public int PostsCount { get; set; }
         public bool IsConfirmed { get; set; }
         public UserRoles Role { get; set; }
-        public List<string> ReactionsPostRepliesIds { get; set; }
+        public List<string> LikesPostRepliesIds { get; set; }
+        public List<string> DislikesPostRepliesIds { get; set; }
         public List<WarningDataModel> Warnings { get; set; }
         public DateTime DateCreated { get; set; }
         public string Reason { get; set; }
@@ -35,7 +36,8 @@ namespace NoFilterForum.Models.DataModels
             IsConfirmed = false;
             Warnings = new List<WarningDataModel>();
             DateCreated = DateTime.UtcNow;
-            ReactionsPostRepliesIds = new List<string>();
+            LikesPostRepliesIds = new List<string>();
+            DislikesPostRepliesIds = new List<string>();
             Bio = "";
             ImageUrl = @"\images\defaultimage.gif";
         }

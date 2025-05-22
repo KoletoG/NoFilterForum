@@ -620,7 +620,7 @@ namespace NoFilterForum.Controllers
                 return BadRequest();
             }
             var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
-            if (currentUser.ReactionsPostRepliesIds.Contains(id))
+            if (currentUser.LikesPostRepliesIds.Contains(id) || currentUser.DislikesPostRepliesIds.Contains(id))
             {
                 return Forbid();
             }
@@ -629,11 +629,12 @@ namespace NoFilterForum.Controllers
                 if (like)
                 {
                     await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                    currentUser.LikesPostRepliesIds.Add(id);
                 }
                 else
                 {
                     await _context.PostDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
-
+                    currentUser.DislikesPostRepliesIds.Add(id);
                 }
             }
             else
@@ -641,13 +642,14 @@ namespace NoFilterForum.Controllers
                 if (like)
                 {
                     await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes + 1));
+                    currentUser.LikesPostRepliesIds.Add(id);
                 }
                 else
                 {
                     await _context.ReplyDataModels.Where(x => x.Id == id).ExecuteUpdateAsync(x => x.SetProperty(x => x.Likes, x => x.Likes - 1));
+                    currentUser.DislikesPostRepliesIds.Add(id);
                 }
             }
-            currentUser.ReactionsPostRepliesIds.Add(id);
             await _context.SaveChangesAsync();
             return NoContent();
         }
