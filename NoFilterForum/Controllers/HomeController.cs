@@ -622,7 +622,7 @@ namespace NoFilterForum.Controllers
             var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
             if (currentUser.LikesPostRepliesIds.Contains(id) || currentUser.DislikesPostRepliesIds.Contains(id))
             {
-                return Forbid();
+                return NoContent();
             }
             if (isPost)
             {
