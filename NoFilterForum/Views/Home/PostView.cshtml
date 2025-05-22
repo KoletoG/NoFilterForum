@@ -77,6 +77,24 @@ else
 	}
 	ShowTime(timeDiff);
 }
+<script>
+	let likesIds = new Set();
+	function updateLikes(btn)
+	{
+		if(likesIds.has(btn.id))
+		{
+
+		}
+		else
+		{
+			document.getElementById(btn.id).style.color="red";
+			let label = document.getElementById("likesCount");
+			let val = parseInt(label.innerText);
+			label.innerText=val+1;
+			likesIds.add(btn.id);
+		}
+	}
+</script>
 @{
 	if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 	{
@@ -99,7 +117,7 @@ else
 			<input type="hidden" name="like" value="true" />
 			<button type="submit">Like</button>
 		</form>
-		<h6>@Model.Post.Likes</h6>
+		<label id="likesCount">@Model.Post.Likes</label>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />
@@ -111,9 +129,9 @@ else
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="true" />
-			<button type="submit">Like</button>
+			<button type="submit" onclick="updateLikes(postLike)" id="postLike">Like</button>
 		</form>
-		<h6>@Model.Post.Likes</h6>
+		<h6 id="likesCount">@Model.Post.Likes</h6>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />

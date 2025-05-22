@@ -259,6 +259,7 @@ namespace NoFilterForum.Controllers
             }
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId, allPages, page, currentUser));
         }
+        // SORT POSTS IN POSTSMAIN BY DATE AND LIKES ALGORITHM???
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
