@@ -196,6 +196,48 @@ else
 		}
 		var timeDiffReply = DateTime.UtcNow - reply.DateCreated;
 		ShowTime(timeDiffReply);
+		if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
+		{
+			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="like" value="true" />
+				<button type="submit" style="color:red">Like</button>
+			</form>
+			<h6>@reply.Likes</h6>
+			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="like" value="false" />
+				<button type="submit">Dislike</button>
+			</form>
+		}
+		else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
+		{
+			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="like" value="true" />
+				<button type="submit">Like</button>
+			</form>
+			<h6>@reply.Likes</h6>
+			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="like" value="false" />
+				<button type="submit" style="color:red">Dislike</button>
+			</form>
+		}
+		else
+		{
+			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="like" value="true" />
+				<button type="submit">Like</button>
+			</form>
+			<h6>@reply.Likes</h6>
+			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="like" value="false" />
+				<button type="submit">Dislike</button>
+			</form>
+		}
 		@if (reply.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
 		{
 			<form asp-action="DeleteReply" asp-route-id="@reply.Id" asp-route-title="@Model.Title" method="post">
