@@ -35,6 +35,27 @@ namespace NoFilterForum.Controllers
             return RedirectToAction("Reports");
         }
         [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PinPost(string postId)
+        {
+            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            {
+                return RedirectToAction("Index");
+            }
+            var post = await _context.PostDataModels.FirstOrDefaultAsync(x=>x.Id==postId);
+            if (!post.IsPinned)
+            {
+                post.IsPinned = true;
+            }
+            else
+            {
+                post.IsPinned = false;
+            }
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        [Authorize]
         [ResponseCache(Duration =30,Location = ResponseCacheLocation.Any)]
         [Route("Reports")]
         public async Task<IActionResult> Reports()
