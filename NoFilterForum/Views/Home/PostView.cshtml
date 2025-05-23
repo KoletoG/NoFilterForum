@@ -86,7 +86,7 @@ else
 			<input type="hidden" name="like" value="true" />
 			<button type="submit" id="postLike" onclick="updatePostLikes()" style="color:red">Like</button>
 		</form>
-		<h6 id="likesCount">@Model.Post.Likes</h6>
+		<h6 id="likesPostCount">@Model.Post.Likes</h6>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />
@@ -100,7 +100,7 @@ else
 			<input type="hidden" name="like" value="true" />
 			<button type="submit" onclick="updatePostLikes()" id="postLike">Like</button>
 		</form>
-		<h6 id="likesCount">@Model.Post.Likes</h6>	
+		<h6 id="likesPostCount">@Model.Post.Likes</h6>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />
@@ -114,7 +114,7 @@ else
 			<input type="hidden" name="like" value="true" />
 			<button type="submit" onclick="updatePostLikes()" id="postLike">Like</button>
 		</form>
-		<h6 id="likesCount">@Model.Post.Likes</h6>
+		<h6 id="likesPostCount">@Model.Post.Likes</h6>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />

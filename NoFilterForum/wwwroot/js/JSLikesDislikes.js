@@ -3,7 +3,7 @@ let updatedColor = "red";
 function updatePostLikes()
 {
     let btnLike = document.getElementById("postLike");
-    let likesCount = document.getElementById("likesCount");
+    let likesCount = document.getElementById("likesPostCount");
     let btnDislike = document.getElementById("postDislike");
     if(btnDislike.style.color==updatedColor)
     {
@@ -24,21 +24,21 @@ function updatePostLikes()
 function updatePostDislikes()
 {
     let btnLike = document.getElementById("postLike");
-    let likesCount = document.getElementById("likesCount");
+    let likesCount = document.getElementById("likesPostCount");
     let btnDislike = document.getElementById("postDislike");
     if(btnLike.style.color==updatedColor)
     {
         btnLike.style.color=normalColor;
-        likesCount.innerText=parseInt(likesCount.innerText)+1;
+        likesCount.innerText=parseInt(likesCount.innerText)-1;
     }
     if(btnDislike.style.color==updatedColor)
     {
         btnDislike.style.color=normalColor;
-        likesCount.innerText=parseInt(likesCount.innerText)-1;
+        likesCount.innerText=parseInt(likesCount.innerText)+1;
     }
     else
     {
         btnDislike.style.color=updatedColor;
-        likesCount.innerText=parseInt(likesCount.innerText)+1;
+        likesCount.innerText=parseInt(likesCount.innerText)-1;
     }
 }
