@@ -43,16 +43,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var post = await _context.PostDataModels.FirstOrDefaultAsync(x=>x.Id==postId);
-            if (!post.IsPinned)
-            {
-                post.IsPinned = true;
-            }
-            else
-            {
-                post.IsPinned = false;
-            }
-            await _context.SaveChangesAsync();
+            await _context.PostDataModels.Where(x => x.Id == postId).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsPinned, x => !x.IsPinned));
             return NoContent();
         }
         [Authorize]
