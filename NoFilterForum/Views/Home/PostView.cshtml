@@ -202,13 +202,13 @@ else
 			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
 				@Html.AntiForgeryToken()
 				<input type="hidden" name="like" value="true" />
-				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('@($"id_{reply.Id}")')" style="color:red">Like</button>
+				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')" style="color:red">Like</button>
 			</form>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
 			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
 				@Html.AntiForgeryToken()
 				<input type="hidden" name="like" value="false" />
-				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('@($"id_{reply.Id}")')">Dislike</button>
+				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')">Dislike</button>
 			</form>
 		}
 		else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
@@ -216,13 +216,13 @@ else
 			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
 				@Html.AntiForgeryToken()
 				<input type="hidden" name="like" value="true" />
-				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('@($"id_{reply.Id}")')">Like</button>
+				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')">Like</button>
 			</form>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
 			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
 				@Html.AntiForgeryToken()
 				<input type="hidden" name="like" value="false" />
-				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('@($"id_{reply.Id}")')" style="color:red">Dislike</button>
+				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')" style="color:red">Dislike</button>
 			</form>
 		}
 		else
@@ -230,13 +230,13 @@ else
 			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
 				@Html.AntiForgeryToken()
 				<input type="hidden" name="like" value="true" />
-				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('@($"id_{reply.Id}")')">Like</button>
+				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')">Like</button>
 			</form>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
 			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
 				@Html.AntiForgeryToken()
 				<input type="hidden" name="like" value="false" />
-				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('@($"id_{reply.Id}")')">Dislike</button>
+				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')">Dislike</button>
 			</form>
 		}
 		@if (reply.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
