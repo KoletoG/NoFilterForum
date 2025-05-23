@@ -3,7 +3,7 @@
 @using NoFilterForum.Models.ViewModels
 @using System.Web
 @model PostViewModel
-<script src="~/js/JSLikesDislikes.js" asp-append-version="true"/>
+<script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
 @if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
 {
 	var encodedPostUser = HttpUtility.UrlEncode(Model.Post.User.UserName);
@@ -86,7 +86,7 @@ else
 			<input type="hidden" name="like" value="true" />
 			<button type="submit" id="postLike" style="color:red">Like</button>
 		</form>
-		<h6>@Model.Post.Likes</h6>
+		<h6 id="likesCount">@Model.Post.Likes</h6>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />
@@ -100,7 +100,7 @@ else
 			<input type="hidden" name="like" value="true" />
 			<button type="submit" id="postLike">Like</button>
 		</form>
-		<label id="likesCount">@Model.Post.Likes</label>
+		<h6 id="likesCount">@Model.Post.Likes</h6>
 		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="like" value="false" />
