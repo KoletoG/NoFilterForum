@@ -3,6 +3,7 @@
 @using NoFilterForum.Models.ViewModels
 @using System.Web
 @model PostViewModel
+<script src="~/js/JSLikesDislikes.js" asp-append-version="true"/>
 @if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
 {
 	var encodedPostUser = HttpUtility.UrlEncode(Model.Post.User.UserName);
@@ -77,24 +78,6 @@ else
 	}
 	ShowTime(timeDiff);
 }
-<script>
-	let likesIds = new Set();
-	function updateLikes(btn)
-	{
-		if(likesIds.has(btn.id))
-		{
-
-		}
-		else
-		{
-			document.getElementById(btn.id).style.color="red";
-			let label = document.getElementById("likesCount");
-			let val = parseInt(label.innerText);
-			label.innerText=val+1;
-			likesIds.add(btn.id);
-		}
-	}
-</script>
 @{
 	if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 	{
