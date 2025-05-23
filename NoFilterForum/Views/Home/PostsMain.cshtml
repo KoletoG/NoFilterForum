@@ -78,10 +78,20 @@
 		</a>
 		var timeDiff = DateTime.UtcNow - post.DateCreated;
 		ShowTime(timeDiff);
-		<form asp-action="PinPost" asp-controller="Admin" method="post" asp-route-postId="@post.Id">
-			@Html.AntiForgeryToken()
-			<button type="submit">Pin post</button>
-		</form>
+		if (post.IsPinned)
+		{
+			<form asp-action="PinPost" asp-controller="Admin" method="post" asp-route-postId="@post.Id">
+				@Html.AntiForgeryToken()
+				<button type="submit">Unpin post</button>
+			</form>
+		}
+		else
+		{
+			<form asp-action="PinPost" asp-controller="Admin" method="post" asp-route-postId="@post.Id">
+				@Html.AntiForgeryToken()
+				<button type="submit">Pin post</button>
+			</form>
+		}
 		<br />
 	}
 	int prevPage = Model.Page - 1;
