@@ -357,6 +357,8 @@ namespace NoFilterForum.Controllers
                     .Include(x => x.Posts)
                     .ThenInclude(x => x.User)
                     .SelectMany(x => x.Posts)
+                    .OrderByDescending(x=>x.IsPinned)
+                    .OrderByDescending(x=>x.DateCreated)
                     .Skip((page - 1) * countPerPage)
                     .Take(countPerPage)
                     .ToListAsync();
