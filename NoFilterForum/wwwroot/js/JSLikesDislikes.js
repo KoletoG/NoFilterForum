@@ -1,20 +1,44 @@
-﻿let likedPosts = new Set();
-let normalColor = "black";
+﻿let normalColor = "black";
 let updatedColor = "red";
-function updateLikes(btn)
+function updatePostLikes()
 {
     let btnLike = document.getElementById("postLike");
     let likesCount = document.getElementById("likesCount");
-    if(likedPosts.has(btn.id))
+    let btnDislike = document.getElementById("postDislike");
+    if(btnDislike.style.color==updatedColor)
+    {
+        btnDislike.style.color=normalColor;
+        likesCount.innerText=parseInt(likesCount.innerText)+1;
+    }
+    if(btnLike.style.color==updatedColor)
     {
         btnLike.style.color=normalColor;
-        likedPosts.delete(btn.id);
         likesCount.innerText=parseInt(likesCount.innerText)-1;
     }
     else
     {
         btnLike.style.color=updatedColor;
-        likedPosts.add(btnLike.id);
+        likesCount.innerText=parseInt(likesCount.innerText)+1;
+    }
+}
+function updatePostDislikes()
+{
+    let btnLike = document.getElementById("postLike");
+    let likesCount = document.getElementById("likesCount");
+    let btnDislike = document.getElementById("postDislike");
+    if(btnLike.style.color==updatedColor)
+    {
+        btnLike.style.color=normalColor;
+        likesCount.innerText=parseInt(likesCount.innerText)+1;
+    }
+    if(btnDislike.style.color==updatedColor)
+    {
+        btnDislike.style.color=normalColor;
+        likesCount.innerText=parseInt(likesCount.innerText)-1;
+    }
+    else
+    {
+        btnDislike.style.color=updatedColor;
         likesCount.innerText=parseInt(likesCount.innerText)+1;
     }
 }
