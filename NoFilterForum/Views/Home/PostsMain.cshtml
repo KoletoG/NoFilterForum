@@ -82,7 +82,7 @@
 	}
 	int prevPage = Model.Page - 1;
 	int nextPage = Model.Page + 1;
-	if (Model.TotalPages == 0)
+	if (Model.TotalPages == 0 || Model.TotalPages==1)
 	{
 
 	}
@@ -92,7 +92,6 @@
 	}
 	else if (Model.Page == Model.TotalPages)
 	{
-
 		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.Title">Previous page</a>
 	}
 	else if(Model.Page>1 && Model.Page<Model.TotalPages)
