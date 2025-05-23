@@ -13,6 +13,7 @@ namespace NoFilterForum.Models.DataModels
         public UserDataModel User { get; set; }
         public short Likes { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
+        public bool IsPinned { get; set; }
         public PostDataModel(string title, string content, UserDataModel user)
         {
             Id = Guid.NewGuid().ToString();
@@ -22,6 +23,7 @@ namespace NoFilterForum.Models.DataModels
             User = user;
             Replies = new List<ReplyDataModel>();
             Likes = 0;
+            IsPinned = false;
         }
         public PostDataModel()
         {
