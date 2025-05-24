@@ -25,5 +25,12 @@ namespace NoFilterForum.Repositories.Implementations
         {
             return await _context.Users.ToListAsync();
         }
+        public async Task<UserDataModel> CreateAsync(UserDataModel user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
     }
 }
