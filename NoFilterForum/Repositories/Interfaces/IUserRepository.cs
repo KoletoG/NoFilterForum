@@ -7,5 +7,8 @@ namespace NoFilterForum.Repositories.Interfaces
         public Task<UserDataModel> GetByIdAsync(string id);
         public Task<UserDataModel> GetByUsernameAsync(string username);
         public Task<List<UserDataModel>> GetAllAsync();
+        public Task<UserDataModel> CreateAsync(UserDataModel user);
+
+        public Task UpdateAsync(UserDataModel user);
     }
 }
