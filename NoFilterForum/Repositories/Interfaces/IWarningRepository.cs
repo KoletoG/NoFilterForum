@@ -1,6 +1,15 @@
-﻿namespace NoFilterForum.Repositories.Interfaces
+﻿using NoFilterForum.Models.DataModels;
+
+namespace NoFilterForum.Repositories.Interfaces
 {
     public interface IWarningRepository
     {
+        public Task<WarningDataModel> GetByIdAsync(string id);
+        public Task<List<WarningDataModel>> GetAllByUserAsync(UserDataModel user);
+        public Task<List<WarningDataModel>> GetAllAsync();
+        public Task<WarningDataModel> CreateAsync(WarningDataModel warning);
+        public Task UpdateAsync(WarningDataModel warning);
+        public Task DeleteAsync(WarningDataModel warning);
+        public Task<bool> ExistsByUserAsync(UserDataModel user);
     }
 }
