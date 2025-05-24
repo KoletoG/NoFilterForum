@@ -10,5 +10,6 @@ namespace NoFilterForum.Repositories.Interfaces
         public Task<UserDataModel> CreateAsync(UserDataModel user);
 
         public Task UpdateAsync(UserDataModel user);
+        public Task DeleteAsync(UserDataModel user);
     }
 }
