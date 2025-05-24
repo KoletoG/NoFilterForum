@@ -1,6 +1,14 @@
-﻿namespace NoFilterForum.Repositories.Interfaces
+﻿using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Models.DataModels;
+
+namespace NoFilterForum.Repositories.Interfaces
 {
     public interface INotificationRepository
     {
+        public Task<NotificationDataModel> GetByIdAsync(string id);
+        public Task<List<NotificationDataModel>> GetAllAsync();
+        public Task<NotificationDataModel> CreateAsync(NotificationDataModel notification);
+        public Task UpdateAsync(NotificationDataModel notification);
+        public Task DeleteAsync(NotificationDataModel notification);
     }
 }
