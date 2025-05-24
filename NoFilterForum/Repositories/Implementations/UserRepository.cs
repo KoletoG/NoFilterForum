@@ -41,5 +41,9 @@ namespace NoFilterForum.Repositories.Implementations
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
+        public async Task<bool> ExistsByUsernameAsync(string username)
+        {
+            return await _context.Users.AnyAsync(x=>x.UserName == username);
+        }
     }
 }
