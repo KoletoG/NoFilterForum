@@ -58,15 +58,13 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var result = await _postService.PinPostAsync(postId);
-            if (result == PinPostResult.NotFound)
+            return result switch
             {
-                return NotFound();
-            }
-            else if (result == PinPostResult.UpdateFailed)
-            {
-                return Problem();
-            } 
-            return NoContent();
+                PinPostResult.NotFound => NotFound(),
+                PinPostResult.UpdateFailed => Problem(),
+                PinPostResult.Success => NoContent(),
+                _ => Problem("Unknown result.")
+            };
         }
         [Authorize]
         [ResponseCache(Duration =30,Location = ResponseCacheLocation.Any)]
