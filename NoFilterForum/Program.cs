@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Models.DataModels;
+using NoFilterForum.Repositories.Implementations;
+using NoFilterForum.Repositories.Interfaces;
 using NoFilterForum.Services;
 
 namespace NoFilterForum
@@ -38,6 +40,13 @@ namespace NoFilterForum
             builder.Services.AddScoped<IIOService, IOService>();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
             builder.Services.AddScoped<INonIOService,NonIOService>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IWarningRepository, WarningRepository>();
+            builder.Services.AddScoped<IPostRepository, PostRepository>();
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
+            builder.Services.AddScoped<IReplyRepository, ReplyRepository>();
+            builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
