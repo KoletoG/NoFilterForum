@@ -34,5 +34,19 @@ namespace NoFilterForum.Services.Implementations
         {
             return await _userRepository.GetAllUnconfirmedAsync();
         }
+        public async Task ConfirmUserAsync(string userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user==null)
+            {
+                return; // Change these, HANDLE THE ERRORS BETTER
+            }
+            if (user.IsConfirmed)
+            {
+                return; // Change these, HANDLE THE ERRORS BETTER
+            }
+            user.IsConfirmed = true;
+            await _userRepository.UpdateAsync(user);
+        }
     }
 }

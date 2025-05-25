@@ -87,7 +87,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            await _context.Users.Where(x => x.Id == userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsConfirmed, true));
+            await _userService.ConfirmUserAsync(userId);
             return RedirectToAction("Reasons");
         }
         [Authorize] // make authorize with roles
