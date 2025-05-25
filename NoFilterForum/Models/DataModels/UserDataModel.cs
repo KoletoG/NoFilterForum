@@ -26,6 +26,7 @@ namespace NoFilterForum.Models.DataModels
         public string Bio {  get; set; }
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
+        public void Confirm() => IsConfirmed = true;
         public UserDataModel(string userName,string email)
         {
             Id = Guid.NewGuid().ToString();

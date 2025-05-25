@@ -32,7 +32,7 @@ namespace NoFilterForum.Services.Implementations
             var updated = await _postRepository.UpdateAsync(post);
             if (!updated)
             {
-                _logger.LogError($"Problem updating the post property with ID: {postId}.");
+                _logger.LogError($"Problem updating the post object with ID: {postId}.");
                 return PinPostResult.UpdateFailed;
             }
             return PinPostResult.Success;

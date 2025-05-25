@@ -45,7 +45,7 @@ namespace NoFilterForum.Services.Implementations
             {
                 return; // Change these, HANDLE THE ERRORS BETTER
             }
-            user.IsConfirmed = true;
+            user.Confirm();
             await _userRepository.UpdateAsync(user);
         }
     }

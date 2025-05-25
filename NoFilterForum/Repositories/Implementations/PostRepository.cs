@@ -37,7 +37,8 @@ namespace NoFilterForum.Repositories.Implementations
             return await _context.PostDataModels.Where(x => x.Id == id).CountAsync();
         }
         public async Task<bool> UpdateAsync(PostDataModel post)
-        {
+        { 
+            // need error handling
             _context.PostDataModels.Update(post);
             await _context.SaveChangesAsync();
             return true;
