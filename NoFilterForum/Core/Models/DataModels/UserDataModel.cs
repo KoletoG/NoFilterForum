@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace NoFilterForum.Models.DataModels
+namespace NoFilterForum.Core.Models.DataModels
 {
     public class UserDataModel : IdentityUser
     {

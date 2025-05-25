@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Data;
-using NoFilterForum.Models.DataModels;
 using NoFilterForum.Repositories.Interfaces;
 
 namespace NoFilterForum.Repositories.Implementations

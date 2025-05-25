@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using NoFilterForum.Models.DataModels;
+using NoFilterForum.Core.Models.DataModels;
 
-namespace NoFilterForum.Models.ViewModels
+namespace NoFilterForum.Core.Models.ViewModels
 {
     public class PostViewModel
     {

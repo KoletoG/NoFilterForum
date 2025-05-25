@@ -1,4 +1,4 @@
-﻿namespace NoFilterForum.Models.GetViewModels
+﻿namespace NoFilterForum.Core.Models.GetViewModels
 {
     public class PostPostViewModel
     {

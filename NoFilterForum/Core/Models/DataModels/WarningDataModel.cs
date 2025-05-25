@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NoFilterForum.Models.DataModels
+namespace NoFilterForum.Core.Models.DataModels
 {
     public class WarningDataModel
     {

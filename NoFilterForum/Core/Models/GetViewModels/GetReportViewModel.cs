@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using NoFilterForum.Models.DataModels;
 
-namespace NoFilterForum.Models.GetViewModels
+namespace NoFilterForum.Core.Models.GetViewModels
 {
     public class GetReportViewModel
     {

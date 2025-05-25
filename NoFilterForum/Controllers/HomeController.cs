@@ -7,19 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Interfaces;
-using NoFilterForum.Models;
-using NoFilterForum.Models.ViewModels;
+using NoFilterForum.Core.Models;
+using NoFilterForum.Core.Models.DataModels;
+using NoFilterForum.Core.Models.ViewModels;
 using Ganss.Xss;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Caching.Memory;
-using NoFilterForum.Models.DataModels;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.IdentityModel.Tokens;
 using SQLitePCL;
 using System.Text;
 using System.Runtime.InteropServices;
-using NoFilterForum.Models.GetViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
@@ -28,6 +27,9 @@ using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using NoFilterForum.Services.Interfaces;
+using NoFilterForum.Core.Models.DataModels;
+using NoFilterForum.Core.Models.GetViewModels;
+using NoFilterForum.Core.Models.ViewModels;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller

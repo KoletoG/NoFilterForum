@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace NoFilterForum.Models.DataModels
+namespace NoFilterForum.Core.Models.DataModels
 {
     public class PostDataModel
     {

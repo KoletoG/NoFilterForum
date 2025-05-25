@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NoFilterForum.Models.DataModels;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Repositories.Interfaces
 {

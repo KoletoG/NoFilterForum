@@ -1,7 +1,7 @@
-﻿@using NoFilterForum.Global_variables
-@using NoFilterForum.Models.DataModels
-@using NoFilterForum.Models.ViewModels
-@using System.Web
+﻿@using System.Web
+@using NoFilterForum.Core.Models.DataModels
+@using NoFilterForum.Core.Models.ViewModels
+@using NoFilterForum.Global_variables
 @model PostsViewModel
 <h2 style="color:red">@ViewBag.ErrorTime</h2>
 <form asp-action="CreatePost" asp-controller="Home" method="post">

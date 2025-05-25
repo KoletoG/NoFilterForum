@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static System.Collections.Specialized.BitVector32;
 
-namespace NoFilterForum.Models.DataModels
+namespace NoFilterForum.Core.Models.DataModels
 {
     public class SectionDataModel
     {

@@ -1,9 +1,9 @@
 using Ganss.Xss;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
-using NoFilterForum.Models.DataModels;
 using NoFilterForum.Repositories.Implementations;
 using NoFilterForum.Repositories.Interfaces;
 using NoFilterForum.Services;

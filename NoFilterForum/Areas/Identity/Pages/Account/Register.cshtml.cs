@@ -19,8 +19,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Global_variables;
-using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Areas.Identity.Pages.Account
 {

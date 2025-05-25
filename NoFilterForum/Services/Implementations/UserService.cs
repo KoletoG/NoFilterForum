@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Global_variables;
-using NoFilterForum.Models.DataModels;
 using NoFilterForum.Repositories.Interfaces;
 using NoFilterForum.Services.Interfaces;
 

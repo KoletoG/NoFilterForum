@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NoFilterForum.Models.ViewModels
+namespace NoFilterForum.Core.Models.ViewModels
 {
     public class CreateSectionViewModel
     {

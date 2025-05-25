@@ -1,4 +1,4 @@
-namespace NoFilterForum.Models
+namespace NoFilterForum.Core.Models
 {
     public class ErrorViewModel
     {

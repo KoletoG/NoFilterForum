@@ -1,4 +1,4 @@
-﻿using NoFilterForum.Models.DataModels;
+﻿using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Services.Interfaces
 {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
-using NoFilterForum.Models.DataModels;
 
 namespace NoFilterForum.Services
 {
