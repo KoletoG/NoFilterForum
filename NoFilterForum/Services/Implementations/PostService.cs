@@ -28,7 +28,7 @@ namespace NoFilterForum.Services.Implementations
                 _logger.LogError($"Post with ID: {postId} was not found.");
                 return PinPostResult.NotFound;
             }
-            post.IsPinned = !post.IsPinned;
+            post.TogglePin();
             var updated = await _postRepository.UpdateAsync(post);
             if (!updated)
             {

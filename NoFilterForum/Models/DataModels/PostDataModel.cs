@@ -14,6 +14,7 @@ namespace NoFilterForum.Models.DataModels
         public short Likes { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
         public bool IsPinned { get; set; }
+        public void TogglePin() => IsPinned = !IsPinned;
         public PostDataModel(string title, string content, UserDataModel user)
         {
             Id = Guid.NewGuid().ToString();
