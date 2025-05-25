@@ -82,7 +82,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSection(GetSectionViewModel sectionViewModel)
+        public async Task<IActionResult> CreateSection(CreateSectionViewModel sectionViewModel)
         {
             string currentUsername = this.User.Identity.Name;
             var currentUserRole = await _context.Users.AsNoTracking().Where(x => x.UserName == currentUsername).Select(x => x.Role).FirstAsync();
