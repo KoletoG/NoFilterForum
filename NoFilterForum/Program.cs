@@ -7,6 +7,8 @@ using NoFilterForum.Models.DataModels;
 using NoFilterForum.Repositories.Implementations;
 using NoFilterForum.Repositories.Interfaces;
 using NoFilterForum.Services;
+using NoFilterForum.Services.Implementations;
+using NoFilterForum.Services.Interfaces;
 
 namespace NoFilterForum
 {
@@ -47,6 +49,13 @@ namespace NoFilterForum
             builder.Services.AddScoped<IReplyRepository, ReplyRepository>();
             builder.Services.AddScoped<ISectionRepository, SectionRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ISectionService, SectionService>();
+            builder.Services.AddScoped<IReplyService, ReplyService>();
+            builder.Services.AddScoped<IReportService, ReportService>();
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<IWarningService, WarningService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
