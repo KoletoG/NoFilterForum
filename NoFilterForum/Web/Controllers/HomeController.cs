@@ -28,7 +28,7 @@ using Microsoft.Extensions.Hosting;
 using NoFilterForum.Core.Models.GetViewModels;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Data;
-namespace NoFilterForum.Controllers
+namespace NoFilterForum.Web.Controllers
 {
     public class HomeController : Controller
     {
@@ -73,7 +73,7 @@ namespace NoFilterForum.Controllers
                 ViewBag.Errors = JsonSerializer.Deserialize<List<string>>(errors);
             }
             var sections = await _sectionService.GetAllSectionsAsync();
-            if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return View(new IndexViewModel(sections, true));
             }
@@ -84,7 +84,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSection(CreateSectionViewModel sectionViewModel)
         {
-            string currentUsername = this.User.Identity.Name;
+            string currentUsername = User.Identity.Name;
             var currentUserRole = await _context.Users.AsNoTracking().Where(x => x.UserName == currentUsername).Select(x => x.Role).FirstAsync();
             if (currentUserRole != UserRoles.Admin)
             {
@@ -109,7 +109,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSection(string id)
         {
-            var currentUser = await _context.Users.FirstAsync(x => x.UserName == this.User.Identity.Name);
+            var currentUser = await _context.Users.FirstAsync(x => x.UserName == User.Identity.Name);
             if (currentUser.Role != UserRoles.Admin)
             {
                 return RedirectToAction("Index");
@@ -134,14 +134,14 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> SendReportModel(GetReportViewModel reportViewModel)
         {
             // Validation that report isn't made from user to himself
-            if (await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == this.User.Identity.Name)
+            if (await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == User.Identity.Name)
             {
                 ModelState.AddModelError("sameUserError", "You can't send a report to yourself!");
             }
             if (ModelState.IsValid)
             {
                 var userTo = await _context.Users.FirstAsync(x => x.Id == reportViewModel.UserIdTo);
-                var userFrom = await _context.Users.FirstAsync(x => x.UserName == this.User.Identity.Name);
+                var userFrom = await _context.Users.FirstAsync(x => x.UserName == User.Identity.Name);
                 reportViewModel.Content = _htmlSanitizer.Sanitize(reportViewModel.Content);
                 var report = new ReportDataModel(userTo, reportViewModel.Content, reportViewModel.IdOfPostReply, reportViewModel.IsPost, userFrom);
                 _context.ReportDataModels.Add(report);
@@ -184,7 +184,7 @@ namespace NoFilterForum.Controllers
                 post = await _context.PostDataModels.AsNoTracking().Include(x => x.User).Where(x => x.Id == id).FirstAsync();
                 _memoryCache.Set($"post_{id}", post, TimeSpan.FromSeconds(1));
             }
-            string currentUsername = this.User.Identity.Name;
+            string currentUsername = User.Identity.Name;
             var currentUser = await _userManager.FindByNameAsync(currentUsername);
             var repCount = await _context.ReplyDataModels.Where(x => x.Post.Id == post.Id).CountAsync();
             double allPages = 1;
@@ -260,7 +260,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReply(GetReplyViewModel replyViewModel)
         {
-            var userName = this.User.Identity.Name;
+            var userName = User.Identity.Name;
             var user = await _ioService.GetUserByNameAsync(userName);
             if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
             {
@@ -295,7 +295,7 @@ namespace NoFilterForum.Controllers
                 await _ioService.AdjustRoleByPostCount(user);
                 await _context.SaveChangesAsync();
                 _memoryCache.Remove($"post_{replyViewModel.PostId}");
-                _memoryCache.Remove($"repliesUser_{this.User.Identity.Name}");
+                _memoryCache.Remove($"repliesUser_{User.Identity.Name}");
                 return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title });
             }
             else
@@ -359,7 +359,7 @@ namespace NoFilterForum.Controllers
                     .ToListAsync();
             }
             var currentUser = await _context.Users.AsNoTracking()
-                .Where(x => x.UserName == this.User.Identity.Name)
+                .Where(x => x.UserName == User.Identity.Name)
                 .FirstAsync();
             title = HttpUtility.UrlEncode(title);
             return View(new PostsViewModel(currentUser, posts, title, page, allPages));
@@ -368,7 +368,7 @@ namespace NoFilterForum.Controllers
         [Authorize]
         public async Task<IActionResult> Notifications()
         {
-            var user = await _ioService.GetUserByNameAsync(this.User.Identity.Name);
+            var user = await _ioService.GetUserByNameAsync(User.Identity.Name);
             var notifications = new List<NotificationDataModel>();
             if (await _context.NotificationDataModels.AnyAsync(x => x.UserTo == user))
             {
@@ -387,7 +387,7 @@ namespace NoFilterForum.Controllers
         public async Task<IActionResult> CreatePost(PostPostViewModel viewModel)
         {
             // Need custom exception for invalid user
-            string userName = this.User.Identity?.Name ?? throw new Exception("Invalid user");
+            string userName = User.Identity?.Name ?? throw new Exception("Invalid user");
             var user = await _ioService.GetUserByNameAsync(userName);
             if (user.Role != UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
             {
@@ -415,7 +415,7 @@ namespace NoFilterForum.Controllers
             await _context.PostDataModels.AddAsync(post);
             section.Posts.Add(post);
             await _context.SaveChangesAsync();
-            _memoryCache.Remove($"postsUser_{this.User.Identity.Name}");
+            _memoryCache.Remove($"postsUser_{User.Identity.Name}");
             viewModel.TitleOfSection = HttpUtility.UrlEncode(viewModel.TitleOfSection);
             return RedirectToAction("PostsMain", new { title = viewModel.TitleOfSection });
         }
@@ -495,14 +495,14 @@ namespace NoFilterForum.Controllers
                 reply.Content = _nonIOService.ReplaceLinkText(reply.Content);
                 dateOrder[reply.Id] = reply.DateCreated;
             }
-            return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == this.User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
+            return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> AcceptWarnings()
         {
-            await _context.WarningDataModels.Where(x => x.User.UserName == this.User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsAccepted, true));
+            await _context.WarningDataModels.Where(x => x.User.UserName == User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsAccepted, true));
             return RedirectToAction("Notifications");
         }
         [HttpPost]
@@ -538,7 +538,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReadNotifications()
         {
-            await _context.NotificationDataModels.Where(x => x.UserTo.UserName == this.User.Identity.Name).ExecuteDeleteAsync();
+            await _context.NotificationDataModels.Where(x => x.UserTo.UserName == User.Identity.Name).ExecuteDeleteAsync();
             return RedirectToAction("Notifications", "Home");
         }
         [HttpPost]
@@ -546,7 +546,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeUsername(string username)
         {
-            var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
             if (currentUser == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -565,7 +565,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail(string email)
         {
-            var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
             if (currentUser == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -591,14 +591,14 @@ namespace NoFilterForum.Controllers
             }
             if (image != null)
             {
-                string randomImgUrl = (NanoidDotNet.Nanoid.Generate() + image.FileName);
+                string randomImgUrl = NanoidDotNet.Nanoid.Generate() + image.FileName;
                 var filePath = Path.Combine("wwwroot/images", randomImgUrl);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
                 string imageUrl = $"/images/{randomImgUrl}";
-                var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+                var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
                 if (currentUser.ImageUrl != "\\images\\defaultimage.gif")
                 {
                     System.IO.File.Delete("wwwroot" + currentUser.ImageUrl);
@@ -619,7 +619,7 @@ namespace NoFilterForum.Controllers
             {
                 return BadRequest();
             }
-            var currentUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
             if (currentUser.LikesPostRepliesIds.Contains(id))
             {
                 currentUser.LikesPostRepliesIds.Remove(id);

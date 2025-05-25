@@ -10,7 +10,7 @@ using NoFilterForum.Infrastructure.Services;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Services;
 
-namespace NoFilterForum
+namespace NoFilterForum.Web
 {
     public class Program
     {
@@ -24,7 +24,8 @@ namespace NoFilterForum
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddDefaultIdentity<UserDataModel>(
-                options => {
+                options =>
+                {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.SignIn.RequireConfirmedPhoneNumber = false;
                     options.SignIn.RequireConfirmedEmail = false;
@@ -38,10 +39,11 @@ namespace NoFilterForum
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IIOService, IOService>();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
-            builder.Services.AddScoped<INonIOService,NonIOService>();
+            builder.Services.AddScoped<INonIOService, NonIOService>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IWarningRepository, WarningRepository>();
             builder.Services.AddScoped<IPostRepository, PostRepository>();
@@ -62,8 +64,8 @@ namespace NoFilterForum
                 c.Cookie.SameSite = SameSiteMode.Strict;
                 c.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 c.SlidingExpiration = true;
-                c.ExpireTimeSpan= TimeSpan.FromDays(14);
-                c.Cookie.MaxAge= TimeSpan.FromDays(14);
+                c.ExpireTimeSpan = TimeSpan.FromDays(14);
+                c.Cookie.MaxAge = TimeSpan.FromDays(14);
             });
             var app = builder.Build();
             // Configure the HTTP request pipeline.
@@ -88,13 +90,13 @@ namespace NoFilterForum
 
             app.UseAuthorization();
 
-            app.MapStaticAssets();
+            app.MapStaticAssets(); 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
             app.MapRazorPages()
-               .WithStaticAssets(); 
+               .WithStaticAssets();
 
             app.Run();
         }

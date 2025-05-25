@@ -12,7 +12,7 @@ using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Services;
 using NoFilterForum.Infrastructure.Data;
 
-namespace NoFilterForum.Controllers
+namespace NoFilterForum.Web.Controllers
 {
     public class AdminController : Controller
     {
@@ -41,7 +41,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteReport(string id)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -53,7 +53,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PinPost(string postId)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -71,7 +71,7 @@ namespace NoFilterForum.Controllers
         [Route("Reports")]
         public async Task<IActionResult> Reports()
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -82,7 +82,7 @@ namespace NoFilterForum.Controllers
         [Route("Reasons")]
         public async Task<IActionResult> Reasons()
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -94,7 +94,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmUser(string userId)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -105,7 +105,7 @@ namespace NoFilterForum.Controllers
         [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -119,7 +119,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GiveWarning(string userid, string content)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -133,7 +133,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRepliesAndPosts(string userid)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -169,7 +169,7 @@ namespace NoFilterForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> BanUser(string id)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -185,7 +185,7 @@ namespace NoFilterForum.Controllers
         [ResponseCache(Duration =60,Location =ResponseCacheLocation.Any)]
         public async Task<IActionResult> ShowWarnings(string id)
         {
-            if (!GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
