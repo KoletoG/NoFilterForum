@@ -9,5 +9,6 @@ namespace NoFilterForum.Repositories.Interfaces
         public Task<ReportDataModel> CreateAsync(ReportDataModel report);
         public Task UpdateAsync(ReportDataModel report);
         public Task DeleteAsync(ReportDataModel report);
+        public Task<bool> ExistsReportsAsync();
     }
 }

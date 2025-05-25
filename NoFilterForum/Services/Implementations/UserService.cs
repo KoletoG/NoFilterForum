@@ -26,5 +26,9 @@ namespace NoFilterForum.Services.Implementations
             }
             return users;
         }
+        public async Task<bool> AnyNotConfirmedUsersAsync()
+        {
+            return await _userRepository.ExistsByNotConfirmedAsync();
+        }
     }
 }

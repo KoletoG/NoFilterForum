@@ -15,5 +15,9 @@ namespace NoFilterForum.Services.Implementations
         {
             return await _reportRepository.GetAllAsync();
         }
+        public async Task<bool> AnyReportsAsync()
+        {
+            return await _reportRepository.ExistsReportsAsync();
+        }
     }
 }

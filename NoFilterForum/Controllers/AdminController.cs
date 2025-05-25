@@ -90,7 +90,7 @@ namespace NoFilterForum.Controllers
             await _context.Users.Where(x => x.Id == userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsConfirmed, true));
             return RedirectToAction("Reasons");
         }
-        [Authorize]
+        [Authorize] // make authorize with roles
         [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
         {
@@ -99,8 +99,9 @@ namespace NoFilterForum.Controllers
                 return RedirectToAction("Index");
             }
             var users = await _userService.GetAllUsersWithoutDefaultAsync();
-            var notConfirmedExist = await _context.Users.AnyAsync(x => !x.IsConfirmed);
-            return View(new AdminPanelViewModel(users,await _context.ReportDataModels.AnyAsync(),notConfirmedExist));
+            bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
+            bool hasReports = await _reportService.AnyReportsAsync();
+            return View(new AdminPanelViewModel(users,hasReports,notConfirmedExist));
         }
         [HttpPost]
         [Authorize]

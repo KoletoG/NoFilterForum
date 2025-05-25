@@ -8,7 +8,7 @@ namespace NoFilterForum.Repositories.Interfaces
         public Task<UserDataModel> GetByUsernameAsync(string username);
         public Task<List<UserDataModel>> GetAllAsync();
         public Task<UserDataModel> CreateAsync(UserDataModel user);
-
+        public Task<bool> ExistsByNotConfirmedAsync();
         public Task UpdateAsync(UserDataModel user);
         public Task DeleteAsync(UserDataModel user);
         public Task<List<UserDataModel>> GetAllNoDefaultAsync();

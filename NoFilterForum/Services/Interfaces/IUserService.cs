@@ -5,5 +5,6 @@ namespace NoFilterForum.Services.Interfaces
     public interface IUserService
     {
         public Task<List<UserDataModel>> GetAllUsersWithoutDefaultAsync();
+        public Task<bool> AnyNotConfirmedUsersAsync();
     }
 }
