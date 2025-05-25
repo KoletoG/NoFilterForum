@@ -36,10 +36,11 @@ namespace NoFilterForum.Repositories.Implementations
         {
             return await _context.PostDataModels.Where(x => x.Id == id).CountAsync();
         }
-        public async Task UpdateAsync(PostDataModel post)
+        public async Task<bool> UpdateAsync(PostDataModel post)
         {
             _context.PostDataModels.Update(post);
             await _context.SaveChangesAsync();
+            return true;
         }
         public async Task DeleteAsync(PostDataModel post)
         {

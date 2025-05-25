@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Runtime.InteropServices;
+using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using NoFilterForum.Global_variables;
 using NoFilterForum.Models;
 using NoFilterForum.Models.DataModels;
 using NoFilterForum.Models.ViewModels;
+using NoFilterForum.Services.Implementations;
 using NoFilterForum.Services.Interfaces;
 
 namespace NoFilterForum.Controllers
@@ -19,17 +21,20 @@ namespace NoFilterForum.Controllers
         private readonly IMemoryCache _memoryCache;
         private readonly IReportService _reportService;
         private readonly IUserService _userService;
+        private readonly IPostService _postService;
         public AdminController(ILogger<AdminController> logger,
             IReportService reportService,
             ApplicationDbContext context,
             IMemoryCache memoryCache,
-            IUserService userService)
+            IUserService userService,
+            IPostService postService)
         {
             _logger = logger;
             _reportService = reportService;
             _context = context;
             _memoryCache = memoryCache;
             _userService = userService;
+            _postService = postService;
         }
         [Authorize]
         [HttpPost]
@@ -52,7 +57,15 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            await _context.PostDataModels.Where(x => x.Id == postId).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsPinned, x => !x.IsPinned));
+            var success = await _postService.PinPostAsync(postId);
+            if (success==PinPostResult.NotFound)
+            {
+                return NotFound();
+            }
+            else if (success == PinPostResult.UpdateFailed)
+            {
+                return Problem();
+            } 
             return NoContent();
         }
         [Authorize]

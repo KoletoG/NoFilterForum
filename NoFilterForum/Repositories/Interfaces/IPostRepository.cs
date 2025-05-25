@@ -10,7 +10,7 @@ namespace NoFilterForum.Repositories.Interfaces
         public Task<List<PostDataModel>> GetAllAsync();
         public Task<PostDataModel> CreateAsync(PostDataModel post);
         public Task<int> GetCountByPostIdAsync(string id);
-        public Task UpdateAsync(PostDataModel post);
+        public Task<bool> UpdateAsync(PostDataModel post);
         public Task DeleteAsync(PostDataModel post);
     }
 }
