@@ -23,7 +23,7 @@ namespace NoFilterForum.Repositories.Implementations
         }
         public async Task<List<SectionDataModel>> GetAllAsync()
         {
-            return await _context.SectionDataModels.ToListAsync();
+            return await _context.SectionDataModels.AsNoTracking().ToListAsync();
         }
         public async Task<SectionDataModel> CreateAsync(SectionDataModel section)
         {

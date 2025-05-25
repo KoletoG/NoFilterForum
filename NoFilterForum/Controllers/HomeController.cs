@@ -27,6 +27,7 @@ using System.Web;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
+using NoFilterForum.Services.Interfaces;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
@@ -40,6 +41,7 @@ namespace NoFilterForum.Controllers
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
         private readonly static int countPerPage = 5;
+        private readonly ISectionService _sectionService;
         public HomeController(ILogger<HomeController> logger,
             ApplicationDbContext context,
             IIOService iOService,
@@ -47,12 +49,14 @@ namespace NoFilterForum.Controllers
             INonIOService nonIOService,
             IMemoryCache memoryCache,
             UserManager<UserDataModel> userManager,
-            SignInManager<UserDataModel> signInManager)
+            SignInManager<UserDataModel> signInManager,
+            ISectionService sectionService)
         {
             _userManager = userManager;
             _logger = logger;
             _context = context;
             _ioService = iOService;
+            _sectionService = sectionService;
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
@@ -68,16 +72,7 @@ namespace NoFilterForum.Controllers
             {
                 ViewBag.Errors = JsonSerializer.Deserialize<List<string>>(errors);
             }
-            if (!_memoryCache.TryGetValue("sections", out List<SectionDataModel> sections))
-            {
-                sections = await _context.SectionDataModels.AsNoTracking().ToListAsync();
-                MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
-                    SlidingExpiration = TimeSpan.FromMinutes(5)
-                };
-                _memoryCache.Set("sections", sections, memoryCacheOptions);
-            }
+            var sections = await _sectionService.GetAllSectionsAsync();
             if (GlobalVariables.adminNames.Contains(this.User.Identity.Name))
             {
                 return View(new IndexViewModel(sections, true));
