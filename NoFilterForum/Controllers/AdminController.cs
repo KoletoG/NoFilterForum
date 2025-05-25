@@ -57,12 +57,12 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var success = await _postService.PinPostAsync(postId);
-            if (success==PinPostResult.NotFound)
+            var result = await _postService.PinPostAsync(postId);
+            if (result == PinPostResult.NotFound)
             {
                 return NotFound();
             }
-            else if (success == PinPostResult.UpdateFailed)
+            else if (result == PinPostResult.UpdateFailed)
             {
                 return Problem();
             } 
