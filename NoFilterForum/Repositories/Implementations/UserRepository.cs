@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Models.DataModels;
@@ -44,6 +45,10 @@ namespace NoFilterForum.Repositories.Implementations
         public async Task<bool> ExistsByNotConfirmedAsync()
         {
             return await _context.Users.AnyAsync(x => !x.IsConfirmed);
+        }
+        public async Task<List<UserDataModel>> GetAllUnconfirmedAsync()
+        {
+            return await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).ToListAsync();
         }
         public async Task DeleteAsync(UserDataModel user)
         {

@@ -30,5 +30,9 @@ namespace NoFilterForum.Services.Implementations
         {
             return await _userRepository.ExistsByNotConfirmedAsync();
         }
+        public async Task<List<UserDataModel>> GetAllUnconfirmedUsersAsync()
+        {
+            return await _userRepository.GetAllUnconfirmedAsync();
+        }
     }
 }

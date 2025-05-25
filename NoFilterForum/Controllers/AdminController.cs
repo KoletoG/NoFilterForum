@@ -75,7 +75,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var users = await _context.Users.Where(x => !x.IsConfirmed).ToListAsync();
+            var users = await _userService.GetAllUnconfirmedUsersAsync();
             return View(new ReasonsViewModel(users));
         }
         [HttpPost]
