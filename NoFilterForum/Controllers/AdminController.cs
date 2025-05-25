@@ -8,6 +8,7 @@ using NoFilterForum.Global_variables;
 using NoFilterForum.Models;
 using NoFilterForum.Models.DataModels;
 using NoFilterForum.Models.ViewModels;
+using NoFilterForum.Services.Interfaces;
 
 namespace NoFilterForum.Controllers
 {
@@ -16,11 +17,19 @@ namespace NoFilterForum.Controllers
         private readonly ILogger<AdminController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _memoryCache;
-        public AdminController(ILogger<AdminController> logger, ApplicationDbContext context, IMemoryCache memoryCache)
+        private readonly IReportService _reportService;
+        private readonly IUserService _userService;
+        public AdminController(ILogger<AdminController> logger,
+            IReportService reportService,
+            ApplicationDbContext context,
+            IMemoryCache memoryCache,
+            IUserService userService)
         {
             _logger = logger;
+            _reportService = reportService;
             _context = context;
             _memoryCache = memoryCache;
+            _userService = userService;
         }
         [Authorize]
         [HttpPost]
@@ -55,7 +64,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var reports = await _context.ReportDataModels.AsNoTracking().Include(x => x.UserTo).Include(x=>x.UserFrom).ToListAsync();
+            var reports = await _reportService.GetAllReportsAsync();
             return View(new ReportsViewModel(reports));
         }
         [Authorize]
@@ -89,11 +98,7 @@ namespace NoFilterForum.Controllers
             {
                 return RedirectToAction("Index");
             }
-            if(!_memoryCache.TryGetValue($"usersList",out List<UserDataModel> users))
-            {
-                users = await _context.Users.AsNoTracking().Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
-                _memoryCache.Set($"usersList", users, TimeSpan.FromMinutes(10));
-            }
+            var users = await _userService.GetAllUsersWithoutDefaultAsync();
             var notConfirmedExist = await _context.Users.AnyAsync(x => !x.IsConfirmed);
             return View(new AdminPanelViewModel(users,await _context.ReportDataModels.AnyAsync(),notConfirmedExist));
         }

@@ -609,6 +609,7 @@ namespace NoFilterForum.Controllers
             }
             return BadRequest();
         }
+        // Change to AJAX
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

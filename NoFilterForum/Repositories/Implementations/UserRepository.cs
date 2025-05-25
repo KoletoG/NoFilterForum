@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Data;
+using NoFilterForum.Global_variables;
 using NoFilterForum.Models.DataModels;
 using NoFilterForum.Repositories.Interfaces;
 
@@ -24,6 +25,10 @@ namespace NoFilterForum.Repositories.Implementations
         public async Task<List<UserDataModel>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
+        }
+        public async Task<List<UserDataModel>> GetAllNoDefaultAsync()
+        {
+           return await _context.Users.AsNoTracking().Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
         }
         public async Task<UserDataModel> CreateAsync(UserDataModel user)
         {

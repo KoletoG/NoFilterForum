@@ -11,6 +11,7 @@ namespace NoFilterForum.Repositories.Interfaces
 
         public Task UpdateAsync(UserDataModel user);
         public Task DeleteAsync(UserDataModel user);
+        public Task<List<UserDataModel>> GetAllNoDefaultAsync();
         public Task<bool> ExistsByUsernameAsync(string username);
     }
 }

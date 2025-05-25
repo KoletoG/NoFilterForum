@@ -1,4 +1,5 @@
-﻿using NoFilterForum.Repositories.Interfaces;
+﻿using NoFilterForum.Models.DataModels;
+using NoFilterForum.Repositories.Interfaces;
 using NoFilterForum.Services.Interfaces;
 
 namespace NoFilterForum.Services.Implementations
@@ -9,6 +10,10 @@ namespace NoFilterForum.Services.Implementations
         public ReportService(IReportRepository reportRepository)
         { 
             _reportRepository = reportRepository; 
+        }
+        public async Task<List<ReportDataModel>> GetAllReportsAsync()
+        {
+            return await _reportRepository.GetAllAsync();
         }
     }
 }

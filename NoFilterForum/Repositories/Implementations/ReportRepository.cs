@@ -19,7 +19,7 @@ namespace NoFilterForum.Repositories.Implementations
         }
         public async Task<List<ReportDataModel>> GetAllAsync()
         {
-            return await _context.ReportDataModels.ToListAsync();
+            return await _context.ReportDataModels.AsNoTracking().Include(x => x.UserTo).Include(x => x.UserFrom).ToListAsync();
         }
         public async Task<ReportDataModel> CreateAsync(ReportDataModel report)
         {
