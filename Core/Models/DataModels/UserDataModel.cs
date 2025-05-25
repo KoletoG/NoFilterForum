@@ -5,7 +5,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace NoFilterForum.Core.Models.DataModels
 {
-    public class UserDataModel : IdentityUser
+    public class UserDataModel : IdentityUser<Guid>
     {
         [Key]
         [Required]
