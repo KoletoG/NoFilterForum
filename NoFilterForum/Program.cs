@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
-using NoFilterForum.Data;
+using NoFilterForum.Infrastructure.Data;
+using NoFilterForum.Infrastructure.Repositories;
+using NoFilterForum.Infrastructure.Services;
 using NoFilterForum.Interfaces;
-using NoFilterForum.Repositories.Implementations;
 using NoFilterForum.Services;
-using NoFilterForum.Services.Implementations;
 
 namespace NoFilterForum
 {

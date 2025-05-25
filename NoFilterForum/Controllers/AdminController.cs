@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Core.Models;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Core.Models.ViewModels;
-using NoFilterForum.Services.Implementations;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Infrastructure.Services;
+using NoFilterForum.Infrastructure.Data;
 
 namespace NoFilterForum.Controllers
 {

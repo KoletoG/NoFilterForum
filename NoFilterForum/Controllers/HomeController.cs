@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Core.Models;
@@ -28,6 +27,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using NoFilterForum.Core.Models.GetViewModels;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Infrastructure.Data;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller
