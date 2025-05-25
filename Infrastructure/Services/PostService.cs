@@ -1,15 +1,12 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Core.Enums;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 
 namespace NoFilterForum.Infrastructure.Services
 {
-    public enum PinPostResult
-    {
-        Success,
-        NotFound,
-        UpdateFailed
-    }
+   
 
     public class PostService : IPostService
     {

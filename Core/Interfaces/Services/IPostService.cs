@@ -1,4 +1,4 @@
-﻿using NoFilterForum.Infrastructure.Services;
+﻿using Core.Enums;
 
 namespace NoFilterForum.Core.Interfaces.Services
 {

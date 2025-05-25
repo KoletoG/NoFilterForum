@@ -9,8 +9,9 @@ using NoFilterForum.Core.Models;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Core.Models.ViewModels;
 using NoFilterForum.Core.Interfaces.Services;
-using NoFilterForum.Infrastructure.Services;
 using NoFilterForum.Infrastructure.Data;
+using NoFilterForum.Infrastructure.Services;
+using Core.Enums;
 
 namespace NoFilterForum.Web.Controllers
 {
