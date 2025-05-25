@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 
-namespace NoFilterForum.Repositories.Interfaces
+namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface IPostRepository
     {

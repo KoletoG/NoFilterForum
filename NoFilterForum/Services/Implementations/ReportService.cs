@@ -1,6 +1,6 @@
-﻿using NoFilterForum.Core.Models.DataModels;
-using NoFilterForum.Repositories.Interfaces;
-using NoFilterForum.Services.Interfaces;
+﻿using NoFilterForum.Core.Interfaces.Repositories;
+using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Services.Implementations
 {

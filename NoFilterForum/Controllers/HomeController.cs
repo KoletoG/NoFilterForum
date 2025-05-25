@@ -26,10 +26,8 @@ using System.Web;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
-using NoFilterForum.Services.Interfaces;
-using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Core.Models.GetViewModels;
-using NoFilterForum.Core.Models.ViewModels;
+using NoFilterForum.Core.Interfaces.Services;
 namespace NoFilterForum.Controllers
 {
     public class HomeController : Controller

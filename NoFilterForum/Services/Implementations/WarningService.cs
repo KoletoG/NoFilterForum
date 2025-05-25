@@ -1,5 +1,5 @@
-﻿using NoFilterForum.Repositories.Interfaces;
-using NoFilterForum.Services.Interfaces;
+﻿using NoFilterForum.Core.Interfaces.Repositories;
+using NoFilterForum.Core.Interfaces.Services;
 
 namespace NoFilterForum.Services.Implementations
 {

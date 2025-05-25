@@ -1,6 +1,6 @@
 ﻿using NoFilterForum.Services.Implementations;
 
-namespace NoFilterForum.Services.Interfaces
+namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface IPostService
     {

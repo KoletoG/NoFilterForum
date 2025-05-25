@@ -1,4 +1,4 @@
-﻿namespace NoFilterForum.Services.Interfaces
+﻿namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface INotificationService
     {

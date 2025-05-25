@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Data;
 using NoFilterForum.Global_variables;
-using NoFilterForum.Repositories.Interfaces;
 
 namespace NoFilterForum.Repositories.Implementations
 {

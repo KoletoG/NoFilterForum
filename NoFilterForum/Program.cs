@@ -1,14 +1,14 @@
 using Ganss.Xss;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NoFilterForum.Core.Interfaces.Repositories;
+using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Data;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Repositories.Implementations;
-using NoFilterForum.Repositories.Interfaces;
 using NoFilterForum.Services;
 using NoFilterForum.Services.Implementations;
-using NoFilterForum.Services.Interfaces;
 
 namespace NoFilterForum
 {

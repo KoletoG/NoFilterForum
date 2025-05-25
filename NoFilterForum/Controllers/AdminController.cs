@@ -10,7 +10,7 @@ using NoFilterForum.Core.Models;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Core.Models.ViewModels;
 using NoFilterForum.Services.Implementations;
-using NoFilterForum.Services.Interfaces;
+using NoFilterForum.Core.Interfaces.Services;
 
 namespace NoFilterForum.Controllers
 {

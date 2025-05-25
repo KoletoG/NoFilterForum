@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Data;
-using NoFilterForum.Repositories.Interfaces;
 
 namespace NoFilterForum.Repositories.Implementations
 {

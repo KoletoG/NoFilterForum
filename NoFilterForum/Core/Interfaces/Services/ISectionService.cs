@@ -1,6 +1,6 @@
 ﻿using NoFilterForum.Core.Models.DataModels;
 
-namespace NoFilterForum.Services.Interfaces
+namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface ISectionService
     {

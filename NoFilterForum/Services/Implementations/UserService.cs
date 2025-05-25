@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using NoFilterForum.Core.Interfaces.Repositories;
+using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Global_variables;
-using NoFilterForum.Repositories.Interfaces;
-using NoFilterForum.Services.Interfaces;
 
 namespace NoFilterForum.Services.Implementations
 {
