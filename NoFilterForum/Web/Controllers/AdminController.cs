@@ -135,7 +135,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GiveWarning(string userid, string content)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(this.User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
