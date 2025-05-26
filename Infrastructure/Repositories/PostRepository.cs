@@ -20,7 +20,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<PostDataModel>> GetAllByUserIdAsync(string userId)
         {
-            return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync();
+            return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<PostDataModel>();
         }
         public async Task<List<PostDataModel>> GetAllAsync()
         {
@@ -29,7 +29,6 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<PostDataModel> CreateAsync(PostDataModel post)
         {
             await _context.PostDataModels.AddAsync(post);
-            await _context.SaveChangesAsync();
             return post;
         }
         public async Task<int> GetCountByPostIdAsync(string id)
@@ -40,19 +39,16 @@ namespace NoFilterForum.Infrastructure.Repositories
         { 
             // need error handling
             _context.PostDataModels.Update(post);
-            await _context.SaveChangesAsync();
             return true;
         }
         public async Task<bool> UpdateRangeAsync(List<PostDataModel> posts)
         {
             _context.PostDataModels.UpdateRange(posts);
-            await _context.SaveChangesAsync();
             return true;
         }
         public async Task DeleteAsync(PostDataModel post)
         {
             _context.PostDataModels.Remove(post);
-            await _context.SaveChangesAsync();
         }
     }
 }

@@ -34,13 +34,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<UserDataModel> CreateAsync(UserDataModel user)
         {
             await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
             return user;
         }
         public async Task UpdateAsync(UserDataModel user)
         {
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
         }
         public async Task<bool> ExistsByNotConfirmedAsync()
         {
@@ -53,7 +51,6 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task DeleteAsync(UserDataModel user)
         {
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
         }
         public async Task<bool> ExistsByUsernameAsync(string username)
         {

@@ -1,7 +1,10 @@
 ﻿using Core.Constants;
 using Core.Enums;
+using Core.Interfaces.Repositories;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
@@ -10,78 +13,94 @@ namespace NoFilterForum.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMemoryCache _memoryCache;
-        private readonly IPostRepository _postRepository;
-        private readonly IReplyRepository _replyRepository;
-        public UserService(IUserRepository userRepository, IMemoryCache memoryCache, IPostRepository postRepository, IReplyRepository replyRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<UserService> _logger;
+        public UserService(IMemoryCache memoryCache, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
-            _userRepository = userRepository;
             _memoryCache = memoryCache;
-            _postRepository = postRepository;
-            _replyRepository = replyRepository;
+            _unitOfWork = unitOfWork;
+            _logger = logger;
         }
         // Add paging
         public async Task<List<UserDataModel>> GetAllUsersWithoutDefaultAsync()
         {
             if (!_memoryCache.TryGetValue($"usersListNoDefault", out List<UserDataModel> users))
             {
-                users = await _userRepository.GetAllNoDefaultAsync();
+                users = await _unitOfWork.Users.GetAllNoDefaultAsync();
                 _memoryCache.Set($"usersListNoDefault", users, TimeSpan.FromMinutes(5));
             }
             return users;
         }
         public async Task<bool> AnyNotConfirmedUsersAsync()
         {
-            return await _userRepository.ExistsByNotConfirmedAsync();
+            return await _unitOfWork.Users.ExistsByNotConfirmedAsync();
         }
         public async Task<List<UserDataModel>> GetAllUnconfirmedUsersAsync()
         {
-            return await _userRepository.GetAllUnconfirmedAsync();
+            return await _unitOfWork.Users.GetAllUnconfirmedAsync();
         }
-        public async Task ConfirmUserAsync(string userId)
+        public async Task<PostResult> ConfirmUserAsync(string userId)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {
-                return; // Change these, HANDLE THE ERRORS BETTER
+                return PostResult.NotFound; // Change these, HANDLE THE ERRORS BETTER
             }
             if (user.IsConfirmed)
             {
-                return; // Change these, HANDLE THE ERRORS BETTER
+                _logger.LogInformation($"User with Id: {userId} has already been confirmed");
+                return PostResult.UpdateFailed; // Change these, HANDLE THE ERRORS BETTER
             }
             user.Confirm();
-            await _userRepository.UpdateAsync(user);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "User was not confirmed.");
+                return PostResult.UpdateFailed;
+            }
         }
         public async Task<PostResult> BanUserByIdAsync(string userId)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {
                 return PostResult.NotFound;
             }
-            var posts = await _postRepository.GetAllByUserIdAsync(userId);
-            var replies = await _replyRepository.GetAllByUserIdAsync(userId);
-            bool success = true;
+            var posts = await _unitOfWork.Posts.GetAllByUserIdAsync(userId);
+            var replies = await _unitOfWork.Replies.GetAllByUserIdAsync(userId);
             foreach (var post in posts)
             {
                 post.SetDefaultUser();
             }
-            success = await _postRepository.UpdateRangeAsync(posts);
-            if (success)
+            foreach (var reply in replies)
             {
-                foreach (var reply in replies)
-                {
-                    reply.SetDefaultUser();
-                }
-                success = await _replyRepository.UpdateRangeAsync(replies);
+                reply.SetDefaultUser();
             }
-            await _userRepository.DeleteAsync(user);
-            return success switch
+            try
             {
-                false => PostResult.UpdateFailed,
-                true => PostResult.Success
-            };
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Posts.UpdateRangeAsync(posts);
+                await _unitOfWork.Replies.UpdateRangeAsync(replies);
+                await _unitOfWork.Users.DeleteAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Failed to ban user");
+                return PostResult.UpdateFailed;
+            }
         }
     }
 }

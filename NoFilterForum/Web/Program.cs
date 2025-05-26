@@ -1,4 +1,6 @@
+using Core.Interfaces.Repositories;
 using Ganss.Xss;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -58,6 +60,7 @@ namespace NoFilterForum.Web
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IWarningService, WarningService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;

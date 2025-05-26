@@ -99,8 +99,13 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            await _userService.ConfirmUserAsync(userId);
-            return RedirectToAction("Reasons");
+            var result = await _userService.ConfirmUserAsync(userId);
+            return result switch
+            {
+                PostResult.Success=> RedirectToAction("Reasons"),
+                PostResult.NotFound=>NotFound(userId),
+                PostResult.UpdateFailed=>Problem()
+            };
         }
         [Authorize] // make authorize with roles
         [Route("Adminpanel")]
