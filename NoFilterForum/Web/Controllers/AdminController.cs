@@ -12,6 +12,7 @@ using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Services;
 using Core.Enums;
 using Core.Constants;
+using Web.Requests;
 
 namespace NoFilterForum.Web.Controllers
 {
@@ -133,23 +134,23 @@ namespace NoFilterForum.Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GiveWarning(string userid, string content)
+        public async Task<IActionResult> GiveWarning(GiveWarningRequest giveWarningRequest)
         {
             if (!UserConstants.adminNames.Contains(this.User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
-            var user = await _userService.GetUserWithWarningsByIdAsync(userid);
+            var user = await _userService.GetUserWithWarningsByIdAsync(giveWarningRequest.UserId);
             if (user == null)
             {
-                return NotFound(userid);
+                return NotFound(giveWarningRequest.UserId);
             }
-            var result = await _warningService.AddWarningAsync(content,user);
+            var result = await _warningService.AddWarningAsync(giveWarningRequest.Content, user);
             return result switch
             {
                 PostResult.Success => RedirectToAction("Profile", "Home", new { userName = user.UserName }),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.NotFound => NotFound(userid),
+                PostResult.NotFound => NotFound(giveWarningRequest.UserId),
                 _ => Problem()
             };
         }
