@@ -198,12 +198,13 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var user = await _context.Users.FirstAsync(x => x.Id == id);
-            await _context.ReplyDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, UserConstants.DefaultUser));
-            await _context.PostDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, UserConstants.DefaultUser));
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(AdminPanel));
+            var result = await _userService.BanUserByIdAsync(id);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction(nameof(AdminPanel)),
+                PostResult.NotFound => NotFound(id),
+                PostResult.UpdateFailed => Problem()
+            }; 
         }
         [Authorize]
         [Route("WarningsOfUserId-{id}")]

@@ -9,6 +9,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<bool> AnyNotConfirmedUsersAsync();
         public Task<List<UserDataModel>> GetAllUnconfirmedUsersAsync();
         public Task<PostResult> ConfirmUserAsync(string userId);
+        public Task<PostResult> BanUserByIdAsync(string userId);
         public Task<UserDataModel> GetUserWithWarningsByIdAsync(string userId);
     }
 }
