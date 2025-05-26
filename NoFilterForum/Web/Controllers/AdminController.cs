@@ -46,8 +46,14 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            await _context.ReportDataModels.Where(x => x.Id == id).ExecuteDeleteAsync();
-            return RedirectToAction("Reports");
+            var result = await _reportService.DeleteReportByIdAsync(id);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Reports"),
+                PostResult.NotFound => NotFound(id),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
         [Authorize]
         [HttpPost]
