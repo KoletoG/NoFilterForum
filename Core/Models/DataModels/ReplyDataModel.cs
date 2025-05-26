@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Core.Constants;
 
 namespace NoFilterForum.Core.Models.DataModels
 {
@@ -11,7 +12,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public PostDataModel Post { get; set; }
         public UserDataModel User { get; set; }
         public short Likes { get; set; }
-
+        public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public ReplyDataModel(string content, UserDataModel user, PostDataModel post)
         {
             Id = Guid.NewGuid().ToString();

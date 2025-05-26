@@ -75,6 +75,10 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 if (replies != null)
                 {
+                    foreach (var reply in replies)
+                    {
+                        reply.User = UserConstants.DefaultUser;
+                    }
                     success = await _replyRepository.UpdateRangeAsync(replies);
                 }
             }
