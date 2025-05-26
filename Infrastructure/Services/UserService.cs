@@ -42,7 +42,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task ConfirmUserAsync(string userId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user==null)
+            if (user == null)
             {
                 return; // Change these, HANDLE THE ERRORS BETTER
             }
@@ -60,28 +60,23 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var posts = await _postRepository.GetAllByUserAsync(user);
-            var replies = await _replyRepository.GetAllByUserAsync(user);
+            var posts = await _postRepository.GetAllByUserIdAsync(userId);
+            var replies = await _replyRepository.GetAllByUserIdAsync(userId);
             bool success = true;
-            if (posts != null)
+            foreach (var post in posts)
             {
-                foreach(var post in posts)
-                {
-                    post.User = UserConstants.DefaultUser;
-                }
-                success = await _postRepository.UpdateRangeAsync(posts);
+                post.SetDefaultUser();
             }
+            success = await _postRepository.UpdateRangeAsync(posts);
             if (success)
             {
-                if (replies != null)
+                foreach (var reply in replies)
                 {
-                    foreach (var reply in replies)
-                    {
-                        reply.User = UserConstants.DefaultUser;
-                    }
-                    success = await _replyRepository.UpdateRangeAsync(replies);
+                    reply.SetDefaultUser();
                 }
+                success = await _replyRepository.UpdateRangeAsync(replies);
             }
+            await _userRepository.DeleteAsync(user);
             return success switch
             {
                 false => PostResult.UpdateFailed,
