@@ -19,6 +19,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.FindAsync(id);
         }
+        public async Task<UserDataModel> GetUserWithWarningsByIdAsync(string id)
+        {
+            return await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id);
+        }
         public async Task<UserDataModel> GetByUsernameAsync(string username)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);

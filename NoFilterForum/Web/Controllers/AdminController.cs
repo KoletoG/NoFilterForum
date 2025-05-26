@@ -23,12 +23,14 @@ namespace NoFilterForum.Web.Controllers
         private readonly IReportService _reportService;
         private readonly IUserService _userService;
         private readonly IPostService _postService;
+        private readonly IWarningService _warningService;
         public AdminController(ILogger<AdminController> logger,
             IReportService reportService,
             ApplicationDbContext context,
             IMemoryCache memoryCache,
             IUserService userService,
-            IPostService postService)
+            IPostService postService,
+            IWarningService warningService)
         {
             _logger = logger;
             _reportService = reportService;
@@ -36,6 +38,7 @@ namespace NoFilterForum.Web.Controllers
             _memoryCache = memoryCache;
             _userService = userService;
             _postService = postService;
+            _warningService = warningService;
         }
         [Authorize]
         [HttpPost]
@@ -136,10 +139,19 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var user = await _context.Users.Include(x=>x.Warnings).Where(x=>x.Id==userid).FirstAsync();
-            user.Warnings.Add(new WarningDataModel(content, user));
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Profile", "Home", new { userName = user.UserName });
+            var user = await _userService.GetUserWithWarningsByIdAsync(userid);
+            if (user == null)
+            {
+                return NotFound(userid);
+            }
+            var result = await _warningService.AddWarningAsync(content,user);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Profile", "Home", new { userName = user.UserName }),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.NotFound => NotFound(userid),
+                _ => Problem()
+            };
         }
         [HttpPost]
         [Authorize]

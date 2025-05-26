@@ -28,18 +28,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<WarningDataModel> CreateAsync(WarningDataModel warning)
         {
             await _context.WarningDataModels.AddAsync(warning);
-            await _context.SaveChangesAsync();
             return warning;
         }
         public async Task UpdateAsync(WarningDataModel warning)
         {
             _context.WarningDataModels.Update(warning);
-            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(WarningDataModel warning)
         {
             _context.WarningDataModels.Remove(warning);
-            await _context.SaveChangesAsync();
         }
         public async Task<bool> ExistsByUserAsync(UserDataModel user)
         {

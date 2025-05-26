@@ -6,6 +6,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     {
         public Task<UserDataModel> GetByIdAsync(string id);
         public Task<UserDataModel> GetByUsernameAsync(string username);
+        public Task<UserDataModel> GetUserWithWarningsByIdAsync(string id);
         public Task<List<UserDataModel>> GetAllAsync();
         public Task<UserDataModel> CreateAsync(UserDataModel user);
         public Task<bool> ExistsByNotConfirmedAsync();
