@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Core.Interfaces.Repositories;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -10,29 +11,35 @@ namespace NoFilterForum.Infrastructure.Services
 
     public class PostService : IPostService
     {
-        private readonly IPostRepository _postRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PostService> _logger;
-        public PostService(IPostRepository postRepository, ILogger<PostService> logger)
+        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger)
         {
-            _postRepository = postRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
         public async Task<PostResult> PinPostAsync(string postId)
         {
-            var post = await _postRepository.GetByIdAsync(postId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
             if (post == null)
             {
-                _logger.LogError($"Post with ID: {postId} was not found.");
                 return PostResult.NotFound;
             }
             post.TogglePin();
-            var updated = await _postRepository.UpdateAsync(post);
-            if (!updated)
+            try
             {
-                _logger.LogError($"Problem updating the post object with ID: {postId}.");
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Posts.UpdateAsync(post);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError($"Problem (un)pinning post with ID: {postId}.");
                 return PostResult.UpdateFailed;
             }
-            return PostResult.Success;
         }
     }
 }

@@ -104,7 +104,8 @@ namespace NoFilterForum.Web.Controllers
             {
                 PostResult.Success=> RedirectToAction("Reasons"),
                 PostResult.NotFound=>NotFound(userId),
-                PostResult.UpdateFailed=>Problem()
+                PostResult.UpdateFailed=>Problem(),
+                _ => Problem("Unknown result.")
             };
         }
         [Authorize] // make authorize with roles
