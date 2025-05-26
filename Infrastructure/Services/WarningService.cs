@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Interfaces.Repositories;
+using Ganss.Xss;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -12,14 +13,17 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<WarningService> _logger;
-        public WarningService(IUnitOfWork unitOfWork, ILogger<WarningService> logger)
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        public WarningService(IUnitOfWork unitOfWork, ILogger<WarningService> logger, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
         }
         public async Task<PostResult> AddWarningAsync(string content, UserDataModel user)
         {
-            // Add sanitization of content
+            content = _htmlSanitizer.Sanitize(content);
             var warning = new WarningDataModel(content, user);
             user.Warnings.Add(warning);
             try
