@@ -45,12 +45,12 @@ namespace NoFilterForum.Infrastructure.Services
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {
-                return PostResult.NotFound; // Change these, HANDLE THE ERRORS BETTER
+                return PostResult.NotFound;
             }
             if (user.IsConfirmed)
             {
                 _logger.LogInformation($"User with Id: {userId} has already been confirmed");
-                return PostResult.UpdateFailed; // Change these, HANDLE THE ERRORS BETTER
+                return PostResult.Success;
             }
             user.Confirm();
             try
@@ -98,7 +98,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Failed to ban user");
+                _logger.LogError(ex, $"Failed to ban user with Id: {userId}");
                 return PostResult.UpdateFailed;
             }
         }
