@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
@@ -47,6 +48,15 @@ namespace NoFilterForum.Infrastructure.Services
             }
             user.Confirm();
             await _userRepository.UpdateAsync(user);
+        }
+        public async Task<PostResult> BanUserByIdAsync(string userId)
+        {
+            var user = _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            return PostResult.Success;
         }
     }
 }

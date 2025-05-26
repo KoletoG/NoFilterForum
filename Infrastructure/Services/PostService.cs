@@ -17,22 +17,22 @@ namespace NoFilterForum.Infrastructure.Services
             _postRepository = postRepository;
             _logger = logger;
         }
-        public async Task<PinPostResult> PinPostAsync(string postId)
+        public async Task<PostResult> PinPostAsync(string postId)
         {
             var post = await _postRepository.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogError($"Post with ID: {postId} was not found.");
-                return PinPostResult.NotFound;
+                return PostResult.NotFound;
             }
             post.TogglePin();
             var updated = await _postRepository.UpdateAsync(post);
             if (!updated)
             {
                 _logger.LogError($"Problem updating the post object with ID: {postId}.");
-                return PinPostResult.UpdateFailed;
+                return PostResult.UpdateFailed;
             }
-            return PinPostResult.Success;
+            return PostResult.Success;
         }
     }
 }

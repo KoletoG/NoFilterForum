@@ -61,9 +61,9 @@ namespace NoFilterForum.Web.Controllers
             var result = await _postService.PinPostAsync(postId);
             return result switch
             {
-                PinPostResult.NotFound => NotFound(),
-                PinPostResult.UpdateFailed => Problem(),
-                PinPostResult.Success => NoContent(),
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => NoContent(),
                 _ => Problem("Unknown result.")
             };
         }
