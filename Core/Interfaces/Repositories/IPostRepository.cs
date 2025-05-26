@@ -11,6 +11,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<PostDataModel> CreateAsync(PostDataModel post);
         public Task<int> GetCountByPostIdAsync(string id);
         public Task<bool> UpdateAsync(PostDataModel post);
+        public Task<bool> UpdateRangeAsync(List<PostDataModel> posts);
         public Task DeleteAsync(PostDataModel post);
     }
 }

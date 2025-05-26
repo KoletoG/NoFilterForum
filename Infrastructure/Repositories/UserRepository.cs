@@ -29,7 +29,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<UserDataModel>> GetAllNoDefaultAsync()
         {
-           return await _context.Users.AsNoTracking().Where(x => x.UserName != GlobalVariables.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
+           return await _context.Users.AsNoTracking().Where(x => x.UserName != UserConstants.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
         }
         public async Task<UserDataModel> CreateAsync(UserDataModel user)
         {

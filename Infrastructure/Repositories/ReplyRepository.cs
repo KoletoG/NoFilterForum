@@ -39,10 +39,17 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x=>x.Post.Id==postId).CountAsync();
         }
-        public async Task UpdateAsync(ReplyDataModel reply)
+        public async Task<bool> UpdateAsync(ReplyDataModel reply)
         {
             _context.ReplyDataModels.Update(reply);
             await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> UpdateRangeAsync(List<ReplyDataModel> replies)
+        {
+            _context.ReplyDataModels.UpdateRange(replies);
+            await _context.SaveChangesAsync();
+            return true;
         }
         public async Task DeleteAsync(ReplyDataModel reply)
         {

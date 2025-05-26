@@ -73,7 +73,7 @@ namespace NoFilterForum.Web.Controllers
                 ViewBag.Errors = JsonSerializer.Deserialize<List<string>>(errors);
             }
             var sections = await _sectionService.GetAllSectionsAsync();
-            if (GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return View(new IndexViewModel(sections, true));
             }
@@ -458,7 +458,7 @@ namespace NoFilterForum.Web.Controllers
             {
                 ViewBag.Error = error;
             }
-            if (userName == GlobalVariables.DefaultUser.UserName)
+            if (userName == UserConstants.DefaultUser.UserName)
             {
                 return RedirectToAction("Index");
             }

@@ -43,6 +43,12 @@ namespace NoFilterForum.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> UpdateRangeAsync(List<PostDataModel> posts)
+        {
+            _context.PostDataModels.UpdateRange(posts);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task DeleteAsync(PostDataModel post)
         {
             _context.PostDataModels.Remove(post);

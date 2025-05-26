@@ -6,7 +6,7 @@
 
 @model PostViewModel
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
-@if (Model.Post.User.UserName != GlobalVariables.DefaultUser.UserName)
+@if (Model.Post.User.UserName != UserConstants.DefaultUser.UserName)
 {
 	var encodedPostUser = HttpUtility.UrlEncode(Model.Post.User.UserName);
 	if (Model.Post.User.Role == UserRoles.Admin)
@@ -124,7 +124,7 @@ else
 		</form>
 	}
 }
-@if (Model.Post.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+@if (Model.Post.User.UserName == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 {
 	<form asp-action="DeletePost" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" method="post">
 		@Html.AntiForgeryToken()
@@ -160,7 +160,7 @@ else
 	}
 	@foreach (var reply in Model.Replies)
 	{
-		if (reply.User.UserName != GlobalVariables.DefaultUser.UserName)
+		if (reply.User.UserName != UserConstants.DefaultUser.UserName)
 		{
 			var encodedUsername = HttpUtility.UrlEncode(reply.User.UserName);
 			if (reply.User.Role == UserRoles.Admin)
@@ -241,7 +241,7 @@ else
 				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')">Dislike</button>
 			</form>
 		}
-		@if (reply.User.UserName == this.User.Identity.Name || GlobalVariables.adminNames.Contains(this.User.Identity.Name))
+		@if (reply.User.UserName == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 		{
 			<form asp-action="DeleteReply" asp-route-id="@reply.Id" asp-route-title="@Model.Title" method="post">
 				@Html.AntiForgeryToken()

@@ -1,10 +1,10 @@
-﻿using Core.Enums;
+﻿using Core.Constants;
+using Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
-using NoFilterForum.Global_variables;
 
 namespace NoFilterForum.Infrastructure.Services
 {
@@ -12,10 +12,14 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMemoryCache _memoryCache;
-        public UserService(IUserRepository userRepository, IMemoryCache memoryCache)
+        private readonly IPostRepository _postRepository;
+        private readonly IReplyRepository _replyRepository;
+        public UserService(IUserRepository userRepository, IMemoryCache memoryCache, IPostRepository postRepository, IReplyRepository replyRepository)
         {
             _userRepository = userRepository;
             _memoryCache = memoryCache;
+            _postRepository = postRepository;
+            _replyRepository = replyRepository;
         }
         // Add paging
         public async Task<List<UserDataModel>> GetAllUsersWithoutDefaultAsync()
@@ -51,12 +55,34 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> BanUserByIdAsync(string userId)
         {
-            var user = _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
                 return PostResult.NotFound;
             }
-            return PostResult.Success;
+            var posts = await _postRepository.GetAllByUserAsync(user);
+            var replies = await _replyRepository.GetAllByUserAsync(user);
+            bool success = true;
+            if (posts != null)
+            {
+                foreach(var post in posts)
+                {
+                    post.User = UserConstants.DefaultUser;
+                }
+                success = await _postRepository.UpdateRangeAsync(posts);
+            }
+            if (success)
+            {
+                if (replies != null)
+                {
+                    success = await _replyRepository.UpdateRangeAsync(replies);
+                }
+            }
+            return success switch
+            {
+                false => PostResult.UpdateFailed,
+                true => PostResult.Success
+            };
         }
     }
 }

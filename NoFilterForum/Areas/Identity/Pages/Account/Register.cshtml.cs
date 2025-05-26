@@ -123,7 +123,7 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (Input.Username == GlobalVariables.DefaultUser.UserName)
+            if (Input.Username == UserConstants.DefaultUser.UserName)
             {
                 ModelState.AddModelError("", $"Username '{Input.Username}' is already taken.");
             }
@@ -132,7 +132,7 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                 var user = new UserDataModel(Input.Username, Input.Email);
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                if (GlobalVariables.adminNames.Contains(user.UserName))
+                if (UserConstants.adminNames.Contains(user.UserName))
                 {
                     user.Role = UserRoles.Admin;
                     user.IsConfirmed = true;

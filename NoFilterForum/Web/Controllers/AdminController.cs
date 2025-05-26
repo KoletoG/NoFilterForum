@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using NoFilterForum.Global_variables;
 using NoFilterForum.Core.Models;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Core.Models.ViewModels;
@@ -12,6 +11,7 @@ using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Services;
 using Core.Enums;
+using Core.Constants;
 
 namespace NoFilterForum.Web.Controllers
 {
@@ -42,7 +42,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteReport(string id)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -54,7 +54,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PinPost(string postId)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -72,7 +72,7 @@ namespace NoFilterForum.Web.Controllers
         [Route("Reports")]
         public async Task<IActionResult> Reports()
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -83,7 +83,7 @@ namespace NoFilterForum.Web.Controllers
         [Route("Reasons")]
         public async Task<IActionResult> Reasons()
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -95,7 +95,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmUser(string userId)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -106,7 +106,7 @@ namespace NoFilterForum.Web.Controllers
         [Route("Adminpanel")]
         public async Task<IActionResult> AdminPanel()
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -120,7 +120,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GiveWarning(string userid, string content)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -134,7 +134,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRepliesAndPosts(string userid)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
@@ -170,13 +170,13 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> BanUser(string id)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
             var user = await _context.Users.FirstAsync(x => x.Id == id);
-            await _context.ReplyDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, GlobalVariables.DefaultUser));
-            await _context.PostDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, GlobalVariables.DefaultUser));
+            await _context.ReplyDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, UserConstants.DefaultUser));
+            await _context.PostDataModels.Where(x => x.User == user).ExecuteUpdateAsync(x => x.SetProperty(x => x.User, UserConstants.DefaultUser));
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(AdminPanel));
@@ -186,7 +186,7 @@ namespace NoFilterForum.Web.Controllers
         [ResponseCache(Duration =60,Location =ResponseCacheLocation.Any)]
         public async Task<IActionResult> ShowWarnings(string id)
         {
-            if (!GlobalVariables.adminNames.Contains(User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }
