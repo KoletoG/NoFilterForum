@@ -28,6 +28,7 @@ using Microsoft.Extensions.Hosting;
 using NoFilterForum.Core.Models.GetViewModels;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Data;
+using Core.Enums;
 namespace NoFilterForum.Web.Controllers
 {
     public class HomeController : Controller
