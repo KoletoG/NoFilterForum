@@ -27,15 +27,15 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeleteReportByIdAsync(string reportId)
         {
-            var user = await _unitOfWork.Reports.GetByIdAsync(reportId);
-            if (user==null)
+            var report = await _unitOfWork.Reports.GetByIdAsync(reportId);
+            if (report == null)
             {
                 return PostResult.NotFound;
             }
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Reports.DeleteAsync(user);
+                await _unitOfWork.Reports.DeleteAsync(report);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
