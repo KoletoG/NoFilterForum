@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Core.Enums;
 using Microsoft.AspNetCore.Identity;
 using NanoidDotNet;
 using static System.Net.Mime.MediaTypeNames;
@@ -47,14 +48,5 @@ namespace NoFilterForum.Core.Models.DataModels
         {
 
         }
-    }
-    public enum UserRoles
-    {
-        Newbie,
-        Regular,
-        Dinosaur,
-        VIP,
-        Admin,
-        Deleted
     }
 }

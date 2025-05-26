@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;

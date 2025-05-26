@@ -1,4 +1,5 @@
-﻿using NoFilterForum.Core.Models.DataModels;
+﻿using Core.Enums;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Global_variables
 {
