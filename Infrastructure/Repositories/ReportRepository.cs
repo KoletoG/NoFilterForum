@@ -24,18 +24,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<ReportDataModel> CreateAsync(ReportDataModel report)
         {
             await _context.ReportDataModels.AddAsync(report);
-            await _context.SaveChangesAsync();
             return report;
         }
         public async Task UpdateAsync(ReportDataModel report)
         {
             _context.ReportDataModels.Update(report);
-            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(ReportDataModel report)
         {
             _context.ReportDataModels.Remove(report);
-            await _context.SaveChangesAsync();
         }
         public async Task<bool> ExistsReportsAsync()
         {
