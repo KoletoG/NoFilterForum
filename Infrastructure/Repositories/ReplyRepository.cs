@@ -52,5 +52,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.ReplyDataModels.Remove(reply);
         }
+        public async Task DeleteRangeAsync(List<ReplyDataModel> replies)
+        {
+            _context.ReplyDataModels.RemoveRange(replies);
+        }
     }
 }

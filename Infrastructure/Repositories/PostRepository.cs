@@ -50,5 +50,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.PostDataModels.Remove(post);
         }
+        public async Task DeleteRangeAsync(List<PostDataModel> posts)
+        {
+            _context.PostDataModels.RemoveRange(posts);
+        }
     }
 }

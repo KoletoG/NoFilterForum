@@ -180,6 +180,10 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
+            if (string.IsNullOrEmpty(userid))
+            {
+                return BadRequest("Id cannot be null");
+            }
             var count = 0;
             if (await _context.ReplyDataModels.Where(x => x.User.Id == userid).AnyAsync())
             {

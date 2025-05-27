@@ -13,5 +13,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<bool> UpdateAsync(PostDataModel post);
         public Task<bool> UpdateRangeAsync(List<PostDataModel> posts);
         public Task DeleteAsync(PostDataModel post);
+        public Task DeleteRangeAsync(List<PostDataModel> posts);
     }
 }

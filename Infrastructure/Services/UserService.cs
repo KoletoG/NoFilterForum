@@ -16,11 +16,15 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IMemoryCache _memoryCache;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<UserService> _logger;
-        public UserService(IMemoryCache memoryCache, IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        private readonly IPostService _postService;
+        private readonly IReplyService _replyService;
+        public UserService(IMemoryCache memoryCache, IUnitOfWork unitOfWork, ILogger<UserService> logger, IPostService postService, IReplyService replyService)
         {
             _memoryCache = memoryCache;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _postService = postService;
+            _replyService = replyService;
         }
         // Add paging
         public async Task<List<UserDataModel>> GetAllUsersWithoutDefaultAsync()
@@ -103,6 +107,29 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, $"Failed to ban user with Id: {userId}");
+                return PostResult.UpdateFailed;
+            }
+        }
+        public async Task<PostResult> DeletePostsAndRepliesByUserId(string userId)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _postService.DeletePostsByUserAsync(user);
+                await _replyService.DeleteRepliesByUserAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, $"Replies and posts of user with Id: {userId} have not been deleted");
                 return PostResult.UpdateFailed;
             }
         }

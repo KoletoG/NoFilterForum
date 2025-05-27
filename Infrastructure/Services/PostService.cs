@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Infrastructure.Services
 {
@@ -39,6 +40,15 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError($"Problem (un)pinning post with ID: {postId}.");
                 return PostResult.UpdateFailed;
+            }
+        }
+        public async Task DeletePostsByUserAsync(UserDataModel user)
+        {
+            var posts = await _unitOfWork.Posts.GetAllByUserIdAsync(user.Id);
+            if (posts.Count > 0)
+            {
+                user.PostsCount -= posts.Count;
+                await _unitOfWork.Posts.DeleteRangeAsync(posts);
             }
         }
     }
