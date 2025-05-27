@@ -14,10 +14,12 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PostService> _logger;
-        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger)
+        private readonly IReplyService _replyService;
+        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger, IReplyService replyService)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _replyService = replyService;
         }
         public async Task<PostResult> PinPostAsync(string postId)
         {
@@ -48,6 +50,10 @@ namespace NoFilterForum.Infrastructure.Services
             if (posts.Count > 0)
             {
                 user.PostsCount -= posts.Count;
+                foreach (var post in posts)
+                {
+                    await _replyService.DeleteRepliesByUserAsync(user);
+                }
                 await _unitOfWork.Posts.DeleteRangeAsync(posts);
             }
         }
