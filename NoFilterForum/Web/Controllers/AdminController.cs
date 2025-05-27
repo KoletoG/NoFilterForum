@@ -19,25 +19,17 @@ namespace NoFilterForum.Web.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly ILogger<AdminController> _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly IMemoryCache _memoryCache;
         private readonly IReportService _reportService;
         private readonly IUserService _userService;
         private readonly IPostService _postService;
         private readonly IWarningService _warningService;
-        public AdminController(ILogger<AdminController> logger,
+        public AdminController(
             IReportService reportService,
-            ApplicationDbContext context,
-            IMemoryCache memoryCache,
             IUserService userService,
             IPostService postService,
             IWarningService warningService)
         {
-            _logger = logger;
             _reportService = reportService;
-            _context = context;
-            _memoryCache = memoryCache;
             _userService = userService;
             _postService = postService;
             _warningService = warningService;
