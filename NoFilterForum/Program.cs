@@ -12,7 +12,7 @@ using NoFilterForum.Infrastructure.Services;
 using NoFilterForum.Interfaces;
 using NoFilterForum.Services;
 
-namespace NoFilterForum.Web
+namespace Web
 {
     public class Program
     {

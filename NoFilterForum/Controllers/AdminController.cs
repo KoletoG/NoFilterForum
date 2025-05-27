@@ -15,7 +15,7 @@ using Core.Constants;
 using Web.Requests;
 using Core.Models.ViewModels;
 
-namespace NoFilterForum.Web.Controllers
+namespace Web.Controllers
 {
     public class AdminController : Controller
     {
@@ -141,7 +141,7 @@ namespace NoFilterForum.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GiveWarning(GiveWarningRequest giveWarningRequest)
         {
-            if (!UserConstants.adminNames.Contains(this.User.Identity.Name))
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
             }

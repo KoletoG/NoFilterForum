@@ -29,7 +29,7 @@ using NoFilterForum.Core.Models.GetViewModels;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Data;
 using Core.Enums;
-namespace NoFilterForum.Web.Controllers
+namespace Web.Controllers
 {
     public class HomeController : Controller
     {
