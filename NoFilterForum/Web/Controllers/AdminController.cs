@@ -171,44 +171,7 @@ namespace NoFilterForum.Web.Controllers
                 _ => Problem()
             };
         }
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteRepliesAndPosts(string userid)
-        {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return RedirectToAction("Index");
-            }
-            if (string.IsNullOrEmpty(userid))
-            {
-                return BadRequest("Id cannot be null");
-            }
-            var count = 0;
-            if (await _context.ReplyDataModels.Where(x => x.User.Id == userid).AnyAsync())
-            {
-                var replies = await _context.ReplyDataModels.Where(x => x.User.Id == userid).ToListAsync();
-                count += replies.Count();
-                _context.RemoveRange(replies);
-            }
-            if(await _context.PostDataModels.Where(x => x.User.Id == userid).AnyAsync())
-            {
-                var posts = await _context.PostDataModels.Where(x => x.User.Id == userid).ToListAsync();
-                count += posts.Count;
-                foreach (var post in posts)
-                {
-                    if (post.Replies != null)
-                    {
-                        _context.RemoveRange(post.Replies);
-                    }
-                }
-                _context.RemoveRange(posts);
-            }
-            var user = await _context.Users.Where(x => x.Id == userid).FirstAsync();
-            user.PostsCount -= count;
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Profile","Home",new { userName = user.UserName });
-        }
+            
         // Add ModelError if something went wrong, that's for every method including creating post and reply
         // ADD ENCODING
         [Authorize]
@@ -229,7 +192,8 @@ namespace NoFilterForum.Web.Controllers
             {
                 PostResult.Success => RedirectToAction(nameof(AdminPanel)),
                 PostResult.NotFound => NotFound(id),
-                PostResult.UpdateFailed => Problem()
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
             }; 
         }
         [Authorize]

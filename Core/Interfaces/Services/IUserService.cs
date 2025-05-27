@@ -11,5 +11,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> ConfirmUserAsync(string userId);
         public Task<PostResult> BanUserByIdAsync(string userId);
         public Task<UserDataModel> GetUserWithWarningsByIdAsync(string userId);
+        public Task<UserDataModel> GetUserByIdAsync(string id);
     }
 }

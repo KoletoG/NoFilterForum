@@ -13,14 +13,5 @@ namespace NoFilterForum.Infrastructure.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task DeleteRepliesByUserAsync(UserDataModel user)
-        {
-            var replies = await _unitOfWork.Replies.GetAllByUserIdAsync(user.Id);
-            if (replies.Count > 0)
-            {
-                user.PostsCount -= replies.Count;
-                await _unitOfWork.Replies.DeleteRangeAsync(replies);
-            }
-        }
     }
 }

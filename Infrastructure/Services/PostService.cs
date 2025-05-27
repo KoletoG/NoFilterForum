@@ -44,18 +44,6 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task DeletePostsByUserAsync(UserDataModel user)
-        {
-            var posts = await _unitOfWork.Posts.GetAllByUserIdAsync(user.Id);
-            if (posts.Count > 0)
-            {
-                user.PostsCount -= posts.Count;
-                foreach (var post in posts)
-                {
-                    await _replyService.DeleteRepliesByUserAsync(user);
-                }
-                await _unitOfWork.Posts.DeleteRangeAsync(posts);
-            }
-        }
+        
     }
 }

@@ -44,6 +44,10 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Users.GetAllUnconfirmedAsync();
         }
+        public async Task<UserDataModel> GetUserByIdAsync(string id)
+        {
+            return await _unitOfWork.Users.GetByIdAsync(id);
+        }
         public async Task<UserDataModel> GetUserWithWarningsByIdAsync(string userId)
         {
             return await _unitOfWork.Users.GetUserWithWarningsByIdAsync(userId);
@@ -107,29 +111,6 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, $"Failed to ban user with Id: {userId}");
-                return PostResult.UpdateFailed;
-            }
-        }
-        public async Task<PostResult> DeletePostsAndRepliesByUserId(string userId)
-        {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null)
-            {
-                return PostResult.NotFound;
-            }
-            try
-            {
-                await _unitOfWork.BeginTransactionAsync();
-                await _postService.DeletePostsByUserAsync(user);
-                await _replyService.DeleteRepliesByUserAsync(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
-                return PostResult.Success;
-            }
-            catch (Exception ex)
-            {
-                await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, $"Replies and posts of user with Id: {userId} have not been deleted");
                 return PostResult.UpdateFailed;
             }
         }
