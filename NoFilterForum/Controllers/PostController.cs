@@ -46,7 +46,7 @@ namespace Web.Controllers
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("PostsMain", new { title = HttpUtility.UrlEncode(createDto.TitleOfSection) })
+                PostResult.Success => RedirectToAction("PostsMain","Home", new { title = HttpUtility.UrlEncode(createDto.TitleOfSection) })
             };
         }
     }
