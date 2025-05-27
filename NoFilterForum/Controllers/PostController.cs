@@ -32,15 +32,22 @@ namespace Web.Controllers
                 return RedirectToAction("Index", "Home", new { errors = errorsJson });
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId==null)
+            if (userId == null)
             {
                 return Unauthorized();
             }
-            if (await _postService.HasTimeout(userId))
+            if (await _postService.HasTimeoutAsync(userId))
             {
-                return RedirectToAction("PostsMain","Home", new { title = createDto.TitleOfSection, errorTime = true }); // Need to change errorTime
+                return RedirectToAction("PostsMain", "Home", new { title = createDto.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
-            return Ok();
+            createDto.TitleOfSection = HttpUtility.UrlDecode(createDto.TitleOfSection);
+            var result = await _postService.CreatePostAsync(createDto, userId);
+            return result switch
+            {
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => RedirectToAction("PostsMain", new { title = HttpUtility.UrlEncode(createDto.TitleOfSection) })
+            };
         }
     }
 }

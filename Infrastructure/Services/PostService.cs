@@ -1,4 +1,5 @@
-﻿using Core.Constants;
+﻿using System.Web;
+using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs;
@@ -52,7 +53,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> HasTimeout(string userId)
+        public async Task<bool> HasTimeoutAsync(string userId)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
             if (dateOfLastPost == default)
@@ -65,7 +66,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }
-        public async Task<PostResult> CreatePost(CreatePostDto createDto, string userId)
+        public async Task<PostResult> CreatePostAsync(CreatePostDto createDto, string userId)
         {
             string sanitizedFormattedBody = TextFormatter.FormatPostBody(_htmlSanitizer.Sanitize(createDto.Body));
             string sanitizedTitle = _htmlSanitizer.Sanitize(createDto.Title);
