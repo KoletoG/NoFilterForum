@@ -9,6 +9,7 @@ using NoFilterForum.Core.Models.GetViewModels;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using System.Security.Claims;
+using Ganss.Xss;
 
 namespace Web.Controllers
 {

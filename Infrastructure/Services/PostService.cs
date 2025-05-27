@@ -1,6 +1,9 @@
 ﻿using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs;
+using Core.Utility;
+using Ganss.Xss;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -16,10 +19,14 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PostService> _logger;
         private readonly IReplyService _replyService;
-        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger, IReplyService replyService)
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger, IReplyService replyService, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
+            _htmlSanitizer.AllowedTags.Add("a");
             _replyService = replyService;
         }
         public async Task<PostResult> PinPostAsync(string postId)
@@ -58,6 +65,42 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }
-        
+        public async Task<PostResult> CreatePost(CreatePostDto createDto, string userId)
+        {
+            string sanitizedBody = _htmlSanitizer.Sanitize(createDto.Body);
+            string sanitizedTitle = _htmlSanitizer.Sanitize(createDto.Title);
+            sanitizedBody = TextFormatter.LinkCheckText(sanitizedBody);
+            sanitizedBody = TextFormatter.CheckForHashTags(sanitizedBody);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            var section = await _unitOfWork.Sections.GetWithPostsByTitleAsync(createDto.TitleOfSection);
+            if (section == null)
+            {
+                return PostResult.NotFound;
+            }
+            var post = new PostDataModel(sanitizedTitle, sanitizedBody, user);
+            section.Posts.Add(post);
+            user.IncrementPostCount();
+            RoleUtility.AdjustRoleByPostCount(user);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Sections.UpdateAsync(section);
+                await _unitOfWork.Posts.CreateAsync(post);
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Creating post failed");
+                return PostResult.UpdateFailed;
+            }
+        }
     }
 }

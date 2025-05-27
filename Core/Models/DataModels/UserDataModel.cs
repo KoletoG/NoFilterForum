@@ -29,6 +29,7 @@ namespace NoFilterForum.Core.Models.DataModels
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
         public void Confirm() => IsConfirmed = true;
+        public void IncrementPostCount() => PostsCount++;
         public UserDataModel(string userName,string email)
         {
             Id = Nanoid.Generate();

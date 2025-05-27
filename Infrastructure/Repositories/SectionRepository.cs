@@ -17,9 +17,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.FindAsync(id);
         }
-        public async Task<SectionDataModel> GetByTitleAsync(string title)
+        public async Task<SectionDataModel> GetWithPostsByTitleAsync(string title)
         {
-            return await _context.SectionDataModels.FirstOrDefaultAsync(x => x.Title == title);
+            return await _context.SectionDataModels.Include(x=>x.Posts).FirstOrDefaultAsync(x => x.Title == title);
         }
         public async Task<List<SectionDataModel>> GetAllAsync()
         {
@@ -28,18 +28,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<SectionDataModel> CreateAsync(SectionDataModel section)
         {
             await _context.SectionDataModels.AddAsync(section);
-            await _context.SaveChangesAsync();
             return section;
         }
         public async Task UpdateAsync(SectionDataModel section)
         {
             _context.SectionDataModels.Update(section);
-            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(SectionDataModel section)
         {
             _context.SectionDataModels.Remove(section);
-            await _context.SaveChangesAsync();
         }
         public async Task<bool> ExistsByTitleAsync(string title)
         {
