@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Core.Utility
 {
@@ -44,6 +45,12 @@ namespace Core.Utility
             {
                 return Array.Empty<string>();
             }
+        }
+        public static string FormatPostBody(string text)
+        {
+            text = LinkCheckText(text);
+            text = CheckForHashTags(text);
+            return text;
         }
     }
 }

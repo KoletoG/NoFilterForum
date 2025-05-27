@@ -67,10 +67,8 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> CreatePost(CreatePostDto createDto, string userId)
         {
-            string sanitizedBody = _htmlSanitizer.Sanitize(createDto.Body);
+            string sanitizedFormattedBody = TextFormatter.FormatPostBody(_htmlSanitizer.Sanitize(createDto.Body));
             string sanitizedTitle = _htmlSanitizer.Sanitize(createDto.Title);
-            sanitizedBody = TextFormatter.LinkCheckText(sanitizedBody);
-            sanitizedBody = TextFormatter.CheckForHashTags(sanitizedBody);
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {
@@ -81,7 +79,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var post = new PostDataModel(sanitizedTitle, sanitizedBody, user);
+            var post = new PostDataModel(sanitizedTitle, sanitizedFormattedBody, user);
             section.Posts.Add(post);
             user.IncrementPostCount();
             RoleUtility.AdjustRoleByPostCount(user);
