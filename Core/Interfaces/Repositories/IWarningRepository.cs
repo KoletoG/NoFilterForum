@@ -1,4 +1,6 @@
-﻿using NoFilterForum.Core.Models.DataModels;
+﻿using Core.Models.DTOs;
+using Core.Models.ViewModels;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Interfaces.Repositories
 {
@@ -11,5 +13,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task UpdateAsync(WarningDataModel warning);
         public Task DeleteAsync(WarningDataModel warning);
         public Task<bool> ExistsByUserAsync(UserDataModel user);
+        public Task<List<ShowWarningsDto>> GetWarningsContentByUserIdAsync(string userId);
     }
 }

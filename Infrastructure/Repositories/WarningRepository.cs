@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs;
+using Core.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
@@ -41,6 +43,14 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<bool> ExistsByUserAsync(UserDataModel user)
         {
             return await _context.WarningDataModels.AnyAsync(x => x.User==user);
+        }
+        public async Task<List<ShowWarningsDto>> GetWarningsContentByUserIdAsync(string userId)
+        {
+            return await _context.WarningDataModels.Where(x => x.User.Id == userId)
+                .Select(u => new ShowWarningsDto
+                { 
+                    Content = u.Content 
+                }).ToListAsync();
         }
     }
 }

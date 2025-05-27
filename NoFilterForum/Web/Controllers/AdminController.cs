@@ -13,6 +13,7 @@ using NoFilterForum.Infrastructure.Services;
 using Core.Enums;
 using Core.Constants;
 using Web.Requests;
+using Core.Models.ViewModels;
 
 namespace NoFilterForum.Web.Controllers
 {
@@ -217,8 +218,12 @@ namespace NoFilterForum.Web.Controllers
                 return RedirectToAction("Index");
             }
             id = HttpUtility.UrlDecode(id);
-            var warnings = await _warningService.GetWarningsByUserIdAsync(id);
-            return View(warnings);
+            var warningsDto = await _warningService.GetWarningsByUserIdAsync(id);
+            var warningsVM = warningsDto.Select(dto => new ShowWarningsViewModel
+            {
+                Content = dto.Content
+            }).ToList();
+            return View(warningsVM);
         }
     }
 }

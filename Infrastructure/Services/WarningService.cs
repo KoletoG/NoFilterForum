@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using Core.Enums;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs;
+using Core.Models.ViewModels;
 using Ganss.Xss;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
@@ -42,13 +44,13 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<WarningDataModel>> GetWarningsByUserIdAsync(string userId)
+        public async Task<List<ShowWarningsDto>> GetWarningsByUserIdAsync(string userId)
         {
             if (userId == null)
             {
-                return new List<WarningDataModel>();
+                return new List<ShowWarningsDto>();
             }
-            return await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
+            return await _unitOfWork.Warnings.GetWarningsContentByUserIdAsync(userId);
         }
     }
 }
