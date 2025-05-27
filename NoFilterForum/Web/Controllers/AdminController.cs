@@ -218,6 +218,10 @@ namespace NoFilterForum.Web.Controllers
                 return RedirectToAction("Index");
             }
             id = HttpUtility.UrlDecode(id);
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id cannot be null");
+            }
             var warningsDto = await _warningService.GetWarningsByUserIdAsync(id);
             var warningsVM = warningsDto.Select(dto => new ShowWarningsViewModel
             {

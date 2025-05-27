@@ -46,10 +46,6 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<List<ShowWarningsDto>> GetWarningsByUserIdAsync(string userId)
         {
-            if (userId == null)
-            {
-                return new List<ShowWarningsDto>();
-            }
             return await _unitOfWork.Warnings.GetWarningsContentByUserIdAsync(userId);
         }
     }
