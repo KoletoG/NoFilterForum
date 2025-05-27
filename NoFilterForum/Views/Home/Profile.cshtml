@@ -75,10 +75,6 @@
 			<input name="Content" placeholder="Reason for warning..." type="text"/>
 			<button type="submit">Give warning</button>
 		</form>
-		<form asp-action="DeleteRepliesAndPosts" asp-route-userid="@Model.User.Id" asp-controller="Admin" method="post">
-			@Html.AntiForgeryToken()
-			<button type="submit">Delete Posts And Replies of User</button>
-		</form>
 	}
 }
 <h1>@Model.User.UserName</h1>
