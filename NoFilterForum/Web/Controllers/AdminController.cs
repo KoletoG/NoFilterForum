@@ -217,8 +217,8 @@ namespace NoFilterForum.Web.Controllers
                 return RedirectToAction("Index");
             }
             id = HttpUtility.UrlDecode(id);
-            var warnignsList = await _context.WarningDataModels.AsNoTracking().Where(x=>x.User.Id==id).ToListAsync();
-            return View(warnignsList);
+            var warnings = await _warningService.GetWarningsByUserIdAsync(id);
+            return View(warnings);
         }
     }
 }

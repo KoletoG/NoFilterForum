@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using System.Runtime.CompilerServices;
+using Core.Enums;
 using Core.Interfaces.Repositories;
 using Ganss.Xss;
 using Microsoft.Build.Framework;
@@ -40,6 +41,14 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError(ex, $"Warning hasn't been added to user with Id: {user.Id}");
                 return PostResult.UpdateFailed;
             }
+        }
+        public async Task<List<WarningDataModel>> GetWarningsByUserIdAsync(string userId)
+        {
+            if (userId == null)
+            {
+                return new List<WarningDataModel>();
+            }
+            return await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
         }
     }
 }
