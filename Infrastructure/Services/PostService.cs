@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Core.Constants;
+using Core.Enums;
 using Core.Interfaces.Repositories;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
@@ -43,6 +44,19 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError($"Problem (un)pinning post with ID: {postId}.");
                 return PostResult.UpdateFailed;
             }
+        }
+        public async Task<bool> HasTimeout(string userId)
+        {
+            var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
+            if (dateOfLastPost == default)
+            {
+                return false;
+            }
+            if(dateOfLastPost.AddMinutes(PostConstants.TimeoutPosts)>DateTime.Now)
+            {
+                return true;
+            }
+            return false;
         }
         
     }

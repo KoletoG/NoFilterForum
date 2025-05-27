@@ -36,7 +36,7 @@ namespace NoFilterForum.Infrastructure.Repositories
             return await _context.PostDataModels.Where(x => x.Id == id).CountAsync();
         }
         public async Task<bool> UpdateAsync(PostDataModel post)
-        { 
+        {
             // need error handling
             _context.PostDataModels.Update(post);
             return true;
@@ -53,6 +53,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task DeleteRangeAsync(List<PostDataModel> posts)
         {
             _context.PostDataModels.RemoveRange(posts);
+        }
+        public async Task<DateTime> GetLastPostDateByUsernameAsync(string userId)
+        {
+            return await _context.PostDataModels.AsNoTracking().Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
         }
     }
 }

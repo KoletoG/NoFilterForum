@@ -8,7 +8,7 @@ using NoFilterForum.Core.Models.DataModels;
 
 namespace Core.Constants
 {
-    public class UserConstants
+    public static class UserConstants
     {
         public static HashSet<string> adminNames = new HashSet<string>() { "Admin" };
         public static UserDataModel DefaultUser = new UserDataModel()
