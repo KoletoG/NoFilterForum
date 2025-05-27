@@ -51,6 +51,10 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id cannot be null");
+            }
             var result = await _reportService.DeleteReportByIdAsync(id);
             return result switch
             {
@@ -68,6 +72,10 @@ namespace NoFilterForum.Web.Controllers
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
+            }
+            if (string.IsNullOrEmpty(postId))
+            {
+                return BadRequest("Id cannot be null");
             }
             var result = await _postService.PinPostAsync(postId);
             return result switch
@@ -110,6 +118,10 @@ namespace NoFilterForum.Web.Controllers
             {
                 return RedirectToAction("Index");
             }
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Id cannot be null");
+            }
             var result = await _userService.ConfirmUserAsync(userId);
             return result switch
             {
@@ -140,6 +152,10 @@ namespace NoFilterForum.Web.Controllers
             if (!UserConstants.adminNames.Contains(this.User.Identity.Name))
             {
                 return RedirectToAction("Index");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
             }
             var user = await _userService.GetUserWithWarningsByIdAsync(giveWarningRequest.UserId);
             if (user == null)
@@ -199,6 +215,10 @@ namespace NoFilterForum.Web.Controllers
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return RedirectToAction("Index");
+            }
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id cannot be null");
             }
             var result = await _userService.BanUserByIdAsync(id);
             return result switch
