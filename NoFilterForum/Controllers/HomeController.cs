@@ -386,44 +386,6 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(PostPostViewModel viewModel)
-        {
-            // Need custom exception for invalid user
-            string userName = User.Identity?.Name ?? throw new Exception("Invalid user");
-            var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role != UserRoles.Admin && await _context.PostDataModels.Where(x => x.User == user).AnyAsync())
-            {
-                var lastPostOfUser = await _context.PostDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
-                if (lastPostOfUser.AddMinutes(15) > DateTime.UtcNow)
-                {
-                    return RedirectToAction("PostsMain", new { title = viewModel.TitleOfSection, errorTime = true });
-                }
-            }
-            if (!ModelState.IsValid)
-            {
-                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("Index", "Home", new { errors = errorsJson });
-            }
-            viewModel.TitleOfSection = HttpUtility.UrlDecode(viewModel.TitleOfSection);
-            var section = await _context.SectionDataModels.Include(x => x.Posts).FirstAsync(x => x.Title == viewModel.TitleOfSection);
-            user.PostsCount++;
-            await _ioService.AdjustRoleByPostCount(user);
-            viewModel.Title = _htmlSanitizer.Sanitize(viewModel.Title);
-            viewModel.Body = _htmlSanitizer.Sanitize(viewModel.Body);
-            viewModel.Body = _nonIOService.LinkCheckText(viewModel.Body);
-            viewModel.Body = _nonIOService.CheckForHashTags(viewModel.Body);
-            var post = new PostDataModel(viewModel.Title, viewModel.Body, user);
-            await _context.PostDataModels.AddAsync(post);
-            section.Posts.Add(post);
-            await _context.SaveChangesAsync();
-            _memoryCache.Remove($"postsUser_{User.Identity.Name}");
-            viewModel.TitleOfSection = HttpUtility.UrlEncode(viewModel.TitleOfSection);
-            return RedirectToAction("PostsMain", new { title = viewModel.TitleOfSection });
-        }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetBio(string bio, string userId)
         {
             if (!ModelState.IsValid)
