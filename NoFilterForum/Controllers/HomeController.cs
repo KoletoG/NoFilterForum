@@ -525,25 +525,6 @@ namespace Web.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeEmail(string email)
-        {
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            currentUser.Email = email;
-            var result = await _userManager.UpdateAsync(currentUser);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignOutAsync();
-                await _signInManager.SignInAsync(currentUser, isPersistent: false);
-            }
-            return RedirectToAction("Index", "Home");
-        }
-        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> ChangeImage(IFormFile image)

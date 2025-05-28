@@ -44,6 +44,14 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.Users.Update(user);
         }
+        public async Task<bool> UsernameExistsAsync(string username)
+        {
+            return await _context.Users.AnyAsync(x=>x.UserName == username);
+        }
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _context.Users.AnyAsync(x => x.Email == email);
+        }
         public async Task<bool> ExistsByNotConfirmedAsync()
         {
             return await _context.Users.AnyAsync(x => !x.IsConfirmed);

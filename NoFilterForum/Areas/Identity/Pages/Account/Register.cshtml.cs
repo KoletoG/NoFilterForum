@@ -87,6 +87,7 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Username")]
+            [MinLength(6)]
             public string Username { get; set; }
 
             /// <summary>

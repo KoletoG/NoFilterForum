@@ -37,6 +37,37 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return users;
         }
+        public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
+            if(user == null)
+            {
+                return PostResult.NotFound;
+            }
+            user.ChangeUsername(changeUsernameRequest.Username);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Username wasn't updated for user with Id: {UserId}", changeUsernameRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
+        }
+        public async Task<bool> UsernameExistsAsync(string username)
+        {
+            return await _unitOfWork.Users.UsernameExistsAsync(username);
+        }
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _unitOfWork.Users.EmailExistsAsync(email);
+        }
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);

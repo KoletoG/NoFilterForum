@@ -13,6 +13,8 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task UpdateAsync(UserDataModel user);
         public Task DeleteAsync(UserDataModel user);
         public Task<List<UserDataModel>> GetAllNoDefaultAsync();
+        public Task<bool> UsernameExistsAsync(string username);
+        public Task<bool> EmailExistsAsync(string email);
         public Task<bool> ExistsByUsernameAsync(string username);
         public Task<List<UserDataModel>> GetAllUnconfirmedAsync();
     }
