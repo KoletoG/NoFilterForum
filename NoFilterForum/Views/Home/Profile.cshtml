@@ -25,9 +25,9 @@
 			<input name="bio" placeholder="Your bio..." type="text" />
 			<button type="submit">Save Bio</button>
 		</form>
-		<form asp-action="ChangeUsername" asp-controller="Home" method="post">
+		<form asp-action="ChangeUsername" asp-controller="Profile" method="post">
 			@Html.AntiForgeryToken()
-			<input name="username" type="text" placeholder="New username..."/>
+			<input name="Username" type="text" placeholder="New username..."/>
 			<button type="submit">Change username</button>
 		</form>
 		<form asp-action="ChangeEmail" asp-controller="Profile" method="post">

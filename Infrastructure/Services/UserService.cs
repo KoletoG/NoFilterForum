@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -19,9 +20,14 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<UserService> _logger;
         private readonly IPostService _postService;
         private readonly IReplyService _replyService;
-        public UserService(IMemoryCache memoryCache, IUnitOfWork unitOfWork, ILogger<UserService> logger, IPostService postService, IReplyService replyService)
+        private readonly UserManager<UserDataModel> _userManager;
+        private readonly SignInManager<UserDataModel> _signInManager;
+
+        public UserService(IMemoryCache memoryCache, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger, IPostService postService, IReplyService replyService)
         {
             _memoryCache = memoryCache;
+            _signInManager = signInManager;
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _logger = logger;
             _postService = postService;
@@ -40,7 +46,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
-            if(user == null)
+            if (user == null)
             {
                 return PostResult.NotFound;
             }
@@ -48,10 +54,19 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
-                return PostResult.Success;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _unitOfWork.CommitTransactionAsync();
+                    await _signInManager.SignOutAsync();
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return PostResult.Success;
+                }
+                else
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return PostResult.UpdateFailed;
+                }
             }
             catch (Exception ex)
             {
@@ -84,8 +99,8 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Email wasn't updated for user with Id: {UserId}", user.Id);
                 return PostResult.UpdateFailed;

@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using Web.ViewModels;
