@@ -206,10 +206,7 @@ namespace Web.Controllers
                 return BadRequest("Id cannot be null");
             }
             var warningsDto = await _warningService.GetWarningsByUserIdAsync(id);
-            var warningsVM = warningsDto.Select(dto => new ShowWarningsViewModel
-            {
-                Content = dto.Content
-            }).ToList();
+            var warningsVM = warningsDto.Select(AdminMappers.MapToViewModel).ToList();
             return View(warningsVM);
         }
     }
