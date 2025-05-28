@@ -497,14 +497,6 @@ namespace Web.Controllers
             _memoryCache.Remove($"repliesUser_{user.UserName}");
             return RedirectToAction("PostsMain", new { title = titleOfSection });
         }
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReadNotifications()
-        {
-            await _context.NotificationDataModels.Where(x => x.UserTo.UserName == User.Identity.Name).ExecuteDeleteAsync();
-            return RedirectToAction("Notifications", "Home");
-        }
         
         [HttpPost]
         [ValidateAntiForgeryToken]

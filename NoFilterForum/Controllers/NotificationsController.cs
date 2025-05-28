@@ -32,5 +32,16 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+        }
     }
 }
