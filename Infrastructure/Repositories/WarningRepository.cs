@@ -1,4 +1,5 @@
 ﻿using Core.Models.DTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Core.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -21,11 +22,19 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<WarningDataModel>> GetAllByUserIdAsync(string userId)
         {
-            return await _context.WarningDataModels.Where(x=>x.User.Id==userId).ToListAsync();
+            return await _context.WarningDataModels.Where(x => x.User.Id == userId).ToListAsync();
         }
         public async Task<List<WarningDataModel>> GetAllAsync()
         {
             return await _context.WarningDataModels.ToListAsync();
+        }
+        public async Task<List<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
+        {
+            return await _context.WarningDataModels.Where(x => x.User.Id == userId && !x.IsAccepted)
+                .Select(x => new WarningsContentDto
+                {
+                    Content = x.Content
+                }).ToListAsync();
         }
         public async Task<WarningDataModel> CreateAsync(WarningDataModel warning)
         {
@@ -42,14 +51,14 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<bool> ExistsByUserAsync(UserDataModel user)
         {
-            return await _context.WarningDataModels.AnyAsync(x => x.User==user);
+            return await _context.WarningDataModels.AnyAsync(x => x.User == user);
         }
         public async Task<List<ShowWarningsDto>> GetWarningsContentByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId)
                 .Select(u => new ShowWarningsDto
-                { 
-                    Content = u.Content 
+                {
+                    Content = u.Content
                 }).ToListAsync();
         }
     }

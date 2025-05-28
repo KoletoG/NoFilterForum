@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Core.Models.ViewModels;
 using Ganss.Xss;
 using Microsoft.Build.Framework;
@@ -47,6 +48,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<List<ShowWarningsDto>> GetWarningsByUserIdAsync(string userId)
         {
             return await _unitOfWork.Warnings.GetWarningsContentByUserIdAsync(userId);
+        }
+        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId)
+        {
+            return await _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync(userId);
         }
     }
 }

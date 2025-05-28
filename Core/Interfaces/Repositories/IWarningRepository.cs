@@ -1,4 +1,5 @@
 ﻿using Core.Models.DTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Core.Models.ViewModels;
 using NoFilterForum.Core.Models.DataModels;
 
@@ -10,6 +11,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<List<WarningDataModel>> GetAllByUserIdAsync(string userId);
         public Task<List<WarningDataModel>> GetAllAsync();
         public Task<WarningDataModel> CreateAsync(WarningDataModel warning);
+        public Task<List<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId);
         public Task UpdateAsync(WarningDataModel warning);
         public Task DeleteAsync(WarningDataModel warning);
         public Task<bool> ExistsByUserAsync(UserDataModel user);

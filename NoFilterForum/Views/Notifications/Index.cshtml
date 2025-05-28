@@ -25,9 +25,9 @@
 	foreach (var notification in Model.Notifications)
 	{
 		<h3>
-			@notification.UserFrom.UserName tagged you in <a asp-action="PostView" asp-route-isFromProfile="true" asp-controller="Home" asp-route-replyId="@notification.Reply.Id" asp-route-titleOfSection="" asp-route-id="@notification.Reply.Post.Id">@notification.Reply.Post.Title</a>
+			@notification.UserFromUsername tagged you in <a asp-action="PostView" asp-route-isFromProfile="true" asp-controller="Home" asp-route-replyId="@notification.ReplyId" asp-route-titleOfSection="" asp-route-id="@notification.PostId">@notification.PostTitle</a>
 		</h3>
-		<h4><i>@notification.Reply.Content</i></h4>
+		<h4><i>@notification.ReplyContent</i></h4>
 	}
 	if (Model.Notifications.Any())
 	{

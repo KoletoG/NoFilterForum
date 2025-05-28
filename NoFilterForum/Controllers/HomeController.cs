@@ -366,23 +366,6 @@ namespace Web.Controllers
             title = HttpUtility.UrlEncode(title);
             return View(new PostsViewModel(currentUser, posts, title, page, allPages));
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Notifications()
-        {
-            var user = await _ioService.GetUserByNameAsync(User.Identity.Name);
-            var notifications = new List<NotificationDataModel>();
-            if (await _context.NotificationDataModels.AnyAsync(x => x.UserTo == user))
-            {
-                notifications = await _context.NotificationDataModels.AsNoTracking().Include(x => x.UserTo).Include(x => x.UserFrom).Include(x => x.Reply).ThenInclude(x => x.Post).Where(x => x.UserTo == user).ToListAsync();
-            }
-            var warnings = new List<WarningDataModel>();
-            if (await _context.WarningDataModels.AnyAsync(x => x.User == user && !x.IsAccepted))
-            {
-                warnings = await _context.WarningDataModels.AsNoTracking().Where(x => x.User == user && !x.IsAccepted).ToListAsync();
-            }
-            return View(new NotificationViewModel(warnings, notifications));
-        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -3,15 +3,18 @@ using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Core.Models.ViewModels;
 
 namespace Web.Controllers
 {
     public class NotificationsController : Controller
     {
         private readonly INotificationService _notificationService;
-        public NotificationsController(INotificationService notificationService) 
+        private readonly IWarningService _warningService;
+        public NotificationsController(INotificationService notificationService, IWarningService warningService) 
         {
             _notificationService = notificationService;
+            _warningService = warningService;
         }
         [HttpPost]
         [Authorize]
@@ -42,6 +45,8 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId);
+            var warningsContentDtosList = await _warningService.GetWarningsContentDtosByUserIdAsync(userId);
+            return View(new NotificationViewModel(warningsContentDtosList, notificationsDtoList));
         }
     }
 }

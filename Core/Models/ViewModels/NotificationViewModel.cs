@@ -1,12 +1,13 @@
-﻿using NoFilterForum.Core.Models.DataModels;
+﻿using Core.Models.DTOs.OutputDTOs;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Models.ViewModels
 {
     public class NotificationViewModel
     {
-        public List<WarningDataModel> Warnings { get; set; }
-        public List<NotificationDataModel> Notifications { get; set; }
-        public NotificationViewModel(List<WarningDataModel> warnings,List<NotificationDataModel> notifications) 
+        public List<WarningsContentDto> Warnings { get; set; }
+        public List<NotificationsDto> Notifications { get; set; }
+        public NotificationViewModel(List<WarningsContentDto> warnings,List<NotificationsDto> notifications) 
         {
             Warnings = warnings;
             Notifications = notifications;
