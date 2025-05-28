@@ -2,7 +2,7 @@
 
 namespace Web.Requests
 {
-    public class GiveWarningRequest
+    public class GiveWarningDto
     {
         [Required]
         public string UserId { get; set; }

@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NoFilterForum.Core.Interfaces.Services;
 
 namespace Web.Controllers
 {
     public class ProfileController : Controller
     {
-        public IActionResult Index()
+        private readonly IUserService _userService;
+        public ProfileController(IUserService userService)
         {
-            return View();
+            _userService = userService;
         }
     }
 }

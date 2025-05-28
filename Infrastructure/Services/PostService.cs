@@ -2,7 +2,7 @@
 using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
-using Core.Models.DTOs;
+using Core.Models.DTOs.InputDTOs;
 using Core.Utility;
 using Ganss.Xss;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

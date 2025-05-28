@@ -139,7 +139,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GiveWarning(GiveWarningRequest giveWarningRequest)
+        public async Task<IActionResult> GiveWarning(GiveWarningDto giveWarningRequest)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {

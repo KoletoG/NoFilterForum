@@ -14,4 +14,8 @@
 		<PackageReference Include="Nanoid" Version="3.1.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Models\DTOs\Use-case dtos\" />
+	</ItemGroup>
+
 </Project>

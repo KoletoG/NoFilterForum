@@ -1,6 +1,5 @@
 ﻿using Core.Enums;
 using System.Web;
-using Core.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Services;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using System.Security.Claims;
 using Ganss.Xss;
+using Core.Models.DTOs.InputDTOs;
 
 namespace Web.Controllers
 {

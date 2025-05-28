@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs
+namespace Core.Models.DTOs.InputDTOs
 {
     public class CreatePostDto
     {

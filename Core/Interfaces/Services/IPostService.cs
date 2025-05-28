@@ -1,5 +1,5 @@
 ﻿using Core.Enums;
-using Core.Models.DTOs;
+using Core.Models.DTOs.InputDTOs;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Interfaces.Services
