@@ -1,7 +1,9 @@
-﻿using Core.Constants;
+﻿using System.Runtime.InteropServices.Marshalling;
+using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
@@ -34,11 +36,11 @@ namespace NoFilterForum.Infrastructure.Services
             _replyService = replyService;
         }
         // Add paging
-        public async Task<List<UserDataModel>> GetAllUsersWithoutDefaultAsync()
+        public async Task<List<UserItemForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()
         {
-            if (!_memoryCache.TryGetValue($"usersListNoDefault", out List<UserDataModel> users))
+            if (!_memoryCache.TryGetValue($"usersListNoDefault", out List<UserItemForAdminPanelDto> users))
             {
-                users = await _unitOfWork.Users.GetAllNoDefaultAsync();
+                users = await _unitOfWork.Users.GetUserItemsForAdminDtoAsync();
                 _memoryCache.Set($"usersListNoDefault", users, TimeSpan.FromMinutes(5));
             }
             return users;
@@ -161,6 +163,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> BanUserByIdAsync(string userId)
         {
+
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {

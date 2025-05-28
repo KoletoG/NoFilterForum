@@ -1,4 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using Core.Models.DTOs.OutputDTOs;
+using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
@@ -34,6 +36,13 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<UserDataModel>> GetAllNoDefaultAsync()
         {
            return await _context.Users.AsNoTracking().Where(x => x.UserName != UserConstants.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
+        }
+        public async Task<List<UserItemForAdminPanelDto>> GetUserItemsForAdminDtoAsync()
+        {
+            return await _context.Users.AsNoTracking()
+                .Where(x => x.UserName != UserConstants.DefaultUser.UserName)
+                .Select(x => new UserItemForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role))
+                .ToListAsync();
         }
         public async Task<UserDataModel> CreateAsync(UserDataModel user)
         {

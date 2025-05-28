@@ -14,6 +14,8 @@ using Core.Enums;
 using Core.Constants;
 using Core.Models.ViewModels;
 using Web.ViewModels;
+using Core.Models.DTOs.OutputDTOs;
+using Web.Mappers.Admin;
 
 namespace Web.Controllers
 {
@@ -132,9 +134,10 @@ namespace Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             var users = await _userService.GetAllUsersWithoutDefaultAsync();
+            var userViewModel = users.Select(AdminMappers.MapToViewModel).ToList();
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
             bool hasReports = await _reportService.AnyReportsAsync();
-            return View(new AdminPanelViewModel(users,hasReports,notConfirmedExist)); // needs to change
+            return View(new AdminPanelViewModel(userViewModel, hasReports,notConfirmedExist));
         }
         [HttpPost]
         [Authorize]
