@@ -36,9 +36,9 @@ namespace NoFilterForum.Infrastructure.Services
             _replyService = replyService;
         }
         // Add paging
-        public async Task<List<UserItemForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()
+        public async Task<List<UsersForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()
         {
-            if (!_memoryCache.TryGetValue($"usersListNoDefault", out List<UserItemForAdminPanelDto> users))
+            if (!_memoryCache.TryGetValue($"usersListNoDefault", out List<UsersForAdminPanelDto> users))
             {
                 users = await _unitOfWork.Users.GetUserItemsForAdminDtoAsync();
                 _memoryCache.Set($"usersListNoDefault", users, TimeSpan.FromMinutes(5));

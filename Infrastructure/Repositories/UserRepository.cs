@@ -37,11 +37,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
            return await _context.Users.AsNoTracking().Where(x => x.UserName != UserConstants.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
         }
-        public async Task<List<UserItemForAdminPanelDto>> GetUserItemsForAdminDtoAsync()
+        public async Task<List<UsersForAdminPanelDto>> GetUserItemsForAdminDtoAsync()
         {
             return await _context.Users.AsNoTracking()
                 .Where(x => x.UserName != UserConstants.DefaultUser.UserName)
-                .Select(x => new UserItemForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role))
+                .Select(x => new UsersForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role))
                 .ToListAsync();
         }
         public async Task<UserDataModel> CreateAsync(UserDataModel user)

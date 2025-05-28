@@ -8,6 +8,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Core.Models.DTOs.OutputDTOs
 {
-    public record UserItemForAdminPanelDto (string Email, string Id, string Username, int WarningsCount, UserRoles Role);
+    public record UsersForAdminPanelDto (string Email, string Id, string Username, int WarningsCount, UserRoles Role);
     
 }
