@@ -24,9 +24,11 @@ namespace Web.Controllers
             { 
                 return BadRequest(ModelState);
             }
-            if (await _userService.EmailExistsAsync(changeEmailViewModel.Email))
+            var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
+            if (emailExists)
             {
-                return BadRequest("Email already exists"); // Change this to not show an error page
+                ModelState.AddModelError(nameof(changeEmailViewModel.Email), "Email already exists");
+                return View(changeEmailViewModel); // Change this to redirect to Profile after Clean Architecture
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
