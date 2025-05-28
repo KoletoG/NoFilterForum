@@ -41,7 +41,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             if (string.IsNullOrEmpty(id))
             {
@@ -63,7 +63,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             if (string.IsNullOrEmpty(postId))
             {
@@ -85,10 +85,10 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             var reports = await _reportService.GetAllReportsAsync();
-            return View(new ReportsViewModel(reports));
+            return View(new ReportsViewModel(reports)); // needs to change
         }
         [Authorize]
         [Route("Reasons")]
@@ -96,10 +96,10 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             var users = await _userService.GetAllUnconfirmedUsersAsync();
-            return View(new ReasonsViewModel(users));
+            return View(new ReasonsViewModel(users)); // needs to change
         }
         [HttpPost]
         [Authorize]
@@ -108,7 +108,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             if (string.IsNullOrEmpty(userId))
             {
@@ -125,16 +125,16 @@ namespace Web.Controllers
         }
         [Authorize] // make authorize with roles
         [Route("Adminpanel")]
-        public async Task<IActionResult> AdminPanel()
+        public async Task<IActionResult> Index()
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             var users = await _userService.GetAllUsersWithoutDefaultAsync();
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
             bool hasReports = await _reportService.AnyReportsAsync();
-            return View(new AdminPanelViewModel(users,hasReports,notConfirmedExist));
+            return View(new AdminPanelViewModel(users,hasReports,notConfirmedExist)); // needs to change
         }
         [HttpPost]
         [Authorize]
@@ -143,7 +143,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             if (!ModelState.IsValid)
             {
@@ -173,7 +173,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             if (string.IsNullOrEmpty(id))
             {
@@ -182,7 +182,7 @@ namespace Web.Controllers
             var result = await _userService.BanUserByIdAsync(id);
             return result switch
             {
-                PostResult.Success => RedirectToAction(nameof(AdminPanel)),
+                PostResult.Success => RedirectToAction(nameof(Index)),
                 PostResult.NotFound => NotFound(id),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
@@ -195,7 +195,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             id = HttpUtility.UrlDecode(id);
             if (string.IsNullOrEmpty(id))
