@@ -7,7 +7,7 @@ namespace Web.Mappers.Admin
 {
     public static class AdminMappers
     {
-        public static UserItemsAdminViewModel MapToViewModel(UsersForAdminPanelDto dto) => new()
+        public static UserItemsAdminViewModel MapToViewModel(UserForAdminPanelDto dto) => new()
         {
             Email = dto.Email,
             Id = dto.Id,
