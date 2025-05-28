@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.OutputDTOs;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
@@ -37,5 +38,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId)
+        {
+            return await _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync(userId);
+        }            
     }
 }

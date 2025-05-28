@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs.OutputDTOs;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
@@ -37,6 +38,19 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task DeleteAsync(NotificationDataModel notification)
         {
             _context.NotificationDataModels.Remove(notification);
+        }
+        public async Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
+        {
+            return await _context.NotificationDataModels.Where(x=>x.UserTo.Id == userId)
+                .Select(x=>new NotificationsDto
+                {
+                    PostId=x.Reply.Post.Id,
+                    ReplyContent = x.Reply.Content,
+                    ReplyId=x.Reply.Id,
+                    PostTitle=x.Reply.Post.Title,
+                    UserFromUsername = x.UserFrom.UserName
+                })
+                .ToListAsync();
         }
         public async Task DeleteRangeAsync(List<NotificationDataModel> notifications)
         {

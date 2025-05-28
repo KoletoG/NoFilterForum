@@ -41,7 +41,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-
+            var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId);
         }
     }
 }
