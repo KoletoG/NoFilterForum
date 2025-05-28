@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.ViewModels;
+using Web.ViewModels;
 
 namespace Web.Controllers
 {
@@ -46,7 +47,19 @@ namespace Web.Controllers
             }
             var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId);
             var warningsContentDtosList = await _warningService.GetWarningsContentDtosByUserIdAsync(userId);
-            return View(new NotificationViewModel(warningsContentDtosList, notificationsDtoList));
+            var notificationsItemsViewModels = notificationsDtoList.Select(x =>new NotificationItemViewModel
+            {
+                PostId = x.PostId,
+                PostTitle = x.PostTitle,
+                UserFromUsername = x.UserFromUsername,
+                ReplyContent = x.ReplyContent,
+                ReplyId = x.ReplyId
+            }).ToList();
+            var warningsItemViewModel = warningsContentDtosList.Select(x => new WarningItemViewModel
+            {
+                Content = x.Content
+            }).ToList();
+            return View(new NotificationViewModel(warningsItemViewModel, notificationsItemsViewModels));
         }
     }
 }
