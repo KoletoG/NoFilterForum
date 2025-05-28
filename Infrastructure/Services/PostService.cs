@@ -66,16 +66,16 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }
-        public async Task<PostResult> CreatePostAsync(CreatePostDto createDto, string userId)
+        public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {
-            string sanitizedFormattedBody = TextFormatter.FormatPostBody(_htmlSanitizer.Sanitize(createDto.Body));
-            string sanitizedTitle = _htmlSanitizer.Sanitize(createDto.Title);
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            string sanitizedFormattedBody = TextFormatter.FormatPostBody(_htmlSanitizer.Sanitize(createPost.Body));
+            string sanitizedTitle = _htmlSanitizer.Sanitize(createPost.Title);
+            var user = await _unitOfWork.Users.GetByIdAsync(createPost.UserId);
             if (user == null)
             {
                 return PostResult.NotFound;
             }
-            var section = await _unitOfWork.Sections.GetWithPostsByTitleAsync(createDto.TitleOfSection);
+            var section = await _unitOfWork.Sections.GetWithPostsByTitleAsync(createPost.TitleOfSection);
             if (section == null)
             {
                 return PostResult.NotFound;

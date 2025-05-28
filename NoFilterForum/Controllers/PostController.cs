@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using System.Security.Claims;
 using Ganss.Xss;
+using Web.ViewModels;
 using Core.Models.DTOs.InputDTOs;
 
 namespace Web.Controllers
@@ -23,7 +24,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreatePostDto createDto)
+        public async Task<IActionResult> Create(CreatePostViewModel createDto)
         {
             if (!ModelState.IsValid)
             {
@@ -41,7 +42,14 @@ namespace Web.Controllers
                 return RedirectToAction("PostsMain", "Home", new { title = createDto.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
             createDto.TitleOfSection = HttpUtility.UrlDecode(createDto.TitleOfSection);
-            var result = await _postService.CreatePostAsync(createDto, userId);
+            var createPostRequest = new CreatePostRequest
+            {
+                Body = createDto.Body,
+                Title = createDto.Title,
+                TitleOfSection = createDto.TitleOfSection,
+                UserId = userId
+            };
+            var result = await _postService.CreatePostAsync(createPostRequest);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
