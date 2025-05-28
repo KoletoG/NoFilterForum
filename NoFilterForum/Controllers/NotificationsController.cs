@@ -16,7 +16,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete() // Might change to read with IsMarked property in NotificaitonsDataModel
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
