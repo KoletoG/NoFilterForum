@@ -32,7 +32,7 @@
 		</form>
 		<form asp-action="ChangeEmail" asp-controller="Home" method="post">
 			@Html.AntiForgeryToken()
-			<input name="email" type="text" placeholder="New email..." />
+			<input name="Email" type="text" placeholder="New email..." />
 			<button type="submit">Change Email</button>
 		</form>
 		<form asp-action="ChangeImage" asp-controller="Home" method="post" enctype="multipart/form-data">

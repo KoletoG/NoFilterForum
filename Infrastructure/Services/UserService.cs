@@ -1,6 +1,7 @@
 ﻿using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.InputDTOs;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -35,6 +36,29 @@ namespace NoFilterForum.Infrastructure.Services
                 _memoryCache.Set($"usersListNoDefault", users, TimeSpan.FromMinutes(5));
             }
             return users;
+        }
+        public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            user.ChangeEmail(changeEmailRequest.Email);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            { 
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Email wasn't updated for user with Id: {UserId}", user.Id);
+                return PostResult.UpdateFailed;
+            }
         }
         public async Task<bool> AnyNotConfirmedUsersAsync()
         {

@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Core.Models.DTOs.InputDTOs;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Interfaces.Services
@@ -12,5 +13,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> BanUserByIdAsync(string userId);
         public Task<UserDataModel> GetUserWithWarningsByIdAsync(string userId);
         public Task<UserDataModel> GetUserByIdAsync(string id);
+        public Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest);
     }
 }
