@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Requests
+namespace Web.ViewModels
 {
-    public class GiveWarningDto
+    public class GiveWarningViewModel
     {
         [Required]
         public string UserId { get; set; }

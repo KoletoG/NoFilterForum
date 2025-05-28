@@ -12,8 +12,8 @@ using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Services;
 using Core.Enums;
 using Core.Constants;
-using Web.Requests;
 using Core.Models.ViewModels;
+using Web.ViewModels;
 
 namespace Web.Controllers
 {
@@ -139,7 +139,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GiveWarning(GiveWarningDto giveWarningRequest)
+        public async Task<IActionResult> GiveWarning(GiveWarningViewModel giveWarningRequest)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
