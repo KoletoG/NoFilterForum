@@ -43,7 +43,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             if (string.IsNullOrEmpty(id))
             {
@@ -65,7 +65,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             if (string.IsNullOrEmpty(postId))
             {
@@ -87,7 +87,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             var reports = await _reportService.GetAllReportsAsync();
             return View(new ReportsViewModel(reports)); // needs to change
@@ -98,7 +98,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             var users = await _userService.GetAllUnconfirmedUsersAsync();
             return View(new ReasonsViewModel(users)); // needs to change
@@ -110,7 +110,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index","Home");
+                return Forbid();
             }
             if (string.IsNullOrEmpty(userId))
             {
@@ -131,7 +131,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             var users = await _userService.GetAllUsersWithoutDefaultAsync();
             var userViewModel = users.Select(AdminMappers.MapToViewModel).ToList();
@@ -146,7 +146,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             if (!ModelState.IsValid)
             {
@@ -176,7 +176,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             if (string.IsNullOrEmpty(id))
             {
@@ -198,7 +198,7 @@ namespace Web.Controllers
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
-                return RedirectToAction("Index", "Home");
+                return Forbid();
             }
             id = HttpUtility.UrlDecode(id);
             if (string.IsNullOrEmpty(id))
