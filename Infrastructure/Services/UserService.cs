@@ -94,10 +94,19 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
-                return PostResult.Success;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _unitOfWork.CommitTransactionAsync();
+                    await _signInManager.SignOutAsync();
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return PostResult.Success;
+                }
+                else
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return PostResult.UpdateFailed;
+                }
             }
             catch (Exception ex)
             {
