@@ -505,25 +505,7 @@ namespace Web.Controllers
             await _context.NotificationDataModels.Where(x => x.UserTo.UserName == User.Identity.Name).ExecuteDeleteAsync();
             return RedirectToAction("Notifications", "Home");
         }
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeUsername(string username)
-        {
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            currentUser.UserName = username;
-            var result = await _userManager.UpdateAsync(currentUser);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignOutAsync();
-                await _signInManager.SignInAsync(currentUser, isPersistent: false);
-            }
-            return RedirectToAction("Index", "Home");
-        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]

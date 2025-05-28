@@ -90,7 +90,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            user.ChangeEmail(changeEmailRequest.Email);
+            user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
