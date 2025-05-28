@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Core.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 
 namespace Web.Controllers
@@ -9,6 +12,25 @@ namespace Web.Controllers
         public NotificationsController(INotificationService notificationService) 
         {
             _notificationService = notificationService;
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var result = await _notificationService.DeleteByUserIdAsync(userId);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Notifications", "Home"), // Change that to ("Notifications or Index","Notifications")
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }

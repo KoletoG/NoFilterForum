@@ -21,21 +21,26 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.NotificationDataModels.ToListAsync();
         }
+        public async Task<List<NotificationDataModel>> GetAllByUserIdAsync(string userId)
+        {
+            return await _context.NotificationDataModels.Where(x=>x.UserTo.Id==userId).ToListAsync();
+        }
         public async Task<NotificationDataModel> CreateAsync(NotificationDataModel notification)
         {
             await _context.NotificationDataModels.AddAsync(notification);
-            await _context.SaveChangesAsync();
             return notification;
         }
         public async Task UpdateAsync(NotificationDataModel notification)
         {
             _context.NotificationDataModels.Update(notification);
-            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(NotificationDataModel notification)
         {
             _context.NotificationDataModels.Remove(notification);
-            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteRangeAsync(List<NotificationDataModel> notifications)
+        {
+            _context.NotificationDataModels.RemoveRange(notifications);
         }
     }
 }
