@@ -14,7 +14,7 @@ using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Infrastructure.Services
 {
-   
+
 
     public class PostService : IPostService
     {
@@ -61,7 +61,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return false;
             }
-            if(dateOfLastPost.AddMinutes(PostConstants.TimeoutPosts)>DateTime.Now)
+            if (dateOfLastPost.AddMinutes(PostConstants.TimeoutPosts) > DateTime.Now)
             {
                 return true;
             }
@@ -106,11 +106,9 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
         }
-        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(string sectionTitle, int page)
+        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest)
         {
-            var totalPageCount = await GetPostsCountBySectionTitleAsync(sectionTitle);
-            return await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(sectionTitle, page, PostConstants.PostsPerSection);
-
+            return await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(getIndexPostRequest.TitleOfSection, getIndexPostRequest.Page, PostConstants.PostsPerSection);
         }
     }
 }

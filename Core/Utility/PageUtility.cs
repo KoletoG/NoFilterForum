@@ -9,23 +9,27 @@ namespace Core.Utility
 {
     public static class PageUtility
     {
-        public static int CalculateAllPages(int totalCount, int countPerPage)
+        public static int GetTotalPagesCount(int totalCount, int countPerPage)
         {
+            if (totalCount==1 || totalCount==0)
+            {
+                return 1;
+            }
             return Convert.ToInt32(Math.Ceiling((double)totalCount / countPerPage));
         }
         public static int ValidatePageNumber(int page, int totalPages)
         {
-            if (page < 1)
+            if (totalPages == 1)
+            {
+                return 1;
+            }
+            else if (page < 1)
             {
                 return 1;
             }
             else if(page>totalPages)
             {
                 return totalPages;
-            }
-            else if (totalPages == 1)
-            {
-                return 1;
             }
             else
             {

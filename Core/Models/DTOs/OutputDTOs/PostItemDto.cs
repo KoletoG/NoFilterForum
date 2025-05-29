@@ -13,6 +13,5 @@ namespace Core.Models.DTOs.OutputDTOs
         public string Username { get; set; }
         public UserRoles Role {  get; set; }
         public DateTime DateCreated { get; set; }
-
     }
 }

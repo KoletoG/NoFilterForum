@@ -13,6 +13,8 @@ using Web.ViewModels;
 using Core.Models.DTOs.InputDTOs;
 using Web.Mappers.Posts;
 using NoFilterForum.Core.Models.ViewModels;
+using Core.Constants;
+using Core.Utility;
 
 namespace Web.Controllers
 {
@@ -71,13 +73,15 @@ namespace Web.Controllers
             {
                 return NotFound();
             }
-            var postsCount = await _postService.GetPostsCountBySectionTitleAsync(postsViewModel.TitleOfSection);
-            if(postsCount != 0)
-            {
-                postsViewModel.Page = 1;
-            }
+            var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(postsViewModel.TitleOfSection);
+            var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
+            postsViewModel.Page = PageUtility.ValidatePageNumber(postsViewModel.Page, totalPages);
+            var getIndexPostRequest = PostMappers.MapToRequest(postsViewModel);
+            var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
             postsViewModel.TitleOfSection = HttpUtility.UrlEncode(postsViewModel.TitleOfSection);
-            return View();
+            var postIndexItemsVMs = postDtoList.Select(PostMappers.MapToViewModel).ToList();
+            var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, postsViewModel.Page, totalPages, postsViewModel.TitleOfSection);
+            return View(postIndexViewModel);
         }
     }
 }
