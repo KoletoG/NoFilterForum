@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Ganss.Xss;
 using Web.ViewModels;
 using Core.Models.DTOs.InputDTOs;
+using Web.Mappers.Posts;
 
 namespace Web.Controllers
 {
@@ -24,13 +25,13 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreatePostViewModel createDto)
+        public async Task<IActionResult> Create(CreatePostViewModel createVM)
         {
             if (!ModelState.IsValid)
             {
                 string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
                 errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("Index", "Home", new { errors = errorsJson });
+                return RedirectToAction("Index", "Home", new { errors = errorsJson }); // Change that
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -39,22 +40,16 @@ namespace Web.Controllers
             }
             if (await _postService.HasTimeoutAsync(userId))
             {
-                return RedirectToAction("PostsMain", "Home", new { title = createDto.TitleOfSection, errorTime = true }); // Need to change errorTime
+                return RedirectToAction("PostsMain", "Home", new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
-            createDto.TitleOfSection = HttpUtility.UrlDecode(createDto.TitleOfSection);
-            var createPostRequest = new CreatePostRequest
-            {
-                Body = createDto.Body,
-                Title = createDto.Title,
-                TitleOfSection = createDto.TitleOfSection,
-                UserId = userId
-            };
+            createVM.TitleOfSection = HttpUtility.UrlDecode(createVM.TitleOfSection);
+            var createPostRequest = PostMappers.MapToRequest(createVM, userId);
             var result = await _postService.CreatePostAsync(createPostRequest);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("PostsMain","Home", new { title = HttpUtility.UrlEncode(createDto.TitleOfSection) }),
+                PostResult.Success => RedirectToAction("PostsMain","Home", new { title = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
                 _ => Problem("Invalid result")
             };
         }

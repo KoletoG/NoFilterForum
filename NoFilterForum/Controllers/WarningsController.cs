@@ -48,7 +48,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)); // Change that
             }
             var createWarningRequest = WarningMappers.MapToRequest(createWarningViewModel);
             var result = await _warningService.AddWarningAsync(createWarningRequest);
