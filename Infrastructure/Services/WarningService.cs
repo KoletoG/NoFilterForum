@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs;
+using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Ganss.Xss;
 using Microsoft.Build.Framework;
@@ -24,10 +25,15 @@ namespace NoFilterForum.Infrastructure.Services
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
         }
-        public async Task<PostResult> AddWarningAsync(string content, UserDataModel user)
+        public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {
-            content = _htmlSanitizer.Sanitize(content);
-            var warning = new WarningDataModel(content, user);
+            var user = await _unitOfWork.Users.GetUserWithWarningsByIdAsync(createWarningRequest.UserId);
+            if(user == null)
+            {
+                return PostResult.NotFound;
+            }
+            createWarningRequest.Content = _htmlSanitizer.Sanitize(createWarningRequest.Content);
+            var warning = new WarningDataModel(createWarningRequest.Content, user);
             user.Warnings.Add(warning);
             try
             {

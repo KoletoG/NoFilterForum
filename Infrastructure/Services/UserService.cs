@@ -129,10 +129,6 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Users.GetByIdAsync(id);
         }
-        public async Task<UserDataModel> GetUserWithWarningsByIdAsync(string userId)
-        {
-            return await _unitOfWork.Users.GetUserWithWarningsByIdAsync(userId);
-        }
         public async Task<PostResult> ConfirmUserAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);

@@ -44,7 +44,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateWarningViewModel giveWarningRequest)
+        public async Task<IActionResult> Create(CreateWarningViewModel createWarningViewModel)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
@@ -54,17 +54,13 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            var user = await _userService.GetUserWithWarningsByIdAsync(giveWarningRequest.UserId);
-            if (user == null)
-            {
-                return NotFound(giveWarningRequest.UserId);
-            }
-            var result = await _warningService.AddWarningAsync(giveWarningRequest.Content, user);
+            var createWarningRequest = WarningMappers.MapToRequest(createWarningViewModel);
+            var result = await _warningService.AddWarningAsync(createWarningRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Profile", "Home", new { userName = user.UserName }),
+                PostResult.Success => RedirectToAction("Profile", "Home", new { userName = "CHANGE" }), // Change to ID
                 PostResult.UpdateFailed => Problem(),
-                PostResult.NotFound => NotFound(giveWarningRequest.UserId),
+                PostResult.NotFound => NotFound(createWarningViewModel.UserId),
                 _ => Problem()
             };
         }
