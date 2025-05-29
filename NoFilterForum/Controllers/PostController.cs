@@ -74,13 +74,8 @@ namespace Web.Controllers
             var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
             var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
             page = PageUtility.ValidatePageNumber(page, totalPages);
-            var getIndexPostRequest = new GetIndexPostRequest
-            {
-                TitleOfSection = titleOfSection,
-                Page = page
-            };
+            var getIndexPostRequest = PostMappers.MapToRequest(page, titleOfSection);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
-            titleOfSection = HttpUtility.UrlEncode(titleOfSection);
             var postIndexItemsVMs = postDtoList.Select(PostMappers.MapToViewModel).ToList();
             var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, page, totalPages, titleOfSection);
             return View(postIndexViewModel);

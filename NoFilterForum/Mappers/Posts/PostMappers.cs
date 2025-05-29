@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.InputDTOs;
+﻿using System.Web;
+using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Web.ViewModels;
 
@@ -18,7 +19,7 @@ namespace Web.Mappers.Posts
             Posts = itemVMs,
             Page = page,
             TotalPages = totalPages,
-            TitleOfSection = titleOfSection
+            TitleOfSection = HttpUtility.UrlEncode(titleOfSection)
         };
         public static PostIndexItemViewModel MapToViewModel(PostItemDto dto) => new()
         {
@@ -28,6 +29,11 @@ namespace Web.Mappers.Posts
             Title = dto.Title,
             Role= dto.Role,
             Username= dto.Username
+        };
+        public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new()
+        {
+            Page = page,
+            TitleOfSection = titleOfSection
         };
     }
 }
