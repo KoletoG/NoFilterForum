@@ -323,49 +323,6 @@ namespace Web.Controllers
             _memoryCache.Remove($"repliesUser_{user.UserName}");
             return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
         }
-        [HttpGet]
-        [Route("Posts/{title}")]
-        [Route("Posts/{title}/page-{page}")]
-        [Route("Posts/{title}/error-{errorTime}")]
-        [Route("Posts/{title}/error-{errorTime}/page-{page}")]
-        [Authorize]
-        public async Task<IActionResult> PostsMain(string title, int page = 1, bool errorTime = false)
-        {
-            title = HttpUtility.UrlDecode(title);
-            if (errorTime)
-            {
-                ViewBag.ErrorTime = "Posts can be created once every 15 minutes!";
-            }
-            var postsCount = await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x => x.Posts).CountAsync();
-            var allPages = Math.Ceiling((double)postsCount / countPerPage);
-            if (page < 1)
-            {
-                page = 1;
-            }
-            else if (page > allPages)
-            {
-                page = (int)allPages;
-            }
-            List<PostDataModel> posts = new List<PostDataModel>();
-            if (await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x => x.Posts).AnyAsync())
-            {
-                posts = await _context.SectionDataModels.AsNoTracking()
-                    .Where(x => x.Title == title)
-                    .Include(x => x.Posts)
-                    .ThenInclude(x => x.User)
-                    .SelectMany(x => x.Posts)
-                    .OrderByDescending(x=>x.IsPinned)
-                    .ThenByDescending(x=>x.DateCreated)
-                    .Skip((page - 1) * countPerPage)
-                    .Take(countPerPage)
-                    .ToListAsync();
-            }
-            var currentUser = await _context.Users.AsNoTracking()
-                .Where(x => x.UserName == User.Identity.Name)
-                .FirstAsync();
-            title = HttpUtility.UrlEncode(title);
-            return View(new PostsViewModel(currentUser, posts, title, page, allPages));
-        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

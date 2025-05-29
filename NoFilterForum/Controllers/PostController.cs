@@ -56,7 +56,7 @@ namespace Web.Controllers
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("PostsMain","Home", new { title = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
+                PostResult.Success => RedirectToAction("Index","Post", new { titleOfSection = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
                 _ => Problem("Invalid result")
             };
         }
@@ -64,6 +64,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string titleOfSection, int page=1)
         {
+            // Error TIME FIX
             titleOfSection = HttpUtility.UrlDecode(titleOfSection);
             bool sectionExists = await _sectionService.ExistsSectionByTitleAsync(titleOfSection);
             if (!sectionExists)
