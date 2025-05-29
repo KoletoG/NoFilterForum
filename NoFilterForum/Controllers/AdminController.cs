@@ -133,8 +133,8 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
-            var users = await _userService.GetAllUsersWithoutDefaultAsync();
-            var userViewModel = users.Select(AdminMappers.MapToViewModel).ToList();
+            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync();
+            var userViewModel = usersDto.Select(AdminMappers.MapToViewModel).ToList();
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
             bool hasReports = await _reportService.AnyReportsAsync();
             return View(new AdminPanelViewModel(userViewModel, hasReports,notConfirmedExist));

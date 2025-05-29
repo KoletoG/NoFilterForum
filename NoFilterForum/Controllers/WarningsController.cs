@@ -19,10 +19,6 @@ namespace Web.Controllers
             _warningService = warningService;
             _userService = userService;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
         [Authorize]
         [HttpGet]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
