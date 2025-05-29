@@ -11,6 +11,8 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<SectionDataModel> CreateAsync(SectionDataModel section);
         public Task UpdateAsync(SectionDataModel section);
         public Task DeleteAsync(SectionDataModel section);
+        public Task<int> GetPostsCountByTitleAsync(string title);
+
         public Task<bool> ExistsByTitleAsync(string title);
     }
 }

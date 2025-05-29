@@ -12,14 +12,17 @@ using Ganss.Xss;
 using Web.ViewModels;
 using Core.Models.DTOs.InputDTOs;
 using Web.Mappers.Posts;
+using NoFilterForum.Core.Models.ViewModels;
 
 namespace Web.Controllers
 {
     public class PostController : Controller
     {
         private readonly IPostService _postService;
-        public PostController(IPostService postService)
+        private readonly IUserService _userService;
+        public PostController(IPostService postService, IUserService userService)
         {
+            _userService = userService;
             _postService = postService;
         }
         [HttpPost]
@@ -52,6 +55,24 @@ namespace Web.Controllers
                 PostResult.Success => RedirectToAction("PostsMain","Home", new { title = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
                 _ => Problem("Invalid result")
             };
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Index(GetPostsViewModel postsViewModel)
+        {
+            postsViewModel.TitleOfSection = HttpUtility.UrlDecode(postsViewModel.TitleOfSection);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var currentUser = await _userService.GetUserByIdAsync(userId);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            postsViewModel.TitleOfSection = HttpUtility.UrlEncode(postsViewModel.TitleOfSection);
+            return View();
         }
     }
 }

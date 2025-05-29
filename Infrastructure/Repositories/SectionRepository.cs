@@ -38,6 +38,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.SectionDataModels.Remove(section);
         }
+        public async Task<int> GetPostsCountByTitleAsync(string title)
+        {
+            return await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x => x.Posts).CountAsync();
+        }
         public async Task<bool> ExistsByTitleAsync(string title)
         {
             return await _context.SectionDataModels.AnyAsync(x => x.Title == title);

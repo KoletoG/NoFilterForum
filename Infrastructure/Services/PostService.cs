@@ -101,5 +101,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<int> PostsCountBySectionTitleAsync(string sectionTitle)
+        {
+            return await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
+        }
     }
 }
