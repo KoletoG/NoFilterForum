@@ -12,10 +12,10 @@ using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Services;
 using Core.Enums;
 using Core.Constants;
-using Core.Models.ViewModels;
 using Web.ViewModels;
 using Core.Models.DTOs.OutputDTOs;
 using Web.Mappers.Admin;
+using Web.Mappers.Warnings;
 
 namespace Web.Controllers
 {
@@ -206,7 +206,7 @@ namespace Web.Controllers
                 return BadRequest("Id cannot be null");
             }
             var warningsDto = await _warningService.GetWarningsByUserIdAsync(id);
-            var warningsVM = warningsDto.Select(AdminMappers.MapToViewModel).ToList();
+            var warningsVM = warningsDto.Select(WarningMappers.MapToViewModel).ToList();
             return View(warningsVM);
         }
     }

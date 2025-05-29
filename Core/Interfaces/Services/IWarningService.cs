@@ -8,7 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Services
     public interface IWarningService
     {
         public Task<PostResult> AddWarningAsync(string content, UserDataModel user);
-        public Task<List<ShowWarningsDto>> GetWarningsByUserIdAsync(string userId);
+        public Task<List<WarningsContentDto>> GetWarningsByUserIdAsync(string userId);
         public Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId);
     }
 }

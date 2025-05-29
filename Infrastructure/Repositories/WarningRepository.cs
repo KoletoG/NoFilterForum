@@ -52,10 +52,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.WarningDataModels.AnyAsync(x => x.User == user);
         }
-        public async Task<List<ShowWarningsDto>> GetWarningsContentByUserIdAsync(string userId)
+        public async Task<List<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId)
-                .Select(u => new ShowWarningsDto
+                .Select(u => new WarningsContentDto
                 {
                     Content = u.Content
                 }).ToListAsync();

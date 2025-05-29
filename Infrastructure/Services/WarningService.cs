@@ -44,7 +44,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<ShowWarningsDto>> GetWarningsByUserIdAsync(string userId)
+        public async Task<List<WarningsContentDto>> GetWarningsByUserIdAsync(string userId)
         {
             return await _unitOfWork.Warnings.GetWarningsContentByUserIdAsync(userId);
         }

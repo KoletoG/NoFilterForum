@@ -1,6 +1,5 @@
 ﻿using Core.Models.DTOs;
 using Core.Models.DTOs.OutputDTOs;
-using Core.Models.ViewModels;
 using Web.ViewModels;
 
 namespace Web.Mappers.Admin
@@ -14,10 +13,6 @@ namespace Web.Mappers.Admin
             Role = dto.Role,
             Username = dto.Username,
             WarningsCount = dto.WarningsCount
-        };
-        public static ShowWarningsViewModel MapToViewModel(ShowWarningsDto dto) => new()
-        {
-            Content = dto.Content
         };
     }
 }
