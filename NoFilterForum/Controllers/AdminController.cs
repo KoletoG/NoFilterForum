@@ -139,33 +139,7 @@ namespace Web.Controllers
             bool hasReports = await _reportService.AnyReportsAsync();
             return View(new AdminPanelViewModel(userViewModel, hasReports,notConfirmedExist));
         }
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GiveWarning(GiveWarningViewModel giveWarningRequest)
-        {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
-            }
-            var user = await _userService.GetUserWithWarningsByIdAsync(giveWarningRequest.UserId);
-            if (user == null)
-            {
-                return NotFound(giveWarningRequest.UserId);
-            }
-            var result = await _warningService.AddWarningAsync(giveWarningRequest.Content, user);
-            return result switch
-            {
-                PostResult.Success => RedirectToAction("Profile", "Home", new { userName = user.UserName }),
-                PostResult.UpdateFailed => Problem(),
-                PostResult.NotFound => NotFound(giveWarningRequest.UserId),
-                _ => Problem()
-            };
-        }
+        
             
         // Add ModelError if something went wrong, that's for every method including creating post and reply
         // ADD ENCODING

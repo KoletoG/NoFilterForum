@@ -69,7 +69,7 @@
 	if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 	{
 		<h6>The user has: @Model.User.Warnings.Count warnings</h6>
-		<form method="post" asp-action="GiveWarning" asp-controller="Admin">
+		<form method="post" asp-action="Create" asp-controller="Warnings">
 			@Html.AntiForgeryToken()
 			<input type="hidden" name="UserId" value="@Model.User.Id" />
 			<input name="Content" placeholder="Reason for warning..." type="text"/>

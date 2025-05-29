@@ -2,7 +2,7 @@
 
 namespace Web.ViewModels
 {
-    public class GiveWarningViewModel
+    public class CreateWarningViewModel
     {
         [Required]
         public string UserId { get; set; }
