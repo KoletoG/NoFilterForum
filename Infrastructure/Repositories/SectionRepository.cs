@@ -38,11 +38,17 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .Select(x=>new PostItemDto
                     {
                         DateCreated = x.DateCreated,
-                        PostId = x.Id,
+                        Id = x.Id,
                         Role = x.User.Role,
-                        Username = x.User.UserName
+                        Username = x.User.UserName,
+                        Title = x.Title,
+                        IsPinned = x.IsPinned
                     })
                     .ToListAsync();
+        }
+        public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
+        {
+            return await _context.SectionDataModels.AnyAsync(x => x.Title == sectionTitle);
         }
         public async Task<SectionDataModel> CreateAsync(SectionDataModel section)
         {

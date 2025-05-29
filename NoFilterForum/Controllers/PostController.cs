@@ -22,8 +22,10 @@ namespace Web.Controllers
     {
         private readonly IPostService _postService;
         private readonly IUserService _userService;
-        public PostController(IPostService postService, IUserService userService)
+        private readonly ISectionService _sectionService;
+        public PostController(IPostService postService,ISectionService sectionService, IUserService userService)
         {
+            _sectionService = sectionService;
             _userService = userService;
             _postService = postService;
         }
@@ -60,27 +62,26 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(GetPostsViewModel postsViewModel)
+        public async Task<IActionResult> Index(string titleOfSection, int page=1)
         {
-            postsViewModel.TitleOfSection = HttpUtility.UrlDecode(postsViewModel.TitleOfSection);
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            titleOfSection = HttpUtility.UrlDecode(titleOfSection);
+            bool sectionExists = await _sectionService.ExistsSectionByTitleAsync(titleOfSection);
+            if (!sectionExists)
             {
-                return Unauthorized();
+                return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
-            var currentUser = await _userService.GetUserByIdAsync(userId);
-            if (currentUser == null)
-            {
-                return NotFound();
-            }
-            var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(postsViewModel.TitleOfSection);
+            var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
             var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
-            postsViewModel.Page = PageUtility.ValidatePageNumber(postsViewModel.Page, totalPages);
-            var getIndexPostRequest = PostMappers.MapToRequest(postsViewModel);
+            page = PageUtility.ValidatePageNumber(page, totalPages);
+            var getIndexPostRequest = new GetIndexPostRequest
+            {
+                TitleOfSection = titleOfSection,
+                Page = page
+            };
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
-            postsViewModel.TitleOfSection = HttpUtility.UrlEncode(postsViewModel.TitleOfSection);
+            titleOfSection = HttpUtility.UrlEncode(titleOfSection);
             var postIndexItemsVMs = postDtoList.Select(PostMappers.MapToViewModel).ToList();
-            var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, postsViewModel.Page, totalPages, postsViewModel.TitleOfSection);
+            var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, page, totalPages, titleOfSection);
             return View(postIndexViewModel);
         }
     }

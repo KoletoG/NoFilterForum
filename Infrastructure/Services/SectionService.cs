@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
@@ -8,18 +9,18 @@ namespace NoFilterForum.Infrastructure.Services
 {
     public class SectionService : ISectionService
     {
-        private readonly ISectionRepository _sectionRepository;
         private readonly IMemoryCache _memoryCache;
-        public SectionService(ISectionRepository sectionRepository, IMemoryCache memoryCache)
+        private readonly IUnitOfWork _unitOfWork;
+        public SectionService(IUnitOfWork unitOfWork, IMemoryCache memoryCache)
         {
-            _sectionRepository = sectionRepository;
+            _unitOfWork = unitOfWork;
             _memoryCache = memoryCache;
         }
         public async Task<List<SectionDataModel>> GetAllSectionsAsync()
         {
             if (!_memoryCache.TryGetValue("sections", out List<SectionDataModel> sections))
             {
-                sections = await _sectionRepository.GetAllAsync();
+                sections = await _unitOfWork.Sections.GetAllAsync();
                 MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
@@ -28,6 +29,14 @@ namespace NoFilterForum.Infrastructure.Services
                 _memoryCache.Set("sections", sections, memoryCacheOptions);
             }
             return sections;
+        }
+        public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
+        {
+            if (string.IsNullOrEmpty(sectionTitle))
+            {
+                return false;
+            }
+            return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle);
         }
     }
 }

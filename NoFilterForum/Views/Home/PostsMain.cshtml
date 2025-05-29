@@ -3,10 +3,11 @@
 @using NoFilterForum.Core.Models.DataModels
 @using NoFilterForum.Core.Models.ViewModels
 @using NoFilterForum.Global_variables
-@model PostsViewModel
+@using Web.ViewModels
+@model PostIndexViewModel
 <h2 style="color:red">@ViewBag.ErrorTime</h2>
 <form asp-action="Create" asp-controller="Post" method="post">
-	<input hidden type="text" name="TitleOfSection" value="@Model.Title" />
+	<input hidden type="text" name="TitleOfSection" value="@Model.TitleOfSection" />
 	<input type="text" name="Title" placeholder="Title of the post" />
 	<input type="text" name="Body" placeholder="Body of the post" />
 	@Html.AntiForgeryToken()
@@ -54,27 +55,27 @@
 	}
 	foreach (var post in Model.Posts)
 	{
-		<a asp-action="PostView" asp-route-id="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.Title">
+		<a asp-action="PostView" asp-route-id="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 			<h3>
-				@post.Title @if (post.User.Role == UserRoles.Admin)
+				@post.Title @if (post.Role == UserRoles.Admin)
 				{
-					<h6 class="text-danger">@post.User.UserName</h6>
+					<h6 class="text-danger">@post.Username</h6>
 				}
-				else if (post.User.Role == UserRoles.VIP)
+				else if (post.Role == UserRoles.VIP)
 				{
-					<h6 class="text-warning">@post.User.UserName</h6>
+					<h6 class="text-warning">@post.Username</h6>
 				}
-				else if (post.User.Role == UserRoles.Regular)
+				else if (post.Role == UserRoles.Regular)
 				{
-					<h6 class="text-light">@post.User.UserName</h6>
+					<h6 class="text-light">@post.Username</h6>
 				}
-				else if (post.User.Role == UserRoles.Dinosaur)
+				else if (post.Role == UserRoles.Dinosaur)
 				{
-					<h6 class="text-primary">@post.User.UserName</h6>
+					<h6 class="text-primary">@post.Username</h6>
 				}
 				else
 				{
-					<h6 class="text-dark">@post.User.UserName</h6>
+					<h6 class="text-dark">@post.Username</h6>
 				}
 			</h3>
 		</a>
@@ -107,16 +108,16 @@
 	}
 	else if (Model.Page == 1)
 	{
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.Title">Next page</a>
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
 	}
 	else if (Model.Page == Model.TotalPages)
 	{
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.Title">Previous page</a>
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
 	}
 	else if (Model.Page > 1 && Model.Page < Model.TotalPages)
 	{
 
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.Title">Next page</a>
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.Title">Previous page</a>
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
+		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
 	}
 }

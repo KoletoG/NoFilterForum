@@ -13,11 +13,6 @@ namespace Web.Mappers.Posts
             TitleOfSection = vm.TitleOfSection,
             UserId = userId
         };
-        public static GetIndexPostRequest MapToRequest(GetPostsViewModel vm) => new()
-        {
-            Page = vm.Page,
-            TitleOfSection = vm.TitleOfSection
-        };
         public static PostIndexViewModel MapToViewModel(List<PostIndexItemViewModel> itemVMs, int page, int totalPages, string titleOfSection) => new()
         {
             Posts = itemVMs,
@@ -28,7 +23,9 @@ namespace Web.Mappers.Posts
         public static PostIndexItemViewModel MapToViewModel(PostItemDto dto) => new()
         {
             DateCreated = dto.DateCreated,
-            PostId= dto.PostId,
+            Id= dto.Id,
+            IsPinned= dto.IsPinned,
+            Title = dto.Title,
             Role= dto.Role,
             Username= dto.Username
         };
