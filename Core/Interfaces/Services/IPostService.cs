@@ -10,6 +10,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> PinPostAsync(string postId);
         public Task<bool> HasTimeoutAsync(string userId);
         public Task<PostResult> CreatePostAsync(CreatePostRequest createPostRequest);
-        public Task<int> PostsCountBySectionTitleAsync(string sectionTitle);
+        public Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle);
     }
 }

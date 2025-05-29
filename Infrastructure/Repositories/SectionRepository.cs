@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs.OutputDTOs;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
@@ -24,6 +25,24 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<SectionDataModel>> GetAllAsync()
         {
             return await _context.SectionDataModels.AsNoTracking().ToListAsync();
+        }
+        public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage)
+        {
+            return await _context.SectionDataModels.AsNoTracking()
+                    .Where(x => x.Title == sectionTitle)
+                    .SelectMany(x => x.Posts)
+                    .OrderByDescending(x => x.IsPinned)
+                    .ThenByDescending(x => x.DateCreated)
+                    .Skip((page - 1) * countPerPage)
+                    .Take(countPerPage)
+                    .Select(x=>new PostItemDto
+                    {
+                        DateCreated = x.DateCreated,
+                        PostId = x.Id,
+                        Role = x.User.Role,
+                        Username = x.User.UserName
+                    })
+                    .ToListAsync();
         }
         public async Task<SectionDataModel> CreateAsync(SectionDataModel section)
         {

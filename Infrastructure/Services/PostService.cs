@@ -3,6 +3,7 @@ using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Core.Utility;
 using Ganss.Xss;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -101,9 +102,15 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<int> PostsCountBySectionTitleAsync(string sectionTitle)
+        public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle)
         {
             return await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
+        }
+        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(string sectionTitle, int page)
+        {
+            var totalPageCount = await GetPostsCountBySectionTitleAsync(sectionTitle);
+            return await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(sectionTitle, page, PostConstants.PostsPerSection);
+
         }
     }
 }

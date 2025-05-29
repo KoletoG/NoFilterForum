@@ -71,6 +71,11 @@ namespace Web.Controllers
             {
                 return NotFound();
             }
+            var postsCount = await _postService.GetPostsCountBySectionTitleAsync(postsViewModel.TitleOfSection);
+            if(postsCount != 0)
+            {
+                postsViewModel.Page = 1;
+            }
             postsViewModel.TitleOfSection = HttpUtility.UrlEncode(postsViewModel.TitleOfSection);
             return View();
         }

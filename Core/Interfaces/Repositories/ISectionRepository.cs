@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs.OutputDTOs;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Interfaces.Repositories
@@ -12,7 +13,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task UpdateAsync(SectionDataModel section);
         public Task DeleteAsync(SectionDataModel section);
         public Task<int> GetPostsCountByTitleAsync(string title);
-
+        public Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage);
         public Task<bool> ExistsByTitleAsync(string title);
     }
 }
