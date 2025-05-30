@@ -10,6 +10,7 @@ namespace Core.Enums
     {
         Success,
         NotFound,
-        UpdateFailed
+        UpdateFailed,
+        Forbid
     }
 }

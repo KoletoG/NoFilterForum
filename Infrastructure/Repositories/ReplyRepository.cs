@@ -25,6 +25,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<ReplyDataModel>();
         }
+        public async Task<string> GetUserIdByReplyIdAsync(string replyId)
+        {
+            return await _context.ReplyDataModels.Where(x=>x.Id==replyId).Select(x=>x.User.Id).FirstOrDefaultAsync();
+        }
         public async Task<List<ReplyDataModel>> GetAllAsync()
         {
             return await _context.ReplyDataModels.ToListAsync();
