@@ -16,7 +16,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<UserDataModel> GetUserByIdAsync(string id);
         public Task<bool> UsernameExistsAsync(string username);
         public Task<bool> EmailExistsAsync(string email);
-        public async Task<bool> IsAdminRoleByIdAsync(string userId);
+        public Task<bool> IsAdminRoleByIdAsync(string userId);
         public Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest);
     }
 }
