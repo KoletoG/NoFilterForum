@@ -8,6 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     {
         public Task<NotificationDataModel> GetByIdAsync(string id);
         public Task<List<NotificationDataModel>> GetAllAsync();
+        public Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId);
         public Task<NotificationDataModel> CreateAsync(NotificationDataModel notification);
         public Task UpdateAsync(NotificationDataModel notification);
         public Task DeleteAsync(NotificationDataModel notification);

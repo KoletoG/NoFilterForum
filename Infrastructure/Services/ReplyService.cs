@@ -33,7 +33,8 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 userOfReply.DecrementPostCount();
             }
-
+            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(request.ReplyId);
+            
             return PostResult.Success;
         }
     }
