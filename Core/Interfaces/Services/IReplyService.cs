@@ -6,6 +6,6 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface IReplyService
     {
-        public Task<PostResult> DeleteReplyByIdAsync(DeleteReplyRequest request);
+        public Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request);
     }
 }

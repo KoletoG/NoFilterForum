@@ -20,7 +20,7 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
             _userService = userService;
         }
-        public async Task<PostResult> DeleteReplyByIdAsync(DeleteReplyRequest request)
+        public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetByIdAsync(request.ReplyId);
             if(reply == null)
