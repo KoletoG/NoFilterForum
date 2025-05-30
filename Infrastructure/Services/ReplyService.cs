@@ -22,13 +22,12 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
-            var reply = await _unitOfWork.Replies.GetByIdAsync(request.ReplyId);
+            var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
             if(reply == null)
             {
                 return PostResult.NotFound;
             }
-            string replyUserId = await _unitOfWork.Replies.GetUserIdByReplyIdAsync(request.ReplyId);
-            if (replyUserId != request.UserId)
+            if (reply.User.Id != request.UserId)
             {
                 bool isAdmin = await _userService.IsAdminRoleByIdAsync(request.UserId);
                 if (!isAdmin)
@@ -36,17 +35,16 @@ namespace NoFilterForum.Infrastructure.Services
                     return PostResult.Forbid;
                 }
             }
-            var userOfReply = await _unitOfWork.Replies.GetUserByReplyIdAsync(replyUserId);
-            if (userOfReply != UserConstants.DefaultUser)
+            if (reply.User != UserConstants.DefaultUser)
             {
-                userOfReply.DecrementPostCount();
+                reply.User.DecrementPostCount();
             }
             var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(request.ReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
                 await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
-                await _unitOfWork.Users.UpdateAsync(userOfReply);
+                await _unitOfWork.Users.UpdateAsync(reply.User);
                 await _unitOfWork.Replies.DeleteAsync(reply);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
