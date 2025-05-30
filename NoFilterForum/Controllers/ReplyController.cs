@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using Web.ViewModels.Reply;
 
 namespace Web.Controllers
 {
@@ -14,9 +15,9 @@ namespace Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(DeleteReplyViewModel deleteReplyViewModel)
         {
-
+            
             return Ok();
         }
     }
