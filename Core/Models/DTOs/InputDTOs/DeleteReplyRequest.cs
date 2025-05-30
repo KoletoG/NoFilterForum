@@ -9,5 +9,6 @@ namespace Core.Models.DTOs.InputDTOs
     public class DeleteReplyRequest
     {
         public string ReplyId { get; set; }
+        public string UserId { get; set; }
     }
 }

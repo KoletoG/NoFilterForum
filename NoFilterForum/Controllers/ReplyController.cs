@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using System.Security.Claims;
+using Web.Mappers.Reply;
 using Web.ViewModels.Reply;
 
 namespace Web.Controllers
@@ -15,9 +18,18 @@ namespace Web.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Delete(DeleteReplyViewModel deleteReplyViewModel)
         {
-            
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+            var deleteReplyRequest = ReplyMapper.MapToRequest(deleteReplyViewModel, userId);
+
             return Ok();
         }
     }

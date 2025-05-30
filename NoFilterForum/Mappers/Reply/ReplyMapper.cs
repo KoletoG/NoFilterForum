@@ -5,9 +5,10 @@ namespace Web.Mappers.Reply
 {
     public static class ReplyMapper
     {
-        public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm) => new()
+        public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm, string userId) => new()
         {
-            ReplyId = vm.ReplyId
+            ReplyId = vm.ReplyId,
+            UserId = userId
         };
     }
 }
