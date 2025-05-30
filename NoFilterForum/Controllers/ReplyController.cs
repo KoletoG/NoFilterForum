@@ -29,7 +29,6 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var deleteReplyRequest = ReplyMapper.MapToRequest(deleteReplyViewModel, userId);
-
             return Ok();
         }
     }

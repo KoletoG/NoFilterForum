@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Core.Constants;
+using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -18,16 +19,21 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeleteReplyByIdAsync(DeleteReplyRequest request)
         {
-            bool isAdmin = await _userService.IsAdminRoleByIdAsync(request.UserId);
-            if (!isAdmin)
+            string replyUserId = await _unitOfWork.Replies.GetUserIdByReplyIdAsync(request.ReplyId);
+            if (replyUserId != request.UserId)
             {
-                string replyUserId = await _unitOfWork.Replies.GetUserIdByReplyIdAsync(request.ReplyId);
-                if(replyUserId != request.UserId)
+                bool isAdmin = await _userService.IsAdminRoleByIdAsync(request.UserId);
+                if (!isAdmin)
                 {
                     return PostResult.Forbid;
                 }
-
             }
+            var userOfReply = await _unitOfWork.Replies.GetUserByReplyIdAsync(replyUserId);
+            if (userOfReply != UserConstants.DefaultUser)
+            {
+                userOfReply.DecrementPostCount();
+            }
+
             return PostResult.Success;
         }
     }
