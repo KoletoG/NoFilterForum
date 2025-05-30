@@ -192,5 +192,17 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<bool> IsAdminRoleByIdAsync(string userId)
+        {
+            var userRole = await _unitOfWork.Users.GetUserRoleIdAsync(userId);
+            if(userRole == UserRoles.Admin)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

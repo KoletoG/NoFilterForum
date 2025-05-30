@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs;
+﻿using Core.Enums;
+using Core.Models.DTOs.OutputDTOs;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Interfaces.Repositories
@@ -6,6 +7,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     public interface IUserRepository
     {
         public Task<UserDataModel> GetByIdAsync(string id);
+        public Task<UserRoles> GetUserRoleIdAsync(string userId);
         public Task<UserDataModel> GetByUsernameAsync(string username);
         public Task<UserDataModel> GetUserWithWarningsByIdAsync(string id);
         public Task<List<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync();

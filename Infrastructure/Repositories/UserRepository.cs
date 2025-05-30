@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Core.Enums;
 using Core.Models.DTOs.OutputDTOs;
 using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task UpdateAsync(UserDataModel user)
         {
             _context.Users.Update(user);
+        }
+        public async Task<UserRoles> GetUserRoleIdAsync(string userId)
+        {
+            return await _context.Users.Where(x=>x.Id==userId).Select(x=>x.Role).FirstOrDefaultAsync();
         }
         public async Task<bool> UsernameExistsAsync(string username)
         {
