@@ -20,20 +20,16 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IMemoryCache _memoryCache;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<UserService> _logger;
-        private readonly IPostService _postService;
-        private readonly IReplyService _replyService;
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
 
-        public UserService(IMemoryCache memoryCache, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger, IPostService postService, IReplyService replyService)
+        public UserService(IMemoryCache memoryCache, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
             _memoryCache = memoryCache;
             _signInManager = signInManager;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _postService = postService;
-            _replyService = replyService;
         }
         // Add paging
         public async Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()

@@ -20,16 +20,14 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PostService> _logger;
-        private readonly IReplyService _replyService;
         private readonly IHtmlSanitizer _htmlSanitizer;
-        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger, IReplyService replyService, IHtmlSanitizer htmlSanitizer)
+        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
-            _replyService = replyService;
         }
         public async Task<PostResult> PinPostAsync(string postId)
         {
