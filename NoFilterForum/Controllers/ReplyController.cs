@@ -40,7 +40,8 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound($"Reply with Id: {deleteReplyViewModel.ReplyId} was not found"),
-                PostResult.Success => RedirectToAction("PostView", "Home", new { id = deleteReplyViewModel.PostId, titleOfSection = deleteReplyViewModel.TitleOfSection })
+                PostResult.Success => RedirectToAction("PostView", "Home", new { id = deleteReplyViewModel.PostId, titleOfSection = deleteReplyViewModel.TitleOfSection }),
+                _ => Problem()
                 // Change previous line when updating PostView
             };
         }
@@ -70,7 +71,8 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound(),
-                PostResult.Success => RedirectToAction("PostView", "Home", new { id = createReplyViewModel.PostId, titleOfSection = createReplyViewModel.Title })
+                PostResult.Success => RedirectToAction("PostView", "Home", new { id = createReplyViewModel.PostId, titleOfSection = createReplyViewModel.Title }),
+                _ => Problem()
                 // Change the line above when PostView is refactored
             };
         }
