@@ -244,7 +244,10 @@ else
 		}
 		@if (reply.User.UserName == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 		{
-			<form asp-action="DeleteReply" asp-route-id="@reply.Id" asp-route-title="@Model.Title" method="post">
+			<form asp-action="Delete" asp-controller="Reply" method="post">
+				<input hidden name="ReplyId" value="@reply.Id"/>
+				<input hidden name="PostId" value="@Model.Post.Id"/>
+				<input hidden name="TitleOfSection" value="@Model.Title"/>
 				@Html.AntiForgeryToken()
 				<button type="submit">Delete Reply</button>
 			</form>
