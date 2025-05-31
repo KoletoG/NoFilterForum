@@ -40,5 +40,12 @@ namespace Web.Controllers
             // Change previous line when updating PostView
             };
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Create(CreateReplyViewModel createReplyViewModel)
+        {
+            return Ok();
+        }
     }
 }
