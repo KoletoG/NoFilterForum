@@ -10,5 +10,11 @@ namespace Web.Mappers.Reply
             ReplyId = vm.ReplyId,
             UserId = userId
         };
+        public static CreateReplyRequest MapToRequest(CreateReplyViewModel vm, string userId) => new()
+        {
+            UserId = userId,
+            Content = vm.Content,
+            PostId = vm.PostId
+        };
     }
 }
