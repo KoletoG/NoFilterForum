@@ -22,7 +22,16 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<bool> HasTimeoutByUserIdAsync(string userId)
         {
-            return "";
+            var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
+            if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
+            {
+                if (await _userService.IsAdminRoleByIdAsync(userId))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
