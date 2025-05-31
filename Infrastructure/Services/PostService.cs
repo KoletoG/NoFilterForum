@@ -67,7 +67,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {
-            string sanitizedFormattedBody = TextFormatter.FormatPostBody(_htmlSanitizer.Sanitize(createPost.Body));
+            string sanitizedFormattedBody = TextFormatter.FormatBody(_htmlSanitizer.Sanitize(createPost.Body));
             string sanitizedTitle = _htmlSanitizer.Sanitize(createPost.Title);
             var user = await _unitOfWork.Users.GetByIdAsync(createPost.UserId);
             if (user == null)

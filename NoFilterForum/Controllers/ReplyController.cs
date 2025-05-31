@@ -54,6 +54,10 @@ namespace Web.Controllers
                 return View(ModelState);
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
             if (await _replyService.HasTimeoutByUserIdAsync(userId))
             {
                 ModelState.AddModelError("timeError", "Replies can be made every 5 seconds");

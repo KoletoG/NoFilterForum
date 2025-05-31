@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
+using Ganss.Xss;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
@@ -14,9 +15,13 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         private readonly ILogger<ReplyService> _logger;
-        public ReplyService(IUnitOfWork unitOfWork, IUserService userService, ILogger<ReplyService> logger)
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        public ReplyService(IUnitOfWork unitOfWork, IUserService userService, ILogger<ReplyService> logger, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
+            _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
+            _htmlSanitizer.AllowedTags.Add("a");
             _logger = logger;
             _userService = userService;
         }
@@ -72,6 +77,12 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest)
         {
+            var user = await _userService.GetUserByIdAsync(createReplyRequest.UserId);
+            if(user == null)
+            {
+                return PostResult.NotFound;
+            }
+            string sanitizedContent =_htmlSanitizer.Sanitize(createReplyRequest.Content);
             return PostResult.Success; 
         }
     }

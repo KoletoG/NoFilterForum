@@ -46,7 +46,7 @@ namespace Core.Utility
                 return Array.Empty<string>();
             }
         }
-        public static string FormatPostBody(string text)
+        public static string FormatBody(string text)
         {
             text = LinkCheckText(text);
             text = CheckForHashTags(text);
