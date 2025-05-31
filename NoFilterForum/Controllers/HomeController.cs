@@ -308,22 +308,6 @@ namespace Web.Controllers
             }
         }
         [Authorize]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> DeleteReply(string id, string title)
-        {
-            var reply = await _context.ReplyDataModels.Include(x => x.Post).Include(x => x.User).FirstAsync(x => x.Id == id);
-            var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == id).ToListAsync();
-            _context.NotificationDataModels.RemoveRange(notifications);
-            var postId = reply.Post.Id;
-            reply.User.PostsCount--;
-            var user = reply.User;
-            _context.ReplyDataModels.Remove(reply);
-            await _context.SaveChangesAsync();
-            _memoryCache.Remove($"repliesUser_{user.UserName}");
-            return RedirectToAction("PostView", new { id = postId, titleOfSection = title });
-        }
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetBio(string bio, string userId)
