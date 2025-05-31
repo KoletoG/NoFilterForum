@@ -70,5 +70,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest)
+        {
+            return PostResult.Success; 
+        }
     }
 }

@@ -24,6 +24,10 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(DeleteReplyViewModel deleteReplyViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if(userId == null)
             {
@@ -45,6 +49,16 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Create(CreateReplyViewModel createReplyViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (await _replyService.HasTimeoutByUserIdAsync(userId))
+            {
+                ModelState.AddModelError("timeError", "Replies can be made every 5 seconds");
+                return Forbid(); // Change to show ModelState error
+            }
 
             return Ok();
         }
