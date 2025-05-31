@@ -55,6 +55,10 @@ namespace NoFilterForum.Infrastructure.Repositories
             _context.ReplyDataModels.Update(reply);
             return true;
         }
+        public async Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId)
+        {
+            return await _context.ReplyDataModels.Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
+        }
         public async Task<bool> UpdateRangeAsync(List<ReplyDataModel> replies)
         {
             _context.ReplyDataModels.UpdateRange(replies);

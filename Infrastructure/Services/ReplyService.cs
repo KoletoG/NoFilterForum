@@ -20,6 +20,10 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
             _userService = userService;
         }
+        public async Task<bool> HasTimeoutByUserIdAsync(string userId)
+        {
+            return "";
+        }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
