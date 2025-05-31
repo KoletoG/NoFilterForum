@@ -8,5 +8,6 @@ namespace NoFilterForum.Core.Interfaces.Services
     {
         public Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request);
         public Task<bool> HasTimeoutByUserIdAsync(string userId);
+        public Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest);
     }
 }

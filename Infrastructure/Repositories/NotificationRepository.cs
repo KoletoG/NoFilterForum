@@ -31,6 +31,11 @@ namespace NoFilterForum.Infrastructure.Repositories
             await _context.NotificationDataModels.AddAsync(notification);
             return notification;
         }
+        public async Task<bool> CreateRangeAsync(List<NotificationDataModel> notifications)
+        {
+            await _context.NotificationDataModels.AddRangeAsync(notifications);
+            return true;
+        }
         public async Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId)
         {
             return await _context.NotificationDataModels.Where(x=>x.Reply.Id==replyId).ToListAsync();

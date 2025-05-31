@@ -18,6 +18,12 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.FindAsync(id);
         }
+        public async Task<PostDataModel> GetWithRepliesByIdAsync(string id)
+        {
+            return await _context.PostDataModels.Where(x => x.Id == id)
+                .Include(x => x.Replies)
+                .FirstOrDefaultAsync();
+        }
         public async Task<List<PostDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<PostDataModel>();

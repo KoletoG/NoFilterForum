@@ -11,6 +11,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId);
         public Task<NotificationDataModel> CreateAsync(NotificationDataModel notification);
         public Task UpdateAsync(NotificationDataModel notification);
+        public Task<bool> CreateRangeAsync(List<NotificationDataModel> notifications);
         public Task DeleteAsync(NotificationDataModel notification);
         public Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId);
         public Task DeleteRangeAsync(List<NotificationDataModel> notifications);
