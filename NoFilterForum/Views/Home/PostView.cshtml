@@ -145,7 +145,7 @@ else
 	</form>
 }
 @{
-	<form asp-action="CreateReply" asp-controller="Home" method="post">
+	<form asp-action="Create" asp-controller="Reply" method="post">
 		@Html.AntiForgeryToken()
 		<input type="text" name="Content" placeholder="Write a reply..." />
 		<input type="hidden" name="Title" value="@Model.Title" />
@@ -264,7 +264,7 @@ else
 				<button type="submit">Send Report Model</button>
 			</form>
 		}
-		<form asp-action="CreateReply" asp-controller="Home" method="post">
+		<form asp-action="Create" asp-controller="Reply" method="post">
 			@Html.AntiForgeryToken()
 			<input type="text" name="Content" value="@($"@{reply.User.UserName}")" placeholder="Write a reply..." />
 			<input type="hidden" name="Title" value="@Model.Title" />
@@ -273,7 +273,7 @@ else
 		</form>
 	}
 	<br />
-	<form asp-action="CreateReply" asp-controller="Home" method="post">
+	<form asp-action="Create" asp-controller="Reply" method="post">
 		@Html.AntiForgeryToken()
 		<input type="text" name="Content" placeholder="Write a reply..." />
 		<input type="hidden" name="Title" value="@Model.Title" />
