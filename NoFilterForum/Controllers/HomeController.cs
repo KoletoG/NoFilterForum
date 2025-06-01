@@ -260,56 +260,6 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReply(GetReplyViewModel replyViewModel)
-        {
-            var userName = User.Identity.Name;
-            var user = await _ioService.GetUserByNameAsync(userName);
-            if (user.Role != UserRoles.Admin && await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).AnyAsync())
-            {
-                var lastReplyOfUser = await _context.ReplyDataModels.AsNoTracking().Where(x => x.User == user).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstAsync();
-                if (lastReplyOfUser.AddSeconds(30) > DateTime.UtcNow)
-                {
-                    ModelState.AddModelError("errorReplyTime", "Replies can be made once every 30 seconds.");
-                }
-            }
-            if (ModelState.IsValid)
-            {
-                var currentPost = await _context.PostDataModels.Include(x => x.Replies).FirstAsync(x => x.Id == replyViewModel.PostId);
-                replyViewModel.Content = _htmlSanitizer.Sanitize(replyViewModel.Content);
-                replyViewModel.Content = _nonIOService.LinkCheckText(replyViewModel.Content);
-                replyViewModel.Content = _nonIOService.CheckForHashTags(replyViewModel.Content);
-                var reply = new ReplyDataModel(replyViewModel.Content, user, currentPost);
-                string[] names = _nonIOService.CheckForTags(replyViewModel.Content);
-                if (!names.IsNullOrEmpty())
-                {
-                    foreach (var name in names)
-                    {
-                        var userTo = await _ioService.GetUserByNameAsync(name);
-                        if (userTo != default)
-                        {
-                            _context.NotificationDataModels.Add(new(reply, user, userTo));
-                        }
-                    }
-                }
-                currentPost.Replies.Add(reply);
-                user.PostsCount++;
-                _context.ReplyDataModels.Add(reply);
-                await _ioService.AdjustRoleByPostCount(user);
-                await _context.SaveChangesAsync();
-                _memoryCache.Remove($"post_{replyViewModel.PostId}");
-                _memoryCache.Remove($"repliesUser_{User.Identity.Name}");
-                return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title });
-            }
-            else
-            {
-                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("PostView", "Home", new { id = replyViewModel.PostId, titleOfSection = replyViewModel.Title, errors = errorsJson });
-            }
-        }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetBio(string bio, string userId)
         {
             if (!ModelState.IsValid)
