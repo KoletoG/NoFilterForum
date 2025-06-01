@@ -1,5 +1,7 @@
 ﻿using System.Web;
+using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
+using NoFilterForum.Core.Models.ViewModels;
 using Web.ViewModels.Section;
 
 namespace Web.Mappers.Section
@@ -17,6 +19,12 @@ namespace Web.Mappers.Section
         {
             Sections = itemVMs,
             IsAdmin = isAdmin
+        };
+        public static CreateSectionRequest MapToRequest(CreateSectionViewModel vm, string userId) => new()
+        {
+            Title = vm.Title,
+            Description = vm.Description,
+            UserId = userId
         };
     }
 }
