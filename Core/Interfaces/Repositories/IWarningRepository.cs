@@ -12,6 +12,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<WarningDataModel> CreateAsync(WarningDataModel warning);
         public Task<List<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId);
         public Task UpdateAsync(WarningDataModel warning);
+        public Task UpdateRangeAsync(List<WarningDataModel> warnings);
         public Task DeleteAsync(WarningDataModel warning);
         public Task<bool> ExistsByUserAsync(UserDataModel user);
         public Task<List<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId);

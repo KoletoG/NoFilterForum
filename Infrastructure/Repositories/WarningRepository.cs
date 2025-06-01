@@ -44,6 +44,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.WarningDataModels.Update(warning);
         }
+        public async Task UpdateRangeAsync(List<WarningDataModel> warnings)
+        {
+            _context.WarningDataModels.UpdateRange(warnings);
+        }
         public async Task DeleteAsync(WarningDataModel warning)
         {
             _context.WarningDataModels.Remove(warning);

@@ -7,6 +7,7 @@ using Core.Constants;
 using Core.Enums;
 using NoFilterForum.Infrastructure.Services;
 using Web.ViewModels;
+using System.Security.Claims;
 
 namespace Web.Controllers
 {
@@ -58,6 +59,23 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.NotFound => NotFound(createWarningViewModel.UserId),
                 _ => Problem()
+            };
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Accept()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var result = await _warningService.AcceptWarningsAsync(userId);
+            return result switch
+            {
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => RedirectToAction("Index", "Notification")
             };
         }
     }
