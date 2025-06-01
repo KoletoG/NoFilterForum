@@ -70,7 +70,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Section wasn't creatd");
+                _logger.LogError(ex, "Section with title: {SectionTitle} wasn't created",createSectionRequest.Title);
                 return PostResult.UpdateFailed;
             }
         }
