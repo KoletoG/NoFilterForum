@@ -1,7 +1,7 @@
 ﻿@using System.Web
-@using NoFilterForum.Core.Models.ViewModels
+@using Web.ViewModels.Section
 
-@model IndexViewModel
+@model IndexSectionViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -24,13 +24,13 @@
     }
     foreach(var section1 in Model.Sections)
     {
-        var endodedSection = HttpUtility.UrlEncode(section1.Title);
-        <a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@endodedSection"><h2>@section1.Title</h2></a>
+        <a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle"><h2>@section1.Title</h2></a>
         <h4>@section1.Description</h4>
         if (Model.IsAdmin)
         {
-        <form asp-action="DeleteSection" asp-route-id="@section1.Id" method="post">
+        <form asp-action="DeleteSection" method="post">
         @Html.AntiForgeryToken()
+            <input type="hidden" name="Id" value="@section1.Id"/>
             <button type="submit">Delete Section</button>
         </form>
         }

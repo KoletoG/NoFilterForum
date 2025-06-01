@@ -96,7 +96,7 @@ namespace Web
             app.MapStaticAssets(); 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Section}/{action=Index}/{id?}")
                 .WithStaticAssets();
             app.MapRazorPages()
                .WithStaticAssets();
