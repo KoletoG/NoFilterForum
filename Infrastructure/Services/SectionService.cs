@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces.Repositories;
+using Core.Models.DTOs.OutputDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -16,11 +17,11 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _memoryCache = memoryCache;
         }
-        public async Task<List<SectionDataModel>> GetAllSectionsAsync()
+        public async Task<List<SectionItemDto>> GetAllSectionItemDtosAsync()
         {
-            if (!_memoryCache.TryGetValue("sections", out List<SectionDataModel> sections))
+            if (!_memoryCache.TryGetValue("sections", out List<SectionItemDto> sections))
             {
-                sections = await _unitOfWork.Sections.GetAllAsync();
+                sections = await _unitOfWork.Sections.GetAllItemsDtoAsync();
                 MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),

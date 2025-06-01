@@ -66,21 +66,6 @@ namespace Web.Controllers
             _memoryCache = memoryCache;
             _signInManager = signInManager;
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Index(string errors = null)
-        {
-            if (!string.IsNullOrEmpty(errors))
-            {
-                ViewBag.Errors = JsonSerializer.Deserialize<List<string>>(errors);
-            }
-            var sections = await _sectionService.GetAllSectionsAsync();
-            if (UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return View(new IndexViewModel(sections, true));
-            }
-            return View(new IndexViewModel(sections, false));
-        }
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

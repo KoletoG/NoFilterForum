@@ -20,11 +20,21 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<SectionDataModel> GetWithPostsByTitleAsync(string title)
         {
-            return await _context.SectionDataModels.Include(x=>x.Posts).FirstOrDefaultAsync(x => x.Title == title);
+            return await _context.SectionDataModels.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Title == title);
         }
         public async Task<List<SectionDataModel>> GetAllAsync()
         {
             return await _context.SectionDataModels.AsNoTracking().ToListAsync();
+        }
+        public async Task<List<SectionItemDto>> GetAllItemsDtoAsync()
+        {
+            return await _context.SectionDataModels
+                .Select(x => new SectionItemDto
+                {
+                    Description = x.Description,
+                    Id = x.Id,
+                    Title = x.Title
+                }).ToListAsync();
         }
         public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage)
         {
@@ -35,7 +45,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .ThenByDescending(x => x.DateCreated)
                     .Skip((page - 1) * countPerPage)
                     .Take(countPerPage)
-                    .Select(x=>new PostItemDto
+                    .Select(x => new PostItemDto
                     {
                         DateCreated = x.DateCreated,
                         Id = x.Id,
