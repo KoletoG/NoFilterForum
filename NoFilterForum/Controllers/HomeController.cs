@@ -69,31 +69,6 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSection(CreateSectionViewModel sectionViewModel)
-        {
-            string currentUsername = User.Identity.Name;
-            var currentUserRole = await _context.Users.AsNoTracking().Where(x => x.UserName == currentUsername).Select(x => x.Role).FirstAsync();
-            if (currentUserRole != UserRoles.Admin)
-            {
-                return RedirectToAction("Index");
-            }
-            if (ModelState.IsValid)
-            {
-                sectionViewModel.Title = _htmlSanitizer.Sanitize(sectionViewModel.Title);
-                sectionViewModel.Description = _htmlSanitizer.Sanitize(sectionViewModel.Description);
-                SectionDataModel section = new SectionDataModel(sectionViewModel.Title, sectionViewModel.Description);
-                _context.SectionDataModels.Add(section);
-                await _context.SaveChangesAsync();
-                _memoryCache.Remove("sections");
-                return RedirectToAction("Index");
-            }
-            List<string> errorsList = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
-            var errorJson = JsonSerializer.Serialize(errorsList);
-            return RedirectToAction("Index", new { errors = errorJson });
-        }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSection(string id)
         {
             var currentUser = await _context.Users.FirstAsync(x => x.UserName == User.Identity.Name);

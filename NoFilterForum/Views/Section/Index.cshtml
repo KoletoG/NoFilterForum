@@ -15,7 +15,7 @@
 @{
     if (Model.IsAdmin)
     {
-        <form asp-action="CreateSection" asp-controller="Home" method="post">
+        <form asp-action="Create" asp-controller="Section" method="post">
             @Html.AntiForgeryToken()
             <input name="Title" placeholder="Title of the section" type="text" />
             <input name="Description" placeholder="Description of the section" type="text" />
