@@ -336,14 +336,6 @@ namespace Web.Controllers
             return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> AcceptWarnings()
-        {
-            await _context.WarningDataModels.Where(x => x.User.UserName == User.Identity.Name).ExecuteUpdateAsync(x => x.SetProperty(x => x.IsAccepted, true));
-            return RedirectToAction("Notifications");
-        }
-        [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePost(string id, string titleOfSection)

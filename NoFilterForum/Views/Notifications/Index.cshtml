@@ -17,7 +17,7 @@
 	}
 	@if (warningsCount > 0)
 	{
-		<form asp-action="AcceptWarnings" asp-controller="Home" method="post">
+		<form asp-action="Accept" asp-controller="Warnings" method="post">
 			@Html.AntiForgeryToken()
 			<button type="submit">I understand</button>
 		</form>
