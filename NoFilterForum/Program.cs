@@ -1,5 +1,7 @@
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Ganss.Xss;
+using Infrastructure.Factories;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +63,7 @@ namespace Web
             builder.Services.AddScoped<IWarningService, WarningService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ISectionFactory, SectionFactory>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;

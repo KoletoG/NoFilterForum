@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
@@ -19,9 +20,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IUserService _userService;
         private readonly ILogger<SectionService> _logger;
-        public SectionService(IUnitOfWork unitOfWork,IUserService userService, IMemoryCache memoryCache, IHtmlSanitizer htmlSanitizer, ILogger<SectionService> logger)
+        private readonly ISectionFactory _sectionFactory;
+        public SectionService(IUnitOfWork unitOfWork,IUserService userService, ISectionFactory sectionFactory, IMemoryCache memoryCache, IHtmlSanitizer htmlSanitizer, ILogger<SectionService> logger)
         {
             _logger = logger;
+            _sectionFactory = sectionFactory;
             _userService = userService;
             _htmlSanitizer = htmlSanitizer;
             _unitOfWork = unitOfWork;
@@ -55,9 +58,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.Forbid;
             }
-            createSectionRequest.Description = _htmlSanitizer.Sanitize(createSectionRequest.Description);
-            createSectionRequest.Title = _htmlSanitizer.Sanitize(createSectionRequest.Title);
-            var section = new SectionDataModel(createSectionRequest.Title, createSectionRequest.Description);
+            var section = _sectionFactory.Create(createSectionRequest.Title, createSectionRequest.Description);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
