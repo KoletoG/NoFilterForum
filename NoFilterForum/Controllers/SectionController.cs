@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 
 namespace Web.Controllers
@@ -10,6 +11,8 @@ namespace Web.Controllers
         {
             _sectionService = sectionService;
         }
+        [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             return View();
