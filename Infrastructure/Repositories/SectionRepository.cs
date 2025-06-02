@@ -18,6 +18,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.FindAsync(id);
         }
+        public async Task<SectionDataModel> GetByIdWithPostsAndRepliesAndUsersAsync(string id)
+        {
+            return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x=>x.User).Include(x=>x.Posts).ThenInclude(x=>x.User).FirstOrDefaultAsync(x => x.Id == id);
+        }
         public async Task<SectionDataModel> GetWithPostsByTitleAsync(string title)
         {
             return await _context.SectionDataModels.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Title == title);

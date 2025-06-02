@@ -77,14 +77,23 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
         {
-            var section = await _unitOfWork.Sections.GetByIdAsync(deleteSectionRequest.SectionId);
+            var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAsync(deleteSectionRequest.SectionId);
             if(section == null)
             {
                 return PostResult.NotFound;
             }
+            var posts = section.Posts;
+            var replies = new List<ReplyDataModel>();
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
+                foreach (var post in posts)
+                {
+                    foreach (var reply in post.Replies)
+                    {
+                        replies.Add(reply);
+                    }
+                }
                 await _unitOfWork.Sections.DeleteAsync(section);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();

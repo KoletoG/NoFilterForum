@@ -17,5 +17,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<int> GetPostsCountByTitleAsync(string title);
         public Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage);
         public Task<bool> ExistsByTitleAsync(string title);
+        public Task<SectionDataModel> GetByIdWithPostsAndRepliesAndUsersAsync(string id);
     }
 }
