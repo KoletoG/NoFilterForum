@@ -88,6 +88,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.Sections.DeleteAsync(section);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
+                _memoryCache.Remove("sections");
                 return PostResult.Success;
             }
             catch (Exception ex) 
