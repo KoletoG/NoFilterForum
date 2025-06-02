@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.ViewModels;
-using Web.Mappers.Notifications;
-using Web.Mappers.Warnings;
+using Web.Mappers;
 using Web.ViewModels;
 
 namespace Web.Controllers

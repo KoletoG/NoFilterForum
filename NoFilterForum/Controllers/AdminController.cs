@@ -14,8 +14,7 @@ using Core.Enums;
 using Core.Constants;
 using Web.ViewModels;
 using Core.Models.DTOs.OutputDTOs;
-using Web.Mappers.Admin;
-using Web.Mappers.Warnings;
+using Web.Mappers;
 
 namespace Web.Controllers
 {

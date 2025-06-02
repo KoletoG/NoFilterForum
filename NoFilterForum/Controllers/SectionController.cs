@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.ViewModels;
-using Web.Mappers.Section;
+using Web.Mappers;
 using Web.ViewModels.Section;
 
 namespace Web.Controllers

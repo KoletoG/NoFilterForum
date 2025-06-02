@@ -11,10 +11,10 @@ using System.Security.Claims;
 using Ganss.Xss;
 using Web.ViewModels;
 using Core.Models.DTOs.InputDTOs;
-using Web.Mappers.Posts;
 using NoFilterForum.Core.Models.ViewModels;
 using Core.Constants;
 using Core.Utility;
+using Web.Mappers;
 
 namespace Web.Controllers
 {

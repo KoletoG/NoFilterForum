@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using System.Security.Claims;
-using Web.Mappers.Reply;
+using Web.Mappers;
 using Web.ViewModels.Reply;
 
 namespace Web.Controllers

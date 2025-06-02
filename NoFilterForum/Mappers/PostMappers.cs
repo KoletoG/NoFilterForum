@@ -3,7 +3,7 @@ using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Web.ViewModels;
 
-namespace Web.Mappers.Posts
+namespace Web.Mappers
 {
     public static class PostMappers
     {

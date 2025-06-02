@@ -1,7 +1,7 @@
 ﻿using Core.Models.DTOs.OutputDTOs;
 using Web.ViewModels;
 
-namespace Web.Mappers.Notifications
+namespace Web.Mappers
 {
     public static class NotificationMappers
     {

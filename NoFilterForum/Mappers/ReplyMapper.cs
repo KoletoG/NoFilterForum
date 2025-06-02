@@ -1,7 +1,7 @@
 ﻿using Core.Models.DTOs.InputDTOs;
 using Web.ViewModels.Reply;
 
-namespace Web.Mappers.Reply
+namespace Web.Mappers
 {
     public static class ReplyMapper
     {

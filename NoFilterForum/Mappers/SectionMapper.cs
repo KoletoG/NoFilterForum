@@ -4,7 +4,7 @@ using Core.Models.DTOs.OutputDTOs;
 using NoFilterForum.Core.Models.ViewModels;
 using Web.ViewModels.Section;
 
-namespace Web.Mappers.Section
+namespace Web.Mappers
 {
     public static class SectionMapper
     {

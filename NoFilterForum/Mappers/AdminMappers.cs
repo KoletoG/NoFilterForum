@@ -2,7 +2,7 @@
 using Core.Models.DTOs.OutputDTOs;
 using Web.ViewModels;
 
-namespace Web.Mappers.Admin
+namespace Web.Mappers
 {
     public static class AdminMappers
     {

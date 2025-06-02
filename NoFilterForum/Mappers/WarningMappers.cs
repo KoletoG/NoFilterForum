@@ -3,7 +3,7 @@ using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Web.ViewModels;
 
-namespace Web.Mappers.Warnings
+namespace Web.Mappers
 {
     public static class WarningMappers
     {
