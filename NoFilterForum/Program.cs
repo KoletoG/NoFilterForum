@@ -63,6 +63,7 @@ namespace Web
             builder.Services.AddScoped<IWarningService, WarningService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IPostFactory,PostFactory>();
             builder.Services.AddScoped<ISectionFactory, SectionFactory>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
