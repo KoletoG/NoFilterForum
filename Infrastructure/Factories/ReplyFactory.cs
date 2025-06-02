@@ -4,13 +4,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Interfaces.Factories;
 using Core.Utility;
 using Ganss.Xss;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace Infrastructure.Factories
 {
-    public class ReplyFactory
+    public class ReplyFactory : IReplyFactory
     {
         private readonly IHtmlSanitizer _htmlSanitizer;
         public ReplyFactory(IHtmlSanitizer htmlSanitizer)

@@ -65,6 +65,7 @@ namespace Web
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IPostFactory,PostFactory>();
             builder.Services.AddScoped<ISectionFactory, SectionFactory>();
+            builder.Services.AddScoped<IReplyFactory, ReplyFactory>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
