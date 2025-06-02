@@ -1,5 +1,6 @@
 ﻿using Core.Constants;
 using Core.Enums;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Core.Utility;
@@ -17,9 +18,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<ReplyService> _logger;
         private readonly IHtmlSanitizer _htmlSanitizer;
-        public ReplyService(IUnitOfWork unitOfWork, IUserService userService, ILogger<ReplyService> logger, IHtmlSanitizer htmlSanitizer)
+        private readonly IReplyFactory _replyFactory;
+        public ReplyService(IUnitOfWork unitOfWork,IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
+            _replyFactory = replyFactory;
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
@@ -88,10 +91,8 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            string sanitizedContent =_htmlSanitizer.Sanitize(createReplyRequest.Content);
-            sanitizedContent = TextFormatter.FormatBody(sanitizedContent);
-            string[] taggedUsernames = TextFormatter.CheckForTags(sanitizedContent);
-            var reply = new ReplyDataModel(sanitizedContent, user, post);
+            var reply = _replyFactory.Create(createReplyRequest.Content, user, post);
+            string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
             var notificationsList = new List<NotificationDataModel>();
             user.IncrementPostCount();
             RoleUtility.AdjustRoleByPostCount(user);
