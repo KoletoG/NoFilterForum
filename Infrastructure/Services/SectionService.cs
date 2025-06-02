@@ -77,7 +77,25 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
         {
-            return PostResult.Success;
+            var section = await _unitOfWork.Sections.GetByIdAsync(deleteSectionRequest.SectionId);
+            if(section == null)
+            {
+                return PostResult.NotFound;
+            }
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Sections.DeleteAsync(section);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Section with Id: {SectionId} wasn't deleted", deleteSectionRequest.SectionId);
+                return PostResult.UpdateFailed;
+            }
         }
     }
 }

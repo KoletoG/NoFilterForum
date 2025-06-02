@@ -28,9 +28,9 @@
         <h4>@section1.Description</h4>
         if (Model.IsAdmin)
         {
-        <form asp-action="DeleteSection" method="post">
+        <form asp-action="Delete" asp-controller="Section" method="post">
         @Html.AntiForgeryToken()
-            <input type="hidden" name="Id" value="@section1.Id"/>
+            <input type="hidden" name="SectionId" value="@section1.Id"/>
             <button type="submit">Delete Section</button>
         </form>
         }

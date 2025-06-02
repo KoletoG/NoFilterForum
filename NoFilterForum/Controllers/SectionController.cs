@@ -62,9 +62,30 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(DeleteSectionViewModel deleteSectionViewModel)
         {
-            return Ok();
+            if (!ModelState.IsValid) 
+            {
+                return RedirectToAction("Index"); // Change that to include ModelState errors
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId==null)
+            {
+                return Unauthorized();
+            }
+            if(!await _userService.IsAdminRoleByIdAsync(userId))
+            {
+                return Forbid();
+            }
+            var deleteSectionRequest = SectionMapper.MapToRequest(deleteSectionViewModel);
+            var result = await _sectionService.DeleteSectionAsync(deleteSectionRequest);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Index"),
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }

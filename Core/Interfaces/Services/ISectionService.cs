@@ -9,6 +9,7 @@ namespace NoFilterForum.Core.Interfaces.Services
     {
         public Task<List<SectionItemDto>> GetAllSectionItemDtosAsync();
         public Task<bool> ExistsSectionByTitleAsync(string sectionTitle);
+        public Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest);
         public Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest);
     }
 }

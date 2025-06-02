@@ -26,5 +26,9 @@ namespace Web.Mappers
             Description = vm.Description,
             UserId = userId
         };
+        public static DeleteSectionRequest MapToRequest(DeleteSectionViewModel vm) => new()
+        {
+            SectionId = vm.SectionId
+        };
     }
 }
