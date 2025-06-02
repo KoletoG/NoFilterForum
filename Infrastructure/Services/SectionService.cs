@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Core.Constants;
+using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
@@ -77,23 +78,37 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
         {
-            var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAsync(deleteSectionRequest.SectionId);
+            var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(deleteSectionRequest.SectionId);
             if(section == null)
             {
                 return PostResult.NotFound;
             }
             var posts = section.Posts;
             var replies = new List<ReplyDataModel>();
+            var users = new List<UserDataModel>();
+            foreach (var post in posts)
+            {
+                foreach (var reply in post.Replies)
+                {
+                    if (reply.User != UserConstants.DefaultUser)
+                    {
+                        reply.User.DecrementPostCount();
+                        users.Add(reply.User);
+                    }
+                    replies.Add(reply);
+                }
+                if(post.User != UserConstants.DefaultUser)
+                {
+                    post.User.DecrementPostCount();
+                    users.Add(post.User);
+                }
+            }
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                foreach (var post in posts)
-                {
-                    foreach (var reply in post.Replies)
-                    {
-                        replies.Add(reply);
-                    }
-                }
+                await _unitOfWork.Users.UpdateRangeAsync(users);
+                await _unitOfWork.Posts.DeleteRangeAsync(posts);
+                await _unitOfWork.Replies.DeleteRangeAsync(replies);
                 await _unitOfWork.Sections.DeleteAsync(section);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();

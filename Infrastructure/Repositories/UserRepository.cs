@@ -54,6 +54,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.Users.Update(user);
         }
+        public async Task UpdateRangeAsync(List<UserDataModel> users)
+        {
+            _context.Users.UpdateRange(users);
+        }
         public async Task<UserRoles> GetUserRoleIdAsync(string userId)
         {
             return await _context.Users.Where(x=>x.Id==userId).Select(x=>x.Role).FirstOrDefaultAsync();
