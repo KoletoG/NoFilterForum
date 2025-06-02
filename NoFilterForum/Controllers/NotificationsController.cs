@@ -22,7 +22,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete() // Might change to read with IsMarked property in NotificaitonsDataModel
+        public async Task<IActionResult> Delete() // Might change to read with IsMarked property in NotificatonsDataModel
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)

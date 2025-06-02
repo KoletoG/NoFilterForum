@@ -4,6 +4,7 @@ using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -73,6 +74,10 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError(ex, "Section with title: {SectionTitle} wasn't created",createSectionRequest.Title);
                 return PostResult.UpdateFailed;
             }
+        }
+        public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
+        {
+            return PostResult.Success;
         }
     }
 }

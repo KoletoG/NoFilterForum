@@ -59,5 +59,12 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            return Ok();
+        }
     }
 }
