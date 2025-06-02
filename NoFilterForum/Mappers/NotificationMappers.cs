@@ -1,5 +1,5 @@
 ﻿using Core.Models.DTOs.OutputDTOs;
-using Web.ViewModels;
+using Web.ViewModels.Notifications;
 
 namespace Web.Mappers
 {

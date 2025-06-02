@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using System.Security.Claims;
 using Ganss.Xss;
-using Web.ViewModels;
 using Core.Models.DTOs.InputDTOs;
 using NoFilterForum.Core.Models.ViewModels;
 using Core.Constants;
 using Core.Utility;
 using Web.Mappers;
+using Web.ViewModels.Post;
 
 namespace Web.Controllers
 {

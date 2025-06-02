@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using Core.Models.DTOs.OutputDTOs;
 using NoFilterForum.Core.Models.DataModels;
-using Web.ViewModels;
+using Web.ViewModels.Warning;
 
-namespace NoFilterForum.Core.Models.ViewModels
+namespace Web.ViewModels.Notifications
 {
     public class NotificationViewModel
     {

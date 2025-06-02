@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Web.ViewModels
+namespace Web.ViewModels.Post
 {
     public class CreatePostViewModel
     {

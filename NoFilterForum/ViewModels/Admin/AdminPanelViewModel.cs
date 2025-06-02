@@ -1,7 +1,6 @@
 ﻿using NoFilterForum.Core.Models.DataModels;
-using Web.ViewModels;
 
-namespace NoFilterForum.Core.Models.ViewModels
+namespace Web.ViewModels.Admin
 {
     public class AdminPanelViewModel
     {

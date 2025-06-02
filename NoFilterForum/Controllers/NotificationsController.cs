@@ -6,6 +6,7 @@ using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.ViewModels;
 using Web.Mappers;
 using Web.ViewModels;
+using Web.ViewModels.Notifications;
 
 namespace Web.Controllers
 {

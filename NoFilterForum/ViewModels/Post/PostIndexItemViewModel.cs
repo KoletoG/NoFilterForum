@@ -1,6 +1,6 @@
 ﻿using Core.Enums;
 
-namespace Web.ViewModels
+namespace Web.ViewModels.Post
 {
     public class PostIndexItemViewModel
     {

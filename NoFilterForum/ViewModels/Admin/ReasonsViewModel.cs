@@ -1,6 +1,6 @@
 ﻿using NoFilterForum.Core.Models.DataModels;
 
-namespace NoFilterForum.Core.Models.ViewModels
+namespace Web.ViewModels.Admin
 {
     public class ReasonsViewModel
     {

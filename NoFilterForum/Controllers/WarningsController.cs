@@ -5,9 +5,9 @@ using NoFilterForum.Core.Interfaces.Services;
 using Core.Constants;
 using Core.Enums;
 using NoFilterForum.Infrastructure.Services;
-using Web.ViewModels;
 using System.Security.Claims;
 using Web.Mappers;
+using Web.ViewModels.Warning;
 
 namespace Web.Controllers
 {

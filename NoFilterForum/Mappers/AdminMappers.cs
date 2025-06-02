@@ -1,6 +1,6 @@
 ﻿using Core.Models.DTOs;
 using Core.Models.DTOs.OutputDTOs;
-using Web.ViewModels;
+using Web.ViewModels.Admin;
 
 namespace Web.Mappers
 {
