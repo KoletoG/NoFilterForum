@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Core.Constants;
 using Core.Enums;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
@@ -20,11 +21,13 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PostService> _logger;
+        private readonly IPostFactory _postFactory;
         private readonly IHtmlSanitizer _htmlSanitizer;
-        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger, IHtmlSanitizer htmlSanitizer)
+        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger,IPostFactory postFactory, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _postFactory = postFactory;
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
@@ -67,8 +70,6 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {
-            string sanitizedFormattedBody = TextFormatter.FormatBody(_htmlSanitizer.Sanitize(createPost.Body));
-            string sanitizedTitle = _htmlSanitizer.Sanitize(createPost.Title);
             var user = await _unitOfWork.Users.GetByIdAsync(createPost.UserId);
             if (user == null)
             {
@@ -79,7 +80,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var post = new PostDataModel(sanitizedTitle, sanitizedFormattedBody, user);
+            var post = _postFactory.Create(createPost.Title, createPost.Body, user);
             section.Posts.Add(post);
             user.IncrementPostCount();
             RoleUtility.AdjustRoleByPostCount(user);
