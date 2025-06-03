@@ -24,7 +24,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<NotificationDataModel>> GetAllByUserIdAsync(string userId)
         {
-            return await _context.NotificationDataModels.Where(x=>x.UserTo.Id==userId).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync();
+        }
+        public async Task<List<NotificationDataModel>> GetAllByUserFromIdAsync(string userId)
+        {
+            return await _context.NotificationDataModels.Where(x=>x.UserFrom.Id == userId).ToListAsync();
         }
         public async Task<NotificationDataModel> CreateAsync(NotificationDataModel notification)
         {
@@ -38,7 +42,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId)
         {
-            return await _context.NotificationDataModels.Where(x=>x.Reply.Id==replyId).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => x.Reply.Id == replyId).ToListAsync();
         }
         public async Task UpdateAsync(NotificationDataModel notification)
         {
@@ -50,13 +54,13 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
         {
-            return await _context.NotificationDataModels.Where(x=>x.UserTo.Id == userId)
-                .Select(x=>new NotificationsDto
+            return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId)
+                .Select(x => new NotificationsDto
                 {
-                    PostId=x.Reply.Post.Id,
+                    PostId = x.Reply.Post.Id,
                     ReplyContent = x.Reply.Content,
-                    ReplyId=x.Reply.Id,
-                    PostTitle=x.Reply.Post.Title,
+                    ReplyId = x.Reply.Id,
+                    PostTitle = x.Reply.Post.Title,
                     UserFromUsername = x.UserFrom.UserName
                 })
                 .ToListAsync();

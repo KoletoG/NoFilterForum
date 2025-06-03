@@ -86,6 +86,7 @@ namespace NoFilterForum.Infrastructure.Services
             var posts = section.Posts;
             var replies = new List<ReplyDataModel>();
             var users = new List<UserDataModel>();
+            var notifications = new List<NotificationDataModel>();
             foreach (var post in posts)
             {
                 foreach (var reply in post.Replies)
@@ -95,6 +96,7 @@ namespace NoFilterForum.Infrastructure.Services
                         reply.User.DecrementPostCount();
                         users.Add(reply.User);
                     }
+                    notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
                     replies.Add(reply);
                 }
                 if(post.User != UserConstants.DefaultUser)
@@ -110,6 +112,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.Posts.DeleteRangeAsync(posts);
                 await _unitOfWork.Replies.DeleteRangeAsync(replies);
                 await _unitOfWork.Sections.DeleteAsync(section);
+                await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 _memoryCache.Remove("sections");
