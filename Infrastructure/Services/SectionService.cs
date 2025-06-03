@@ -82,21 +82,21 @@ namespace NoFilterForum.Infrastructure.Services
             var replies = posts.SelectMany(x => x.Replies).ToList();
             foreach (var post in posts)
             {
-                if (post.User != UserConstants.DefaultUser)
-                {
-                    post.User.DecrementPostCount();
-                    users.Add(post.User);
-                }
+                DecrementAndCollect(users, post.User);
             }
             foreach (var reply in replies)
             {
-                if (reply.User != UserConstants.DefaultUser)
-                {
-                    reply.User.DecrementPostCount();
-                    users.Add(reply.User);
-                }
+                DecrementAndCollect(users, reply.User);
             }
             return (users, replies);
+        }
+        private void DecrementAndCollect(HashSet<UserDataModel> users, UserDataModel user)
+        {
+            if (user != UserConstants.DefaultUser)
+            {
+                user.DecrementPostCount();
+                users.Add(user);
+            }
         }
         public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
         {
