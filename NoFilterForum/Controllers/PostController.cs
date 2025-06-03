@@ -91,7 +91,15 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var deletePostRequest = PostMappers.MapToRequest(deletePostViewModel, userId);
-            return Ok();
+            var result = await _postService.DeletePostByIdAsync(deletePostRequest);
+            return result switch
+            {
+                PostResult.NotFound => NotFound(),
+                PostResult.Forbid => Forbid(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => RedirectToAction("PostsMain", new { title = deletePostViewModel.SectionTitle }),
+                _ => Problem()
+        };
         }
     }
 }
