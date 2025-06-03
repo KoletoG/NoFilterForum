@@ -97,7 +97,7 @@ namespace Web.Controllers
                 PostResult.NotFound => NotFound(),
                 PostResult.Forbid => Forbid(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("PostsMain", new { title = deletePostViewModel.SectionTitle }),
+                PostResult.Success => RedirectToAction("Index", new { titleOfSection = deletePostViewModel.SectionTitle }),
                 _ => Problem()
         };
         }
