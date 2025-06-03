@@ -79,29 +79,21 @@ namespace NoFilterForum.Infrastructure.Services
         private (HashSet<UserDataModel> users, List<ReplyDataModel> replies) ProcessPosts(List<PostDataModel> posts)
         {
             var users = new HashSet<UserDataModel>();
-            var replies = new List<ReplyDataModel>();
+            var replies = posts.SelectMany(x => x.Replies).ToList();
             foreach (var post in posts)
             {
                 if (post.User != UserConstants.DefaultUser)
                 {
                     post.User.DecrementPostCount();
-                    if (!users.Contains(post.User))
-                    {
-                        users.Add(post.User);
-                    }
                     users.Add(post.User);
                 }
-                foreach (var reply in post.Replies)
+            }
+            foreach (var reply in replies)
+            {
+                if (reply.User != UserConstants.DefaultUser)
                 {
-                    if (reply.User != UserConstants.DefaultUser)
-                    {                       
-                        reply.User.DecrementPostCount(); 
-                        if (!users.Contains(reply.User))
-                        {
-                            users.Add(reply.User);
-                        }
-                    }
-                    replies.Add(reply);
+                    reply.User.DecrementPostCount();
+                    users.Add(reply.User);
                 }
             }
             return (users, replies);
@@ -114,12 +106,11 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var posts = section.Posts;
-            var replies = new List<ReplyDataModel>();
             var users = new List<UserDataModel>();
+            (var usersSet,var replies) = ProcessPosts(posts);
             var notificationsTasks = replies.Select(x => _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)).ToList();
-            var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x=>x).ToList();
-            (var usersSet, replies) = ProcessPosts(posts);
-            users= usersSet.ToList();
+            var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x => x).ToList();
+            users = usersSet.ToList();
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
