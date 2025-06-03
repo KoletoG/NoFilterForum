@@ -23,7 +23,7 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<SectionService> _logger;
         private readonly ISectionFactory _sectionFactory;
-        public SectionService(IUnitOfWork unitOfWork,IUserService userService, ISectionFactory sectionFactory, IMemoryCache memoryCache, IHtmlSanitizer htmlSanitizer, ILogger<SectionService> logger)
+        public SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, IMemoryCache memoryCache, IHtmlSanitizer htmlSanitizer, ILogger<SectionService> logger)
         {
             _logger = logger;
             _sectionFactory = sectionFactory;
@@ -72,39 +72,54 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Section with title: {SectionTitle} wasn't created",createSectionRequest.Title);
+                _logger.LogError(ex, "Section with title: {SectionTitle} wasn't created", createSectionRequest.Title);
                 return PostResult.UpdateFailed;
             }
+        }
+        private (HashSet<UserDataModel> users, List<ReplyDataModel> replies) ProcessPosts(List<PostDataModel> posts)
+        {
+            var users = new HashSet<UserDataModel>();
+            var replies = new List<ReplyDataModel>();
+            foreach (var post in posts)
+            {
+                if (post.User != UserConstants.DefaultUser)
+                {
+                    post.User.DecrementPostCount();
+                    if (!users.Contains(post.User))
+                    {
+                        users.Add(post.User);
+                    }
+                    users.Add(post.User);
+                }
+                foreach (var reply in post.Replies)
+                {
+                    if (reply.User != UserConstants.DefaultUser)
+                    {                       
+                        reply.User.DecrementPostCount(); 
+                        if (!users.Contains(reply.User))
+                        {
+                            users.Add(reply.User);
+                        }
+                    }
+                    replies.Add(reply);
+                }
+            }
+            return (users, replies);
         }
         public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
         {
             var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(deleteSectionRequest.SectionId);
-            if(section == null)
+            if (section == null)
             {
                 return PostResult.NotFound;
             }
             var posts = section.Posts;
             var replies = new List<ReplyDataModel>();
             var users = new List<UserDataModel>();
-            var notifications = new List<NotificationDataModel>();
-            foreach (var post in posts)
-            {
-                foreach (var reply in post.Replies)
-                {
-                    if (reply.User != UserConstants.DefaultUser)
-                    {
-                        reply.User.DecrementPostCount();
-                        users.Add(reply.User);
-                    }
-                    notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
-                    replies.Add(reply);
-                }
-                if(post.User != UserConstants.DefaultUser)
-                {
-                    post.User.DecrementPostCount();
-                    users.Add(post.User);
-                }
-            }
+            var notificationsTasks = replies.Select(x => _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)).ToList();
+            var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x=>x).ToList();
+            (var usersSet, replies) = ProcessPosts(posts);
+            users= usersSet.ToList();
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -118,7 +133,7 @@ namespace NoFilterForum.Infrastructure.Services
                 _memoryCache.Remove("sections");
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Section with Id: {SectionId} wasn't deleted", deleteSectionRequest.SectionId);
