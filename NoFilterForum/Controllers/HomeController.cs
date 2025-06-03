@@ -69,30 +69,6 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteSection(string id)
-        {
-            var currentUser = await _context.Users.FirstAsync(x => x.UserName == User.Identity.Name);
-            if (currentUser.Role != UserRoles.Admin)
-            {
-                return RedirectToAction("Index");
-            }
-            var section = await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
-            foreach (var post in section.Posts)
-            {
-                foreach (var reply in post.Replies)
-                {
-                    await _ioService.DeleteReply(reply);
-                }
-                await _ioService.DeletePost(post);
-            }
-            _context.SectionDataModels.Remove(section);
-            await _context.SaveChangesAsync();
-            _memoryCache.Remove("sections");
-            return RedirectToAction("Index");
-        }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendReportModel(GetReportViewModel reportViewModel)
         {
             // Validation that report isn't made from user to himself
