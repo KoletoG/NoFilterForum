@@ -141,6 +141,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 await _unitOfWork.Replies.DeleteRangeAsync(repliesOfPost);
                 await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
+                await _unitOfWork.Users.UpdateRangeAsync(users.ToList());
                 await _unitOfWork.Posts.DeleteAsync(post);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
