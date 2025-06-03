@@ -35,5 +35,10 @@ namespace Web.Mappers
             Page = page,
             TitleOfSection = titleOfSection
         };
+        public static DeletePostRequest MapToRequest(DeletePostViewModel vm, string userId) => new()
+        {
+            PostId = vm.PostId,
+            UserId = userId
+        };
     }
 }

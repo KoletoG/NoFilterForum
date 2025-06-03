@@ -80,5 +80,18 @@ namespace Web.Controllers
             var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, page, totalPages, titleOfSection);
             return View(postIndexViewModel);
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(DeletePostViewModel deletePostViewModel)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+            var deletePostRequest = PostMappers.MapToRequest(deletePostViewModel, userId);
+            return Ok();
+        }
     }
 }

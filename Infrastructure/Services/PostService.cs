@@ -20,13 +20,15 @@ namespace NoFilterForum.Infrastructure.Services
     public class PostService : IPostService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
         private readonly ILogger<PostService> _logger;
         private readonly IPostFactory _postFactory;
         private readonly IHtmlSanitizer _htmlSanitizer;
-        public PostService(IUnitOfWork unitOfWork, ILogger<PostService> logger,IPostFactory postFactory, IHtmlSanitizer htmlSanitizer)
+        public PostService(IUnitOfWork unitOfWork,IUserService userService ,ILogger<PostService> logger,IPostFactory postFactory, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _userService = userService;
             _postFactory = postFactory;
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
@@ -109,5 +111,48 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(getIndexPostRequest.TitleOfSection, getIndexPostRequest.Page, PostConstants.PostsPerSection);
         }
+        public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest)
+        {
+            var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId);
+            if (post == null)
+            {
+                return PostResult.NotFound;
+            }
+            if (post.User.Id != deletePostRequest.UserId)
+            {
+                if(!await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId))
+                {
+                    return PostResult.Forbid;
+                }
+            }
+            var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
+            HashSet<UserDataModel> users = new HashSet<UserDataModel>();
+            var notificationsTasks = repliesOfPost.Select(x => _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)).ToList();
+            var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x=>x).ToList();
+            foreach(var reply in repliesOfPost)
+            {
+                reply.User.DecrementPostCount();
+                users.Add(reply.User);
+            }
+            post.User.DecrementPostCount();
+            users.Add(post.User);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Replies.DeleteRangeAsync(repliesOfPost);
+                await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
+                await _unitOfWork.Posts.DeleteAsync(post);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Post with Id: {PostId} was not deleted", deletePostRequest.PostId);
+                return PostResult.UpdateFailed;
+            }
+        }
+
     }
 }
