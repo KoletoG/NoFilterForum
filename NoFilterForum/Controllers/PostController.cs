@@ -85,6 +85,10 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeletePostViewModel deletePostViewModel)
         {
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(); // Change this
+            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if(userId == null)
             {

@@ -272,35 +272,6 @@ namespace Web.Controllers
             return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
         }
         [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePost(string id, string titleOfSection)
-        {
-            if (!ModelState.IsValid)
-            {
-                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("Index", "Home", new { errors = errorsJson });
-            }
-            var post = await _context.PostDataModels.Include(x => x.User).FirstAsync(x => x.Id == id);
-            var replies = await _context.ReplyDataModels.Include(x => x.User).Where(x => x.Post == post).ToListAsync();
-            foreach (var rep in replies)
-            {
-                rep.User.PostsCount--;
-                var notifications = await _context.NotificationDataModels.Include(x => x.Reply).Where(x => x.Reply.Id == rep.Id).ToListAsync();
-                _context.NotificationDataModels.RemoveRange(notifications);
-                _context.ReplyDataModels.Remove(rep);
-            }
-            _memoryCache.Remove($"title_for_{post.Id}");
-            post.User.PostsCount--;
-            var user = post.User;
-            _context.PostDataModels.Remove(post);
-            await _context.SaveChangesAsync();
-            _memoryCache.Remove($"repliesUser_{user.UserName}");
-            return RedirectToAction("PostsMain", new { title = titleOfSection });
-        }
-        
-        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> ChangeImage(IFormFile image)
