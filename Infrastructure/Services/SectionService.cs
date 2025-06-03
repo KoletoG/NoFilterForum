@@ -106,11 +106,10 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var posts = section.Posts;
-            var users = new List<UserDataModel>();
             (var usersSet,var replies) = ProcessPosts(posts);
             var notificationsTasks = replies.Select(x => _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)).ToList();
             var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x => x).ToList();
-            users = usersSet.ToList();
+            var users = usersSet.ToList();
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
