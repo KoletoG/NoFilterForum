@@ -35,7 +35,7 @@
 			<input name="Email" type="text" placeholder="New email..." />
 			<button type="submit">Change Email</button>
 		</form>
-		<form asp-action="ChangeImage" asp-controller="Home" method="post" enctype="multipart/form-data">
+		<form asp-action="UpdateImage" asp-controller="Profile" method="post" enctype="multipart/form-data">
 			@Html.AntiForgeryToken()
 			<input type="file" name="image" accept="image/*"/>
 			<button type="submit">Change image</button>

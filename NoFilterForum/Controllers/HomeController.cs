@@ -246,36 +246,6 @@ namespace Web.Controllers
             }
             return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> ChangeImage(IFormFile image)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorsList = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                return BadRequest(errorsList);
-            }
-            if (image != null)
-            {
-                string randomImgUrl = NanoidDotNet.Nanoid.Generate() + image.FileName;
-                var filePath = Path.Combine("wwwroot/images", randomImgUrl);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-                string imageUrl = $"/images/{randomImgUrl}";
-                var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-                if (currentUser.ImageUrl != "\\images\\defaultimage.gif")
-                {
-                    System.IO.File.Delete("wwwroot" + currentUser.ImageUrl);
-                }
-                currentUser.ImageUrl = imageUrl;
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            return BadRequest();
-        }
         // Change to AJAX
         [Authorize]
         [HttpPost]
