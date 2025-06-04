@@ -113,5 +113,16 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ChangeImage(ChangeImageViewModel changeImageViewModel)
+        {
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok();
+        }
     }
 }
