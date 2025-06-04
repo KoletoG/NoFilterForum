@@ -22,7 +22,6 @@
 		<h3>Your bio: @Html.Raw(Model.User.Bio)</h3>
 		<form asp-action="ChangeBio" asp-controller="Profile" method="post">
 			@Html.AntiForgeryToken()
-			<input hidden name="UserId" value="@Model.User.Id"/>
 			<input name="Bio" placeholder="Your bio..." type="text" />
 			<button type="submit">Save Bio</button>
 		</form>

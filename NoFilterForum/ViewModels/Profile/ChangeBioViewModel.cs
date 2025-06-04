@@ -6,7 +6,5 @@ namespace Web.ViewModels.Profile
     {
         [Required]
         public string Bio {  get; set; }
-        [Required]
-        public string UserId { get; set; }
     }
 }

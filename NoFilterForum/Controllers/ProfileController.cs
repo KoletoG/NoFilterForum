@@ -99,11 +99,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            if (currentUserId != changeBioViewModel.UserId) 
-            {
-                return Forbid();
-            }
-            var changeUserRequest = ProfileMapper.MapToRequest(changeBioViewModel);
+            var changeUserRequest = ProfileMapper.MapToRequest(changeBioViewModel,currentUserId);
             var result = await _userService.ChangeBioAsync(changeUserRequest);
             return result switch
             {
@@ -122,6 +118,12 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             return Ok();
         }
     }
