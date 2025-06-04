@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using Web.Mappers;
 using Web.ViewModels.Profile;
 
 namespace Web.Controllers
@@ -102,7 +103,7 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
-
+            var changeUserRequest = ProfileMapper.MapToRequest(changeBioViewModel);
             return Ok();
         }
     }
