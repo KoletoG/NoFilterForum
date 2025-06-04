@@ -8,6 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Services
     public interface IUserService
     {
         public Task<bool> AnyNotConfirmedUsersAsync();
+        public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync();
         public Task<List<UserDataModel>> GetAllUnconfirmedUsersAsync();
         public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest);

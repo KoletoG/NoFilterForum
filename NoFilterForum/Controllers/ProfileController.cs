@@ -104,7 +104,14 @@ namespace Web.Controllers
                 return Forbid();
             }
             var changeUserRequest = ProfileMapper.MapToRequest(changeBioViewModel);
-            return Ok();
+            var result = await _userService.ChangeBioAsync(changeUserRequest);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Profile", "Home", new { userName = User.Identity.Name }),
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }
