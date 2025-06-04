@@ -241,7 +241,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         private string GetImageUrl(string imageName)
         {
-            return $"/images/{imageName}";
+            return Path.Combine("/images/",imageName);
         }
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
         {
