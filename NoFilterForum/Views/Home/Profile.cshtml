@@ -20,9 +20,10 @@
 		<h3>Email: @Model.User.Email</h3>
 		<h3>Your account was created on @Model.User.DateCreated.ToLongDateString()</h3>
 		<h3>Your bio: @Html.Raw(Model.User.Bio)</h3>
-		<form asp-action="SetBio" asp-controller="Home" asp-route-userid="@Model.User.Id" method="post">
+		<form asp-action="ChangeBio" asp-controller="Profile" method="post">
 			@Html.AntiForgeryToken()
-			<input name="bio" placeholder="Your bio..." type="text" />
+			<input hidden name="UserId" value="@Model.User.Id"/>
+			<input name="Bio" placeholder="Your bio..." type="text" />
 			<button type="submit">Save Bio</button>
 		</form>
 		<form asp-action="ChangeUsername" asp-controller="Profile" method="post">
