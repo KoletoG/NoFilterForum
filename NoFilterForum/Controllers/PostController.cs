@@ -23,7 +23,7 @@ namespace Web.Controllers
         private readonly IPostService _postService;
         private readonly IUserService _userService;
         private readonly ISectionService _sectionService;
-        public PostController(IPostService postService,ISectionService sectionService, IUserService userService)
+        public PostController(IPostService postService, ISectionService sectionService, IUserService userService)
         {
             _sectionService = sectionService;
             _userService = userService;
@@ -56,13 +56,13 @@ namespace Web.Controllers
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("Index","Post", new { titleOfSection = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
+                PostResult.Success => RedirectToAction("Index", "Post", new { titleOfSection = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
                 _ => Problem("Invalid result")
             };
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string titleOfSection, int page=1)
+        public async Task<IActionResult> Index(string titleOfSection, int page = 1)
         {
             // Error TIME FIX
             titleOfSection = HttpUtility.UrlDecode(titleOfSection);
@@ -85,12 +85,12 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeletePostViewModel deletePostViewModel)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(); // Change this
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId == null)
+            if (userId == null)
             {
                 return Unauthorized();
             }
@@ -103,7 +103,7 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Success => RedirectToAction("Index", new { titleOfSection = deletePostViewModel.SectionTitle }),
                 _ => Problem()
-        };
+            };
         }
     }
 }

@@ -21,8 +21,8 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel changeEmailViewModel)
         {
-            if (!ModelState.IsValid) 
-            { 
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
             var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
@@ -83,6 +83,14 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
             };
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ChangeBio()
+        {
+
+            return Ok();
         }
     }
 }

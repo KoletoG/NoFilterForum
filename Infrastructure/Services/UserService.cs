@@ -200,5 +200,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return false;
             }
         }
+        public async Task<PostResult> ChangeBioAsync()
+        {
+
+        }
     }
 }
