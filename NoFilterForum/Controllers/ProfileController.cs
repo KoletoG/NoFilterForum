@@ -123,7 +123,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            
+            var changeImageRequest = ProfileMapper.MapToRequest(changeImageViewModel, userId);
             return Ok();
         }
     }

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NoFilterForum.Infrastructure.Services
 {
@@ -229,6 +230,48 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "User's bio with Id: {UserId} was not changed", changeBioRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
+        }
+        private string GetImageFileUrl(string imageFileName)
+        {
+            imageFileName = _htmlSanitizer.Sanitize(imageFileName);
+            string randomImgUrl = NanoidDotNet.Nanoid.Generate() + imageFileName;
+            return randomImgUrl;
+        }
+        private string GetImageUrl(string imageName)
+        {
+            return $"/images/{imageName}";
+        }
+        public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
+        {
+            var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);
+            if (currentUser == null) 
+            {
+                return PostResult.NotFound;
+            }
+            var fileUrl = GetImageFileUrl(updateImageRequest.Image.FileName);
+            if (currentUser.ImageUrl != "\\images\\defaultimage.gif")
+            {
+                System.IO.File.Delete("wwwroot" + currentUser.ImageUrl);
+            }
+            currentUser.ChangeImageUrl(GetImageUrl(fileUrl));
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                using (var stream = new FileStream(Path.Combine("wwwroot/images", fileUrl), FileMode.Create))
+                {
+                    await updateImageRequest.Image.CopyToAsync(stream);
+                }
+                await _unitOfWork.Users.UpdateAsync(currentUser);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Image of user with Id: {UserId} was not changed", updateImageRequest.UserId);
                 return PostResult.UpdateFailed;
             }
         }
