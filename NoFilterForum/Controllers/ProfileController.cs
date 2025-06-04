@@ -87,8 +87,21 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> ChangeBio()
+        public async Task<IActionResult> ChangeBio(ChangeBioViewModel changeBioViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == null)
+            {
+                return Unauthorized();
+            }
+            if (currentUserId != changeBioViewModel.UserId) 
+            {
+                return Forbid();
+            }
 
             return Ok();
         }
