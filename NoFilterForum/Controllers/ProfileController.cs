@@ -124,7 +124,14 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var changeImageRequest = ProfileMapper.MapToRequest(changeImageViewModel, userId);
-            return Ok();
+            var result = await _userService.UpdateImageAsync(changeImageRequest);
+            return result switch
+            {
+                PostResult.Success => NoContent(),
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }
