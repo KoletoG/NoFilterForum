@@ -193,31 +193,6 @@ namespace Web.Controllers
             return View(new PostViewModel(post, replies, titleOfSection, isFromProfile, replyId, allPages, page, currentUser));
         }
         // SORT POSTS IN POSTSMAIN BY DATE AND LIKES ALGORITHM???
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetBio(string bio, string userId)
-        {
-            if (!ModelState.IsValid)
-            {
-                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("Index", "Home", new { errors = errorsJson });
-            }
-            bio = _htmlSanitizer.Sanitize(bio);
-            bio = _nonIOService.LinkCheckText(bio);
-            bio = _nonIOService.CheckForHashTags(bio);
-            var user = await _context.Users.AsNoTracking().Where(x => x.Id == userId).Select(x => new { x.UserName, x.Bio }).FirstAsync();
-            if (string.IsNullOrWhiteSpace(bio))
-            {
-                return RedirectToAction("Profile", "Home", new { userName = user.UserName, error = "Setting bio cannot be empty!" });
-            }
-            else if (user.Bio != bio)
-            {
-                await _context.Users.Where(x => x.Id == userId).ExecuteUpdateAsync(x => x.SetProperty(x => x.Bio, bio));
-            }
-            return RedirectToAction("Profile", "Home", new { userName = user.UserName });
-        }
         // Need to add likes with AJAX
         [Authorize]
         [HttpGet]
