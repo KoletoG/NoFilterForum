@@ -41,7 +41,7 @@ namespace Web.Controllers
             {
                 Email = changeEmailViewModel.Email,
                 UserId = userId
-            };
+            }; // USE MAPPER
             var result = await _userService.ChangeEmailByIdAsync(changeEmailRequest);
             return result switch
             {
@@ -75,7 +75,7 @@ namespace Web.Controllers
             {
                 Username = changeUsernameViewModel.Username,
                 UserId = userId
-            };
+            }; // USE MAPPER
             var result = await _userService.ChangeUsernameByIdAsync(changeUsernameRequest);
             return result switch
             {

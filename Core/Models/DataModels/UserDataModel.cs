@@ -31,6 +31,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public void Confirm() => IsConfirmed = true;
         public void IncrementPostCount() => PostsCount++;
         public void DecrementPostCount() => PostsCount--;
+        public void ChangeBio(string bio) => Bio = bio;
         public void ChangeEmail(string email) => Email = email;
         public void ChangeUsername(string username) => UserName = username;
         public UserDataModel(string userName,string email)

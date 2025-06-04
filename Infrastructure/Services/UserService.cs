@@ -4,6 +4,8 @@ using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
+using Core.Utility;
+using Ganss.Xss;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +24,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<UserService> _logger;
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
-
-        public UserService(IMemoryCache memoryCache, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        public UserService(IMemoryCache memoryCache,IHtmlSanitizer htmlSanitizer, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
             _memoryCache = memoryCache;
+            _htmlSanitizer = htmlSanitizer;
             _signInManager = signInManager;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
@@ -200,9 +203,34 @@ namespace NoFilterForum.Infrastructure.Services
                 return false;
             }
         }
-        public async Task<PostResult> ChangeBioAsync()
+        public async Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest)
         {
-
+            var user = await _unitOfWork.Users.GetByIdAsync(changeBioRequest.UserId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            changeBioRequest.Bio = _htmlSanitizer.Sanitize(changeBioRequest.Bio);
+            changeBioRequest.Bio = TextFormatter.FormatBody(changeBioRequest.Bio);
+            if(user.Bio == changeBioRequest.Bio)
+            {
+                return PostResult.Success;
+            }
+            user.ChangeBio(changeBioRequest.Bio);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "User's bio with Id: {UserId} was not changed", changeBioRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
         }
     }
 }
