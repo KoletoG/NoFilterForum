@@ -2,7 +2,7 @@
 
 namespace Web.ViewModels.Profile
 {
-    public class ChangeImageViewModel
+    public class UpdateImageViewModel
     {
         [Required]
         public IFormFile Image { get; set; }

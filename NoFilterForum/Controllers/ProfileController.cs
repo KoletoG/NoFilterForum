@@ -112,7 +112,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> ChangeImage(ChangeImageViewModel changeImageViewModel)
+        public async Task<IActionResult> UpdateImage(UpdateImageViewModel changeImageViewModel)
         {
             if (!ModelState.IsValid) 
             {
@@ -123,7 +123,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-
+            
             return Ok();
         }
     }

@@ -11,5 +11,10 @@ namespace Web.Mappers
             Bio = vm.Bio,
             UserId = userId
         };
+        public static UpdateImageRequest MapToRequest(UpdateImageViewModel vm, string userId) => new()
+        {
+            Image = vm.Image,
+            UserId = userId
+        };
     }
 }
