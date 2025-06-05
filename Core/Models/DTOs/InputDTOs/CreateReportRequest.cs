@@ -10,6 +10,6 @@ namespace Core.Models.DTOs.InputDTOs
     {
         public string UserToId {  get; set; }
         public string Content { get; set; }
-        public string UserFrom {  get; set; }
+        public string UserFromId {  get; set; }
     }
 }

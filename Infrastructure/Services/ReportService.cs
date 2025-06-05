@@ -50,6 +50,17 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest)
         {
+            var userTo = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserToId);
+            if(userTo == null)
+            {
+                return PostResult.NotFound;
+            }
+            var userFrom = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserFromId);
+            if(userFrom == null)
+            {
+                return PostResult.NotFound;
+            }
+
             return PostResult.Success;
         }
     }
