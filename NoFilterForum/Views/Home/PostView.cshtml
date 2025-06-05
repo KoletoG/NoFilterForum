@@ -136,7 +136,7 @@ else
 }
 else
 {
-	<form asp-action="SendReportModel" asp-controller="Home" method="post">
+	<form asp-action="Create" asp-controller="Report" method="post">
 		@Html.AntiForgeryToken()
 		<input name="Content" type="text" placeholder="Reason for report..." />
 		<input type="hidden" name="IsPost" value="true" />
@@ -256,7 +256,7 @@ else
 		}
 		else
 		{
-			<form asp-action="SendReportModel" asp-controller="Home" method="post">
+			<form asp-action="Create" asp-controller="Report" method="post">
 				@Html.AntiForgeryToken()
 				<input name="Content" type="text" placeholder="Reason for report..." />
 				<input type="hidden" name="IsPost" value="false" />

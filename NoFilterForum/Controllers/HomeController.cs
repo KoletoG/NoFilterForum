@@ -67,46 +67,6 @@ namespace Web.Controllers
             _memoryCache = memoryCache;
             _signInManager = signInManager;
         }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendReportModel(CreateReportViewModel reportViewModel)
-        {
-            // Validation that report isn't made from user to himself
-            if (await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == User.Identity.Name)
-            {
-                ModelState.AddModelError("sameUserError", "You can't send a report to yourself!");
-            }
-            if (ModelState.IsValid)
-            {
-                var userTo = await _context.Users.FirstAsync(x => x.Id == reportViewModel.UserIdTo);
-                var userFrom = await _context.Users.FirstAsync(x => x.UserName == User.Identity.Name);
-                reportViewModel.Content = _htmlSanitizer.Sanitize(reportViewModel.Content);
-                var report = new ReportDataModel(userTo, reportViewModel.Content, reportViewModel.IdOfPostReply, reportViewModel.IsPost, userFrom);
-                _context.ReportDataModels.Add(report);
-                await _context.SaveChangesAsync();
-            }
-            var errorsList = "";
-            if (ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).Any())
-            {
-                errorsList = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                errorsList = HttpUtility.UrlEncode(errorsList);
-            }
-            if (reportViewModel.IsPost)
-            {
-                return RedirectToAction("PostView", new { id = reportViewModel.IdOfPostReply, titleOfSection = reportViewModel.Title, errors = errorsList });
-            }
-            else
-            {
-                var postId = await _context.ReplyDataModels.AsNoTracking()
-                    .Where(x => x.Id == reportViewModel.IdOfPostReply)
-                    .Include(x => x.Post)
-                    .Select(x => x.Post)
-                    .Select(x => x.Id)
-                    .FirstAsync();
-                return RedirectToAction("PostView", new { id = postId, titleOfSection = reportViewModel.Title, errors = errorsList });
-            }
-        }
         [HttpGet]
         [Authorize]
         [Route("Post/{id}")]
