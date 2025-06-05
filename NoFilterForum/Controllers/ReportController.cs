@@ -1,9 +1,11 @@
-﻿using System.Security.Claims;
+﻿using System.Runtime.InteropServices;
+using System.Security.Claims;
 using Core.Constants;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using Web.Mappers;
 using Web.ViewModels.Admin;
 using Web.ViewModels.Report;
 
@@ -13,9 +15,11 @@ namespace Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IReportService _reportService;
-        public ReportController(IUserService userService, IReportService reportService)
+        private readonly IPostService _postService;
+        public ReportController(IUserService userService,IPostService postService, IReportService reportService)
         {
             _userService = userService;
+            _postService = postService;
             _reportService = reportService;
         }
 
@@ -59,7 +63,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create(CreateReportViewModel createReportViewModel)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (currentUserId == null) 
+            if (currentUserId == null)
             {
                 return Unauthorized();
             }
@@ -67,12 +71,30 @@ namespace Web.Controllers
             {
                 ModelState.AddModelError("sameUser", "Report cannot be made to yourself");
             }
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            return Ok();
+            var createReportRequest = ReportMapper.MapToRequest(createReportViewModel, currentUserId);
+            var result = await _reportService.CreateReportAsync(createReportRequest);
+            if (result == PostResult.Success)
+            {
+                if (createReportRequest.IsPost)
+                {
+                    return RedirectToAction("PostView", "Home", new { id = createReportViewModel.IdOfPostReply, titleOfSection = createReportViewModel.Title });
+                }
+                else
+                {
+                    var postId = await _postService.GetPostIdByReplyId(createReportRequest.IdOfPostOrReply);
+                    return RedirectToAction("PostView", "Home", new { id = postId, titleOfSection = createReportViewModel.Title });
+                }
+            }
+            return result switch
+            {
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }

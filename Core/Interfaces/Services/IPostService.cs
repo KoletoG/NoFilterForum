@@ -10,6 +10,7 @@ namespace NoFilterForum.Core.Interfaces.Services
     {
         public Task<PostResult> PinPostAsync(string postId);
         public Task<bool> HasTimeoutAsync(string userId);
+        public Task<string> GetPostIdByReplyId(string replyId);
         public Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest);
         public Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle);
         public Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest);
