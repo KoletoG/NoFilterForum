@@ -30,6 +30,7 @@ using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Data;
 using Core.Enums;
 using System.Security.Claims;
+using Web.ViewModels.Report;
 namespace Web.Controllers
 {
     public class HomeController : Controller
@@ -69,7 +70,7 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendReportModel(GetReportViewModel reportViewModel)
+        public async Task<IActionResult> SendReportModel(CreateReportViewModel reportViewModel)
         {
             // Validation that report isn't made from user to himself
             if (await _context.Users.AsNoTracking().Where(x => x.Id == reportViewModel.UserIdTo).Select(x => x.UserName).FirstAsync() == User.Identity.Name)

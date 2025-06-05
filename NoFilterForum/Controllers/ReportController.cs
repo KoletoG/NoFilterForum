@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using Web.ViewModels.Admin;
+using Web.ViewModels.Report;
 
 namespace Web.Controllers
 {
@@ -50,6 +51,13 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
             };
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateReportViewModel createReportViewModel)
+        {
+            return Ok();
         }
     }
 }
