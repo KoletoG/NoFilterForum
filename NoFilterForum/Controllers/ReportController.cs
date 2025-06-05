@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
@@ -27,6 +28,28 @@ namespace Web.Controllers
             }
             var reports = await _reportService.GetAllReportsAsync();
             return View(new ReportsViewModel(reports)); // needs to change
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
+            {
+                return Forbid();
+            }
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id cannot be null");
+            }
+            var result = await _reportService.DeleteReportByIdAsync(id);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Reports"),
+                PostResult.NotFound => NotFound(id),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }

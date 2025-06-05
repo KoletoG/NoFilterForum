@@ -39,28 +39,6 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteReport(string id)
-        {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
-            if (string.IsNullOrEmpty(id))
-            {
-                return BadRequest("Id cannot be null");
-            }
-            var result = await _reportService.DeleteReportByIdAsync(id);
-            return result switch
-            {
-                PostResult.Success => RedirectToAction("Reports"),
-                PostResult.NotFound => NotFound(id),
-                PostResult.UpdateFailed => Problem(),
-                _ => Problem()
-            };
-        }
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PinPost(string postId)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
