@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.InputDTOs;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -46,6 +47,10 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError(ex, $"Report with Id: {reportId} wasn't deleted.");
                 return PostResult.UpdateFailed;
             }
+        }
+        public async Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest)
+        {
+            return PostResult.Success;
         }
     }
 }

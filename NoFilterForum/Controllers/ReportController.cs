@@ -1,4 +1,5 @@
-﻿using Core.Constants;
+﻿using System.Security.Claims;
+using Core.Constants;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,20 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateReportViewModel createReportViewModel)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == null) 
+            {
+                return Unauthorized();
+            }
+            if (currentUserId.Equals(createReportViewModel.UserIdTo))
+            {
+                ModelState.AddModelError("sameUser", "Report cannot be made to yourself");
+            }
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
+            }
+
             return Ok();
         }
     }
