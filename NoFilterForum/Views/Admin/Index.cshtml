@@ -10,7 +10,7 @@
 	}
 	if (Model.HasReports)
 	{
-		<a asp-action="Reports" asp-controller="Admin"><h2 style="color:red" class="font-monospace">You have pending reports...</h2></a>
+		<a asp-action="Index" asp-controller="Report"><h2 style="color:red" class="font-monospace">You have pending reports...</h2></a>
 	}
 	foreach(var user in Model.Users)
 	{

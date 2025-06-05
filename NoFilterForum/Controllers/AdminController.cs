@@ -81,18 +81,6 @@ namespace Web.Controllers
             };
         }
         [Authorize]
-        [ResponseCache(Duration =30,Location = ResponseCacheLocation.Any)]
-        [Route("Reports")]
-        public async Task<IActionResult> Reports()
-        {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
-            var reports = await _reportService.GetAllReportsAsync();
-            return View(new ReportsViewModel(reports)); // needs to change
-        }
-        [Authorize]
         [Route("Reasons")]
         public async Task<IActionResult> Reasons()
         {

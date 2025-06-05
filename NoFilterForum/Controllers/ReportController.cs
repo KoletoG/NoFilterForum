@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Constants;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using Web.ViewModels.Admin;
 
 namespace Web.Controllers
 {
@@ -13,9 +16,17 @@ namespace Web.Controllers
             _reportService = reportService;
         }
 
-        public IActionResult Index()
+        [Authorize]
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
+        [Route("Reports")]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            if (!UserConstants.adminNames.Contains(User.Identity.Name))
+            {
+                return Forbid();
+            }
+            var reports = await _reportService.GetAllReportsAsync();
+            return View(new ReportsViewModel(reports)); // needs to change
         }
     }
 }
