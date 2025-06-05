@@ -65,13 +65,33 @@ namespace NoFilterForum.Infrastructure.Services
             }
             if (createReportRequest.IsPost)
             {
-
+                if(!await _unitOfWork.Posts.ExistByIdAsync(createReportRequest.IdOfPostOrReply))
+                {
+                    return PostResult.NotFound;
+                }
             }
             else
             {
-
+                if (!await _unitOfWork.Replies.ExistByIdAsync(createReportRequest.IdOfPostOrReply))
+                {
+                    return PostResult.NotFound;
+                }
             }
-            return PostResult.Success;
+            var report = _reportFactory.CreateReport(createReportRequest.Content,userFrom,userTo,createReportRequest.IdOfPostOrReply,createReportRequest.IsPost);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Reports.CreateAsync(report);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Report by user with Id: {UserId} was not created", createReportRequest.UserFromId);
+                return PostResult.UpdateFailed;
+            }
         }
     }
 }
