@@ -63,7 +63,14 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
+            if (createReportRequest.IsPost)
+            {
 
+            }
+            else
+            {
+
+            }
             return PostResult.Success;
         }
     }

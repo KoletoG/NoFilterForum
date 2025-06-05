@@ -70,5 +70,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.AsNoTracking().Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
         }
+        public async Task<bool> ExistByIdAsync(string id)
+        {
+            return await _context.PostDataModels.AnyAsync(x=>x.Id == id);
+        }
     }
 }

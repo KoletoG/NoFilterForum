@@ -17,5 +17,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task DeleteAsync(PostDataModel post);
         public Task DeleteRangeAsync(List<PostDataModel> posts);
         public Task<DateTime> GetLastPostDateByUsernameAsync(string userId);
+        public Task<bool> ExistByIdAsync(string id);
     }
 }

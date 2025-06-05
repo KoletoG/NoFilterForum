@@ -20,5 +20,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task DeleteAsync(ReplyDataModel reply);
         public Task<int> GetCountByPostIdAsync(string postId);
         public Task DeleteRangeAsync(List<ReplyDataModel> replies);
+        public Task<bool> ExistByIdAsync(string id);
     }
 }

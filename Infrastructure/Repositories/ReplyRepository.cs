@@ -72,6 +72,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.ReplyDataModels.Remove(reply);
         }
+        public async Task<bool> ExistByIdAsync(string id)
+        {
+            return await _context.ReplyDataModels.AnyAsync(x => x.Id == id);
+        }
         public async Task DeleteRangeAsync(List<ReplyDataModel> replies)
         {
             _context.ReplyDataModels.RemoveRange(replies);
