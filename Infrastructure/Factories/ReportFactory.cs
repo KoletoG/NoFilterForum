@@ -21,7 +21,6 @@ namespace Infrastructure.Factories
         { 
             content= _htmlSanitizer.Sanitize(content);
             return new(userTo, content, idOfPostReply, isPost, userFrom);
-
         }
     }
 }

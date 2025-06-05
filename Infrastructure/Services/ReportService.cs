@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Microsoft.Build.Framework;
@@ -12,10 +13,12 @@ namespace NoFilterForum.Infrastructure.Services
     public class ReportService : IReportService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReportFactory _reportFactory;
         private readonly ILogger<ReportService> _logger;
-        public ReportService(IUnitOfWork unitOfWork, ILogger<ReportService> logger)
+        public ReportService(IUnitOfWork unitOfWork,IReportFactory reportFactory, ILogger<ReportService> logger)
         { 
             _logger = logger;
+            _reportFactory = reportFactory;
             _unitOfWork = unitOfWork;
         }
         public async Task<List<ReportDataModel>> GetAllReportsAsync()

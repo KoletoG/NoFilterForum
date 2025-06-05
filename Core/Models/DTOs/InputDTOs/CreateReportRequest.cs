@@ -11,5 +11,7 @@ namespace Core.Models.DTOs.InputDTOs
         public string UserToId {  get; set; }
         public string Content { get; set; }
         public string UserFromId {  get; set; }
+        public bool IsPost { get; set; }
+        public string IdOfPostOrReply { get; set; }
     }
 }
