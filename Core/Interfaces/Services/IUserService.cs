@@ -7,6 +7,7 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface IUserService
     {
+        public bool IsDefaultUsername(string username);
         public Task<bool> AnyNotConfirmedUsersAsync();
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);

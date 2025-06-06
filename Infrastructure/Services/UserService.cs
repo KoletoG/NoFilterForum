@@ -45,6 +45,14 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return users;
         }
+        public async Task GetProfileDtoByUsername(string username)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(username);
+        }
+        public bool IsDefaultUsername(string username)
+        {
+            return username == UserConstants.DefaultUser.UserName;
+        }
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);

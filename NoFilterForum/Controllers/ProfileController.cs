@@ -1,4 +1,6 @@
 ﻿using System.Security.Claims;
+using System.Web;
+using Core.Constants;
 using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -137,7 +139,15 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string username, int page=1)
         {
-            
+            username = HttpUtility.UrlDecode(username);
+            if (string.IsNullOrEmpty(username)) 
+            {
+                return BadRequest($"Username cannot be null or empty");
+            }
+            if (_userService.IsDefaultUsername(username))
+            {
+                return Forbid();
+            }
             return View();
         }
     }
