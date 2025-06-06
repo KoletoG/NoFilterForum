@@ -1,4 +1,6 @@
 ﻿using Core.Enums;
+using Web.ViewModels.Post;
+using Web.ViewModels.Reply;
 
 namespace Web.ViewModels.Profile
 {
@@ -16,5 +18,7 @@ namespace Web.ViewModels.Profile
         public int Page {  get; set; }
         public string Username { get; set; }
         public bool IsSameUser { get; set; }
+        public List<ReplyItemViewModel> Replies { get; set; }
+        public List<PostItemViewModel> Posts { get; set; }
     }
 }
