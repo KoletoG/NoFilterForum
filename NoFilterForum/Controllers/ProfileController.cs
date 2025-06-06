@@ -133,5 +133,12 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Index(string username, int page=1)
+        {
+            
+            return View();
+        }
     }
 }
