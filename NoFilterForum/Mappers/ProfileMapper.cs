@@ -16,5 +16,10 @@ namespace Web.Mappers
             Image = vm.Image,
             UserId = userId
         };
+        public static GetProfileDtoRequest MapToRequest(string username, string currentUsername) => new()
+        {
+            Username = username,
+            CurrentUsername = currentUsername
+        };
     }
 }

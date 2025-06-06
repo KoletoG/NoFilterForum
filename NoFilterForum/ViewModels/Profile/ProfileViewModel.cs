@@ -15,7 +15,7 @@ namespace Web.ViewModels.Profile
         public string UserId { get; set; }
         public int PostsCount { get; set; }
         public int TotalPages {  get; set; }
-        public int Page {  get; set; }
+        public int Page { get; set; }
         public string Username { get; set; }
         public bool IsSameUser { get; set; }
         public List<ReplyItemViewModel> Replies { get; set; }

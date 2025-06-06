@@ -148,6 +148,19 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
+            var getProfileDtoRequest = ProfileMapper.MapToRequest(username, User.Identity.Name);
+            var resultUser = await _userService.GetProfileDtoByUsernameAsync(getProfileDtoRequest);
+            if (resultUser.GetResult != GetResult.Success)
+            {
+                return resultUser.GetResult switch
+                {
+                    GetResult.NotFound => NotFound(),
+                    GetResult.Problem => Problem(),
+                    GetResult.Forbid => Forbid(),
+                    _ => Problem()
+                };
+            }
+
             return View();
         }
     }
