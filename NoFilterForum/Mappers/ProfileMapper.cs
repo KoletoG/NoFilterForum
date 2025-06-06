@@ -37,7 +37,7 @@ namespace Web.Mappers
             Title = dto.Title,
             Created = dto.Created
         };
-        public static ProfileViewModel MapToViewModel(List<PostItemViewModel> posts, List<ReplyItemViewModel> replies, bool isSameUser, ProfileUserDto profileUserDto, int page, Dictionary<string, DateTime> UserIdDate, int totalPages) => new()
+        public static ProfileViewModel MapToViewModel(List<PostItemViewModel> posts, List<ReplyItemViewModel> replies, bool isSameUser, ProfileUserViewModel profileUserDto, int page, Dictionary<string, DateTime> UserIdDate, int totalPages) => new()
         {
             IsSameUser = isSameUser,
             Posts = posts,
@@ -46,6 +46,18 @@ namespace Web.Mappers
             Page = page,
             UserIdDate = UserIdDate,
             Profile = profileUserDto
+        };
+        public static ProfileUserViewModel MapToViewModel(ProfileUserDto dto) => new()
+        {
+            Bio = dto.Bio,
+            DateCreated = dto.DateCreated,
+            Email = dto.Email,
+            Id = dto.Id,
+            ImageUrl = dto.ImageUrl,
+            PostsCount = dto.PostsCount,
+            Role = dto.Role,
+            UserName = dto.UserName,
+            WarningsCount = dto.WarningsCount,
         };
     }
 }

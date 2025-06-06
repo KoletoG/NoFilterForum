@@ -167,6 +167,7 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
+            var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto);
             var replyDtoRequest = ReplyMapper.MapToRequest(username);
             List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
             var postDtoRequest = PostMappers.MapToRequest(username);
@@ -180,7 +181,7 @@ namespace Web.Controllers
             var profileViewModel = ProfileMapper.MapToViewModel(postViewModelList,
                 replyViewModelList,
                 resultUser.IsSameUser,
-                resultUser.UserDto, 
+                profileUserViewModel, 
                 page, 
                 dictionary, 
                 totalPageCount);

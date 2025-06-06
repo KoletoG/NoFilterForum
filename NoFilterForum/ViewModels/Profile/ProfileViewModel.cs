@@ -7,7 +7,7 @@ namespace Web.ViewModels.Profile
 {
     public class ProfileViewModel
     {
-        public ProfileUserDto Profile { get; set; }
+        public ProfileUserViewModel Profile { get; set; }
         public bool IsSameUser { get; set; }
         public List<ReplyItemViewModel> Replies { get; set; }
         public List<PostItemViewModel> Posts { get; set; }
