@@ -45,9 +45,28 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return users;
         }
-        public async Task GetProfileDtoByUsername(string username)
+        public async Task<ProfileDto> GetProfileDtoByUsername(GetProfileDtoRequest getProfileDtoRequest)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(username);
+            var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.Username);
+            if(user == null)
+            {
+                return new ProfileDto()
+                {
+                    GetResult = GetResult.NotFound
+                };
+            }
+            var profileUserDto = await _unitOfWork.Users.GetProfileUserDtoByIdAsync(user.Id);
+            bool isSameUser = false;
+            if(getProfileDtoRequest.Username == getProfileDtoRequest.CurrentUsername)
+            {
+                isSameUser = true;
+            }
+            return new()
+            {
+                GetResult = GetResult.Success,
+                IsSameUser = isSameUser,
+                UserDto = profileUserDto
+            };
         }
         public bool IsDefaultUsername(string username)
         {

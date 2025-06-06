@@ -10,6 +10,7 @@ namespace Core.Models.DTOs.OutputDTOs
     public class ProfileDto
     {
         public GetResult GetResult { get; set; }
-        public ProfileUserDto UserDto { get; set; }
+        public bool IsSameUser { get; set; }
+        public ProfileUserDto? UserDto { get; set; }
     }
 }
