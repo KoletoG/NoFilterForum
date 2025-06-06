@@ -4,6 +4,7 @@ using System.Web;
 using Core.Constants;
 using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
+using Core.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -169,6 +170,7 @@ namespace Web.Controllers
             var replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
             var postDtoRequest = PostMappers.MapToRequest(username);
             var postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
+            
             return View();
         }
     }
