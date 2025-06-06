@@ -3,6 +3,7 @@ using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Core.Utility;
 using Ganss.Xss;
 using Microsoft.Extensions.Logging;
@@ -41,6 +42,10 @@ namespace NoFilterForum.Infrastructure.Services
                 return true;
             }
             return false;
+        }
+        public async Task<List<ReplyItemDto>> GetListReplyItemDto(GetReplyItemRequest getReplyItemRequest)
+        {
+
         }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
