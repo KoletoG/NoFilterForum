@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Web;
 using Core.Constants;
 using Core.Enums;
@@ -15,9 +16,11 @@ namespace Web.Controllers
     public class ProfileController : Controller
     {
         private readonly IUserService _userService;
-        public ProfileController(IUserService userService)
+        private readonly IReplyService _replyService;
+        public ProfileController(IUserService userService, IReplyService replyService)
         {
             _userService = userService;
+            _replyService = replyService;
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -160,7 +163,8 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-
+            var replyDtoRequest = ReplyMapper.MapToRequest(username);
+            var replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
             return View();
         }
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs.OutputDTOs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
@@ -16,6 +18,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<ReplyDataModel> GetByIdAsync(string id)
         {
             return await _context.ReplyDataModels.FindAsync(id);
+        }
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUsernameAsync(string username)
+        {
+            return await _context.ReplyDataModels.Where(x=>x.User.UserName == username).Select(x => new ReplyItemDto()
+            {
+                Content = x.Content,
+                Id = x.Id,
+                PostId = x.Post.Id
+            }).ToListAsync();
         }
         public async Task<ReplyDataModel> GetWithUserByIdAsync(string id)
         {

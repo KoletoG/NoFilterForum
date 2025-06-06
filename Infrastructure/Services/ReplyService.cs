@@ -43,9 +43,9 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDto(GetReplyItemRequest getReplyItemRequest)
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest)
         {
-
+            return await _unitOfWork.Replies.GetListReplyItemDtoByUsernameAsync(getReplyItemRequest.Username);
         }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
