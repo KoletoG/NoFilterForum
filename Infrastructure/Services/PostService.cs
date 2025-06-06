@@ -38,6 +38,10 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Replies.GetPostIdById(replyId);
         }
+        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest)
+        {
+            return await _unitOfWork.Posts.GetListProfilePostDtoByUsernameAsync(getProfilePostDtoRequest.Username);
+        }
         public async Task<PostResult> PinPostAsync(string postId)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(postId);

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs.OutputDTOs;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Core.Interfaces.Repositories
@@ -14,6 +15,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<int> GetCountByPostIdAsync(string id);
         public Task<bool> UpdateAsync(PostDataModel post);
         public Task<bool> UpdateRangeAsync(List<PostDataModel> posts);
+        public Task<List<ProfilePostDto>> GetListProfilePostDtoByUsernameAsync(string username);
         public Task DeleteAsync(PostDataModel post);
         public Task DeleteRangeAsync(List<PostDataModel> posts);
         public Task<DateTime> GetLastPostDateByUsernameAsync(string userId);

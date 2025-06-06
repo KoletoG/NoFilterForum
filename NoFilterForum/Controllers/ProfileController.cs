@@ -17,8 +17,10 @@ namespace Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IReplyService _replyService;
-        public ProfileController(IUserService userService, IReplyService replyService)
+        private readonly IPostService _postService;
+        public ProfileController(IUserService userService,IPostService postService, IReplyService replyService)
         {
+            _postService = postService;
             _userService = userService;
             _replyService = replyService;
         }
@@ -165,6 +167,8 @@ namespace Web.Controllers
             }
             var replyDtoRequest = ReplyMapper.MapToRequest(username);
             var replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
+            var postDtoRequest = PostMappers.MapToRequest(username);
+            var postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
             return View();
         }
     }

@@ -40,5 +40,9 @@ namespace Web.Mappers
             PostId = vm.PostId,
             UserId = userId
         };
+        public static GetProfilePostDtoRequest MapToRequest(string username) => new()
+        {
+            Username = username
+        };
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models.DTOs.OutputDTOs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
@@ -29,6 +30,14 @@ namespace NoFilterForum.Infrastructure.Repositories
             return await _context.PostDataModels.Where(x => x.Id == id)
                 .Include(x => x.User)
                 .FirstOrDefaultAsync();
+        }
+        public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUsernameAsync(string username)
+        {
+            return await _context.PostDataModels.Where(x => x.User.UserName == username).Select(x => new ProfilePostDto()
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToListAsync();
         }
         public async Task<List<PostDataModel>> GetAllByUserIdAsync(string userId)
         {
