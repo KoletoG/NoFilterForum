@@ -155,58 +155,6 @@ namespace Web.Controllers
         }
         // SORT POSTS IN POSTSMAIN BY DATE AND LIKES ALGORITHM???
         // Need to add likes with AJAX
-        [Authorize]
-        [HttpGet]
-        [Route("Profile/{userName}")]
-        [Route("Profile/{userName}/page-{page}")]
-        [Route("Profile/{userName}/error-{error}")]
-        [Route("Profile/{userName}/error-{error}/page-{page}")]
-        public async Task<IActionResult> Profile(string userName, int page = 1, string error = "")
-        {
-            userName = HttpUtility.UrlDecode(userName);
-            if (!string.IsNullOrEmpty(error))
-            {
-                ViewBag.Error = error;
-            }
-            if (userName == UserConstants.DefaultUser.UserName)
-            {
-                return RedirectToAction("Index");
-            }
-            var currentUser = await _ioService.GetUserByNameAsync(userName);
-            var postsCount = await _context.PostDataModels.Where(x => x.User == currentUser).CountAsync();
-            var repliesCount = await _context.ReplyDataModels.Where(x => x.User == currentUser).CountAsync();
-            var allCount = postsCount + repliesCount;
-            var allPages = Math.Ceiling((double)allCount / countPerPage);
-            if (page < 1)
-            {
-                page = 1;
-            }
-            else if (page >= allPages)
-            {
-                page = (int)allPages;
-            }
-            if (!_memoryCache.TryGetValue($"postsUser_{userName}", out List<PostDataModel> posts))
-            {
-                posts = await _ioService.GetTByUserAsync<PostDataModel>(currentUser);
-                _memoryCache.Set($"postsUser_{userName}", posts, TimeSpan.FromMinutes(240));
-            }
-            if (!_memoryCache.TryGetValue($"repliesUser_{userName}", out List<ReplyDataModel> replies))
-            {
-                replies = await _ioService.GetTByUserAsync<ReplyDataModel>(currentUser);
-                _memoryCache.Set($"postsUser_{userName}", replies, TimeSpan.FromMinutes(240));
-            }
-            Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
-            foreach (var post in posts)
-            {
-                dateOrder[post.Id] = post.DateCreated;
-            }
-            foreach (var reply in replies)
-            {
-                reply.Content = _nonIOService.ReplaceLinkText(reply.Content);
-                dateOrder[reply.Id] = reply.DateCreated;
-            }
-            return View(new ProfileViewModel(currentUser, page, allPages, posts, replies, userName == User.Identity.Name, dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary()));
-        }
         // Change to AJAX
         [Authorize]
         [HttpPost]
