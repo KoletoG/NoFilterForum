@@ -4,6 +4,7 @@ using System.Web;
 using Core.Constants;
 using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Core.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -167,11 +168,23 @@ namespace Web.Controllers
                 };
             }
             var replyDtoRequest = ReplyMapper.MapToRequest(username);
-            var replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
+            List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
             var postDtoRequest = PostMappers.MapToRequest(username);
-            var postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
-            
-            return View();
+            List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
+            var totalCount = _userService.GetTotalCountByPostsAndReplies(replyDtoList, postDtoList);
+            int totalPageCount = PageUtility.GetTotalPagesCount(totalCount,PostConstants.PostsPerSection);
+            page = PageUtility.ValidatePageNumber(page,totalPageCount);
+            var replyViewModelList = replyDtoList.Select(ProfileMapper.MapToViewModel).ToList();
+            var postViewModelList = postDtoList.Select(ProfileMapper.MapToViewModel).ToList();
+            var dictionary = _userService.OrderDates(postDtoList, replyDtoList,page, PostConstants.PostsPerSection);
+            var profileViewModel = ProfileMapper.MapToViewModel(postViewModelList,
+                replyViewModelList,
+                resultUser.IsSameUser,
+                resultUser.UserDto, 
+                page, 
+                dictionary, 
+                totalPageCount);
+            return View(profileViewModel);
         }
     }
 }

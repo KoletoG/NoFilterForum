@@ -41,7 +41,8 @@ namespace NoFilterForum.Infrastructure.Repositories
                 PostsCount = x.PostsCount,
                 Role = x.Role,
                 UserName = x.UserName,
-                WarningsCount = x.Warnings.Count
+                WarningsCount = x.Warnings.Count,
+                ImageUrl = x.ImageUrl
             }).FirstOrDefaultAsync();
         }
         public async Task<List<UserDataModel>> GetAllAsync()

@@ -1,6 +1,9 @@
 ﻿using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Web.ViewModels.Post;
 using Web.ViewModels.Profile;
+using Web.ViewModels.Reply;
 
 namespace Web.Mappers
 {
@@ -20,6 +23,29 @@ namespace Web.Mappers
         {
             Username = username,
             CurrentUsername = currentUsername
+        };
+        public static ReplyItemViewModel MapToViewModel(ReplyItemDto dto) => new()
+        {
+            Content = dto.Content,
+            Id = dto.Id,
+            PostId = dto.PostId,
+            Created = dto.Created
+        };
+        public static PostItemViewModel MapToViewModel(ProfilePostDto dto) => new()
+        {
+            Id = dto.Id,
+            Title = dto.Title,
+            Created = dto.Created
+        };
+        public static ProfileViewModel MapToViewModel(List<PostItemViewModel> posts, List<ReplyItemViewModel> replies, bool isSameUser, ProfileUserDto profileUserDto, int page, Dictionary<string, DateTime> UserIdDate, int totalPages) => new()
+        {
+            IsSameUser = isSameUser,
+            Posts = posts,
+            Replies = replies,
+            TotalPages = totalPages,
+            Page = page,
+            UserIdDate = UserIdDate,
+            Profile = profileUserDto
         };
     }
 }

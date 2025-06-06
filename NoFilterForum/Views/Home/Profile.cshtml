@@ -1,13 +1,13 @@
 ﻿@using System.Web
 @using Core.Enums
 @using NoFilterForum.Core.Models.DataModels
-@using NoFilterForum.Core.Models.ViewModels
 @using NoFilterForum.Global_variables
+@using Web.ViewModels.Profile
 
 
 @model ProfileViewModel
 @{
-	<img src="@Model.User.ImageUrl" width="200" height="200" />
+	<img src="@Model.Profile.ImageUrl" width="200" height="200" />
 	if (Model.IsSameUser)
 	{
 		if (!string.IsNullOrEmpty(ViewBag.Error))
@@ -15,11 +15,11 @@
 			<h1 style="color:red">@ViewBag.Error</h1>
 		}
 		<h1>Hello!</h1>
-		<h6>You have: @Model.User.Warnings.Count warnings</h6>
+		<h6>You have: @Model.Profile.WarningsCount warnings</h6>
 		<h2>Your info (This information is only visible by you): </h2>
-		<h3>Email: @Model.User.Email</h3>
-		<h3>Your account was created on @Model.User.DateCreated.ToLongDateString()</h3>
-		<h3>Your bio: @Html.Raw(Model.User.Bio)</h3>
+		<h3>Email: @Model.Profile.Email</h3>
+		<h3>Your account was created on @Model.Profile.DateCreated.ToLongDateString()</h3>
+		<h3>Your bio: @Html.Raw(Model.Profile.Bio)</h3>
 		<form asp-action="ChangeBio" asp-controller="Profile" method="post">
 			@Html.AntiForgeryToken()
 			<input name="Bio" placeholder="Your bio..." type="text" />
@@ -43,44 +43,44 @@
 	}
 	else
 	{
-		<h3>@Model.User.UserName's bio: @Html.Raw(Model.User.Bio)</h3>
+		<h3>@Model.Profile.UserName's bio: @Html.Raw(Model.Profile.Bio)</h3>
 	}
-	<h4>Role: @Model.User.Role</h4>
-	if (Model.User.Role == UserRoles.Admin)
+	<h4>Role: @Model.Profile.Role</h4>
+	if (Model.Profile.Role == UserRoles.Admin)
 	{
-		<h3 class="text-danger">@Model.User.UserName</h3>
+		<h3 class="text-danger">@Model.Profile.UserName</h3>
 	}
-	else if (Model.User.Role == UserRoles.VIP)
+	else if (Model.Profile.Role == UserRoles.VIP)
 	{
-		<h3 class="text-warning">@Model.User.UserName</h3>
+		<h3 class="text-warning">@Model.Profile.UserName</h3>
 	}
-	else if (Model.User.Role == UserRoles.Regular)
+	else if (Model.Profile.Role == UserRoles.Regular)
 	{
-		<h3 class="text-light">@Model.User.UserName</h3>
+		<h3 class="text-light">@Model.Profile.UserName</h3>
 	}
-	else if (Model.User.Role == UserRoles.Dinosaur)
+	else if (Model.Profile.Role == UserRoles.Dinosaur)
 	{
-		<h3 class="text-primary">@Model.User.UserName</h3>
+		<h3 class="text-primary">@Model.Profile.UserName</h3>
 	}
 	else
 	{
-		<h3 class="text-dark">@Model.User.UserName</h3>
+		<h3 class="text-dark">@Model.Profile.UserName</h3>
 	}
 	if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 	{
-		<h6>The user has: @Model.User.Warnings.Count warnings</h6>
+		<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
 		<form method="post" asp-action="Create" asp-controller="Warnings">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="UserId" value="@Model.User.Id" />
+			<input type="hidden" name="UserId" value="@Model.Profile.Id" />
 			<input name="Content" placeholder="Reason for warning..." type="text"/>
 			<button type="submit">Give warning</button>
 		</form>
 	}
 }
-<h1>@Model.User.UserName</h1>
-<h5>Posts count: @Model.User.PostsCount</h5>
+<h1>@Model.Profile.UserName</h1>
+<h5>Posts count: @Model.Profile.PostsCount</h5>
 @{
-	foreach(var key in Model.userDate.Keys)
+	foreach(var key in Model.UserIdDate.Keys)
 	{
 		foreach(var post in Model.Posts)
 		{
@@ -95,7 +95,7 @@
 		{
 			if (reply.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@reply.Post.Id" asp-route-isFromProfile="true" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
+				<a asp-action="PostView" asp-route-id="@reply.PostId" asp-route-isFromProfile="true" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
 				<br />
 				break;
 			}
@@ -103,8 +103,8 @@
 	}
 	int previousPage = Model.Page - 1;
 	int nextPage = Model.Page + 1;
-	string encodedUsername = HttpUtility.UrlEncode(Model.User.UserName);
-	if (Model.AllPages == 1)
+	string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
+	if (Model.TotalPages == 1)
 	{
 		
 	}
@@ -114,7 +114,7 @@
 			Next page
 		</a>
 	}
-	else if (Model.Page == Model.AllPages)
+	else if (Model.Page == Model.TotalPages)
 	{
 
 		<a asp-action="Profile" asp-route-userName="@encodedUsername" asp-route-page="@previousPage" asp-controller="Home">

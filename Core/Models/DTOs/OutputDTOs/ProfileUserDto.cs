@@ -16,6 +16,7 @@ namespace Core.Models.DTOs.OutputDTOs
         public string? Bio { get; set; }
         public UserRoles Role { get; set; }
         public int PostsCount { get; set; }
+        public string ImageUrl { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

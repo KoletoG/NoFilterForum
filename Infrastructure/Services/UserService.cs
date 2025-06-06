@@ -45,6 +45,20 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return users;
         }
+        public Dictionary<string,DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemDto> replyItemDtos, int page, int countPerPage)
+        {
+            Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
+            foreach (var post in postItemDtos)
+            {
+                dateOrder[post.Id] = post.Created;
+            }
+            foreach (var reply in replyItemDtos)
+            {
+                reply.Content = TextFormatter.ReplaceLinkText(reply.Content);
+                dateOrder[reply.Id] = reply.Created;
+            }
+            return dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary();
+        }
         public async Task<ProfileDto> GetProfileDtoByUsernameAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.Username);
@@ -111,6 +125,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> EmailExistsAsync(string email)
         {
             return await _unitOfWork.Users.EmailExistsAsync(email);
+        }
+        public int GetTotalCountByPostsAndReplies(List<ReplyItemDto> replies, List<ProfilePostDto> posts)
+        {
+            return replies.Count + posts.Count;
         }
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
         {
