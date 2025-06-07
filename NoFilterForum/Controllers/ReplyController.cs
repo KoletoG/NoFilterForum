@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using System.Security.Claims;
+using System.Web;
 using Web.Mappers;
 using Web.ViewModels.Reply;
 
@@ -15,9 +16,11 @@ namespace Web.Controllers
         {
             _replyService = replyService;
         }
-        public IActionResult Index()
+        public IActionResult Index(string postId, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "")
         {
-            return View();
+            postId = HttpUtility.UrlDecode(postId);
+            replyId = HttpUtility.UrlDecode(replyId);
+            return Ok();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

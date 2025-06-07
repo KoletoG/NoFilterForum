@@ -174,11 +174,11 @@ else
 			{
 				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-warning">@reply.User.UserName</a>
 			}
-			else if (Model.Post.User.Role == UserRoles.Regular)
+			else if (reply.User.Role == UserRoles.Regular)
 			{
 				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-light">@reply.User.UserName</a>
 			}
-			else if (Model.Post.User.Role == UserRoles.Dinosaur)
+			else if (reply.User.Role == UserRoles.Dinosaur)
 			{
 				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-primary">@reply.User.UserName</a>
 			}
