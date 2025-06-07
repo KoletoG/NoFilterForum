@@ -30,6 +30,11 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
             _userService = userService;
         }
+        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
+        {
+            var listReplyIndexItemDto = new List<ReplyIndexItemDto>();
+            return listReplyIndexItemDto;
+        }
         public async Task<bool> HasTimeoutByUserIdAsync(string userId)
         {
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);

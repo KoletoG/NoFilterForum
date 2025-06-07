@@ -24,7 +24,7 @@ namespace Web.Controllers
         {
             postId = HttpUtility.UrlDecode(postId);
             replyId = HttpUtility.UrlDecode(replyId);
-            var post = await _postService.GetPostItemDtoByIdAsync(postId);
+            var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
             return Ok();
         }
         [HttpPost]
