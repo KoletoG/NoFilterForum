@@ -38,9 +38,9 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Replies.GetPostIdById(replyId);
         }
-        public async Task<PostItemDto> GetPostItemDtoByIdAsync(string postId)
+        public async Task<PostReplyIndexDto> GetPostReplyIndexDtoByIdAsync(string postId)
         {
-            return await _unitOfWork.Posts.GetPostItemDtoByIdAsync(postId);
+            return await _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync(postId);
         }
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest)
         {

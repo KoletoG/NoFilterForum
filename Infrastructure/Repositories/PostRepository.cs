@@ -31,16 +31,19 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Include(x => x.User)
                 .FirstOrDefaultAsync();
         }
-        public async Task<PostItemDto> GetPostItemDtoByIdAsync(string id)
+        public async Task<PostReplyIndexDto> GetPostReplyIndexDtoByIdAsync(string id)
         {
-            return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostItemDto()
+            return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostReplyIndexDto()
             {
+                Content = x.Content,
                 Id = x.Id,
                 DateCreated = x.DateCreated,
-                IsPinned = x.IsPinned,
+                Likes = x.Likes,
                 Role = x.User.Role,
                 Title = x.Title,
-                Username = x.User.UserName
+                UserId = x.User.Id,
+                Username = x.User.UserName,
+                ImageUrl = x.User.ImageUrl
             }).FirstOrDefaultAsync();
         }
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUsernameAsync(string username)
