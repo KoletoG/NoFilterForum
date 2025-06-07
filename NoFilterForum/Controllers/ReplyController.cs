@@ -1,8 +1,10 @@
 ﻿using Core.Enums;
+using Core.Models.DTOs.OutputDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using Web.Mappers;
 using Web.ViewModels.Reply;
@@ -12,14 +14,17 @@ namespace Web.Controllers
     public class ReplyController : Controller
     {
         private readonly IReplyService _replyService;
-        public ReplyController(IReplyService replyService)
+        private readonly IPostService _postService;
+        public ReplyController(IReplyService replyService, IPostService postService)
         {
             _replyService = replyService;
+            _postService = postService;
         }
-        public IActionResult Index(string postId, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "")
+        public async Task<IActionResult> Index(string postId, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "")
         {
             postId = HttpUtility.UrlDecode(postId);
             replyId = HttpUtility.UrlDecode(replyId);
+            var post = await _postService.GetPostItemDtoByIdAsync(postId);
             return Ok();
         }
         [HttpPost]

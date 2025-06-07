@@ -31,6 +31,18 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Include(x => x.User)
                 .FirstOrDefaultAsync();
         }
+        public async Task<PostItemDto> GetPostItemDtoByIdAsync(string id)
+        {
+            return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostItemDto()
+            {
+                Id = x.Id,
+                DateCreated = x.DateCreated,
+                IsPinned = x.IsPinned,
+                Role = x.User.Role,
+                Title = x.Title,
+                Username = x.User.UserName
+            }).FirstOrDefaultAsync();
+        }
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUsernameAsync(string username)
         {
             return await _context.PostDataModels.Where(x => x.User.UserName == username).Select(x => new ProfilePostDto()
