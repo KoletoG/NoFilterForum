@@ -6,5 +6,8 @@ namespace Web.ViewModels.Reply
     {
         public string Username { get; set; }
         public UserRoles Role {  get; set; }
+        public string ImageUrl { get; set; }
+        public string Id { get; set; }
+        public string Content { get; set; }
     }
 }

@@ -6,6 +6,6 @@
         public string ReplyId { get;set; }
         public int Page {  get; set; }
         public int TotalPages { get; set; }
-
+        public List<ReplyIndexItemViewModel> Replies { get; set; }
     }
 }
