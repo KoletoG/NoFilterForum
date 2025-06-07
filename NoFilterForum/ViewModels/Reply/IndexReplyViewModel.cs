@@ -1,6 +1,4 @@
-﻿using Web.ViewModels.Post;
-
-namespace Web.ViewModels.Reply
+﻿namespace Web.ViewModels.Reply
 {
     public class IndexReplyViewModel
     {
@@ -10,5 +8,6 @@ namespace Web.ViewModels.Reply
         public int TotalPages { get; set; }
         public List<ReplyIndexItemViewModel> Replies { get; set; }
         public PostReplyIndexViewModel Post {  get; set; }
+        public CurrentUserReplyIndexViewModel CurrentUser { get; set; }
     }
 }
