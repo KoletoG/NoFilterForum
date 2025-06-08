@@ -34,14 +34,30 @@ namespace NoFilterForum.Infrastructure.Services
         {
             var listReplyIndexItemDto = new List<ReplyIndexItemDto>();
             var totalPages = 1;
-            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostReplyId);
+            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostId);
             if (repliesCount > 0) 
             {
                 totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
                 getListReplyIndexItemRequest.Page= PageUtility.ValidatePageNumber(getListReplyIndexItemRequest.Page, totalPages);
-                
+                listReplyIndexItemDto = await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page,PostConstants.PostsPerSection);
+
             }
             return listReplyIndexItemDto;
+        }
+        public async Task<(int page,int totalPages)> GetPageAndTotalPage(int page, string postId)
+        {
+            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
+            int totalPages=1;
+            if (repliesCount>0)
+            {
+                totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+                page = PageUtility.ValidatePageNumber(page, totalPages);
+            }
+            else
+            {
+                page = 1;
+            }
+            return (page, totalPages);
         }
         public async Task<bool> HasTimeoutByUserIdAsync(string userId)
         {

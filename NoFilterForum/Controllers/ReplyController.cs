@@ -20,11 +20,11 @@ namespace Web.Controllers
             _replyService = replyService;
             _postService = postService;
         }
-        public async Task<IActionResult> Index(string postId, string titleOfSection, int page = 1, bool isFromProfile = false, string replyId = "")
+        public async Task<IActionResult> Index(string postId, string titleOfSection, int page = 1)
         {
             postId = HttpUtility.UrlDecode(postId);
-            replyId = HttpUtility.UrlDecode(replyId);
             var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
+            
             return Ok();
         }
         [HttpPost]

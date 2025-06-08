@@ -9,7 +9,6 @@ namespace Core.Models.DTOs.InputDTOs
     public class GetListReplyIndexItemRequest
     {
         public int Page {  get; set; }
-        public string PostReplyId { get; set; }
-        public bool IsFromProfile { get; set; }
+        public string PostId { get; set; }
     }
 }
