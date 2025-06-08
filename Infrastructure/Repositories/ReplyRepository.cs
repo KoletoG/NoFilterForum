@@ -29,7 +29,8 @@ namespace NoFilterForum.Infrastructure.Repositories
                 ImageUrl = x.User.ImageUrl,
                 Likes = x.Likes,
                 Role = x.User.Role,
-                Username = x.User.UserName
+                Username = x.User.UserName,
+                UserId = x.User.Id
             }).Skip((page-1)*repliesPerPage).Take(repliesPerPage).ToListAsync();
         }
         public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUsernameAsync(string username)
