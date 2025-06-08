@@ -1,4 +1,5 @@
 ﻿using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.OutputDTOs;
 using Web.ViewModels.Reply;
 
 namespace Web.Mappers
@@ -24,6 +25,28 @@ namespace Web.Mappers
         public static GetReplyItemRequest MapToRequest(string username) => new()
         {
             Username = username
+        };
+        public static ReplyIndexItemViewModel MapToViewModel(ReplyIndexItemDto dto) => new()
+        {
+            Content = dto.Content,
+            Id = dto.Id,
+            DateCreated = dto.DateCreated,
+            ImageUrl = dto.ImageUrl,
+            Likes = dto.Likes,
+            Role = dto.Role,
+            UserId = dto.UserId,
+            Username = dto.Username
+        };
+        public static PostReplyIndexViewModel MapToViewModel(PostReplyIndexDto dto) => new()
+        {
+            Id = dto.Id,
+            Content = dto.Content,
+            DateCreated = dto.DateCreated,
+            ImageUrl = dto.ImageUrl,
+            Likes = dto.Likes,
+            Role = dto.Role,
+            UserId = dto.UserId,
+            Username = dto.Username
         };
     }
 }

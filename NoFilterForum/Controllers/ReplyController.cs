@@ -30,7 +30,9 @@ namespace Web.Controllers
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             var currentUsername = User.Identity.Name;
             _replyService.MarkTagsOfContents(ref listReplyIndexDto,ref post, currentUsername);
-            return Ok();
+            var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
+            var postVM = ReplyMapper.MapToViewModel(post);
+            return View(); // Need to add viewmodels 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
