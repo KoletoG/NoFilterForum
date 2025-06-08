@@ -55,6 +55,14 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return (page, totalPages);
         }
+        public void MarkTagsOfContents(ref List<ReplyIndexItemDto> replies, ref PostReplyIndexDto post, string currentUsername)
+        {
+            post.Content = TextFormatter.MarkTagsOfContent(post.Content, currentUsername);
+            foreach (var reply in replies)
+            {
+                reply.Content = TextFormatter.MarkTagsOfContent(reply.Content, currentUsername); ;
+            }
+        }
         public async Task<bool> HasTimeoutByUserIdAsync(string userId)
         {
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);

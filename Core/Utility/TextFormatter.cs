@@ -52,5 +52,10 @@ namespace Core.Utility
             text = CheckForHashTags(text);
             return text;
         }
+        public static string MarkTagsOfContent(string content, string currentUsername)
+        {
+            content = string.Join(" ", content.Split(' ').Select(x => MarkTags(x, currentUsername)));
+            return content;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Models.DTOs.OutputDTOs;
+using Core.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
@@ -27,6 +28,8 @@ namespace Web.Controllers
             (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId);
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
+            var currentUsername = User.Identity.Name;
+            _replyService.MarkTagsOfContents(ref listReplyIndexDto,ref post, currentUsername);
             return Ok();
         }
         [HttpPost]
