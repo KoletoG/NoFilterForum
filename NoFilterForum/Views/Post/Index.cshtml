@@ -56,7 +56,7 @@
 	}
 	foreach (var post in Model.Posts)
 	{
-		<a asp-action="PostView" asp-controller="Home" asp-route-id="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
+		<a asp-action="Index" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 			<h3>
 				@post.Title @if (post.Role == UserRoles.Admin)
 				{
