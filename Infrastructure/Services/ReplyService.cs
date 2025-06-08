@@ -33,14 +33,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
         {
             var listReplyIndexItemDto = new List<ReplyIndexItemDto>();
-            var totalPages = 1;
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostId);
             if (repliesCount > 0) 
             {
-                totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
-                getListReplyIndexItemRequest.Page= PageUtility.ValidatePageNumber(getListReplyIndexItemRequest.Page, totalPages);
                 listReplyIndexItemDto = await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page,PostConstants.PostsPerSection);
-
             }
             return listReplyIndexItemDto;
         }

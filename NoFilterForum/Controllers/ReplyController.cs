@@ -24,7 +24,9 @@ namespace Web.Controllers
         {
             postId = HttpUtility.UrlDecode(postId);
             var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
-            
+            (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId);
+            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
+            var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             return Ok();
         }
         [HttpPost]
