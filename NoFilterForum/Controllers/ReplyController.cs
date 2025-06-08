@@ -16,13 +16,20 @@ namespace Web.Controllers
     {
         private readonly IReplyService _replyService;
         private readonly IPostService _postService;
-        public ReplyController(IReplyService replyService, IPostService postService)
+        private readonly IUserService _userService;
+        public ReplyController(IReplyService replyService, IPostService postService, IUserService userService)
         {
             _replyService = replyService;
             _postService = postService;
+            _userService = userService;
         }
         public async Task<IActionResult> Index(string postId, string titleOfSection, int page = 1)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
             postId = HttpUtility.UrlDecode(postId);
             var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
             (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId);
@@ -32,7 +39,16 @@ namespace Web.Controllers
             _replyService.MarkTagsOfContents(ref listReplyIndexDto,ref post, currentUsername);
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
-            return View(); // Need to add viewmodels 
+            var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
+            var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
+            var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM, 
+                postVM,
+                replyIndexVMList,
+                page, 
+                totalPages, 
+                titleOfSection,
+                "CHANGE THIS");
+            return View(indexReplyVM); // Need to add viewmodels 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

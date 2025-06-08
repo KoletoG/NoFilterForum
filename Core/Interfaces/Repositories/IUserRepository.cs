@@ -10,6 +10,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<UserRoles> GetUserRoleIdAsync(string userId);
         public Task<UserDataModel> GetByUsernameAsync(string username);
         public Task<ProfileUserDto> GetProfileUserDtoByIdAsync(string id);
+        public Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id);
         public Task<UserDataModel> GetUserWithWarningsByIdAsync(string id);
         public Task<List<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync();
         public Task<List<UserDataModel>> GetAllAsync();

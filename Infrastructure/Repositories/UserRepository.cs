@@ -30,6 +30,14 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
         }
+        public async Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id)
+        {
+            return await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto()
+            {
+                DislikesPostRepliesIds = x.DislikesPostRepliesIds,
+                LikesPostRepliesIds = x.LikesPostRepliesIds
+            }).FirstOrDefaultAsync();
+        }
         public async Task<ProfileUserDto> GetProfileUserDtoByIdAsync(string id)
         {
             return await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto

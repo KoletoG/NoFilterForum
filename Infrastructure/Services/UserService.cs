@@ -45,6 +45,10 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return users;
         }
+        public async Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id)
+        {
+            return await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(id);
+        }
         public Dictionary<string,DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemDto> replyItemDtos, int page, int countPerPage)
         {
             Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();

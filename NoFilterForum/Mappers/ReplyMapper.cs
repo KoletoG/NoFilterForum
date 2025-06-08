@@ -48,5 +48,27 @@ namespace Web.Mappers
             UserId = dto.UserId,
             Username = dto.Username
         };
+        public static CurrentUserReplyIndexViewModel MapToViewModel(CurrentUserReplyIndexDto dto) => new()
+        {
+            DislikesPostRepliesIds = dto.DislikesPostRepliesIds,
+            LikesPostRepliesIds = dto.LikesPostRepliesIds
+        };
+        public static IndexReplyViewModel MapToViewModel(CurrentUserReplyIndexViewModel userVM,
+            PostReplyIndexViewModel postVM,
+            List<ReplyIndexItemViewModel> repliesVM,
+            int page,
+            int totalPages,
+            string titleOfSection,
+            string replyId)
+        => new()
+        {
+            Page = page,
+            TotalPages = totalPages,
+            Title = titleOfSection,
+            ReplyId = replyId,
+            CurrentUser = userVM,
+            Post = postVM,
+            Replies = repliesVM
+        };
     }
 }
