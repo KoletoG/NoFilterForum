@@ -6,7 +6,5 @@ namespace Web.ViewModels.Post
     {
         [Required]
         public string PostId { get; set; }
-        [Required]
-        public string SectionTitle { get; set; }
     }
 }

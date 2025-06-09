@@ -129,7 +129,6 @@ else
 	<form asp-action="Delete" asp-controller="Post" method="post">
 		@Html.AntiForgeryToken()
 		<input hidden name="PostId" value="@Model.Post.Id" />
-		<input hidden name="SectionTitle" value="@Model.Title" />
 		<button type="submit">Delete Post</button>
 	</form>
 }
@@ -141,7 +140,6 @@ else
 		<input type="hidden" name="IsPost" value="true" />
 		<input name="IdOfPostReply" type="hidden" value="@Model.Post.Id" />
 		<input name="UserIdTo" type="hidden" value="@Model.Post.UserId" />
-		<input name="Title" type="hidden" value="@Model.Title" />
 		<button type="submit">Send Report Model</button>
 	</form>
 }
@@ -149,7 +147,6 @@ else
 	<form asp-action="Create" asp-controller="Reply" method="post">
 		@Html.AntiForgeryToken()
 		<input type="text" name="Content" placeholder="Write a reply..." />
-		<input type="hidden" name="Title" value="@Model.Title" />
 		<input type="hidden" name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Create reply</button>
 	</form>
@@ -248,7 +245,6 @@ else
 			<form asp-action="Delete" asp-controller="Reply" method="post">
 				<input hidden name="ReplyId" value="@reply.Id"/>
 				<input hidden name="PostId" value="@Model.Post.Id"/>
-				<input hidden name="TitleOfSection" value="@Model.Title"/>
 				@Html.AntiForgeryToken()
 				<button type="submit">Delete Reply</button>
 			</form>
@@ -261,14 +257,12 @@ else
 				<input type="hidden" name="IsPost" value="false" />
 				<input name="IdOfPostReply" type="hidden" value="@reply.Id" />
 				<input name="UserIdTo" type="hidden" value="@reply.Username" />
-				<input name="Title" type="hidden" value="@Model.Title" />
 				<button type="submit">Send Report Model</button>
 			</form>
 		}
 		<form asp-action="Create" asp-controller="Reply" method="post">
 			@Html.AntiForgeryToken()
 			<input type="text" name="Content" value="@($"@{reply.Username}")" placeholder="Write a reply..." />
-			<input type="hidden" name="Title" value="@Model.Title" />
 			<input type="hidden" name="PostId" value="@Model.Post.Id" />
 			<button type="submit">Create reply</button>
 		</form>
@@ -277,7 +271,6 @@ else
 	<form asp-action="Create" asp-controller="Reply" method="post">
 		@Html.AntiForgeryToken()
 		<input type="text" name="Content" placeholder="Write a reply..." />
-		<input type="hidden" name="Title" value="@Model.Title" />
 		<input type="hidden" name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Create reply</button>
 	</form>
@@ -289,16 +282,16 @@ else
 	}
 	else if (Model.Page == 1)
 	{
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
 	}
 	else if (Model.Page == Model.TotalPages)
 	{
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
 	}
 	else
 	{
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
-		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-route-titleOfSection="@Model.Title" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-controller="Home" asp-route-page="@previousPage">Previous page</a>
+		<a asp-action="PostView" asp-route-id="@Model.Post.Id" asp-controller="Home" asp-route-page="@nextPage">Next page</a>
 	}
 
 }

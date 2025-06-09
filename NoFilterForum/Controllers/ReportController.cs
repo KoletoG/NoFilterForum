@@ -81,12 +81,12 @@ namespace Web.Controllers
             {
                 if (createReportRequest.IsPost)
                 {
-                    return RedirectToAction("PostView", "Home", new { id = createReportViewModel.IdOfPostReply, titleOfSection = createReportViewModel.Title });
+                    return RedirectToAction("Index", "Reply", new { id = createReportViewModel.IdOfPostReply});
                 }
                 else
                 {
                     var postId = await _postService.GetPostIdByReplyId(createReportRequest.IdOfPostOrReply);
-                    return RedirectToAction("PostView", "Home", new { id = postId, titleOfSection = createReportViewModel.Title });
+                    return RedirectToAction("Index", "Reply", new { postId = postId});
                 }
             }
             return result switch

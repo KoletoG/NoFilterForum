@@ -96,14 +96,19 @@ namespace Web.Controllers
             }
             var deletePostRequest = PostMappers.MapToRequest(deletePostViewModel, userId);
             var result = await _postService.DeletePostByIdAsync(deletePostRequest);
-            return result switch
+            if (result != PostResult.Success)
             {
-                PostResult.NotFound => NotFound(),
-                PostResult.Forbid => Forbid(),
-                PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("Index", new { titleOfSection = deletePostViewModel.SectionTitle }),
-                _ => Problem()
-            };
+                return result switch
+                {
+                    PostResult.NotFound => NotFound(),
+                    PostResult.Forbid => Forbid(),
+                    PostResult.UpdateFailed => Problem(),
+                    _ => Problem()
+                };
+            }
+            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId); 
+            return RedirectToAction("Index", new { titleOfSection = sectionTitle });
+                   
         }
     }
 }

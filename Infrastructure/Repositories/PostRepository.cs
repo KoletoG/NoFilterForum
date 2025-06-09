@@ -19,6 +19,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.FindAsync(id);
         }
+        public async Task<string> GetSectionTitleByIdAsync(string postId)
+        {
+            return await _context.PostDataModels.Where(x => x.Id == postId).Select(x => x.Section.Title).FirstOrDefaultAsync();
+        }
         public async Task<PostDataModel> GetWithRepliesByIdAsync(string id)
         {
             return await _context.PostDataModels.Where(x => x.Id == id)

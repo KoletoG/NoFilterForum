@@ -34,6 +34,10 @@ namespace NoFilterForum.Infrastructure.Services
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
         }
+        public async Task<string> GetSectionTitleByPostIdAsync(string postId)
+        {
+            return await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
+        }
         public async Task<string> GetPostIdByReplyId(string replyId)
         {
             return await _unitOfWork.Replies.GetPostIdById(replyId);

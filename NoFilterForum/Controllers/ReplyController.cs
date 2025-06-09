@@ -23,7 +23,7 @@ namespace Web.Controllers
             _postService = postService;
             _userService = userService;
         }
-        public async Task<IActionResult> Index(string postId, string titleOfSection, string replyId = "", int page = 1)
+        public async Task<IActionResult> Index(string postId, string replyId = "", int page = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -50,7 +50,6 @@ namespace Web.Controllers
                 replyIndexVMList,
                 page, 
                 totalPages, 
-                titleOfSection,
                 replyId);
             return View(indexReplyVM); // Need to add viewmodels 
         }
@@ -75,7 +74,7 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound($"Reply with Id: {deleteReplyViewModel.ReplyId} was not found"),
-                PostResult.Success => RedirectToAction("PostView", "Home", new { id = deleteReplyViewModel.PostId, titleOfSection = deleteReplyViewModel.TitleOfSection }),
+                PostResult.Success => RedirectToAction("Index", new { postId = deleteReplyViewModel.PostId }),
                 _ => Problem()
                 // Change previous line when updating PostView
             };
@@ -106,7 +105,7 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound(),
-                PostResult.Success => RedirectToAction("PostView", "Home", new { id = createReplyViewModel.PostId, titleOfSection = createReplyViewModel.Title }),
+                PostResult.Success => RedirectToAction("Index", new { postId = createReplyViewModel.PostId}),
                 _ => Problem()
                 // Change the line above when PostView is refactored
             };

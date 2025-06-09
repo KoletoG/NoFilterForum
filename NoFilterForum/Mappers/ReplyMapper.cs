@@ -58,13 +58,11 @@ namespace Web.Mappers
             List<ReplyIndexItemViewModel> repliesVM,
             int page,
             int totalPages,
-            string titleOfSection,
             string replyId)
         => new()
         {
             Page = page,
             TotalPages = totalPages,
-            Title = titleOfSection,
             ReplyId = replyId,
             CurrentUser = userVM,
             Post = postVM,

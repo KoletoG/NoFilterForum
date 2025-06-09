@@ -9,7 +9,5 @@ namespace Web.ViewModels.Reply
         [Required]
         [MinLength(2)]
         public string Content { get; set; }
-        [Required]
-        public string Title { get; set; }
     }
 }

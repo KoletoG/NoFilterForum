@@ -7,8 +7,6 @@ namespace Web.ViewModels.Reply
         [Required]
         public string ReplyId { get; set; }
         [Required]
-        public string TitleOfSection { get; set; }
-        [Required]
         public string PostId { get; set; }
     }
 }
