@@ -35,37 +35,14 @@ namespace Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly IIOService _ioService;
-        private readonly IHtmlSanitizer _htmlSanitizer;
-        private readonly INonIOService _nonIOService;
-        private readonly IMemoryCache _memoryCache;
         private readonly UserManager<UserDataModel> _userManager;
-        private readonly SignInManager<UserDataModel> _signInManager;
-        private readonly static int countPerPage = 5;
-        private readonly ISectionService _sectionService;
-        public HomeController(ILogger<HomeController> logger,
+        public HomeController(
             ApplicationDbContext context,
-            IIOService iOService,
-            IHtmlSanitizer htmlSanitizer,
-            INonIOService nonIOService,
-            IMemoryCache memoryCache,
-            UserManager<UserDataModel> userManager,
-            SignInManager<UserDataModel> signInManager,
-            ISectionService sectionService)
+            UserManager<UserDataModel> userManager)
         {
-            _userManager = userManager;
-            _logger = logger;
             _context = context;
-            _ioService = iOService;
-            _sectionService = sectionService;
-            _htmlSanitizer = htmlSanitizer;
-            _htmlSanitizer.AllowedTags.Clear();
-            _htmlSanitizer.AllowedTags.Add("a");
-            _nonIOService = nonIOService;
-            _memoryCache = memoryCache;
-            _signInManager = signInManager;
+            _userManager = userManager;
         }
         // SORT POSTS IN POSTSMAIN BY DATE AND LIKES ALGORITHM???
         // Need to add likes with AJAX

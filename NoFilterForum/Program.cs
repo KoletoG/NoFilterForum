@@ -47,7 +47,6 @@ namespace Web
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IIOService, IOService>();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
-            builder.Services.AddScoped<INonIOService, NonIOService>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IWarningRepository, WarningRepository>();
             builder.Services.AddScoped<IPostRepository, PostRepository>();
