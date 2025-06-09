@@ -47,7 +47,7 @@ namespace Web.Controllers
             }
             if (await _postService.HasTimeoutAsync(userId))
             {
-                return RedirectToAction("PostsMain", "Home", new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
+                return RedirectToAction("Index", "Post", new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
             createVM.TitleOfSection = HttpUtility.UrlDecode(createVM.TitleOfSection);
             var createPostRequest = PostMappers.MapToRequest(createVM, userId);

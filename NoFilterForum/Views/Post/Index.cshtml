@@ -109,16 +109,16 @@
 	}
 	else if (Model.Page == 1)
 	{
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
+		<a asp-action="Index" asp-controller="Post" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
 	}
 	else if (Model.Page == Model.TotalPages)
 	{
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
+		<a asp-action="Index" asp-controller="Post" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
 	}
 	else if (Model.Page > 1 && Model.Page < Model.TotalPages)
 	{
 
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
-		<a asp-action="PostsMain" asp-controller="Home" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
+		<a asp-action="Index" asp-controller="Post" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
+		<a asp-action="Index" asp-controller="Post" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
 	}
 }
