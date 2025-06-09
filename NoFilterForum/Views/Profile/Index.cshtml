@@ -86,7 +86,7 @@
 		{
 			if (post.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@post.Id"><h4 style="font-weight:bold">Post: @post.Title</h4></a>
+				<a asp-action="Index" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">Post: @post.Title</h4></a>
 				<br />
 				break;
 			}
@@ -95,7 +95,7 @@
 		{
 			if (reply.Id == key)
 			{
-				<a asp-action="PostView" asp-route-id="@reply.PostId" asp-route-isFromProfile="true" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
+				<a asp-action="Index" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
 				<br />
 				break;
 			}
