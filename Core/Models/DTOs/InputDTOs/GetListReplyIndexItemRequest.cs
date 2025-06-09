@@ -10,5 +10,6 @@ namespace Core.Models.DTOs.InputDTOs
     {
         public int Page {  get; set; }
         public string PostId { get; set; }
+        public string ReplyId { get; set; } = string.Empty;
     }
 }

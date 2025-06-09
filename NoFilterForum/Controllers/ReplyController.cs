@@ -23,17 +23,21 @@ namespace Web.Controllers
             _postService = postService;
             _userService = userService;
         }
-        public async Task<IActionResult> Index(string postId, string titleOfSection, int page = 1)
+        public async Task<IActionResult> Index(string postId, string titleOfSection, string replyId = "", int page = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Unauthorized();
             }
+            if (!string.IsNullOrEmpty(replyId))
+            {
+                replyId = HttpUtility.UrlDecode(replyId);
+            }
             postId = HttpUtility.UrlDecode(postId);
             var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
             (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId);
-            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
+            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId, replyId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             var currentUsername = User.Identity.Name;
             _replyService.MarkTagsOfContents(ref listReplyIndexDto,ref post, currentUsername);

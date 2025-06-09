@@ -17,10 +17,11 @@ namespace Web.Mappers
             Content = vm.Content,
             PostId = vm.PostId
         };
-        public static GetListReplyIndexItemRequest MapToRequest(int page, string postId) => new()
+        public static GetListReplyIndexItemRequest MapToRequest(int page, string postId, string replyId) => new()
         {
             Page = page,
-            PostId = postId
+            PostId = postId,
+            ReplyId = replyId
         };
         public static GetReplyItemRequest MapToRequest(string username) => new()
         {
