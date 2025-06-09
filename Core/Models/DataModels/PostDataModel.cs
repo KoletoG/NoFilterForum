@@ -15,6 +15,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public short Likes { get; set; }
         public List<ReplyDataModel> Replies { get; set; }
         public bool IsPinned { get; set; }
+        public SectionDataModel Section { get; set; }
         public void TogglePin() => IsPinned = !IsPinned;
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public PostDataModel(string title, string content, UserDataModel user)
