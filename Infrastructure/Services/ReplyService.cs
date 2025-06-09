@@ -36,6 +36,10 @@ namespace NoFilterForum.Infrastructure.Services
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostId);
             if (repliesCount > 0) 
             {
+                if (!string.IsNullOrEmpty(getListReplyIndexItemRequest.ReplyId))
+                {
+
+                }
                 listReplyIndexItemDto = await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page,PostConstants.PostsPerSection);
             }
             return listReplyIndexItemDto;
