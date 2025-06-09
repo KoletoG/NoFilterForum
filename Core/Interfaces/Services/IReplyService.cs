@@ -10,7 +10,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request);
         public Task<bool> HasTimeoutByUserIdAsync(string userId);
         public Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest);
-        public Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId);
+        public Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId = "");
         public void MarkTagsOfContents(ref List<ReplyIndexItemDto> replies, ref PostReplyIndexDto post, string currentUsername);
 
         public Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest);
