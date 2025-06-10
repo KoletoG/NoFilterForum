@@ -18,6 +18,8 @@ namespace NoFilterForum.Core.Models.DataModels
         public SectionDataModel Section { get; set; }
         public void TogglePin() => IsPinned = !IsPinned;
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
+        public void IncrementLikes() => Likes++;
+        public void DecrementLikes() => Likes--;
         public PostDataModel(string title, string content, UserDataModel user)
         {
             Id = Guid.NewGuid().ToString();

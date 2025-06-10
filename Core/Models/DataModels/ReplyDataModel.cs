@@ -13,6 +13,8 @@ namespace NoFilterForum.Core.Models.DataModels
         public UserDataModel User { get; set; }
         public short Likes { get; set; }
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
+        public void IncrementLikes() => Likes++;
+        public void DecrementLikes() => Likes--;
         public ReplyDataModel(string content, UserDataModel user, PostDataModel post)
         {
             Id = Guid.NewGuid().ToString();

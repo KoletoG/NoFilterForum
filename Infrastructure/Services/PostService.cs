@@ -7,6 +7,7 @@ using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Core.Utility;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -36,7 +37,33 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> Like(LikeDislikeRequest likeDislikeRequest)
         {
-            return PostResult.Success;
+            var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            user.LikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(likeDislikeRequest.PostReplyId);
+            if (post == null)
+            {
+                return PostResult.NotFound;
+            }
+            post.IncrementLikes();
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.Posts.UpdateAsync(post);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Post with Id: {UserId} was not liked", likeDislikeRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
         }
         public async Task<string> GetSectionTitleByPostIdAsync(string postId)
         {
