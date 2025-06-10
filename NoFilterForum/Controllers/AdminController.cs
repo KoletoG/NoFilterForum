@@ -24,17 +24,14 @@ namespace Web.Controllers
         private readonly IReportService _reportService;
         private readonly IUserService _userService;
         private readonly IPostService _postService;
-        private readonly IWarningService _warningService;
         public AdminController(
             IReportService reportService,
             IUserService userService,
-            IPostService postService,
-            IWarningService warningService)
+            IPostService postService)
         {
             _reportService = reportService;
             _userService = userService;
             _postService = postService;
-            _warningService = warningService;
         }
         [Authorize]
         [HttpPost]
@@ -90,7 +87,7 @@ namespace Web.Controllers
                 PostResult.Success=> RedirectToAction("Reasons"),
                 PostResult.NotFound=>NotFound(userId),
                 PostResult.UpdateFailed=>Problem(),
-                _ => Problem("Unknown result.")
+                _ => Problem("Unknown result")
             };
         }
         [Authorize] // make authorize with roles
