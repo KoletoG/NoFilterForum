@@ -47,6 +47,11 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
+            if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            {
+                post.IncrementLikes();
+                user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
+            }
             if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
             {
                 post.DecrementLikes();
@@ -84,6 +89,11 @@ namespace NoFilterForum.Infrastructure.Services
             if (post == null)
             {
                 return PostResult.NotFound;
+            }
+            if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            {
+                post.DecrementLikes();
+                user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
             }
             if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
             {

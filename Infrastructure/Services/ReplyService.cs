@@ -6,6 +6,7 @@ using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using Core.Utility;
 using Ganss.Xss;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
@@ -41,6 +42,11 @@ namespace NoFilterForum.Infrastructure.Services
             if (reply == null)
             {
                 return PostResult.NotFound;
+            }
+            if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            {
+                reply.IncrementLikes();
+                user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
             }
             if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
             {
@@ -79,6 +85,11 @@ namespace NoFilterForum.Infrastructure.Services
             if (reply == null)
             {
                 return PostResult.NotFound;
+            }
+            if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            {
+                reply.DecrementLikes();
+                user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
             }
             if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
             {
