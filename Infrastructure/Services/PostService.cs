@@ -42,13 +42,21 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            user.LikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
             var post = await _unitOfWork.Posts.GetByIdAsync(likeDislikeRequest.PostReplyId);
             if (post == null)
             {
                 return PostResult.NotFound;
             }
-            post.IncrementLikes();
+            if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            {
+                post.DecrementLikes();
+                user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
+            }
+            else
+            {
+                post.IncrementLikes();
+                user.LikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
+            }
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -72,13 +80,21 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            user.DislikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
             var post = await _unitOfWork.Posts.GetByIdAsync(likeDislikeRequest.PostReplyId);
             if (post == null)
             {
                 return PostResult.NotFound;
             }
-            post.DecrementLikes();
+            if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            {
+                post.IncrementLikes();
+                user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
+            }
+            else
+            {
+                post.DecrementLikes();
+                user.DislikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
+            }
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
