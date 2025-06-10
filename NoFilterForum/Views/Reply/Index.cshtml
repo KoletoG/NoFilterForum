@@ -83,43 +83,44 @@ else
 @{
 	if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 	{
-		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+		<form asp-action="Like" asp-controller="Post" method="post">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="like" value="true" />
+			<input type="hidden" name="Id" value="@Model.Post.Id" />
 			<button type="submit" id="postLike" onclick="updatePostLikes()" style="color:red">Like</button>
 		</form>
 		<h6 id="likesPostCount">@Model.Post.Likes</h6>
-		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+		<form asp-action="Dislike" asp-controller="Post" method="post">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="like" value="false" />
+			<input type="hidden" name="Id" value="@Model.Post.Id" />
 			<button type="submit" onclick="updatePostDislikes()" id="postDislike">Dislike</button>
 		</form>
 	}
 	else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
 	{
-		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+		<form asp-action="Like" asp-controller="Post" method="post">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="like" value="true" />
-			<button type="submit" onclick="updatePostLikes()" id="postLike">Like</button>
+			<input type="hidden" name="Id" value="@Model.Post.Id" />
+			<button type="submit" id="postLike" onclick="updatePostLikes()">Like</button>
 		</form>
 		<h6 id="likesPostCount">@Model.Post.Likes</h6>
-		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+		<form asp-action="Dislike" asp-controller="Post" method="post">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="like" value="false" />
-			<button type="submit" id="postDislike" onclick="updatePostDislikes()" style="color:red">Dislike</button>
+			<input type="hidden" name="Id" value="@Model.Post.Id" />
+			<button type="submit" onclick="updatePostDislikes()" id="postDislike" style="color:red">Dislike</button>
 		</form>
 	}
 	else
 	{
-		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+
+		<form asp-action="Like" asp-controller="Post" method="post">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="like" value="true" />
-			<button type="submit" onclick="updatePostLikes()" id="postLike">Like</button>
+			<input type="hidden" name="Id" value="@Model.Post.Id" />
+			<button type="submit" id="postLike" onclick="updatePostLikes()">Like</button>
 		</form>
 		<h6 id="likesPostCount">@Model.Post.Likes</h6>
-		<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@Model.Post.Id" asp-route-isPost="true">
+		<form asp-action="Dislike" asp-controller="Post" method="post">
 			@Html.AntiForgeryToken()
-			<input type="hidden" name="like" value="false" />
+			<input type="hidden" name="Id" value="@Model.Post.Id" />
 			<button type="submit" onclick="updatePostDislikes()" id="postDislike">Dislike</button>
 		</form>
 	}
@@ -200,43 +201,43 @@ else
 		ShowTime(timeDiffReply);
 		if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 		{
-			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+			<form asp-action="Like" asp-controller="Reply" method="post">
 				@Html.AntiForgeryToken()
-				<input type="hidden" name="like" value="true" />
+				<input type="hidden" name="Id" value="@reply.Id" />
 				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')" style="color:red">Like</button>
 			</form>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+			<form asp-action="Dislike" asp-controller="Reply" method="post">
 				@Html.AntiForgeryToken()
-				<input type="hidden" name="like" value="false" />
+				<input type="hidden" name="Id" value="@reply.Id" />
 				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')">Dislike</button>
 			</form>
 		}
 		else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
 		{
-			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+			<form asp-action="Like" asp-controller="Reply" method="post">
 				@Html.AntiForgeryToken()
-				<input type="hidden" name="like" value="true" />
-				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')">Like</button>
+				<input type="hidden" name="Id" value="@reply.Id" />
+				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')" >Like</button>
 			</form>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+			<form asp-action="Dislike" asp-controller="Reply" method="post">
 				@Html.AntiForgeryToken()
-				<input type="hidden" name="like" value="false" />
+				<input type="hidden" name="Id" value="@reply.Id" />
 				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')" style="color:red">Dislike</button>
 			</form>
 		}
 		else
 		{
-			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+			<form asp-action="Like" asp-controller="Reply" method="post">
 				@Html.AntiForgeryToken()
-				<input type="hidden" name="like" value="true" />
+				<input type="hidden" name="Id" value="@reply.Id" />
 				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')">Like</button>
 			</form>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<form asp-action="LikeDislike" asp-controller="Home" method="post" asp-route-id="@reply.Id" asp-route-isPost="false">
+			<form asp-action="Dislike" asp-controller="Reply" method="post">
 				@Html.AntiForgeryToken()
-				<input type="hidden" name="like" value="false" />
+				<input type="hidden" name="Id" value="@reply.Id" />
 				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')">Dislike</button>
 			</form>
 		}
