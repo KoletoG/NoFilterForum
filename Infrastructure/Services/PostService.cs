@@ -65,6 +65,36 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<PostResult> Dislike(LikeDislikeRequest likeDislikeRequest)
+        {
+            var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            user.DislikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
+            var post = await _unitOfWork.Posts.GetByIdAsync(likeDislikeRequest.PostReplyId);
+            if (post == null)
+            {
+                return PostResult.NotFound;
+            }
+            post.DecrementLikes();
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.Posts.UpdateAsync(post);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Post with Id: {UserId} was not liked", likeDislikeRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
+        }
         public async Task<string> GetSectionTitleByPostIdAsync(string postId)
         {
             return await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
