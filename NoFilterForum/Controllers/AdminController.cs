@@ -67,7 +67,9 @@ namespace Web.Controllers
                 return Forbid();
             }
             var users = await _userService.GetAllUnconfirmedUsersAsync();
-            return View(new ReasonsViewModel(users)); // needs to change
+            var usersVM = users.Select(AdminMappers.MapToViewModel).ToList();
+            var reasonsViewModel = AdminMappers.MapToViewModel(usersVM);
+            return View(reasonsViewModel);
         }
         [HttpPost]
         [Authorize]

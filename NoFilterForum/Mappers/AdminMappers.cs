@@ -20,5 +20,16 @@ namespace Web.Mappers
             HasReports = hasReports,
             NotConfirmedExist = notConfirmedExist
         };
+        public static UserReasonViewModel MapToViewModel(UsersReasonsDto dto) => new()
+        {
+            Username = dto.Username,
+            Email = dto.Email,
+            Id = dto.Id,
+            Reason = dto.Reason
+        };
+        public static ReasonsViewModel MapToViewModel(List<UserReasonViewModel> usersVM) => new()
+        {
+            Users = usersVM
+        };
     }
 }
