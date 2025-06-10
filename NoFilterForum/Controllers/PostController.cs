@@ -64,14 +64,14 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Like(string id)
+        public async Task<IActionResult> Like(LikeDislikePostViewModel likeDislikePostViewModel)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Unauthorized();
             }
-            var likeDislikeRequest = PostMappers.MapToRequest(id, userId);
+            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikePostViewModel.Id, userId);
             var result = await _postService.LikeAsync(likeDislikeRequest);
             return result switch
             {
@@ -83,14 +83,14 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Dislike(string id)
+        public async Task<IActionResult> Dislike(LikeDislikePostViewModel likeDislikePostViewModel)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Unauthorized();
             }
-            var likeDislikeRequest = PostMappers.MapToRequest(id, userId);
+            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikePostViewModel.Id, userId);
             var result = await _postService.DislikeAsync(likeDislikeRequest);
             return result switch
             {
