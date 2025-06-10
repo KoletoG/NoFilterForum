@@ -30,6 +30,66 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
             _userService = userService;
         }
+        public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
+        {
+            var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            user.LikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
+            var reply = await _unitOfWork.Replies.GetByIdAsync(likeDislikeRequest.PostReplyId);
+            if (reply == null)
+            {
+                return PostResult.NotFound;
+            }
+            reply.IncrementLikes();
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.Replies.UpdateAsync(reply);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Post with Id: {UserId} was not liked", likeDislikeRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
+        }
+        public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest)
+        {
+            var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
+            if (user == null)
+            {
+                return PostResult.NotFound;
+            }
+            user.DislikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
+            var reply = await _unitOfWork.Replies.GetByIdAsync(likeDislikeRequest.PostReplyId);
+            if (reply == null)
+            {
+                return PostResult.NotFound;
+            }
+            reply.DecrementLikes();
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.Users.UpdateAsync(user);
+                await _unitOfWork.Replies.UpdateAsync(reply);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return PostResult.Success;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Post with Id: {UserId} was not liked", likeDislikeRequest.UserId);
+                return PostResult.UpdateFailed;
+            }
+        }
         public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
         {
             var listReplyIndexItemDto = new List<ReplyIndexItemDto>();
