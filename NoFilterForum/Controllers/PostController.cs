@@ -77,7 +77,8 @@ namespace Web.Controllers
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => NoContent()
+                PostResult.Success => NoContent(),
+                _ => Problem()
             };
         }
         [HttpPost]
@@ -96,7 +97,8 @@ namespace Web.Controllers
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => NoContent()
+                PostResult.Success => NoContent(),
+                _ => Problem()
             };
         }
         [HttpGet]

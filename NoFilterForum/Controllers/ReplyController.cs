@@ -65,12 +65,13 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var likeDislikeRequest = PostMappers.MapToRequest(likeDislikeReplyViewModel.Id, userId);
-            var result = await _postService.LikeAsync(likeDislikeRequest);
+            var result = await _replyService.LikeAsync(likeDislikeRequest);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => NoContent()
+                PostResult.Success => NoContent(),
+                _ => Problem()
             };
         }
         [HttpPost]
@@ -84,12 +85,13 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var likeDislikeRequest = PostMappers.MapToRequest(likeDislikeReplyViewModel.Id, userId);
-            var result = await _postService.DislikeAsync(likeDislikeRequest);
+            var result = await _replyService.DislikeAsync(likeDislikeRequest);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => NoContent()
+                PostResult.Success => NoContent(),
+                _ => Problem()
             };
         }
         [HttpPost]
