@@ -47,12 +47,14 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            var wasLiked = user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
+            var wasDisliked = user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
+            if (wasDisliked)
             {
                 post.IncrementLikes();
                 user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
             }
-            if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            if (wasLiked)
             {
                 post.DecrementLikes();
                 user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
@@ -74,7 +76,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex) 
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Post with Id: {UserId} was not liked", likeDislikeRequest.UserId);
+                _logger.LogError(ex, "Post with Id: {PostId} was not liked", likeDislikeRequest.PostReplyId);
                 return PostResult.UpdateFailed;
             }
         }
@@ -90,12 +92,14 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            if (user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            var wasLiked = user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
+            var wasDisliked = user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
+            if (wasLiked)
             {
                 post.DecrementLikes();
                 user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
             }
-            if (user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId))
+            if (wasDisliked)
             {
                 post.IncrementLikes();
                 user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
@@ -117,7 +121,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Post with Id: {UserId} was not disliked", likeDislikeRequest.UserId);
+                _logger.LogError(ex, "Post with Id: {PostId} was not disliked", likeDislikeRequest.PostReplyId);
                 return PostResult.UpdateFailed;
             }
         }
