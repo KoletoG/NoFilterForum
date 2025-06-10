@@ -113,7 +113,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Post with Id: {UserId} was not liked", likeDislikeRequest.UserId);
+                _logger.LogError(ex, "Post with Id: {UserId} was not disliked", likeDislikeRequest.UserId);
                 return PostResult.UpdateFailed;
             }
         }
