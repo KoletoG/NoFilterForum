@@ -103,7 +103,8 @@ namespace Web.Controllers
             var userViewModel = usersDto.Select(AdminMappers.MapToViewModel).ToList();
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
             bool hasReports = await _reportService.AnyReportsAsync();
-            return View(new AdminPanelViewModel(userViewModel, hasReports,notConfirmedExist));
+            var adminPanelVM = AdminMappers.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
+            return View(adminPanelVM);
         }
         
             
