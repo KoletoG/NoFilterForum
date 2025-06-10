@@ -71,12 +71,33 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var user = await _userService.GetUserByIdAsync(userId);
-            if (user==null)
+            var likeDislikeRequest = PostMappers.MapToRequest(id, userId);
+            var result = await _postService.LikeAsync(likeDislikeRequest);
+            return result switch
             {
-               return NotFound();
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => NoContent()
+            };
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Dislike(string id)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
             }
-
+            var likeDislikeRequest = PostMappers.MapToRequest(id, userId);
+            var result = await _postService.DislikeAsync(likeDislikeRequest);
+            return result switch
+            {
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => NoContent()
+            };
         }
         [HttpGet]
         [Authorize]
@@ -124,9 +145,9 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId); 
+            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId);
             return RedirectToAction("Index", new { titleOfSection = sectionTitle });
-                   
+
         }
     }
 }

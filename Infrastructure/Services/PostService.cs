@@ -35,7 +35,7 @@ namespace NoFilterForum.Infrastructure.Services
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
         }
-        public async Task<PostResult> Like(LikeDislikeRequest likeDislikeRequest)
+        public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
             if (user == null)
@@ -65,7 +65,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> Dislike(LikeDislikeRequest likeDislikeRequest)
+        public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
             if (user == null)

@@ -44,5 +44,10 @@ namespace Web.Mappers
         {
             Username = username
         };
+        public static LikeDislikeRequest MapToRequest(string postId, string userId) => new()
+        {
+            PostReplyId = postId,
+            UserId = userId
+        };
     }
 }

@@ -10,8 +10,8 @@ namespace NoFilterForum.Core.Interfaces.Services
     {
         public Task<PostResult> PinPostAsync(string postId);
         public Task<bool> HasTimeoutAsync(string userId);
-        public Task<PostResult> Like(LikeDislikeRequest likeDislikeRequest);
-        public Task<PostResult> Dislike(LikeDislikeRequest likeDislikeRequest);
+        public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest);
+        public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<string> GetSectionTitleByPostIdAsync(string postId);
         public Task<PostReplyIndexDto> GetPostReplyIndexDtoByIdAsync(string id);
         public Task<string> GetPostIdByReplyId(string replyId);
