@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Web.Mappers;
+using Web.ViewModels.Post;
 using Web.ViewModels.Reply;
 
 namespace Web.Controllers
@@ -52,6 +53,44 @@ namespace Web.Controllers
                 totalPages, 
                 replyId);
             return View(indexReplyVM); // Need to add viewmodels 
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikePostViewModel)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikePostViewModel.Id, userId);
+            var result = await _postService.LikeAsync(likeDislikeRequest);
+            return result switch
+            {
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => NoContent()
+            };
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Dislike(LikeDislikeReplyViewModel likeDislikePostViewModel)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikePostViewModel.Id, userId);
+            var result = await _postService.DislikeAsync(likeDislikeRequest);
+            return result switch
+            {
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.Success => NoContent()
+            };
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
