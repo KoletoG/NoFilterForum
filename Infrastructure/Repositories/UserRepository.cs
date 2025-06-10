@@ -7,6 +7,7 @@ using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Infrastructure.Data;
+using Web.ViewModels.Admin;
 
 namespace NoFilterForum.Infrastructure.Repositories
 {
@@ -97,9 +98,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync(x => !x.IsConfirmed);
         }
-        public async Task<List<UserDataModel>> GetAllUnconfirmedAsync()
+        public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync()
         {
-            return await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).ToListAsync();
+            return await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto()
+            {
+                Email= x.Email,
+                Id=x.Id,
+                Reason=x.Reason,
+                Username = x.UserName
+            }).ToListAsync();
         }
         public async Task DeleteAsync(UserDataModel user)
         {

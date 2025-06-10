@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
+using Web.ViewModels.Admin;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace NoFilterForum.Infrastructure.Services
@@ -170,9 +171,9 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Users.ExistsByNotConfirmedAsync();
         }
-        public async Task<List<UserDataModel>> GetAllUnconfirmedUsersAsync()
+        public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUsersAsync()
         {
-            return await _unitOfWork.Users.GetAllUnconfirmedAsync();
+            return await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
         }
         public async Task<UserDataModel> GetUserByIdAsync(string id)
         {

@@ -1,6 +1,7 @@
 ﻿using Core.Enums;
 using Core.Models.DTOs.OutputDTOs;
 using NoFilterForum.Core.Models.DataModels;
+using Web.ViewModels.Admin;
 
 namespace NoFilterForum.Core.Interfaces.Repositories
 {
@@ -23,6 +24,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<bool> UsernameExistsAsync(string username);
         public Task<bool> EmailExistsAsync(string email);
         public Task<bool> ExistsByUsernameAsync(string username);
-        public Task<List<UserDataModel>> GetAllUnconfirmedAsync();
+        public Task<List<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync();
     }
 }

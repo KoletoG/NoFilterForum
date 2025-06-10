@@ -6,6 +6,7 @@
 @{
 	foreach(var user in Model.Users)
 	{
+		<h4>@user.Email</h4>
 		<h3>@user.UserName</h3>
 		<h6>@user.Reason</h6>
 		<form asp-action="ConfirmUser" asp-route-userId="@user.Id" method="post">

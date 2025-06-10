@@ -2,6 +2,7 @@
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.OutputDTOs;
 using NoFilterForum.Core.Models.DataModels;
+using Web.ViewModels.Admin;
 
 namespace NoFilterForum.Core.Interfaces.Services
 {
@@ -15,7 +16,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
         public Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync();
-        public Task<List<UserDataModel>> GetAllUnconfirmedUsersAsync();
+        public Task<List<UsersReasonsDto>> GetAllUnconfirmedUsersAsync();
         public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest);
         public Task<PostResult> ConfirmUserAsync(string userId);
         public Task<PostResult> BanUserByIdAsync(string userId);
