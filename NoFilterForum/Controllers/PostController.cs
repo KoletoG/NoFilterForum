@@ -15,6 +15,7 @@ using Core.Constants;
 using Core.Utility;
 using Web.Mappers;
 using Web.ViewModels.Post;
+using System.Runtime.CompilerServices;
 
 namespace Web.Controllers
 {
@@ -59,6 +60,23 @@ namespace Web.Controllers
                 PostResult.Success => RedirectToAction("Index", "Post", new { titleOfSection = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
                 _ => Problem("Invalid result")
             };
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Like(string id)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user==null)
+            {
+               return NotFound();
+            }
+
         }
         [HttpGet]
         [Authorize]

@@ -34,6 +34,10 @@ namespace NoFilterForum.Infrastructure.Services
             _htmlSanitizer.AllowedTags.Clear();
             _htmlSanitizer.AllowedTags.Add("a");
         }
+        public async Task<PostResult> Like(LikeDislikeRequest likeDislikeRequest)
+        {
+            return PostResult.Success;
+        }
         public async Task<string> GetSectionTitleByPostIdAsync(string postId)
         {
             return await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
