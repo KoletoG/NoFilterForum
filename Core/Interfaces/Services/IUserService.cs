@@ -1,8 +1,9 @@
 ﻿using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Admin;
+using Core.Models.DTOs.OutputDTOs.Profile;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using NoFilterForum.Core.Models.DataModels;
-using Web.ViewModels.Admin;
 
 namespace NoFilterForum.Core.Interfaces.Services
 {

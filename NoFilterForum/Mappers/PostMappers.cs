@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Post;
 using Web.ViewModels.Post;
 
 namespace Web.Mappers

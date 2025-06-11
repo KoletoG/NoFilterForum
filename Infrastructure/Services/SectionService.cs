@@ -3,7 +3,7 @@ using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Section;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs;
+﻿using Core.Models.DTOs.OutputDTOs.Profile;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using NoFilterForum.Core.Interfaces.Repositories;

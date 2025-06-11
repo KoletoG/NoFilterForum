@@ -1,6 +1,6 @@
 ﻿using Core.Enums;
 using Core.Interfaces.Repositories;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Notification;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;

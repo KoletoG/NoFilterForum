@@ -1,4 +1,4 @@
-﻿using Core.Models.DTOs.OutputDTOs;
+﻿using Core.Models.DTOs.OutputDTOs.Notification;
 using Web.ViewModels.Notifications;
 
 namespace Web.Mappers

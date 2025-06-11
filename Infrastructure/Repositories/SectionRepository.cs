@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs;
+﻿using Core.Models.DTOs.OutputDTOs.Post;
+using Core.Models.DTOs.OutputDTOs.Section;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;

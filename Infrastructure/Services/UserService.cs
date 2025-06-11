@@ -3,7 +3,9 @@ using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Admin;
+using Core.Models.DTOs.OutputDTOs.Profile;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +16,6 @@ using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
-using Web.ViewModels.Admin;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace NoFilterForum.Infrastructure.Services

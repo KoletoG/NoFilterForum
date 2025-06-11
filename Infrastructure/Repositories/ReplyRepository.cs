@@ -1,4 +1,4 @@
-﻿using Core.Models.DTOs.OutputDTOs;
+﻿using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using NoFilterForum.Core.Interfaces.Repositories;

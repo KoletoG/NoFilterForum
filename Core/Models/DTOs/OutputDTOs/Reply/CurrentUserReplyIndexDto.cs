@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.OutputDTOs
+namespace Core.Models.DTOs.OutputDTOs.Reply
 {
     public class CurrentUserReplyIndexDto
     {

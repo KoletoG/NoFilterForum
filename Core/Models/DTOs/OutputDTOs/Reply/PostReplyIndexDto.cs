@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Enums;
 
-namespace Core.Models.DTOs.OutputDTOs
+namespace Core.Models.DTOs.OutputDTOs.Reply
 {
     public class PostReplyIndexDto
     {

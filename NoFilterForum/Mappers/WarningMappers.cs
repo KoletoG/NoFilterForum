@@ -1,6 +1,6 @@
 ﻿using Core.Models.DTOs;
 using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Warning;
 using Web.ViewModels.Warning;
 
 namespace Web.Mappers

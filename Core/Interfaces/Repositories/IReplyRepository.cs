@@ -1,4 +1,4 @@
-﻿using Core.Models.DTOs.OutputDTOs;
+﻿using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 

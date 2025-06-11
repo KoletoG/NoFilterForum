@@ -1,5 +1,5 @@
 ﻿using Core.Enums;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Notification;
 
 namespace NoFilterForum.Core.Interfaces.Services
 {

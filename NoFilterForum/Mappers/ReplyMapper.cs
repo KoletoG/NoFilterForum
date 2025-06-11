@@ -1,5 +1,5 @@
 ﻿using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Web.ViewModels.Reply;
 
 namespace Web.Mappers

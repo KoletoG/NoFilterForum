@@ -1,13 +1,14 @@
 ﻿using System.Runtime.CompilerServices;
 using Core.Enums;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Admin;
+using Core.Models.DTOs.OutputDTOs.Profile;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Global_variables;
 using NoFilterForum.Infrastructure.Data;
-using Web.ViewModels.Admin;
 
 namespace NoFilterForum.Infrastructure.Repositories
 {

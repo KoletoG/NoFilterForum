@@ -1,5 +1,6 @@
 ﻿using Core.Models.DTOs.InputDTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Profile;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Web.ViewModels.Post;
 using Web.ViewModels.Profile;

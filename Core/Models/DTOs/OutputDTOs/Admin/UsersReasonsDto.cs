@@ -1,4 +1,4 @@
-﻿namespace Web.ViewModels.Admin
+﻿namespace Core.Models.DTOs.OutputDTOs.Admin
 {
     public class UsersReasonsDto
     {

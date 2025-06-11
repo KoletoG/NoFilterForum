@@ -1,5 +1,5 @@
 ﻿using Core.Models.DTOs;
-using Core.Models.DTOs.OutputDTOs;
+using Core.Models.DTOs.OutputDTOs.Admin;
 using Web.ViewModels.Admin;
 
 namespace Web.Mappers
