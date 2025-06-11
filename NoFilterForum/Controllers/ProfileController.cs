@@ -4,6 +4,7 @@ using System.Web;
 using Core.Constants;
 using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
@@ -47,11 +48,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var changeEmailRequest = new ChangeEmailRequest
-            {
-                Email = changeEmailViewModel.Email,
-                UserId = userId
-            }; // USE MAPPER
+            var changeEmailRequest = ProfileMapper.MapToRequest(changeEmailViewModel, userId);
             var result = await _userService.ChangeEmailByIdAsync(changeEmailRequest);
             return result switch
             {
@@ -81,11 +78,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var changeUsernameRequest = new ChangeUsernameRequest
-            {
-                Username = changeUsernameViewModel.Username,
-                UserId = userId
-            }; // USE MAPPER
+            var changeUsernameRequest = ProfileMapper.MapToRequest(changeUsernameViewModel, userId);
             var result = await _userService.ChangeUsernameByIdAsync(changeUsernameRequest);
             return result switch
             {

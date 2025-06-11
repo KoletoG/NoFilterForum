@@ -2,6 +2,7 @@
 using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Mono.TextTemplating;
 using Web.ViewModels.Post;
 using Web.ViewModels.Profile;
 using Web.ViewModels.Reply;
@@ -59,6 +60,16 @@ namespace Web.Mappers
             Role = dto.Role,
             UserName = dto.UserName,
             WarningsCount = dto.WarningsCount,
+        };
+        public static ChangeEmailRequest MapToRequest(ChangeEmailViewModel changeEmailViewModel, string userId) => new()
+        {
+            Email = changeEmailViewModel.Email,
+            UserId = userId
+        };
+        public static ChangeUsernameRequest MapToRequest(ChangeUsernameViewModel changeUsernameViewModel, string userId) => new()
+        {
+            UserId = userId,
+            Username = changeUsernameViewModel.Username
         };
     }
 }
