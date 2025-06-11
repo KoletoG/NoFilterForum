@@ -43,6 +43,10 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest();
+            }
             var result = await _postService.PinPostAsync(pinPostViewModel.PostId);
             return result switch
             {
@@ -73,6 +77,10 @@ namespace Web.Controllers
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return Forbid();
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
             }
             var result = await _userService.ConfirmUserAsync(confirmUserViewModel.UserId);
             return result switch
@@ -108,6 +116,10 @@ namespace Web.Controllers
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return Forbid();
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
             }
             var result = await _userService.BanUserByIdAsync(banUserViewModel.Id);
             return result switch
