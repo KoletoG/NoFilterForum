@@ -24,7 +24,6 @@ using System.Web;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
-using NoFilterForum.Core.Models.GetViewModels;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Infrastructure.Data;
 using Core.Enums;
