@@ -86,15 +86,17 @@
 		{
 			if (post.IsPinned)
 			{
-				<form asp-action="PinPost" asp-controller="Admin" method="post" asp-route-postId="@post.Id">
+				<form asp-action="PinPost" asp-controller="Admin" method="post">
 					@Html.AntiForgeryToken()
+					<input hidden name="PostId" value="@post.Id" />
 					<button type="submit">Unpin post</button>
 				</form>
 			}
 			else
 			{
-				<form asp-action="PinPost" asp-controller="Admin" method="post" asp-route-postId="@post.Id">
+				<form asp-action="PinPost" asp-controller="Admin" method="post">
 					@Html.AntiForgeryToken()
+					<input hidden name="PostId" value="@post.Id" />
 					<button type="submit">Pin post</button>
 				</form>
 			}

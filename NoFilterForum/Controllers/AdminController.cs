@@ -37,17 +37,13 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PinPost(string postId)
+        public async Task<IActionResult> PinPost(PinPostViewModel pinPostViewModel)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return Forbid();
             }
-            if (string.IsNullOrEmpty(postId))
-            {
-                return BadRequest("Id cannot be null");
-            }
-            var result = await _postService.PinPostAsync(postId);
+            var result = await _postService.PinPostAsync(pinPostViewModel.PostId);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
