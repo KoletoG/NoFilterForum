@@ -9,8 +9,9 @@
 		<h4>@user.Email</h4>
 		<h3>@user.Username</h3>
 		<h6>@user.Reason</h6>
-		<form asp-action="ConfirmUser" asp-route-userId="@user.Id" method="post">
+		<form asp-action="ConfirmUser" method="post">
 		@Html.AntiForgeryToken()
+		<input hidden name="UserId" value="@user.Id"/>
 		<button type="submit">Confirm User</button>
 		</form>
 	}

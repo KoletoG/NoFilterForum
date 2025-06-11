@@ -71,22 +71,18 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmUser(string userId)
+        public async Task<IActionResult> ConfirmUser(ConfirmUserViewModel confirmUserViewModel)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return Forbid();
             }
-            if (string.IsNullOrEmpty(userId))
-            {
-                return BadRequest("Id cannot be null");
-            }
-            var result = await _userService.ConfirmUserAsync(userId);
+            var result = await _userService.ConfirmUserAsync(confirmUserViewModel.UserId);
             return result switch
             {
-                PostResult.Success=> RedirectToAction("Reasons"),
-                PostResult.NotFound=>NotFound(userId),
-                PostResult.UpdateFailed=>Problem(),
+                PostResult.Success => RedirectToAction("Reasons"),
+                PostResult.NotFound => NotFound(confirmUserViewModel.UserId),
+                PostResult.UpdateFailed => Problem(),
                 _ => Problem("Unknown result")
             };
         }
@@ -127,7 +123,7 @@ namespace Web.Controllers
                 PostResult.NotFound => NotFound(id),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
-            }; 
+            };
         }
     }
 }
