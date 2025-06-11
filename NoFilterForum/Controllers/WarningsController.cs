@@ -8,17 +8,16 @@ using NoFilterForum.Infrastructure.Services;
 using System.Security.Claims;
 using Web.Mappers;
 using Web.ViewModels.Warning;
+using System.Runtime.InteropServices;
 
 namespace Web.Controllers
 {
     public class WarningsController : Controller
     {
         private readonly IWarningService _warningService;
-        private readonly IUserService _userService;
-        public WarningsController(IWarningService warningService, IUserService userService)
+        public WarningsController(IWarningService warningService)
         {
             _warningService = warningService;
-            _userService = userService;
         }
         [Authorize]
         [HttpGet]
@@ -55,7 +54,7 @@ namespace Web.Controllers
             var result = await _warningService.AddWarningAsync(createWarningRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Profile", "Home", new { userName = "CHANGE" }), // Change to ID
+                PostResult.Success => RedirectToAction("Index", "Profile", new { userName = "CHANGE" }), // Change to ID
                 PostResult.UpdateFailed => Problem(),
                 PostResult.NotFound => NotFound(createWarningViewModel.UserId),
                 _ => Problem()
@@ -75,7 +74,8 @@ namespace Web.Controllers
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("Index", "Notification")
+                PostResult.Success => RedirectToAction("Index", "Notification"),
+                _ => Problem()
             };
         }
     }
