@@ -3,36 +3,40 @@
 
 @model IndexSectionViewModel
 @{
-    ViewData["Title"] = "Home Page";
-}
-@if (ViewBag.Errors != null)
-{
-    foreach(var error in ViewBag.Errors)
-    {
-        <h6 class="text-danger">@error</h6>
-    }
+	ViewData["Title"] = "Home Page";
 }
 @{
-    if (Model.IsAdmin)
-    {
-        <form asp-action="Create" asp-controller="Section" method="post">
-            @Html.AntiForgeryToken()
-            <input name="Title" placeholder="Title of the section" type="text" />
-            <input name="Description" placeholder="Description of the section" type="text" />
-            <button type="submit">Create Section</button>
-        </form>
-    }
-    foreach(var section1 in Model.Sections)
-    {
-        <a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle"><h2>@section1.Title</h2></a>
-        <h4>@section1.Description</h4>
-        if (Model.IsAdmin)
-        {
-        <form asp-action="Delete" asp-controller="Section" method="post">
-        @Html.AntiForgeryToken()
-            <input type="hidden" name="SectionId" value="@section1.Id"/>
-            <button type="submit">Delete Section</button>
-        </form>
-        }
-    }
+	if (Model.IsAdmin)
+	{
+		<form asp-action="Create" asp-controller="Section" method="post">
+			@Html.AntiForgeryToken()
+			<div class="input-group">
+				<span asp-validation-for="CreateSection.Title" class="text-danger"></span>
+				<label asp-for="CreateSection.Title"></label>
+				<input asp-for="CreateSection.Title" />
+			</div>
+			<div class="input-group">
+				<span asp-validation-for="CreateSection.Description" class="text-danger"></span>
+				<label asp-for="CreateSection.Description"></label>
+				<input asp-for="CreateSection.Description" />
+			</div>
+			<button type="submit">Create Section</button>
+		</form>
+	}
+	foreach (var section1 in Model.Sections)
+	{
+		<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle"><h2>@section1.Title</h2></a>
+		<h4>@section1.Description</h4>
+		if (Model.IsAdmin)
+		{
+			<form asp-action="Delete" asp-controller="Section" method="post">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="SectionId" value="@section1.Id" />
+				<button type="submit">Delete Section</button>
+			</form>
+		}
+	}
+}
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 }

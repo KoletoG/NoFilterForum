@@ -42,7 +42,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Index");
+                return View(createSectionViewModel); // Need to change this
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
