@@ -1,6 +1,6 @@
 ﻿using Core.Enums;
 using Core.Models.DTOs;
-using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Warning;
 using Core.Models.DTOs.OutputDTOs.Warning;
 using NoFilterForum.Core.Models.DataModels;
 

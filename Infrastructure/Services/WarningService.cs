@@ -2,7 +2,7 @@
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs;
-using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Warning;
 using Core.Models.DTOs.OutputDTOs.Warning;
 using Ganss.Xss;
 using Microsoft.Build.Framework;

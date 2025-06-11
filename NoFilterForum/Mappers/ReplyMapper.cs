@@ -1,4 +1,5 @@
 ﻿using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Web.ViewModels.Reply;
 

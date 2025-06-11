@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Section;
 using Core.Models.DTOs.OutputDTOs.Section;
 using NoFilterForum.Core.Models.DataModels;
 

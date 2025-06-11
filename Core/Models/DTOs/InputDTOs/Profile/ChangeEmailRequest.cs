@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.InputDTOs
+namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public class DeleteReplyRequest
+    public class ChangeEmailRequest
     {
-        public string ReplyId { get; set; }
         public string UserId { get; set; }
+        public string Email { get; set; }
     }
 }

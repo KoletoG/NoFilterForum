@@ -1,6 +1,8 @@
 ﻿using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Post;
+using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Post;
 using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;

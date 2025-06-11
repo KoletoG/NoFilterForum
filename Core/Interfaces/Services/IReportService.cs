@@ -1,5 +1,5 @@
 ﻿using Core.Enums;
-using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Report;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.InputDTOs
+namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public class DeletePostRequest
+    public class ChangeBioRequest
     {
-        public string PostId { get; set; }
+        public string Bio { get; set; }
         public string UserId { get; set; }
-
     }
 }

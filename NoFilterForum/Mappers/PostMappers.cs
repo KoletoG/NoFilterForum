@@ -1,5 +1,7 @@
 ﻿using System.Web;
 using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Post;
+using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Post;
 using Web.ViewModels.Post;
 

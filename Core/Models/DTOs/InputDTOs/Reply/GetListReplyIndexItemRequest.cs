@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.InputDTOs
+namespace Core.Models.DTOs.InputDTOs.Reply
 {
-    public class GetIndexPostRequest
+    public class GetListReplyIndexItemRequest
     {
-        public string TitleOfSection { get; set; }
         public int Page {  get; set; }
+        public string PostId { get; set; }
     }
 }

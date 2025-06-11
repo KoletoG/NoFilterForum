@@ -2,7 +2,7 @@
 using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
-using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Admin;
 using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;

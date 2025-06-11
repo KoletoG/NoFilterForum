@@ -1,4 +1,4 @@
-﻿using Core.Models.DTOs.InputDTOs;
+﻿using Core.Models.DTOs.InputDTOs.Report;
 using Web.ViewModels.Reply;
 using Web.ViewModels.Report;
 

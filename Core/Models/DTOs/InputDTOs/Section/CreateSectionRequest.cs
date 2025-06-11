@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.InputDTOs
+namespace Core.Models.DTOs.InputDTOs.Section
 {
-    public class CreateWarningRequest
+    public class CreateSectionRequest
     {
+        public string Description { get; set; }
+        public string Title { get; set; }
         public string UserId { get; set; }
-        public string Content { get; set; }
     }
 }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.InputDTOs
+namespace Core.Models.DTOs.InputDTOs.Reply
 {
-    public class GetProfilePostDtoRequest
+    public class GetReplyItemRequest
     {
-        public string Username {  get; set; }
+        public string Username { get; set; }
     }
 }

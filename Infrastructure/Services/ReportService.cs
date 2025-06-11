@@ -1,7 +1,7 @@
 ﻿using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
-using Core.Models.DTOs.InputDTOs;
+using Core.Models.DTOs.InputDTOs.Report;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
