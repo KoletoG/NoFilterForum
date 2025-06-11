@@ -11,8 +11,6 @@ using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Repositories;
 using NoFilterForum.Infrastructure.Services;
-using NoFilterForum.Interfaces;
-using NoFilterForum.Services;
 
 namespace Web
 {
@@ -45,7 +43,6 @@ namespace Web
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddMemoryCache();
-            builder.Services.AddScoped<IIOService, IOService>();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IWarningRepository, WarningRepository>();

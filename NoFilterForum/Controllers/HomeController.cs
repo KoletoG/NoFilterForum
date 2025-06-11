@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Global_variables;
-using NoFilterForum.Interfaces;
 using NoFilterForum.Core.Models;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Core.Models.ViewModels;
