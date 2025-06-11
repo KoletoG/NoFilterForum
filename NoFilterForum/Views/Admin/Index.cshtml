@@ -21,8 +21,9 @@
 		}
 		<h5>@user.Email</h5>
 		<h5>@user.Role</h5>
-		<form asp-controller="Admin" asp-action="BanUser" asp-route-id="@user.Id" method="post">
+		<form asp-controller="Admin" asp-action="BanUser" method="post">
 		@Html.AntiForgeryToken()
+		<input hidden name="Id" value="@user.Id"/>
 		<button type="submit">Ban user</button>
 		</form>
 	}

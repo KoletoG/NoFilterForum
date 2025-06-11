@@ -16,6 +16,7 @@ using Web.ViewModels;
 using Core.Models.DTOs.OutputDTOs;
 using Web.Mappers;
 using Web.ViewModels.Admin;
+using Core.Models.DTOs.InputDTOs.Admin;
 
 namespace Web.Controllers
 {
@@ -106,21 +107,17 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BanUser(string id)
+        public async Task<IActionResult> BanUser(BanUserViewModel banUserViewModel)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return Forbid();
             }
-            if (string.IsNullOrEmpty(id))
-            {
-                return BadRequest("Id cannot be null");
-            }
-            var result = await _userService.BanUserByIdAsync(id);
+            var result = await _userService.BanUserByIdAsync(banUserViewModel.Id);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index)),
-                PostResult.NotFound => NotFound(id),
+                PostResult.NotFound => NotFound(banUserViewModel.Id),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
             };
