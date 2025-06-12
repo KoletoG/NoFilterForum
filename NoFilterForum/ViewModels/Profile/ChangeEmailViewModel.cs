@@ -6,6 +6,7 @@ namespace Web.ViewModels.Profile
     {
         [EmailAddress]
         [Required]
+        [Display(Name ="Email")]
         public string Email { get; set; }
     }
 }

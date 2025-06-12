@@ -31,11 +31,7 @@
 			<input name="Username" type="text" placeholder="New username..."/>
 			<button type="submit">Change username</button>
 		</form>
-		<form asp-action="ChangeEmail" asp-controller="Profile" method="post">
-			@Html.AntiForgeryToken()
-			<input name="Email" type="text" placeholder="New email..." />
-			<button type="submit">Change Email</button>
-		</form>
+		<partial name="_ChangeEmail" model="new ChangeEmailViewModel()"/>
 		<form asp-action="UpdateImage" asp-controller="Profile" method="post" enctype="multipart/form-data">
 			@Html.AntiForgeryToken()
 			<input type="file" name="image" accept="image/*"/>
@@ -70,7 +66,7 @@
 	if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 	{
 		<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
-		<partial name="~/Views/Warnings/_CreateWarning.cshtml"  model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
+		<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 	}
 }
 <h1>@Model.Profile.UserName</h1>
