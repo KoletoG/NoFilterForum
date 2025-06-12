@@ -1,0 +1,20 @@
+﻿@using NoFilterForum.Core.Models.ViewModels
+@model CreateSectionViewModel
+
+<form asp-action="Create" asp-controller="Section" method="post">
+	@Html.AntiForgeryToken()
+	<div class="input-group">
+		<span asp-validation-for="Title" class="text-danger"></span>
+		<label asp-for="Title"></label>
+		<input asp-for="Title" />
+	</div>
+	<div class="input-group">
+		<span asp-validation-for="Description" class="text-danger"></span>
+		<label asp-for="Description"></label>
+		<input asp-for="Description" />
+	</div>
+	<button type="submit">Create Section</button>
+</form>
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+}

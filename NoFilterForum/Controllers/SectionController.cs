@@ -47,11 +47,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
-                bool isAdmin = await _userService.IsAdminRoleByIdAsync(userId);
-                var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
-                var indexSectionViewModel = SectionMapper.MapToViewModel(sectionItemViewModelList, isAdmin);
-                return View("Index",indexSectionViewModel); // Include errors
+                return RedirectToAction("Index"); // Include errors
             }
             var createSectionRequest = SectionMapper.MapToRequest(createSectionViewModel, userId);
             var result = await _sectionService.CreateSectionAsync(createSectionRequest);

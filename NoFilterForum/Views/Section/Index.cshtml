@@ -1,4 +1,5 @@
 ﻿@using System.Web
+@using NoFilterForum.Core.Models.ViewModels
 @using Web.ViewModels.Section
 
 @model IndexSectionViewModel
@@ -8,20 +9,7 @@
 @{
 	if (Model.IsAdmin)
 	{
-		<form asp-action="Create" asp-controller="Section" method="post">
-			@Html.AntiForgeryToken()
-			<div class="input-group">
-				<span asp-validation-for="CreateSection.Title" class="text-danger"></span>
-				<label asp-for="CreateSection.Title"></label>
-				<input asp-for="CreateSection.Title" />
-			</div>
-			<div class="input-group">
-				<span asp-validation-for="CreateSection.Description" class="text-danger"></span>
-				<label asp-for="CreateSection.Description"></label>
-				<input asp-for="CreateSection.Description" />
-			</div>
-			<button type="submit">Create Section</button>
-		</form>
+		<partial name="_CreateSection" model="new CreateSectionViewModel()"/>
 	}
 	foreach (var section1 in Model.Sections)
 	{
