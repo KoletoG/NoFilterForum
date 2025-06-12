@@ -51,7 +51,7 @@ namespace Web.Controllers
                 bool isAdmin = await _userService.IsAdminRoleByIdAsync(userId);
                 var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
                 var indexSectionViewModel = SectionMapper.MapToViewModel(sectionItemViewModelList, isAdmin);
-                return View("Index",indexSectionViewModel); // Need to change this
+                return View("Index",indexSectionViewModel); // Include errors
             }
             var createSectionRequest = SectionMapper.MapToRequest(createSectionViewModel, userId);
             var result = await _sectionService.CreateSectionAsync(createSectionRequest);
