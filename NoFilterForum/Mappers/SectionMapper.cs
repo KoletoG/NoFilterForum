@@ -21,6 +21,12 @@ namespace Web.Mappers
             Sections = itemVMs,
             IsAdmin = isAdmin
         };
+        public static IndexSectionViewModel MapToViewModel(List<SectionItemViewModel> itemVMs, bool isAdmin, CreateSectionViewModel createSectionViewModel) => new()
+        {
+            Sections = itemVMs,
+            IsAdmin = isAdmin,
+            CreateSection = createSectionViewModel
+        };
         public static CreateSectionRequest MapToRequest(CreateSectionViewModel vm, string userId) => new()
         {
             Title = vm.Title,

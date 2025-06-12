@@ -40,14 +40,18 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateSectionViewModel createSectionViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(createSectionViewModel); // Need to change this
-            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Unauthorized();
+            }
+            if (!ModelState.IsValid)
+            {
+                var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
+                bool isAdmin = await _userService.IsAdminRoleByIdAsync(userId);
+                var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
+                var indexSectionViewModel = SectionMapper.MapToViewModel(sectionItemViewModelList, isAdmin);
+                return View("Index",indexSectionViewModel); // Need to change this
             }
             var createSectionRequest = SectionMapper.MapToRequest(createSectionViewModel, userId);
             var result = await _sectionService.CreateSectionAsync(createSectionRequest);
