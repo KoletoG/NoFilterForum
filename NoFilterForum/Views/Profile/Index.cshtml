@@ -3,6 +3,7 @@
 @using NoFilterForum.Core.Models.DataModels
 @using NoFilterForum.Global_variables
 @using Web.ViewModels.Profile
+@using Web.ViewModels.Warning
 
 
 @model ProfileViewModel
@@ -69,12 +70,7 @@
 	if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 	{
 		<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
-		<form method="post" asp-action="Create" asp-controller="Warnings">
-			@Html.AntiForgeryToken()
-			<input type="hidden" name="UserId" value="@Model.Profile.Id" />
-			<input name="Content" placeholder="Reason for warning..." type="text"/>
-			<button type="submit">Give warning</button>
-		</form>
+		<partial name="~/Views/Warnings/_CreateWarning.cshtml"  model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 	}
 }
 <h1>@Model.Profile.UserName</h1>
@@ -131,4 +127,8 @@
 			Next page
 		</a>
 	}
+}
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 }

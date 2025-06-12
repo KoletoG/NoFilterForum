@@ -1,0 +1,10 @@
+﻿@using Web.ViewModels.Warning
+@model CreateWarningViewModel
+
+<form method="post" asp-action="Create" asp-controller="Warnings">
+	@Html.AntiForgeryToken()
+	<input type="hidden" asp-for="UserId" />
+	<span asp-validation-for="Content" class="text-danger"></span>
+	<input asp-for="Content" />
+	<button type="submit">Give warning</button>
+</form>

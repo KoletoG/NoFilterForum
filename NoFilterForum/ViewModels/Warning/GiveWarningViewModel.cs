@@ -7,7 +7,7 @@ namespace Web.ViewModels.Warning
         [Required]
         public string UserId { get; set; }
         [Required]
-        [MinLength(10)]
+        [MinLength(10,ErrorMessage ="Text characters should be at least 10")]
         public string Content { get; set; }
     }
 }
