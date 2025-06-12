@@ -21,11 +21,7 @@
 		<h3>Email: @Model.Profile.Email</h3>
 		<h3>Your account was created on @Model.Profile.DateCreated.ToLongDateString()</h3>
 		<h3>Your bio: @Html.Raw(Model.Profile.Bio)</h3>
-		<form asp-action="ChangeBio" asp-controller="Profile" method="post">
-			@Html.AntiForgeryToken()
-			<input name="Bio" placeholder="Your bio..." type="text" />
-			<button type="submit">Save Bio</button>
-		</form>
+		<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
 		<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()"/>
 		<partial name="_ChangeEmail" model="new ChangeEmailViewModel()"/>
 		<form asp-action="UpdateImage" asp-controller="Profile" method="post" enctype="multipart/form-data">
