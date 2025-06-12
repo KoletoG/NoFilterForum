@@ -1,0 +1,10 @@
+﻿@using Web.ViewModels.Profile
+@model ChangeUsernameViewModel
+
+<form asp-action="ChangeUsername" asp-controller="Profile" method="post">
+	@Html.AntiForgeryToken()
+	<label asp-for="Username"></label>
+	<span asp-validation-for="Username" class="text-danger"></span>
+	<input asp-for="Username" />
+	<button type="submit">Change username</button>
+</form>
