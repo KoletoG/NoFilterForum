@@ -24,11 +24,7 @@
 		<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
 		<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()"/>
 		<partial name="_ChangeEmail" model="new ChangeEmailViewModel()"/>
-		<form asp-action="UpdateImage" asp-controller="Profile" method="post" enctype="multipart/form-data">
-			@Html.AntiForgeryToken()
-			<input type="file" name="image" accept="image/*"/>
-			<button type="submit">Change image</button>
-		</form>
+		<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
 	}
 	else
 	{
