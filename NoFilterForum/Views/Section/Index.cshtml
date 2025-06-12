@@ -17,11 +17,7 @@
 		<h4>@section1.Description</h4>
 		if (Model.IsAdmin)
 		{
-			<form asp-action="Delete" asp-controller="Section" method="post">
-				@Html.AntiForgeryToken()
-				<input type="hidden" name="SectionId" value="@section1.Id" />
-				<button type="submit">Delete Section</button>
-			</form>
+			<partial name="_DeleteSection" model="new DeleteSectionViewModel(){SectionId=section1.Id}"/>
 		}
 	}
 }

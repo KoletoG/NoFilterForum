@@ -1,0 +1,8 @@
+﻿@using Web.ViewModels.Section
+@model DeleteSectionViewModel
+
+<form asp-action="Delete" asp-controller="Section" method="post">
+	@Html.AntiForgeryToken()
+	<input type="hidden" asp-for="SectionId" />
+	<button type="submit">Delete Section</button>
+</form>
