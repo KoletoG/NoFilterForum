@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using System.Web;
+using Core.Enums;
 
 namespace Web.ViewModels
 {
@@ -6,10 +7,17 @@ namespace Web.ViewModels
     {
         public UserRoles Role {  get; set; }
         public string Username { get; set; }
-        public RoleViewModel(UserRoles role, string username)
+        public bool ShouldRoute {  get; set; }
+        public string EncodedUsername { get; init; }
+        public RoleViewModel(UserRoles role, string username, bool shouldRoute)
         {
             Role = role;
             Username = username;
+            ShouldRoute = shouldRoute;
+            if (ShouldRoute)
+            {
+                EncodedUsername = HttpUtility.UrlEncode(Username);
+            }
         }
     }
 }

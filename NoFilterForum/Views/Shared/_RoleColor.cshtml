@@ -1,23 +1,30 @@
 ﻿@using Core.Enums
 @using Web.ViewModels
 @model RoleViewModel
-@if (Model.Role == UserRoles.Admin)
+@if (Model.ShouldRoute)
 {
-	<h6 class="text-danger">@Model.Username</h6>
-}
-else if (Model.Role == UserRoles.VIP)
-{
-	<h6 class="text-warning">@Model.Username</h6>
-}
-else if (Model.Role == UserRoles.Regular)
-{
-	<h6 class="text-light">@Model.Username</h6>
-}
-else if (Model.Role == UserRoles.Dinosaur)
-{
-	<h6 class="text-primary">@Model.Username</h6>
+
 }
 else
 {
-	<h6 class="text-dark">@Model.Username</h6>
+	if (Model.Role == UserRoles.Admin)
+	{
+		<h6 class="text-danger">@Model.Username</h6>
+	}
+	else if (Model.Role == UserRoles.VIP)
+	{
+		<h6 class="text-warning">@Model.Username</h6>
+	}
+	else if (Model.Role == UserRoles.Regular)
+	{
+		<h6 class="text-light">@Model.Username</h6>
+	}
+	else if (Model.Role == UserRoles.Dinosaur)
+	{
+		<h6 class="text-primary">@Model.Username</h6>
+	}
+	else
+	{
+		<h6 class="text-dark">@Model.Username</h6>
+	}
 }
