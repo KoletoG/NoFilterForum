@@ -8,7 +8,7 @@ namespace Web.ViewModels
         public UserRoles Role {  get; set; }
         public string Username { get; set; }
         public bool ShouldRoute {  get; set; }
-        public string EncodedUsername { get; init; }
+        public string EncodedUsername { get; private init; }
         public RoleViewModel(UserRoles role, string username, bool shouldRoute)
         {
             Role = role;
