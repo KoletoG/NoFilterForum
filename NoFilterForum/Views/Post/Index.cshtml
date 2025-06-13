@@ -82,6 +82,7 @@
 					<button type="submit">Pin post</button>
 				</form>
 			}
+			<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)"/>
 		}
 		<br />
 	}
@@ -105,4 +106,7 @@
 		<a asp-action="Index" asp-controller="Post" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
 		<a asp-action="Index" asp-controller="Post" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
 	}
+}
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
 }

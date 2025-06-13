@@ -1,0 +1,19 @@
+﻿@using Web.ViewModels.Post
+@model PinPostPartialViewModel
+
+@if (Model.IsPinned)
+{
+	<form asp-action="PinPost" asp-controller="Admin" method="post">
+		@Html.AntiForgeryToken()
+		<input type="hidden" asp-for="PinPostVM.PostId" />
+		<button type="submit">Unpin post</button>
+	</form>
+}
+else
+{
+	<form asp-action="PinPost" asp-controller="Admin" method="post">
+		@Html.AntiForgeryToken()
+		<input type="hidden" asp-for="PinPostVM.PostId" />
+		<button type="submit">Pin post</button>
+	</form>
+}
