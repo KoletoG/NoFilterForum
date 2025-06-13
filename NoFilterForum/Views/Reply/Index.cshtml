@@ -1,6 +1,7 @@
 ﻿@using System.Web
 @using Core.Enums
 @using NoFilterForum.Global_variables
+@using Web.ViewModels
 @using Web.ViewModels.Reply
 
 
@@ -8,27 +9,7 @@
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
 @if (Model.Post.Username != UserConstants.DefaultUser.UserName)
 {
-	var encodedPostUser = HttpUtility.UrlEncode(Model.Post.Username);
-	if (Model.Post.Role == UserRoles.Admin)
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-danger">@Model.Post.Username</a>
-	}
-	else if (Model.Post.Role == UserRoles.VIP)
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-warning">@Model.Post.Username</a>
-	}
-	else if (Model.Post.Role == UserRoles.Regular)
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-light">@Model.Post.Username</a>
-	}
-	else if (Model.Post.Role == UserRoles.Dinosaur)
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-primary">@Model.Post.Username</a>
-	}
-	else
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedPostUser" class="text-dark">@Model.Post.Username</a>
-	}
+	<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.Username,true)" />
 	<img src="@Model.Post.ImageUrl" width="125" height="125" />
 }
 else
@@ -162,27 +143,7 @@ else
 	{
 		if (reply.Username != UserConstants.DefaultUser.UserName)
 		{
-			var encodedUsername = HttpUtility.UrlEncode(reply.Username);
-			if (reply.Role == UserRoles.Admin)
-			{
-				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-danger">@reply.Username</a>
-			}
-			else if (reply.Role == UserRoles.VIP)
-			{
-				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-warning">@reply.Username</a>
-			}
-			else if (reply.Role == UserRoles.Regular)
-			{
-				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-light">@reply.Username</a>
-			}
-			else if (reply.Role == UserRoles.Dinosaur)
-			{
-				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-primary">@reply.Username</a>
-			}
-			else
-			{
-				<a asp-action="Profile" asp-route-userName="@encodedUsername" class="text-dark">@reply.Username</a>
-			}
+			<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.Username,true)"/>
 			<img src="@reply.ImageUrl" width="125" height="125" />
 		}
 		else
