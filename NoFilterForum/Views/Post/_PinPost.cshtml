@@ -1,11 +1,16 @@
-﻿@using Web.ViewModels.Post
+﻿@using Web.ViewModels.Admin
+@using Web.ViewModels.Post
 @model PinPostPartialViewModel
 
+@{
+	string postIdName = nameof(PinPostViewModel.PostId);
+	string postIdValue = Model.PinPostVM.PostId; 
+}
 @if (Model.IsPinned)
 {
 	<form asp-action="PinPost" asp-controller="Admin" method="post">
 		@Html.AntiForgeryToken()
-		<input type="hidden" asp-for="PinPostVM.PostId" />
+		<input hidden name="@postIdName" value="@postIdValue" />
 		<button type="submit">Unpin post</button>
 	</form>
 }
@@ -13,7 +18,7 @@ else
 {
 	<form asp-action="PinPost" asp-controller="Admin" method="post">
 		@Html.AntiForgeryToken()
-		<input type="hidden" asp-for="PinPostVM.PostId" />
+		<input hidden name="@postIdName" value="@postIdValue" />
 		<button type="submit">Pin post</button>
 	</form>
 }
