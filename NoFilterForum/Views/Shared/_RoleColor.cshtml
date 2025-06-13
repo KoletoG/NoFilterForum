@@ -5,23 +5,23 @@
 {
 	if (Model.Role == UserRoles.Admin)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.EncodedUsername" class="text-danger">@Model.Username</a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userName="@Model.EncodedUsername" class="text-danger">@Model.Username</a>
 	}
 	else if (Model.Role == UserRoles.VIP)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.EncodedUsername" class="text-warning">@Model.Username</a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userName="@Model.EncodedUsername" class="text-warning">@Model.Username</a>
 	}
 	else if (Model.Role == UserRoles.Regular)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.EncodedUsername" class="text-light">@Model.Username</a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userName="@Model.EncodedUsername" class="text-light">@Model.Username</a>
 	}
 	else if (Model.Role == UserRoles.Dinosaur)
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.EncodedUsername" class="text-primary">@Model.Username</a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userName="@Model.EncodedUsername" class="text-primary">@Model.Username</a>
 	}
 	else
 	{
-		<a asp-action="Profile" asp-route-userName="@Model.EncodedUsername" class="text-dark">@Model.Username</a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userName="@Model.EncodedUsername" class="text-dark">@Model.Username</a>
 	}
 }
 else
