@@ -58,26 +58,8 @@
 	{
 		<a asp-action="Index" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 			<h3>
-				@post.Title @if (post.Role == UserRoles.Admin)
-				{
-					<h6 class="text-danger">@post.Username</h6>
-				}
-				else if (post.Role == UserRoles.VIP)
-				{
-					<h6 class="text-warning">@post.Username</h6>
-				}
-				else if (post.Role == UserRoles.Regular)
-				{
-					<h6 class="text-light">@post.Username</h6>
-				}
-				else if (post.Role == UserRoles.Dinosaur)
-				{
-					<h6 class="text-primary">@post.Username</h6>
-				}
-				else
-				{
-					<h6 class="text-dark">@post.Username</h6>
-				}
+				@post.Title 
+				<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Username)" />
 			</h3>
 		</a>
 		var timeDiff = DateTime.UtcNow - post.DateCreated;
