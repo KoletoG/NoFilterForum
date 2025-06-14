@@ -1,10 +1,11 @@
 ﻿@using Web.ViewModels
 @model LikeDislikeViewModel
 
+<script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
 @{
 	<form asp-action="@Model.LikeDislike" asp-controller="@Model.PostReply" method="post">
 		@Html.AntiForgeryToken()
 		<input type="hidden" name="Id" value="@Model.Id" />
-		<button type="submit" id="@string.Concat(Model.PostReply,Model.LikeDislike)" onclick="updatePostLikes()" style="@Model.ColorRed">@Model.LikeDislike</button>
+		<button type="submit" id="@string.Concat(Model.LikeDislike,"_id_",Model.Id)" onclick="@string.Concat("update",Model.LikeDislike,$"(`id_{Model.Id}`)")" style="@Model.ColorRed">@Model.LikeDislike</button>
 	</form>
 }

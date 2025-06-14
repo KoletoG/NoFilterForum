@@ -1,6 +1,6 @@
 ﻿let normalColor = "black";
 let updatedColor = "red";
-function updatePostLikes()
+function updateLike()
 {
     let btnLike = document.getElementById("postLike");
     let likesCount = document.getElementById("likesPostCount");
@@ -21,7 +21,7 @@ function updatePostLikes()
         likesCount.innerText=parseInt(likesCount.innerText)+1;
     }
 }
-function updatePostDislikes()
+function updateDislike()
 {
     let btnLike = document.getElementById("postLike");
     let likesCount = document.getElementById("likesPostCount");
@@ -42,11 +42,11 @@ function updatePostDislikes()
         likesCount.innerText=parseInt(likesCount.innerText)-1;
     }
 }
-function updateLikes(id)
+function updateLike(id)
 {
-    let btnLike = document.getElementById(`like_${id}`);
+    let btnLike = document.getElementById(`Like_${id}`);
     let likesCount = document.getElementById(`likesCount_${id}`);
-    let btnDislike = document.getElementById(`dislike_${id}`);
+    let btnDislike = document.getElementById(`Dislike_${id}`);
     if(btnDislike.style.color==updatedColor)
     {
         btnDislike.style.color=normalColor;
@@ -63,11 +63,11 @@ function updateLikes(id)
         likesCount.innerText=parseInt(likesCount.innerText)+1;
     }
 }
-function updateDislikes(id)
+function updateDislike(id)
 {
-    let btnLike = document.getElementById(`like_${id}`);
+    let btnLike = document.getElementById(`Like_${id}`);
     let likesCount = document.getElementById(`likesCount_${id}`);
-    let btnDislike = document.getElementById(`dislike_${id}`);
+    let btnDislike = document.getElementById(`Dislike_${id}`);
     if(btnLike.style.color==updatedColor)
     {
         btnLike.style.color=normalColor;

@@ -142,17 +142,9 @@ else
 		}
 		else
 		{
-			<form asp-action="Like" asp-controller="Reply" method="post">
-				@Html.AntiForgeryToken()
-				<input type="hidden" name="Id" value="@reply.Id" />
-				<button type="submit" id="like_id_@reply.Id" onclick="updateLikes('id_@reply.Id')">Like</button>
-			</form>
+			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)"/>
 			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<form asp-action="Dislike" asp-controller="Reply" method="post">
-				@Html.AntiForgeryToken()
-				<input type="hidden" name="Id" value="@reply.Id" />
-				<button type="submit" id="dislike_id_@reply.Id" onclick="updateDislikes('id_@reply.Id')">Dislike</button>
-			</form>
+			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
 		}
 		@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 		{
