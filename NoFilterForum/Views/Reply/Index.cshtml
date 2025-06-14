@@ -92,13 +92,6 @@ else
 		<input type="hidden" name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Create reply</button>
 	</form>
-	if (ViewBag.ErrorsList != null)
-	{
-		foreach (var error in ViewBag.ErrorsList)
-		{
-			<h5 class="text-danger">@error</h5>
-		}
-	}
 	@foreach (var reply in Model.Replies)
 	{
 		if (reply.Username != UserConstants.DefaultUser.UserName)
@@ -216,12 +209,15 @@ else
 	}
 
 }
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
-			var targetLabel = document.getElementById("idrep_@Model.ReplyId");
-			if (targetLabel)
-			{
-				targetLabel.scrollIntoView({ behavior: "smooth", block: "start" });
-			}
-	});
-</script>
+@section Scripts{
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+				var targetLabel = document.getElementById("idrep_@Model.ReplyId");
+				if (targetLabel)
+				{
+					targetLabel.scrollIntoView({ behavior: "smooth", block: "start" });
+				}
+		});
+	</script>
+}
