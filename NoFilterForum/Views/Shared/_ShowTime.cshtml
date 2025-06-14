@@ -1,43 +1,44 @@
 ﻿@using Web.ViewModels
 @model ShowTimeViewModel
 @{
-	void ShowTime(TimeSpan timediff)
+	double totalDays = Model.TimeDifference.TotalDays;
+	double totalHours = Model.TimeDifference.TotalHours;
+	double totalMinutes = Model.TimeDifference.TotalMinutes;
+	double totalSeconds = Model.TimeDifference.TotalSeconds;
+	if ((totalDays / 31) < 12) // 31 is days of month, 12 is months per year
 	{
-		if ((timediff.TotalDays / 31) < 12)
+		if (totalDays <= 31)
 		{
-			if (timediff.TotalDays <= 31)
+			if (totalDays < 1) // If time difference is less than 24 hours
 			{
-				if (timediff.TotalDays < 1)
+				if (totalHours < 1) // If time difference is less than 60 minutes
 				{
-					if (timediff.TotalHours < 1)
+					if (totalMinutes < 1) // If time difference is less than 60 seconds
 					{
-						if (timediff.TotalMinutes < 1)
-						{
-							<h6>@timediff.TotalSeconds.ToString("0") seconds ago</h6>
-						}
-						else
-						{
-							<h6>@timediff.TotalMinutes.ToString("0") minutes ago</h6>
-						}
+						<h6>@totalSeconds.ToString("0") seconds ago</h6>
 					}
 					else
 					{
-						<h6>@timediff.TotalHours.ToString("0") hours ago</h6>
+						<h6>@totalMinutes.ToString("0") minutes ago</h6>
 					}
 				}
 				else
 				{
-					<h6>@timediff.TotalDays.ToString("0") days ago</h6>
+					<h6>@totalHours.ToString("0") hours ago</h6>
 				}
 			}
 			else
 			{
-				<h6>@((timediff.TotalDays / 31).ToString("0")) months ago</h6>
+				<h6>@totalDays.ToString("0") days ago</h6>
 			}
 		}
 		else
 		{
-			<h6>@((timediff.TotalDays / 31 / 12).ToString("0")) years ago</h6>
+			<h6>@((totalDays / 31).ToString("0")) months ago</h6>
 		}
+	}
+	else
+	{
+		<h6>@((totalDays / 31 / 12).ToString("0")) years ago</h6>
 	}
 }
