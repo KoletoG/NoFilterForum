@@ -8,17 +8,23 @@ namespace Web.ViewModels
         public LikeDislikePostViewModel PostLikeDislike { get; set; } = new LikeDislikePostViewModel();
         public LikeDislikeReplyViewModel ReplyLikeDislike { get; set; } = new LikeDislikeReplyViewModel();
         public string Id { get; }
-        public bool IsLike { get; }
-        public bool IsPost { get; }
         public string ColorRed { get; } = string.Empty;
+        public string LikeDislike { get; } = "Like";
+        public string PostReply { get; } = "Post";
         public LikeDislikeViewModel(string id, bool isPost, bool isLike, bool isMarked)
         {
             Id = id;
-            IsLike = isLike;
-            IsPost = isPost;
             if (isMarked)
             {
                 ColorRed = "color:red";
+            }
+            if (!isLike)
+            {
+                LikeDislike = "Dislike";
+            }
+            if (!isPost)
+            {
+                PostReply = "Reply";
             }
         }
     }
