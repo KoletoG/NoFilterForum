@@ -1,0 +1,24 @@
+﻿@using Web.ViewModels
+@model LikeDislikeViewModel
+
+@{
+	if (Model.IsPost)
+	{
+		if (Model.IsLike)
+		{
+			<form asp-action="Like" asp-controller="Post" method="post">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="Id" value="@Model.Id" />
+				<button type="submit" id="postLike" onclick="updatePostLikes()">Like</button>
+			</form>
+		}
+		else
+		{
+			<form asp-action="Dislike" asp-controller="Post" method="post">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="Id" value="@Model.Id" />
+				<button type="submit" onclick="updatePostDislikes()" id="postDislike" style="color:red">Dislike</button>
+			</form>
+		}
+	}
+}
