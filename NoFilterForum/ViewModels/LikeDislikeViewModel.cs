@@ -10,13 +10,16 @@ namespace Web.ViewModels
         public string Id { get; }
         public bool IsLike { get; }
         public bool IsPost { get; }
-        public bool IsMarked { get; }
+        public string ColorRed { get; } = string.Empty;
         public LikeDislikeViewModel(string id, bool isPost, bool isLike, bool isMarked)
         {
             Id = id;
             IsLike = isLike;
             IsPost = isPost;
-            IsMarked = isMarked;
+            if (isMarked)
+            {
+                ColorRed = "color:red";
+            }
         }
     }
 }
