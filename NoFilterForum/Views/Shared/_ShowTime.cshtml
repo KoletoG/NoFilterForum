@@ -1,44 +1,4 @@
 ﻿@using Web.ViewModels
 @model ShowTimeViewModel
-@{
-	double totalDays = Model.TimeDifference.TotalDays;
-	double totalHours = Model.TimeDifference.TotalHours;
-	double totalMinutes = Model.TimeDifference.TotalMinutes;
-	double totalSeconds = Model.TimeDifference.TotalSeconds;
-	if ((totalDays / 31) < 12) // 31 is days of month, 12 is months per year
-	{
-		if (totalDays <= 31)
-		{
-			if (totalDays < 1) // If time difference is less than 24 hours
-			{
-				if (totalHours < 1) // If time difference is less than 60 minutes
-				{
-					if (totalMinutes < 1) // If time difference is less than 60 seconds
-					{
-						<h6>@totalSeconds.ToString("0") seconds ago</h6>
-					}
-					else
-					{
-						<h6>@totalMinutes.ToString("0") minutes ago</h6>
-					}
-				}
-				else
-				{
-					<h6>@totalHours.ToString("0") hours ago</h6>
-				}
-			}
-			else
-			{
-				<h6>@totalDays.ToString("0") days ago</h6>
-			}
-		}
-		else
-		{
-			<h6>@((totalDays / 31).ToString("0")) months ago</h6>
-		}
-	}
-	else
-	{
-		<h6>@((totalDays / 31 / 12).ToString("0")) years ago</h6>
-	}
-}
+
+<h6>@Model.DisplayTimeAgo</h6>
