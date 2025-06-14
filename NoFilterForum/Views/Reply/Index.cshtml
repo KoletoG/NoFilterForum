@@ -19,47 +19,7 @@ else
 <h1>@Model.Post.Title</h1>
 <h5>@Html.Raw(Model.Post.Content)</h5>
 @{
-	var timeDiff = DateTime.UtcNow - Model.Post.DateCreated;
-	void ShowTime(TimeSpan timediff)
-	{
-		if ((timediff.TotalDays / 31) < 12)
-		{
-			if (timediff.TotalDays <= 31)
-			{
-				if (timediff.TotalDays < 1)
-				{
-					if (timediff.TotalHours < 1)
-					{
-						if (timediff.TotalMinutes < 1)
-						{
-							<h6>@timediff.TotalSeconds.ToString("0") seconds ago</h6>
-						}
-						else
-						{
-							<h6>@timediff.TotalMinutes.ToString("0") minutes ago</h6>
-						}
-					}
-					else
-					{
-						<h6>@timediff.TotalHours.ToString("0") hours ago</h6>
-					}
-				}
-				else
-				{
-					<h6>@timediff.TotalDays.ToString("0") days ago</h6>
-				}
-			}
-			else
-			{
-				<h6>@((timediff.TotalDays / 31).ToString("0")) months ago</h6>
-			}
-		}
-		else
-		{
-			<h6>@((timediff.TotalDays / 31 / 12).ToString("0")) years ago</h6>
-		}
-	}
-	ShowTime(timeDiff);
+	<partial name="_ShowTime" model="new ShowTimeViewModel(Model.Post.DateCreated)" />
 }
 @{
 	if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
@@ -158,8 +118,7 @@ else
 		{
 			<h5>@Html.Raw(reply.Content)</h5>
 		}
-		var timeDiffReply = DateTime.UtcNow - reply.DateCreated;
-		ShowTime(timeDiffReply);
+		<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
 		if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 		{
 			<form asp-action="Like" asp-controller="Reply" method="post">
