@@ -5,8 +5,6 @@ namespace Web.ViewModels
 {
     public class LikeDislikeViewModel
     {
-        public LikeDislikePostViewModel PostLikeDislike { get; set; } = new LikeDislikePostViewModel();
-        public LikeDislikeReplyViewModel ReplyLikeDislike { get; set; } = new LikeDislikeReplyViewModel();
         public string Id { get; }
         public string ColorRed { get; } = string.Empty;
         public string LikeDislike { get; } = "Like";
