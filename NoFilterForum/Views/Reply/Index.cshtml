@@ -61,12 +61,7 @@ else
 	</form>
 }
 @{
-	<form asp-action="Create" asp-controller="Reply" method="post">
-		@Html.AntiForgeryToken()
-		<input type="text" name="Content" placeholder="Write a reply..." />
-		<input type="hidden" name="PostId" value="@Model.Post.Id" />
-		<button type="submit">Create reply</button>
-	</form>
+	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 	@foreach (var reply in Model.Replies)
 	{
 		if (reply.Username != UserConstants.DefaultUser.UserName)
@@ -125,20 +120,10 @@ else
 				<button type="submit">Send Report Model</button>
 			</form>
 		}
-		<form asp-action="Create" asp-controller="Reply" method="post">
-			@Html.AntiForgeryToken()
-			<input type="text" name="Content" value="@($"@{reply.Username}")" placeholder="Write a reply..." />
-			<input type="hidden" name="PostId" value="@Model.Post.Id" />
-			<button type="submit">Create reply</button>
-		</form>
+		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=reply.Username}" />
 	}
 	<br />
-	<form asp-action="Create" asp-controller="Reply" method="post">
-		@Html.AntiForgeryToken()
-		<input type="text" name="Content" placeholder="Write a reply..." />
-		<input type="hidden" name="PostId" value="@Model.Post.Id" />
-		<button type="submit">Create reply</button>
-	</form>
+	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}"/>
 	int previousPage = Model.Page - 1;
 	int nextPage = Model.Page + 1;
 	if (Model.TotalPages == 1)
