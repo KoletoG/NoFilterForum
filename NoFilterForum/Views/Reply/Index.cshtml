@@ -120,7 +120,8 @@ else
 				<button type="submit">Send Report Model</button>
 			</form>
 		}
-		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=reply.Username}" />
+		string usernameContent = $"@{reply.Username}";
+		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
 	}
 	<br />
 	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}"/>
