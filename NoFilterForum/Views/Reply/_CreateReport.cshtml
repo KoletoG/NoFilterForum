@@ -1,0 +1,13 @@
+﻿@using Web.ViewModels.Report
+@model CreateReportViewModel
+
+<form asp-action="Create" asp-controller="Report" method="post">
+	@Html.AntiForgeryToken()
+	<span asp-validation-for="Content" class="text-danger"></span>
+	<label asp-for="Content"></label>
+	<input asp-for="Content" placeholder="Reason for report..." />
+	<input type="hidden" asp-for="IsPost" value="@Model.IsPost" />
+	<input asp-for="IdOfPostReply" type="hidden" value="@Model.IdOfPostReply" />
+	<input asp-for="UserIdTo" type="hidden" value="@Model.UserIdTo" />
+	<button type="submit">Send Report Model</button>
+</form>
