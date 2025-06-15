@@ -2,6 +2,7 @@
 @using Core.Enums
 @using NoFilterForum.Global_variables
 @using Web.ViewModels
+@using Web.ViewModels.Post
 @using Web.ViewModels.Reply
 @using Web.ViewModels.Report
 
@@ -48,7 +49,8 @@ else
 		@Html.AntiForgeryToken()
 		<input hidden name="PostId" value="@Model.Post.Id" />
 		<button type="submit">Delete Post</button>
-	</form>
+	</form> 
+	<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}"/>
 }
 else
 {
