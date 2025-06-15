@@ -3,6 +3,7 @@
 @using NoFilterForum.Global_variables
 @using Web.ViewModels
 @using Web.ViewModels.Reply
+@using Web.ViewModels.Report
 
 
 @model IndexReplyViewModel
@@ -51,14 +52,7 @@ else
 }
 else
 {
-	<form asp-action="Create" asp-controller="Report" method="post">
-		@Html.AntiForgeryToken()
-		<input name="Content" type="text" placeholder="Reason for report..." />
-		<input type="hidden" name="IsPost" value="true" />
-		<input name="IdOfPostReply" type="hidden" value="@Model.Post.Id" />
-		<input name="UserIdTo" type="hidden" value="@Model.Post.UserId" />
-		<button type="submit">Send Report Model</button>
-	</form>
+	<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=true,IdOfPostReply=Model.Post.Id,UserIdTo= Model.Post.UserId}"/>
 }
 @{
 	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
@@ -111,14 +105,7 @@ else
 		}
 		else
 		{
-			<form asp-action="Create" asp-controller="Report" method="post">
-				@Html.AntiForgeryToken()
-				<input name="Content" type="text" placeholder="Reason for report..." />
-				<input type="hidden" name="IsPost" value="false" />
-				<input name="IdOfPostReply" type="hidden" value="@reply.Id" />
-				<input name="UserIdTo" type="hidden" value="@reply.Username" />
-				<button type="submit">Send Report Model</button>
-			</form>
+			<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=false,IdOfPostReply=reply.Id,UserIdTo= reply.UserId}" />
 		}
 		string usernameContent = $"@{reply.Username}";
 		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
