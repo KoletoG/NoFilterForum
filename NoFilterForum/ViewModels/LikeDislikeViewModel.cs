@@ -1,4 +1,5 @@
-﻿using Web.ViewModels.Post;
+﻿using System.ComponentModel;
+using Web.ViewModels.Post;
 using Web.ViewModels.Reply;
 
 namespace Web.ViewModels
@@ -6,24 +7,17 @@ namespace Web.ViewModels
     public class LikeDislikeViewModel
     {
         public string Id { get; }
-        public string ColorRed { get; } = string.Empty;
-        public string LikeDislike { get; } = "Like";
-        public string PostReply { get; } = "Post";
+        public bool ColorRed { get; }
+        public bool IsLiked { get; }
+        public bool IsPost {  get; }
+        public string Style => ColorRed ? "color:red" : string.Empty;
+        public string Label => IsLiked ? "Like" : "Dislike";
         public LikeDislikeViewModel(string id, bool isPost, bool isLike, bool isMarked)
         {
             Id = id;
-            if (isMarked)
-            {
-                ColorRed = "color:red";
-            }
-            if (!isLike)
-            {
-                LikeDislike = "Dislike";
-            }
-            if (!isPost)
-            {
-                PostReply = "Reply";
-            }
+            IsLiked = isLike;
+            IsPost = isPost;
+            ColorRed = isMarked;
         }
     }
 }

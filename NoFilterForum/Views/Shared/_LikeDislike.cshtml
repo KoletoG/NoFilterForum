@@ -3,9 +3,9 @@
 
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
 @{
-	<form asp-action="@Model.LikeDislike" asp-controller="@Model.PostReply" method="post">
+	<form asp-action="@(Model.IsLiked ? "Like" : "Dislike")" asp-controller="@(Model.IsPost ? "Post" : "Reply")" method="post">
 		@Html.AntiForgeryToken()
 		<input type="hidden" name="Id" value="@Model.Id" />
-		<button type="submit" id="@string.Concat(Model.LikeDislike,"_id_",Model.Id)" onclick="@string.Concat("update",Model.LikeDislike,$"(`id_{Model.Id}`)")" style="@Model.ColorRed">@Model.LikeDislike</button>
+		<button type="submit" id="@($"{Model.Label}_id_{Model.Id}")" onclick="@($"update{Model.Label}(`id_{Model.Id}`)")" style="@Model.Style">@Model.Label</button>
 	</form>
 }
