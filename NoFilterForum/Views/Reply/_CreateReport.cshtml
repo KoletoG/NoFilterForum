@@ -3,6 +3,8 @@
 
 <form asp-action="Create" asp-controller="Reply" method="post">
 	@Html.AntiForgeryToken()
+	<span asp-validation-for="Content" class="text-danger"></span>
+	<label asp-for="Content"></label>
 	<input asp-for="Content" placeholder="Write a reply..." />
 	<input type="hidden" asp-for="PostId" value="@Model.PostId" />
 	<button type="submit">Create reply</button>
