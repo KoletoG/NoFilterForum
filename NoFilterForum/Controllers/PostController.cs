@@ -36,9 +36,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                string errorsJson = JsonSerializer.Serialize(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                errorsJson = HttpUtility.HtmlEncode(errorsJson);
-                return RedirectToAction("Index", "Home", new { errors = errorsJson }); // Change that
+                return BadRequest(ModelState);
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -104,7 +102,6 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string titleOfSection, int page = 1)
         {
-            // Error TIME FIX
             titleOfSection = HttpUtility.UrlDecode(titleOfSection);
             bool sectionExists = await _sectionService.ExistsSectionByTitleAsync(titleOfSection);
             if (!sectionExists)
