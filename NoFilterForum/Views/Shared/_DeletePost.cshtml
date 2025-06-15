@@ -1,0 +1,7 @@
+﻿@using Web.ViewModels.Post
+@model DeletePostViewModel
+<form asp-action="Delete" asp-controller="Post" method="post">
+	@Html.AntiForgeryToken()
+	<input hidden asp-for="PostId" value="@Model.PostId" />
+	<button type="submit">Delete Post</button>
+</form>
