@@ -1,0 +1,9 @@
+﻿@using Web.ViewModels.Reply
+@model CreateReplyViewModel
+
+<form asp-action="Create" asp-controller="Reply" method="post">
+	@Html.AntiForgeryToken()
+	<input asp-for="Content" placeholder="Write a reply..." />
+	<input type="hidden" asp-for="PostId" value="@Model.PostId" />
+	<button type="submit">Create reply</button>
+</form>
