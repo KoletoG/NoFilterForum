@@ -127,7 +127,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(); // Change this
+                return BadRequest(ModelState); // Change this
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)

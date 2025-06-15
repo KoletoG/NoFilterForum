@@ -45,11 +45,6 @@ else
 }
 @if (Model.Post.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 {
-	<form asp-action="Delete" asp-controller="Post" method="post">
-		@Html.AntiForgeryToken()
-		<input hidden name="PostId" value="@Model.Post.Id" />
-		<button type="submit">Delete Post</button>
-	</form> 
 	<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}"/>
 }
 else
