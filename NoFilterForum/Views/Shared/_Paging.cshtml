@@ -8,13 +8,15 @@
         <a asp-action="@Model.ActionName"
            asp-controller="@Model.ControllerName"
            asp-route-page="@Model.PreviousPage"
-           asp-route-title="@Model.TitleOfSection">Previous page</a>
+           asp-route-title="@Model.TitleOfSection"
+           asp-route-id="@Model.Id">Previous page</a>
     }
     if (Model.HasNext)
     {
         <a asp-action="@Model.ActionName"
            asp-controller="@Model.ControllerName"
            asp-route-page="@Model.NextPage"
-           asp-route-title="@Model.TitleOfSection">Next page</a>
+           asp-route-title="@Model.TitleOfSection"
+           asp-route-id="@Model.Id">Next page</a>
     }
 }

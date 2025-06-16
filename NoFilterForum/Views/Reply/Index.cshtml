@@ -128,7 +128,9 @@ else
 		<a asp-action="Index" asp-route-id="@Model.Post.Id" asp-controller="Reply" asp-route-page="@previousPage">Previous page</a>
 		<a asp-action="Index" asp-route-id="@Model.Post.Id" asp-controller="Reply" asp-route-page="@nextPage">Next page</a>
 	}
-
+	string controllerName = "Reply";
+	string actionName = "Index";
+	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)"/>
 }
 @section Scripts{
 	<partial name="_ValidationScriptsPartial" />
