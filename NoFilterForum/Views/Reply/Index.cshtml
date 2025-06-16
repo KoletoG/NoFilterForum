@@ -109,25 +109,6 @@ else
 	}
 	<br />
 	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}"/>
-	int previousPage = Model.Page - 1;
-	int nextPage = Model.Page + 1;
-	if (Model.TotalPages == 1)
-	{
-
-	}
-	else if (Model.Page == 1)
-	{
-		<a asp-action="Index" asp-route-id="@Model.Post.Id" asp-controller="Reply" asp-route-page="@nextPage">Next page</a>
-	}
-	else if (Model.Page == Model.TotalPages)
-	{
-		<a asp-action="Index" asp-route-id="@Model.Post.Id" asp-controller="Reply" asp-route-page="@previousPage">Previous page</a>
-	}
-	else
-	{
-		<a asp-action="Index" asp-route-id="@Model.Post.Id" asp-controller="Reply" asp-route-page="@previousPage">Previous page</a>
-		<a asp-action="Index" asp-route-id="@Model.Post.Id" asp-controller="Reply" asp-route-page="@nextPage">Next page</a>
-	}
 	string controllerName = "Reply";
 	string actionName = "Index";
 	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)"/>
