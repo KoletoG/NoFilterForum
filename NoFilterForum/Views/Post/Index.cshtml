@@ -7,13 +7,7 @@
 @using Web.ViewModels.Post
 @model PostIndexViewModel
 <h2 style="color:red">@ViewBag.ErrorTime</h2>
-<form asp-action="Create" asp-controller="Post" method="post">
-	<input hidden type="text" name="TitleOfSection" value="@Model.TitleOfSection" />
-	<input type="text" name="Title" placeholder="Title of the post" />
-	<input type="text" name="Body" placeholder="Body of the post" />
-	@Html.AntiForgeryToken()
-	<button type="submit">Create post</button>
-</form>
+<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}"/>
 @{
 	foreach (var post in Model.Posts)
 	{
