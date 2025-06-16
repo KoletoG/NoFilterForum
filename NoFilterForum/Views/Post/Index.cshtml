@@ -6,7 +6,6 @@
 @using Web.ViewModels
 @using Web.ViewModels.Post
 @model PostIndexViewModel
-<h2 style="color:red">@ViewBag.ErrorTime</h2>
 <partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}"/>
 @{
 	foreach (var post in Model.Posts)
