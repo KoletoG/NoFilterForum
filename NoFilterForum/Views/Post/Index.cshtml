@@ -30,26 +30,9 @@
 		}
 		<br />
 	}
-	int prevPage = Model.Page - 1;
-	int nextPage = Model.Page + 1;
-	if (Model.TotalPages == 0 || Model.TotalPages == 1)
-	{
-
-	}
-	else if (Model.Page == 1)
-	{
-		<a asp-action="Index" asp-controller="Post" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
-	}
-	else if (Model.Page == Model.TotalPages)
-	{
-		<a asp-action="Index" asp-controller="Post" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
-	}
-	else if (Model.Page > 1 && Model.Page < Model.TotalPages)
-	{
-
-		<a asp-action="Index" asp-controller="Post" asp-route-page="@nextPage" asp-route-title="@Model.TitleOfSection">Next page</a>
-		<a asp-action="Index" asp-controller="Post" asp-route-page="@prevPage" asp-route-title="@Model.TitleOfSection">Previous page</a>
-	}
+	string controllerName = "Post";
+	string actionName = "Index";
+	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)"/>
 }
 @section Scripts{
 	<partial name="_ValidationScriptsPartial" />
