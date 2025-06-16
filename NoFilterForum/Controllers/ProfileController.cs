@@ -141,7 +141,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index(string username, int page=1)
         {
             username = HttpUtility.UrlDecode(username);
-            if (string.IsNullOrEmpty(username)) 
+            if (string.IsNullOrEmpty(username))  // Change to UserId on PC
             {
                 return BadRequest($"Username cannot be null or empty");
             }

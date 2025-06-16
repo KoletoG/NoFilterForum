@@ -1,0 +1,14 @@
+﻿@using Web.ViewModels.Post
+@model CreatePostViewModel
+
+<form asp-action="Create" asp-controller="Post" method="post">
+	<input type="hidden" asp-for="TitleOfSection" value="@Model.TitleOfSection" />
+	<span asp-validation-for="Title" class="text-danger"></span>
+	<label asp-for="Title"></label>
+	<input asp-for="Title" placeholder="Title of the post" />
+	<span asp-validation-for="Body" class="text-danger"></span>
+	<label asp-for="Body"></label>
+	<input asp-for="Body" placeholder="Body of the post" />
+	@Html.AntiForgeryToken()
+	<button type="submit">Create post</button>
+</form>

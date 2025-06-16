@@ -13,7 +13,7 @@ namespace Core.Constants
         public static HashSet<string> adminNames = new HashSet<string>() { "Admin" };
         public static UserDataModel DefaultUser = new UserDataModel()
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = "DefaultUserId",
             Email = "null@email.c",
             UserName = "default",
             Role = UserRoles.Deleted
