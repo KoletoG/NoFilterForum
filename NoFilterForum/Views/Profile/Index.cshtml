@@ -2,6 +2,7 @@
 @using Core.Enums
 @using NoFilterForum.Core.Models.DataModels
 @using NoFilterForum.Global_variables
+@using Web.ViewModels
 @using Web.ViewModels.Profile
 @using Web.ViewModels.Warning
 
@@ -54,7 +55,7 @@
 	if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 	{
 		<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
-		<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
+			<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 	}
 }
 <h1>@Model.Profile.UserName</h1>
@@ -84,33 +85,9 @@
 	int previousPage = Model.Page - 1;
 	int nextPage = Model.Page + 1;
 	string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
-	if (Model.TotalPages == 1)
-	{
-		
-	}
-	else if (Model.Page==1)
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedUsername" asp-route-page="@nextPage" asp-controller="Home">
-			Next page
-		</a>
-	}
-	else if (Model.Page == Model.TotalPages)
-	{
-
-		<a asp-action="Profile" asp-route-userName="@encodedUsername" asp-route-page="@previousPage" asp-controller="Home">
-			Previous page
-		</a>
-	}
-	else
-	{
-		<a asp-action="Profile" asp-route-userName="@encodedUsername" asp-route-page="@previousPage" asp-controller="Home">
-			Previous page
-		</a>
-
-		<a asp-action="Profile" asp-route-userName="@encodedUsername" asp-route-page="@nextPage" asp-controller="Home">
-			Next page
-		</a>
-	}
+	string controllerName = "Profile";
+	string actionName = "Index";
+	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,string.Empty,encodedUsername)"/>
 }
 
 @section Scripts {
