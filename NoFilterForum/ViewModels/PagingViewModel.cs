@@ -8,6 +8,7 @@ namespace Web.ViewModels
         public int TotalPages { get; private init; }
         public string ControllerName { get; private init; }
         public string ActionName { get; private init; }
+        public string Username { get; private init; } = string.Empty;
         public string TitleOfSection { get; private init; } = string.Empty;
         public string Id { get; private init; } = string.Empty;
         public bool HasPrevious => Page > 1;
@@ -16,7 +17,7 @@ namespace Web.ViewModels
         public int PreviousPage => Page - 1;
         public int NextPage => Page + 1;
 
-        public PagingViewModel(int page, int totalPages, string controllerName, string actionName, string titleOfSection = "", string id="")
+        public PagingViewModel(int page, int totalPages, string controllerName, string actionName, string titleOfSection = "", string id="", string username="")
         {
             Page = page;
             TotalPages = totalPages;
@@ -24,6 +25,7 @@ namespace Web.ViewModels
             ActionName = actionName;
             TitleOfSection = titleOfSection;
             Id = id;
+            Username = username;
         }
     }
 
