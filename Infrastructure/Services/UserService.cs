@@ -67,7 +67,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
-            var user = await _unitOfWork.Users.GetByUsernameAsync(getProfileDtoRequest.UserId);
+            var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
             if(user == null)
             {
                 return new ProfileDto()

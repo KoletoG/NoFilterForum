@@ -1,6 +1,7 @@
 ﻿@using System.Web
 @using Microsoft.AspNetCore.Identity
 @using NoFilterForum.Core.Models.DataModels
+@using System.Security.Claims
 
 @inject SignInManager<UserDataModel> SignInManager
 @inject UserManager<UserDataModel> UserManager
@@ -11,7 +12,7 @@
 			<a class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="Notifications">Notifications</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link text-dark" asp-controller="Profile" asp-action="Index" asp-route-username="@HttpUtility.UrlEncode(this.User.Identity.Name)" asp-route-page="1">Your Profile</a>
+			<a class="nav-link text-dark" asp-controller="Profile" asp-action="Index" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)" asp-route-page="1">Your Profile</a>
 		</li>
 		<li class="nav-item">
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Section", new { area = "" })">
