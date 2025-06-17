@@ -18,7 +18,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<int> GetCountByPostIdAsync(string id);
         public Task<bool> UpdateAsync(PostDataModel post);
         public Task<bool> UpdateRangeAsync(List<PostDataModel> posts);
-        public Task<List<ProfilePostDto>> GetListProfilePostDtoByUsernameAsync(string username);
+        public Task<List<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string username);
         public Task DeleteAsync(PostDataModel post);
         public Task DeleteRangeAsync(List<PostDataModel> posts);
         public Task<DateTime> GetLastPostDateByUsernameAsync(string userId);

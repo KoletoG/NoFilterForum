@@ -8,6 +8,6 @@ namespace Core.Models.DTOs.InputDTOs.Profile
 {
     public class GetProfilePostDtoRequest
     {
-        public string Username {  get; set; }
+        public string UserId {  get; set; }
     }
 }

@@ -42,9 +42,9 @@ namespace Web.Mappers
             PostId = vm.PostId,
             UserId = userId
         };
-        public static GetProfilePostDtoRequest MapToRequest(string username) => new()
+        public static GetProfilePostDtoRequest MapToRequest(string userId) => new()
         {
-            Username = username
+            UserId = userId
         };
         public static LikeDislikeRequest MapToRequest(string postId, string userId) => new()
         {

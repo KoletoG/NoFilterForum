@@ -51,9 +51,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 ImageUrl = x.User.ImageUrl
             }).FirstOrDefaultAsync();
         }
-        public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUsernameAsync(string username)
+        public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
         {
-            return await _context.PostDataModels.Where(x => x.User.UserName == username).Select(x => new ProfilePostDto()
+            return await _context.PostDataModels.Where(x => x.User.Id == userId).Select(x => new ProfilePostDto()
             {
                 Id = x.Id,
                 Title = x.Title,

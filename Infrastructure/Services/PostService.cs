@@ -143,7 +143,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest)
         {
-            return await _unitOfWork.Posts.GetListProfilePostDtoByUsernameAsync(getProfilePostDtoRequest.Username);
+            return await _unitOfWork.Posts.GetListProfilePostDtoByUsernameAsync(getProfilePostDtoRequest.UserId);
         }
         public async Task<PostResult> PinPostAsync(string postId)
         {

@@ -148,8 +148,8 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
-            var getProfileDtoRequest = ProfileMapper.MapToRequest(username, User.Identity.Name);
-            var resultUser = await _userService.GetProfileDtoByUsernameAsync(getProfileDtoRequest);
+            var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest);
             if (resultUser.GetResult != GetResult.Success)
             {
                 return resultUser.GetResult switch
@@ -161,9 +161,9 @@ namespace Web.Controllers
                 };
             }
             var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto);
-            var replyDtoRequest = ReplyMapper.MapToRequest(username);
+            var replyDtoRequest = ReplyMapper.MapToRequest(userId);
             List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
-            var postDtoRequest = PostMappers.MapToRequest(username);
+            var postDtoRequest = PostMappers.MapToRequest(userId);
             List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
             var totalCount = _userService.GetTotalCountByPostsAndReplies(replyDtoList, postDtoList);
             int totalPageCount = PageUtility.GetTotalPagesCount(totalCount,PostConstants.PostsPerSection);
