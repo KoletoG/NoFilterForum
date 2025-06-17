@@ -188,7 +188,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest)
         {
-            return await _unitOfWork.Replies.GetListReplyItemDtoByUsernameAsync(getReplyItemRequest.UserId);
+            return await _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync(getReplyItemRequest.UserId);
         }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {

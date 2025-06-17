@@ -142,7 +142,7 @@ namespace Web.Controllers
         {
             if (string.IsNullOrEmpty(userId))  // Change to UserId on PC
             {
-                return BadRequest($"Username cannot be null or empty");
+                return BadRequest($"Id cannot be null or empty");
             }
             if (_userService.IsDefaultUserId(userId))
             {
