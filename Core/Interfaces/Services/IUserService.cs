@@ -9,7 +9,7 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface IUserService
     {
-        public bool IsDefaultUsername(string username);
+        public bool IsDefaultUserId(string username);
         public Dictionary<string, DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemDto> replyItemDtos, int page, int countPerPage);
         public Task<bool> AnyNotConfirmedUsersAsync();
         public Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id);

@@ -88,9 +88,9 @@ namespace NoFilterForum.Infrastructure.Services
                 UserDto = profileUserDto
             };
         }
-        public bool IsDefaultUsername(string username)
+        public bool IsDefaultUserId(string id)
         {
-            return username == UserConstants.DefaultUser.UserName;
+            return id == UserConstants.DefaultUser.Id;
         }
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {

@@ -138,14 +138,13 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string username, int page=1)
+        public async Task<IActionResult> Index(string userId, int page=1)
         {
-            username = HttpUtility.UrlDecode(username);
-            if (string.IsNullOrEmpty(username))  // Change to UserId on PC
+            if (string.IsNullOrEmpty(userId))  // Change to UserId on PC
             {
                 return BadRequest($"Username cannot be null or empty");
             }
-            if (_userService.IsDefaultUsername(username))
+            if (_userService.IsDefaultUserId(username))
             {
                 return Forbid();
             }
