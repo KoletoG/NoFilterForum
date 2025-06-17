@@ -11,7 +11,7 @@
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
 @if (Model.Post.Username != UserConstants.DefaultUser.UserName)
 {
-	<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.Username,true)" />
+	<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true)" />
 	<img src="@Model.Post.ImageUrl" width="125" height="125" />
 }
 else
@@ -57,7 +57,7 @@ else
 	{
 		if (reply.Username != UserConstants.DefaultUser.UserName)
 		{
-			<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.Username,true)"/>
+			<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)"/>
 			<img src="@reply.ImageUrl" width="125" height="125" />
 		}
 		else
