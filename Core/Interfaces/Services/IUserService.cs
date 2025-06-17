@@ -13,7 +13,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Dictionary<string, DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemDto> replyItemDtos, int page, int countPerPage);
         public Task<bool> AnyNotConfirmedUsersAsync();
         public Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id);
-        public Task<ProfileDto> GetProfileDtoByUsernameAsync(GetProfileDtoRequest getProfileDtoRequest);
+        public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest);
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
         public Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync();

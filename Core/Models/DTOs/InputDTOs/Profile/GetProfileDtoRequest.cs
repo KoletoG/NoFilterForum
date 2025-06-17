@@ -8,7 +8,7 @@ namespace Core.Models.DTOs.InputDTOs.Profile
 {
     public class GetProfileDtoRequest
     {
-        public string Username { get; set; }
-        public string CurrentUsername { get; set; }
+        public string UserId { get; set; }
+        public string CurrentUserId { get; set; }
     }
 }

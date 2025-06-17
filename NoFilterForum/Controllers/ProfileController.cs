@@ -144,7 +144,7 @@ namespace Web.Controllers
             {
                 return BadRequest($"Username cannot be null or empty");
             }
-            if (_userService.IsDefaultUserId(username))
+            if (_userService.IsDefaultUserId(userId))
             {
                 return Forbid();
             }

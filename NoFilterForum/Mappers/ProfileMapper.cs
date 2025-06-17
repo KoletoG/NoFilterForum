@@ -21,10 +21,10 @@ namespace Web.Mappers
             Image = vm.Image,
             UserId = userId
         };
-        public static GetProfileDtoRequest MapToRequest(string username, string currentUsername) => new()
+        public static GetProfileDtoRequest MapToRequest(string userId, string currentUserId) => new()
         {
-            Username = username,
-            CurrentUsername = currentUsername
+            UserId = userId,
+            CurrentUserId = currentUserId
         };
         public static ReplyItemViewModel MapToViewModel(ReplyItemDto dto) => new()
         {

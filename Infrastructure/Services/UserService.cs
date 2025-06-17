@@ -65,9 +65,9 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary();
         }
-        public async Task<ProfileDto> GetProfileDtoByUsernameAsync(GetProfileDtoRequest getProfileDtoRequest)
+        public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
-            var user = await _unitOfWork.Users.GetByUsernameAsync(getProfileDtoRequest.Username);
+            var user = await _unitOfWork.Users.GetByUsernameAsync(getProfileDtoRequest.UserId);
             if(user == null)
             {
                 return new ProfileDto()
@@ -77,7 +77,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             var profileUserDto = await _unitOfWork.Users.GetProfileUserDtoByIdAsync(user.Id);
             bool isSameUser = false;
-            if(getProfileDtoRequest.Username == getProfileDtoRequest.CurrentUsername)
+            if(getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId)
             {
                 isSameUser = true;
             }
