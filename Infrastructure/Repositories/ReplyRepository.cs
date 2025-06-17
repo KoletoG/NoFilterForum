@@ -37,9 +37,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 UserId = x.User.Id
             }).Skip((page-1)*repliesPerPage).Take(repliesPerPage).ToListAsync();
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUsernameAsync(string username)
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId)
         {
-            return await _context.ReplyDataModels.Where(x=>x.User.UserName == username).Select(x => new ReplyItemDto()
+            return await _context.ReplyDataModels.Where(x=>x.User.Id == userId).Select(x => new ReplyItemDto()
             {
                 Content = x.Content,
                 Id = x.Id,

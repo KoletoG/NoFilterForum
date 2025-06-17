@@ -23,9 +23,9 @@ namespace Web.Mappers
             Page = page,
             PostId = postId
         };
-        public static GetReplyItemRequest MapToRequest(string username) => new()
+        public static GetReplyItemRequest MapToRequest(string userId) => new()
         {
-            Username = username
+            UserId = userId
         };
         public static ReplyIndexItemViewModel MapToViewModel(ReplyIndexItemDto dto) => new()
         {

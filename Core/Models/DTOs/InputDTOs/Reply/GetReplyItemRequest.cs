@@ -8,6 +8,6 @@ namespace Core.Models.DTOs.InputDTOs.Reply
 {
     public class GetReplyItemRequest
     {
-        public string Username { get; set; }
+        public string UserId { get; set; }
     }
 }
