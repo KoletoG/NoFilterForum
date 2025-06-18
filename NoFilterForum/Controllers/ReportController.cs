@@ -43,9 +43,9 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
-            if (string.IsNullOrEmpty(deleteReportViewModel.Id))
+            if (!ModelState.IsValid) 
             {
-                return BadRequest("Id cannot be null");
+                return BadRequest(ModelState);
             }
             var result = await _reportService.DeleteReportByIdAsync(deleteReportViewModel.Id);
             return result switch
