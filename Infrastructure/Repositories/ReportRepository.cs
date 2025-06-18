@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Runtime.CompilerServices;
+using Core.Models.DTOs.OutputDTOs.Report;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
@@ -16,6 +18,17 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<ReportDataModel> GetByIdAsync(string id)
         {
             return await _context.ReportDataModels.FindAsync(id);
+        }
+        public async Task<List<ReportItemDto>> GetReportDtosAsync()
+        {
+            return await _context.ReportDataModels.Select(x => new ReportItemDto()
+            {
+                Content = x.Content,
+                Id = x.Id,
+                IdOfPostReply = x.IdOfPostReply,
+                UserFromUsername = x.UserFrom.UserName,
+                UserToUsername = x.UserTo.UserName
+            }).ToListAsync();
         }
         public async Task<List<ReportDataModel>> GetAllAsync()
         {

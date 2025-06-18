@@ -32,8 +32,10 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
-            var reports = await _reportService.GetAllReportsAsync();
-            return View(new ReportsViewModel(reports)); // needs to change
+            var reportDtos = await _reportService.GetAllDtosAsync();
+            var reportVMs = reportDtos.Select(ReportMapper.MapToViewModel).ToList();
+            var reportIndexVM = ReportMapper.MapToViewModel(reportVMs);
+            return View(reportIndexVM);
         }
         [Authorize]
         [HttpPost]
