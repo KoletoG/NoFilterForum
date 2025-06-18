@@ -13,7 +13,8 @@
 		<a asp-action="Index" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 			<h3>
 				@post.Title 
-				<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Username,false)" />
+				<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" /> @{// CHANGE THAT
+					}
 			</h3>
 		</a>
 		<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)"/>
