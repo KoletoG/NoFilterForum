@@ -4,6 +4,7 @@ using Core.Constants;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using NoFilterForum.Core.Interfaces.Services;
 using Web.Mappers;
 using Web.ViewModels.Admin;
@@ -36,21 +37,21 @@ namespace Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(DeleteReportViewModel deleteReportViewModel)
         {
             if (!UserConstants.adminNames.Contains(User.Identity.Name))
             {
                 return Forbid();
             }
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(deleteReportViewModel.Id))
             {
                 return BadRequest("Id cannot be null");
             }
-            var result = await _reportService.DeleteReportByIdAsync(id);
+            var result = await _reportService.DeleteReportByIdAsync(deleteReportViewModel.Id);
             return result switch
             {
                 PostResult.Success => RedirectToAction("Reports"),
-                PostResult.NotFound => NotFound(id),
+                PostResult.NotFound => NotFound(deleteReportViewModel.Id),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
             };
