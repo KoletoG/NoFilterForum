@@ -9,8 +9,9 @@
 	<h5>@report.UserTo.UserName</h5>
 	<h5>@report.UserFrom.UserName</h5>
 	<h3>@report.Content</h3>
-	<form asp-action="Delete" asp-route-id="@report.Id" asp-controller="Report" method="post">
+	<form asp-action="Delete" asp-controller="Report" method="post">
 		@Html.AntiForgeryToken()
+		<input type="hidden" name="Id" value="@report.Id"/>
 		<button type="submit">Delete report</button>
 	</form>
 }
