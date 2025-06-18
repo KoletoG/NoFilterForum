@@ -14,9 +14,8 @@ namespace Web.Mappers
             UserToId = vm.UserIdTo,
             IsPost = vm.IsPost
         };
-        public static DeleteReportRequest MapToRequest(DeleteReportViewModel vm, string userId) => new()
+        public static DeleteReportRequest MapToRequest(DeleteReportViewModel vm) => new()
         {
-            UserId = userId,
             ReportId = vm.Id
         };
     }

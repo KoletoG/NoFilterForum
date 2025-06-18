@@ -9,6 +9,5 @@ namespace Core.Models.DTOs.InputDTOs.Report
     public class DeleteReportRequest
     {
         public string ReportId { get; set; }
-        public string UserId { get; set; }
     }
 }

@@ -29,9 +29,9 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Reports.ExistsReportsAsync();
         }
-        public async Task<PostResult> DeleteReportByIdAsync(string reportId)
+        public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest)
         {
-            var report = await _unitOfWork.Reports.GetByIdAsync(reportId);
+            var report = await _unitOfWork.Reports.GetByIdAsync(deleteReportRequest.ReportId);
             if (report == null)
             {
                 return PostResult.NotFound;
@@ -47,7 +47,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, $"Report with Id: {reportId} wasn't deleted.");
+                _logger.LogError(ex, $"Report with Id: {deleteReportRequest.ReportId} wasn't deleted.");
                 return PostResult.UpdateFailed;
             }
         }

@@ -14,4 +14,8 @@
 		<PackageReference Include="Nanoid" Version="3.1.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Models\DTOs\OutputDTOs\Report\" />
+	</ItemGroup>
+
 </Project>

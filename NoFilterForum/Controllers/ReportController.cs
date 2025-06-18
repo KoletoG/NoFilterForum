@@ -48,13 +48,8 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) 
-            {
-                return Unauthorized();
-            }
-
-            var result = await _reportService.DeleteReportByIdAsync(deleteReportViewModel.Id);
+            var deleteReportRequest = ReportMapper.MapToRequest(deleteReportViewModel);
+            var result = await _reportService.DeleteReportByIdAsync(deleteReportRequest);
             return result switch
             {
                 PostResult.Success => RedirectToAction("Reports"),
