@@ -140,7 +140,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string userId, int page=1)
         {
-            if (string.IsNullOrEmpty(userId))  // Change to UserId on PC
+            if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest($"Id cannot be null or empty");
             }

@@ -13,12 +13,10 @@ namespace Web.Controllers
 {
     public class ReportController : Controller
     {
-        private readonly IUserService _userService;
         private readonly IReportService _reportService;
         private readonly IPostService _postService;
-        public ReportController(IUserService userService,IPostService postService, IReportService reportService)
+        public ReportController(IPostService postService, IReportService reportService)
         {
-            _userService = userService;
             _postService = postService;
             _reportService = reportService;
         }
