@@ -4,6 +4,7 @@ using Core.Constants;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using NoFilterForum.Core.Interfaces.Services;
 using Web.Mappers;
@@ -47,6 +48,12 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) 
+            {
+                return Unauthorized();
+            }
+
             var result = await _reportService.DeleteReportByIdAsync(deleteReportViewModel.Id);
             return result switch
             {
