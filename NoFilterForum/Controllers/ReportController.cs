@@ -52,7 +52,7 @@ namespace Web.Controllers
             var result = await _reportService.DeleteReportByIdAsync(deleteReportRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Reports"),
+                PostResult.Success => RedirectToAction("Index"),
                 PostResult.NotFound => NotFound(deleteReportViewModel.Id),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
