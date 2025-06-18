@@ -1,0 +1,7 @@
+﻿@using Web.ViewModels.Report
+@model DeleteReportViewModel
+<form asp-action="Delete" asp-controller="Report" method="post">
+	@Html.AntiForgeryToken()
+	<input type="hidden" asp-for="Id" value="@Model.Id" />
+	<button type="submit">Delete report</button>
+</form>

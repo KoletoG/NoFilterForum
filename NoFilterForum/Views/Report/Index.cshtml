@@ -1,5 +1,6 @@
 ﻿@using NoFilterForum.Core.Models.ViewModels
 @using Web.ViewModels.Admin
+@using Web.ViewModels.Report
 
 @model ReportsViewModel
 
@@ -9,9 +10,5 @@
 	<h5>@report.UserTo.UserName</h5>
 	<h5>@report.UserFrom.UserName</h5>
 	<h3>@report.Content</h3>
-	<form asp-action="Delete" asp-controller="Report" method="post">
-		@Html.AntiForgeryToken()
-		<input type="hidden" name="Id" value="@report.Id"/>
-		<button type="submit">Delete report</button>
-	</form>
+	<partial name="_DeleteReport" model="new DeleteReportViewModel(){Id=report.Id}"/>
 }
