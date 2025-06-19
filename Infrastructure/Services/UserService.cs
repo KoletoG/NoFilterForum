@@ -8,6 +8,7 @@ using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
@@ -27,13 +28,15 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<UserService> _logger;
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
-        private readonly IHtmlSanitizer _htmlSanitizer;
-        public UserService(IMemoryCache memoryCache,IHtmlSanitizer htmlSanitizer, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        private readonly IHtmlSanitizer _htmlSanitizer; 
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public UserService(IMemoryCache memoryCache,IHtmlSanitizer htmlSanitizer,IWebHostEnvironment webHostEnvironment, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
             _memoryCache = memoryCache;
             _htmlSanitizer = htmlSanitizer;
             _signInManager = signInManager;
             _userManager = userManager;
+            _webHostEnvironment = webHostEnvironment;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
@@ -292,7 +295,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         private string GetImageUrl(string imageName)
         {
-            return $"/images/{imageName}";
+            return Path.Combine("images\\", imageName);
         }
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
         {
@@ -302,15 +305,16 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var fileUrl = GetImageFileUrl(updateImageRequest.Image.FileName);
-            if (currentUser.ImageUrl != "\\images\\defaultimage.gif")
+            if (currentUser.ImageUrl != "images\\defaultimage.gif")
             {
-                System.IO.File.Delete("wwwroot" + currentUser.ImageUrl);
+                var pathToDelete = Path.Combine(_webHostEnvironment.WebRootPath, currentUser.ImageUrl);
+                System.IO.File.Delete(pathToDelete);
             }
             currentUser.ChangeImageUrl(GetImageUrl(fileUrl));
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                using (var stream = new FileStream(Path.Combine("wwwroot/images", fileUrl), FileMode.Create))
+                using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath,"images", fileUrl), FileMode.Create))
                 {
                     await updateImageRequest.Image.CopyToAsync(stream);
                 }

@@ -9,7 +9,7 @@
 
 @model ProfileViewModel
 @{
-	<img src="@Model.Profile.ImageUrl" width="200" height="200" />
+	<img src="/@Model.Profile.ImageUrl" width="200" height="200" />
 	if (Model.IsSameUser)
 	{
 		if (!string.IsNullOrEmpty(ViewBag.Error))

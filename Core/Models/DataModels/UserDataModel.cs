@@ -48,7 +48,7 @@ namespace NoFilterForum.Core.Models.DataModels
             LikesPostRepliesIds = new List<string>();
             DislikesPostRepliesIds = new List<string>();
             Bio = "";
-            ImageUrl = @"\images\defaultimage.gif";
+            ImageUrl = @"images\defaultimage.gif";
         }
         public UserDataModel()
         {
