@@ -189,7 +189,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             if (user.IsConfirmed)
             {
-                _logger.LogInformation($"User with Id: {userId} has already been confirmed");
+                _logger.LogInformation("User with Id: {UserId} has already been confirmed",userId);
                 return PostResult.Success;
             }
             user.Confirm();
@@ -204,7 +204,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "User was not confirmed.");
+                _logger.LogError(ex, "User with {UserId} was not confirmed.",userId);
                 return PostResult.UpdateFailed;
             }
         }
@@ -239,7 +239,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, $"Failed to ban user with Id: {userId}");
+                _logger.LogError(ex, "Failed to ban user with Id: {UserId}",userId);
                 return PostResult.UpdateFailed;
             }
         }
