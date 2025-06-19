@@ -295,7 +295,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         private string GetImageUrl(string imageName)
         {
-            return Path.Combine("images\\", imageName);
+            return Path.Combine("images", imageName);
         }
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
         {
@@ -305,7 +305,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var fileUrl = GetImageFileUrl(updateImageRequest.Image.FileName);
-            if (currentUser.ImageUrl != "images\\defaultimage.gif")
+            if (currentUser.ImageUrl != Path.Combine("images", "defaultimage.gif")) // Avoid hardcoding
             {
                 var pathToDelete = Path.Combine(_webHostEnvironment.WebRootPath, currentUser.ImageUrl);
                 System.IO.File.Delete(pathToDelete);
