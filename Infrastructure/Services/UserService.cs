@@ -289,8 +289,12 @@ namespace NoFilterForum.Infrastructure.Services
         }
         private string GetImageFileUrl(string imageFileName)
         {
-            imageFileName = _htmlSanitizer.Sanitize(imageFileName);
-            string randomImgUrl = NanoidDotNet.Nanoid.Generate() + imageFileName;
+            imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName));
+            imageFileName = imageFileName.Replace(' ', '_');
+            imageFileName = imageFileName.ToLower(); 
+            var invalidChars = Path.GetInvalidFileNameChars();
+            imageFileName = new string(imageFileName.Where(c => !invalidChars.Contains(c)).ToArray());
+            string randomImgUrl = NanoidDotNet.Nanoid.Generate() + "_" + imageFileName;
             return randomImgUrl;
         }
         private string GetImageUrl(string imageName)
