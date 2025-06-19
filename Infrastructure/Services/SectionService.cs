@@ -106,8 +106,11 @@ namespace NoFilterForum.Infrastructure.Services
             }
             var posts = section.Posts;
             (var usersSet,var replies) = ProcessPosts(posts);
-            var notificationsTasks = replies.Select(x => _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)).ToList();
-            var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x => x).ToList();
+            var notifications = new List<NotificationDataModel>();
+            foreach(var reply in replies)
+            {
+                notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
+            }
             var users = usersSet.ToList();
             try
             {
