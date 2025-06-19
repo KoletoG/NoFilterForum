@@ -74,7 +74,7 @@ namespace Web.Controllers
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("Index", "Notification"),
+                PostResult.Success => RedirectToAction("Index", "Notifications"),
                 _ => Problem()
             };
         }
