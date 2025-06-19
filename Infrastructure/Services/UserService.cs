@@ -305,11 +305,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var fileUrl = GetImageFileUrl(updateImageRequest.Image.FileName);
-            if (currentUser.ImageUrl != Path.Combine("images", "defaultimage.gif")) // Avoid hardcoding
-            {
-                var pathToDelete = Path.Combine(_webHostEnvironment.WebRootPath, currentUser.ImageUrl);
-                System.IO.File.Delete(pathToDelete);
-            }
+            var currentUserImageUrl = currentUser.ImageUrl;
             currentUser.ChangeImageUrl(GetImageUrl(fileUrl));
             try
             {
@@ -321,6 +317,11 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.Users.UpdateAsync(currentUser);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
+                if (currentUserImageUrl != Path.Combine("images", "defaultimage.gif")) // Avoid hardcoding
+                {
+                    var pathToDelete = Path.Combine(_webHostEnvironment.WebRootPath, currentUserImageUrl);
+                    System.IO.File.Delete(pathToDelete);
+                }
                 return PostResult.Success;
             }
             catch (Exception ex) 
