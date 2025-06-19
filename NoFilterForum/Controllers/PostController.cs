@@ -131,6 +131,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
+            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId);
             var deletePostRequest = PostMappers.MapToRequest(deletePostViewModel, userId);
             var result = await _postService.DeletePostByIdAsync(deletePostRequest);
             if (result != PostResult.Success)
@@ -143,7 +144,6 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId);
             return RedirectToAction("Index", new { titleOfSection = sectionTitle });
 
         }
