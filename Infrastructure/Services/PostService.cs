@@ -238,10 +238,10 @@ namespace NoFilterForum.Infrastructure.Services
             }
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
             HashSet<UserDataModel> users = new HashSet<UserDataModel>();
-            var notificationsTasks = repliesOfPost.Select(x => _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)).ToList();
-            var notifications = (await Task.WhenAll(notificationsTasks)).SelectMany(x=>x).ToList();
+            var notifications = new List<NotificationDataModel>();
             foreach(var reply in repliesOfPost)
             {
+                notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
                 reply.User.DecrementPostCount();
                 users.Add(reply.User);
             }
