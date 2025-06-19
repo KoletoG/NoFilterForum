@@ -20,16 +20,14 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IMemoryCache _memoryCache;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IUserService _userService;
         private readonly ILogger<SectionService> _logger;
         private readonly ISectionFactory _sectionFactory;
-        public SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, IMemoryCache memoryCache, IHtmlSanitizer htmlSanitizer, ILogger<SectionService> logger)
+        public SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, IMemoryCache memoryCache, ILogger<SectionService> logger)
         {
             _logger = logger;
             _sectionFactory = sectionFactory;
             _userService = userService;
-            _htmlSanitizer = htmlSanitizer;
             _unitOfWork = unitOfWork;
             _memoryCache = memoryCache;
         }
