@@ -35,7 +35,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
             if (emailExists)
@@ -65,7 +65,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var usernameExists = await _userService.UsernameExistsAsync(changeUsernameViewModel.Username);
             if (usernameExists)
@@ -95,7 +95,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId == null)
@@ -119,7 +119,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid) 
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)

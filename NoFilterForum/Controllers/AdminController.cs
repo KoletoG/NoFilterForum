@@ -45,7 +45,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid) 
             {
-                return BadRequest();
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var result = await _postService.PinPostAsync(pinPostViewModel.PostId);
             return result switch
@@ -80,7 +80,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var result = await _userService.ConfirmUserAsync(confirmUserViewModel.UserId);
             return result switch
@@ -119,7 +119,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var result = await _userService.BanUserByIdAsync(banUserViewModel.Id);
             return result switch
