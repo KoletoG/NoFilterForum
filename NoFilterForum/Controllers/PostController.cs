@@ -36,7 +36,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -124,7 +124,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Change this
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)); // Change this
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)

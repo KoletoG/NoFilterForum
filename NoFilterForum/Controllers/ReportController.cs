@@ -48,7 +48,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid) 
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var deleteReportRequest = ReportMapper.MapToRequest(deleteReportViewModel);
             var result = await _reportService.DeleteReportByIdAsync(deleteReportRequest);
@@ -76,7 +76,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createReportRequest = ReportMapper.MapToRequest(createReportViewModel, currentUserId);
             var result = await _reportService.CreateReportAsync(createReportRequest);

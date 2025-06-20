@@ -101,7 +101,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState);
+                return View(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -127,7 +127,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState); // Change when postview is done
+                return View(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)); // Change when postview is done
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
