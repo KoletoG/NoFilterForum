@@ -14,7 +14,7 @@
 	}
 	foreach(var user in Model.Users)
 	{
-		<a asp-action="Profile" asp-controller="Home" asp-route-userName="@HttpUtility.UrlEncode(user.Username)"><h4>@user.Username</h4></a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4>@user.Username</h4></a>
 		@if (user.WarningsCount >= 3)
 		{
 			<p style="color:red"><a asp-action="Details" asp-controller="Warnings" asp-route-id="@HttpUtility.UrlEncode(user.Id)">@user.Username has more than 2 warnings {@user.WarningsCount} (Click to view them)</a></p>			
