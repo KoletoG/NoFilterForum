@@ -54,7 +54,7 @@ namespace Web.Controllers
             var result = await _warningService.AddWarningAsync(createWarningRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Profile", new { userName = "CHANGE" }), // Change to ID
+                PostResult.Success => RedirectToAction("Index", "Profile", new { userId = createWarningRequest.UserId }), // Change to ID
                 PostResult.UpdateFailed => Problem(),
                 PostResult.NotFound => NotFound(createWarningViewModel.UserId),
                 _ => Problem()
