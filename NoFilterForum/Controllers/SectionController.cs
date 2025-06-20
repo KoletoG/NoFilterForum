@@ -47,7 +47,7 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index"); // Include errors
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createSectionRequest = SectionMapper.MapToRequest(createSectionViewModel, userId);
             var result = await _sectionService.CreateSectionAsync(createSectionRequest);
@@ -66,7 +66,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid) 
             {
-                return RedirectToAction("Index"); // Change that to include ModelState errors
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId==null)
