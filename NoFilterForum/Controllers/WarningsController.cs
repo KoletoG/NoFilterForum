@@ -48,13 +48,13 @@ namespace Web.Controllers
             }
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)); // Change that
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createWarningRequest = WarningMappers.MapToRequest(createWarningViewModel);
             var result = await _warningService.AddWarningAsync(createWarningRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Profile", new { userId = createWarningRequest.UserId }), // Change to ID
+                PostResult.Success => RedirectToAction("Index", "Profile", new { userId = createWarningRequest.UserId }),
                 PostResult.UpdateFailed => Problem(),
                 PostResult.NotFound => NotFound(createWarningViewModel.UserId),
                 _ => Problem()

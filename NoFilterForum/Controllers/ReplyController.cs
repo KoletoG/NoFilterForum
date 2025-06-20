@@ -52,7 +52,7 @@ namespace Web.Controllers
                 page, 
                 totalPages, 
                 replyId);
-            return View(indexReplyVM); // Need to add viewmodels 
+            return View(indexReplyVM);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -117,7 +117,6 @@ namespace Web.Controllers
                 PostResult.NotFound => NotFound($"Reply with Id: {deleteReplyViewModel.ReplyId} was not found"),
                 PostResult.Success => RedirectToAction("Index", new { postId = deleteReplyViewModel.PostId }),
                 _ => Problem()
-                // Change previous line when updating PostView
             };
         }
         [HttpPost]
@@ -127,7 +126,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)); // Change when postview is done
+                return View(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -137,7 +136,7 @@ namespace Web.Controllers
             if (await _replyService.HasTimeoutByUserIdAsync(userId))
             {
                 ModelState.AddModelError("timeError", "Replies can be made every 5 seconds");
-                return Forbid(); // Change to show ModelState error
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createReplyRequest = ReplyMapper.MapToRequest(createReplyViewModel, userId);
             var result = await _replyService.CreateReplyAsync(createReplyRequest);
@@ -148,7 +147,6 @@ namespace Web.Controllers
                 PostResult.NotFound => NotFound(),
                 PostResult.Success => RedirectToAction("Index", new { postId = createReplyViewModel.PostId}),
                 _ => Problem()
-                // Change the line above when PostView is refactored
             };
         }
     }

@@ -32,7 +32,7 @@ namespace Web.Controllers
             var result = await _notificationService.DeleteByUserIdAsync(userId);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Notifications"), // Change that to ("Notifications or Index","Notifications")
+                PostResult.Success => RedirectToAction("Index", "Notifications"),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()

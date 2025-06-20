@@ -33,15 +33,14 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel changeEmailViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-            }
             var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
             if (emailExists)
             {
                 ModelState.AddModelError(nameof(changeEmailViewModel.Email), "Email already exists");
-                return View(changeEmailViewModel); // Change this to redirect to Profile after Clean Architecture
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -63,15 +62,14 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> ChangeUsername(ChangeUsernameViewModel changeUsernameViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-            }
             var usernameExists = await _userService.UsernameExistsAsync(changeUsernameViewModel.Username);
             if (usernameExists)
             {
                 ModelState.AddModelError(nameof(changeUsernameViewModel.Username), "Username already exists");
-                return View(changeUsernameViewModel); // Change this to redirect to Profile after Clean Architecture
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)

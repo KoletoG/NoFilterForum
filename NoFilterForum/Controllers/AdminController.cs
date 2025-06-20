@@ -106,8 +106,6 @@ namespace Web.Controllers
             var adminPanelVM = AdminMappers.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
             return View(adminPanelVM);
         }
-        // Add ModelError if something went wrong, that's for every method including creating post and reply
-        // ADD ENCODING
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

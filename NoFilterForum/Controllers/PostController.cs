@@ -124,7 +124,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)); // Change this
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
