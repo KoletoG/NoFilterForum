@@ -93,12 +93,7 @@ else
 		}
 		@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 		{
-			<form asp-action="Delete" asp-controller="Reply" method="post">
-				<input hidden name="ReplyId" value="@reply.Id"/>
-				<input hidden name="PostId" value="@Model.Post.Id"/>
-				@Html.AntiForgeryToken()
-				<button type="submit">Delete Reply</button>
-			</form>
+			<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}"/>
 		}
 		else
 		{
