@@ -9,28 +9,24 @@
 	}
 
 		.section-card h2 {
-			transition: color 0.5s ease, font-weight 0.5s ease;
+			transition: font-weight 0.5s ease;
 			color: black;
 		}
 
 		.section-card h5 {
-			transition: color 0.5s ease, font-weight 0.5s ease;
+			transition: text-align 0.5s ease; 
 			color: gray;
 		}
-
-		.section-card:hover {
-			background-color: black;
-		}
-
 			.section-card:hover h2 {
 				color: white;
 				font-weight: bold;
-			}
+		}
 
-			.section-card:hover h5 {
-				color: lightgray;
-				font-weight: bold;
-			}</style>
+		.section-card:hover h5 {
+			text-align:center;
+		}
+
+			</style>
 @{
 	if (Model.IsAdmin)
 	{ // MAKE THE TITLE IN THE LEFT, DESCRIPTION IN THE RIGHT
@@ -38,13 +34,13 @@
 	}
 	foreach (var section1 in Model.Sections)
 	{
-		<div class="section-card container-md border border-2 border-dark mb-3 mt-3 rounded-1 text-center w-50" style="font-family:Verdana;">
+		<div class="container section-card mb-3 mt-3 rounded-1 w-50" style="font-family:Verdana;">
 			<a style="text-decoration:none" asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
-				<div>
-					<h2 class="" style="font-family:Tahoma">@section1.Title</h2>
-					<div class="mb-2 mt-2">
-						<h5 class=" fst-italic" style="font-family:'Global Serif'">@section1.Description</h5>
-					</div>
+				<div class="bg-dark-subtle pt-1 pb-1 row ps-1 pe-1 border border-2 border-dark">
+					<h2 class="fst-italic  text-center" style="font-family:Tahoma; font-weight:bold">@section1.Title</h2>
+				</div>
+				<div class="mb-2 row border border-2 pt-1 border-dark border-top-0">
+					<h5 class="fst-italic" style="font-family:'Global Serif'">@section1.Description</h5>
 				</div>
 			</a>
 			@if (Model.IsAdmin)
