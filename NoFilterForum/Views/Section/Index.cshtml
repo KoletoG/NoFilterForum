@@ -7,17 +7,43 @@
 	{
 		<partial name="_CreateSection" model="new CreateSectionViewModel()" />
 	}
+	<style>
+		.section-card {
+			text-decoration: none;
+			transition: background-color 0.5s ease, color 0.5s ease;
+		}
 
+			.section-card h2 {
+				transition: color 0.3s ease, font-weight 0.5s ease;
+			color:black;
+		}
+
+			.section-card h5 {
+				transition: color 0.3s ease, font-weight 0.5s ease;
+			color:gray;
+		}
+			.section-card:hover {
+				background-color: black;
+			}
+
+				.section-card:hover h2 {
+					color: white;
+					font-weight:bold;
+				}
+				.section-card:hover h5{
+					color: lightgray;
+					font-weight: bold;
+				}</style>
 	foreach (var section1 in Model.Sections)
 	{
-		<div class="container-md border border-2 border-dark mb-3 mt-3 rounded-1 text-center w-50" style="font-family:Verdana;">
+		<div class="section-card container-md border border-2 border-dark mb-3 mt-3 rounded-1 text-center w-50" style="font-family:Verdana;">
 			<a style="text-decoration:none" asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
 				<div>
-					<h2 class="text-black" style="font-family:Tahoma">@section1.Title</h2>
+					<h2 class="" style="font-family:Tahoma">@section1.Title</h2>
 					<div class="mb-2 mt-2">
-						<h5 class="text-black-50 fst-italic" style="font-family:'Global Serif'">@section1.Description</h5>
+						<h5 class=" fst-italic" style="font-family:'Global Serif'">@section1.Description</h5>
 					</div>
-			</div>
+				</div>
 			</a>
 			@if (Model.IsAdmin)
 			{
