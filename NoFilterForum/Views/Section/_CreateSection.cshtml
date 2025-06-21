@@ -1,20 +1,18 @@
 ﻿@using NoFilterForum.Core.Models.ViewModels
 @model CreateSectionViewModel
-
-<form asp-action="Create" asp-controller="Section" method="post">
-	@Html.AntiForgeryToken()
-	<div class="input-group">
+<div class="container-md border border-2 border-dark mb-3 mt-3 rounded-1 text-center w-50">
+	<form asp-action="Create" asp-controller="Section" method="post" class="mt-3">
+		@Html.AntiForgeryToken()
 		<span asp-validation-for="Title" class="text-danger"></span>
-		<label asp-for="Title"></label>
-		<input asp-for="Title" />
-	</div>
-	<div class="input-group">
+		<label asp-for="Title" style="font-family:Tahoma; font-weight:bold" class="fs-4 form-label"></label>
+		<input asp-for="Title" placeholder="Title text here..." class="form-control" />
 		<span asp-validation-for="Description" class="text-danger"></span>
-		<label asp-for="Description"></label>
-		<input asp-for="Description" />
-	</div>
-	<button type="submit">Create Section</button>
-</form>
-@section Scripts{
+		<label asp-for="Description" style="font-family:Tahoma; font-weight:bold" class="fs-4 form-label"></label>
+		<input asp-for="Description" class="form-control fst-italic" placeholder="Description text here..." style="font-family:'Global Serif'" />
+		<button type="submit" class="btn btn-secondary mt-3 mb-3">Create Section</button>
+	</form>
+
+</div>
+@section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }
