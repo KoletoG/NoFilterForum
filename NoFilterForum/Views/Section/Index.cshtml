@@ -4,7 +4,7 @@
 @model IndexSectionViewModel
 @{
 	if (Model.IsAdmin)
-	{
+	{ // MAKE THE TITLE IN THE LEFT, DESCRIPTION IN THE RIGHT
 		<partial name="_CreateSection" model="new CreateSectionViewModel()" />
 	}
 	<style>
