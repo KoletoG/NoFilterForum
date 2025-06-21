@@ -1,24 +1,25 @@
 ﻿@using System.Web
 @using NoFilterForum.Core.Models.ViewModels
 @using Web.ViewModels.Section
-
 @model IndexSectionViewModel
-@{
-	ViewData["Title"] = "Home Page";
-}
 @{
 	if (Model.IsAdmin)
 	{
-		<partial name="_CreateSection" model="new CreateSectionViewModel()"/>
+		<partial name="_CreateSection" model="new CreateSectionViewModel()" />
 	}
+
 	foreach (var section1 in Model.Sections)
 	{
-		<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle"><h2>@section1.Title</h2></a>
-		<h4>@section1.Description</h4>
-		if (Model.IsAdmin)
-		{
-			<partial name="_DeleteSection" model="new DeleteSectionViewModel(){SectionId=section1.Id}"/>
-		}
+		<div class="container-md border border-4 mb-3" style="font-family:Verdana;">
+			<a style="text-decoration:none" asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
+				<p class="display-6">@section1.Title</p>
+				<h5>@section1.Description</h5>
+			</a>
+			@if (Model.IsAdmin)
+			{
+				<partial name="_DeleteSection" model="new DeleteSectionViewModel(){SectionId=section1.Id}" />
+			}
+		</div>
 	}
 }
 @section Scripts {
