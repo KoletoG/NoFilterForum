@@ -10,10 +10,14 @@
 
 	foreach (var section1 in Model.Sections)
 	{
-		<div class="container-md border border-4 mb-3" style="font-family:Verdana;">
+		<div class="container-md border border-2 border-dark mb-3 mt-3 rounded-1 text-center w-50" style="font-family:Verdana;">
 			<a style="text-decoration:none" asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
-				<p class="display-6">@section1.Title</p>
-				<h5>@section1.Description</h5>
+				<div>
+					<h2 class="text-black" style="font-family:Tahoma">@section1.Title</h2>
+					<div class="mb-2 mt-2">
+						<h5 class="text-black-50 fst-italic" style="font-family:'Global Serif'">@section1.Description</h5>
+					</div>
+			</div>
 			</a>
 			@if (Model.IsAdmin)
 			{
