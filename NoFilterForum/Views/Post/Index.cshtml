@@ -14,7 +14,8 @@
 			<h3>
 				@post.Title 
 				<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" /> @{// CHANGE THAT
-					}
+				}
+				<img src="@post.UserImageUrl" width="125" height="125" />
 			</h3>
 		</a>
 		<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)"/>
