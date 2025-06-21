@@ -10,5 +10,6 @@ namespace Web.ViewModels.Post
         public string Title { get; set; }
         public bool IsPinned { get; set; }
         public DateTime DateCreated { get; set; }
+        public string UserImageUrl { get; set; }
     }
 }

@@ -57,7 +57,8 @@ namespace NoFilterForum.Infrastructure.Repositories
                         Role = x.User.Role,
                         Username = x.User.UserName,
                         Title = x.Title,
-                        IsPinned = x.IsPinned
+                        IsPinned = x.IsPinned,
+                        ImageUrl = x.User.ImageUrl
                     })
                     .ToListAsync();
         }

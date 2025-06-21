@@ -30,7 +30,8 @@ namespace Web.Mappers
             IsPinned= dto.IsPinned,
             Title = dto.Title,
             Role= dto.Role,
-            Username= dto.Username
+            Username= dto.Username,
+            UserImageUrl = dto.ImageUrl
         };
         public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new()
         {

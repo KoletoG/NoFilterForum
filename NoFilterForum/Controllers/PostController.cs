@@ -21,12 +21,10 @@ namespace Web.Controllers
     public class PostController : Controller
     {
         private readonly IPostService _postService;
-        private readonly IUserService _userService;
         private readonly ISectionService _sectionService;
-        public PostController(IPostService postService, ISectionService sectionService, IUserService userService)
+        public PostController(IPostService postService, ISectionService sectionService)
         {
             _sectionService = sectionService;
-            _userService = userService;
             _postService = postService;
         }
         [HttpPost]
