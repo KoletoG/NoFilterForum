@@ -11,19 +11,18 @@
 	foreach (var post in Model.Posts)
 	{
 		<div class="container w-50">
-			<div class="row">
-				<div class="col">
+			<div class="row g-0">
+				<div class="col-8 me-2 align-self-center">
 					<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 						<div class="col fs-4 text-black" style="font-family:'Book Antiqua'">
 							@post.Title
 						</div>
 					</a>
-			</div>
-			<div class="col">
-
+				</div>
+				<div class="col-2 border border-1">
+					<img src="@post.UserImageUrl" class="border border-2 border-black rounded-2 img-fluid">
 					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" />
-					<img src="@post.UserImageUrl" width="125" height="125" />
-			</div>
+				</div>
 			</div>
 			<div class="row">
 				<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />

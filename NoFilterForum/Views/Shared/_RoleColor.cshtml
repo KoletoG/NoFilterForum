@@ -5,7 +5,7 @@
 {
 	if (Model.Role == UserRoles.Admin)
 	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-danger">@Model.Username</a>
+		<a asp-action="Index" class="fs-4" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-danger">@Model.Username</a>
 	}
 	else if (Model.Role == UserRoles.VIP)
 	{
@@ -28,7 +28,7 @@ else
 {
 	if (Model.Role == UserRoles.Admin)
 	{
-		<h6 class="text-danger">@Model.Username</h6>
+		<h6 class="text-danger text-center">@Model.Username</h6>
 	}
 	else if (Model.Role == UserRoles.VIP)
 	{
