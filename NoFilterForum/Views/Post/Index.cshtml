@@ -6,29 +6,40 @@
 @using Web.ViewModels
 @using Web.ViewModels.Post
 @model PostIndexViewModel
-<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}"/>
+<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
 @{
 	foreach (var post in Model.Posts)
 	{
-		<a asp-action="Index" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
-			<h3>
-				@post.Title 
-				<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" /> @{// CHANGE THAT
-				}
-				<img src="@post.UserImageUrl" width="125" height="125" />
-			</h3>
-		</a>
-		<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)"/>
-		if (UserConstants.adminNames.Contains(this.User.Identity.Name))
-		{
-			<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)"/>
-		}
+		<div class="container w-50">
+			<div class="row">
+				<div class="col">
+					<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
+						<div class="col fs-4 text-black" style="font-family:'Book Antiqua'">
+							@post.Title
+						</div>
+					</a>
+			</div>
+			<div class="col">
+
+					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" />
+					<img src="@post.UserImageUrl" width="125" height="125" />
+			</div>
+			</div>
+			<div class="row">
+				<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
+			</div>
+
+			@if (UserConstants.adminNames.Contains(this.User.Identity.Name))
+			{
+				<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)" />
+			}
+		</div>
 		<br />
 	}
 	string controllerName = "Post";
 	string actionName = "Index";
-	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)"/>
+	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)" />
 }
-@section Scripts{
+@section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }
