@@ -23,7 +23,7 @@
 		}
 
 		.section-card:hover h5 {
-			text-align:center;
+			font-weight:bolder
 		}
 
 			</style>
@@ -40,7 +40,8 @@
 					<h2 class="fst-italic  text-center" style="font-family:Tahoma; font-weight:bold">@section1.Title</h2>
 				</div>
 				<div class="mb-2 row border border-2 pt-1 border-dark border-top-0">
-					<h5 class="fst-italic" style="font-family:'Global Serif'">@section1.Description</h5>
+					<h5 class="fst-italic col" style="font-family:'Global Serif'">@section1.Description</h5>
+					<h5 class="fst-italic col text-end" style="font-family:'Global Serif'">Posts: @section1.PostsCount</h5>
 				</div>
 			</a>
 			@if (Model.IsAdmin)
