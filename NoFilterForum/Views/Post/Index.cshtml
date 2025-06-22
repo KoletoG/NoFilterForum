@@ -7,6 +7,14 @@
 @using Web.ViewModels.Post
 @model PostIndexViewModel
 <partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
+<style>
+	.underlinehover{
+		color:black;
+	}
+	.underlinehover:hover{
+		color:gray;
+	}
+</style>
 @{
 	foreach (var post in Model.Posts)
 	{
@@ -14,7 +22,7 @@
 			<div class="row g-0">
 				<div class="col-8 me-2 align-self-center">
 					<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
-						<div class="col fs-4 text-black" style="font-family:'Book Antiqua'">
+						<div class="underlinehover col fs-4 fw-bold" style="font-family:'Book Antiqua'">
 							@post.Title
 						</div>
 					</a>
