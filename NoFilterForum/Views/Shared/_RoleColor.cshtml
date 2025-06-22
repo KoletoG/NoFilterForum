@@ -28,7 +28,7 @@ else
 {
 	if (Model.Role == UserRoles.Admin)
 	{
-		<h6 class="text-danger text-center">@Model.Username</h6>
+		<h6 class="text-danger text-center fw-bold">@Model.Username</h6>
 	}
 	else if (Model.Role == UserRoles.VIP)
 	{
@@ -44,6 +44,6 @@ else
 	}
 	else
 	{
-		<h6 class="text-dark">@Model.Username</h6>
+		<h6 class="text-dark text-break text-center fw-bold">@Model.Username</h6>
 	}
 }

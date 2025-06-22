@@ -11,7 +11,7 @@
 	<form asp-action="PinPost" asp-controller="Admin" method="post">
 		@Html.AntiForgeryToken()
 		<input hidden name="@postIdName" value="@postIdValue" />
-		<button type="submit">Unpin post</button>
+		<button type="submit" class="btn btn-secondary">Unpin post</button>
 	</form>
 }
 else
@@ -19,6 +19,6 @@ else
 	<form asp-action="PinPost" asp-controller="Admin" method="post">
 		@Html.AntiForgeryToken()
 		<input hidden name="@postIdName" value="@postIdValue" />
-		<button type="submit">Pin post</button>
+		<button type="submit" class="btn btn-secondary">Pin post</button>
 	</form>
 }

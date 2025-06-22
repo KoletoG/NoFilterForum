@@ -8,18 +8,19 @@
 @model PostIndexViewModel
 <partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
 <style>
-	.underlinehover{
-		color:black;
+	.underlinehover {
+		color: black;
 	}
-	.underlinehover:hover{
-		color:gray;
-	}
+
+		.underlinehover:hover {
+			color: gray;
+		}
 </style>
 @{
-	foreach (var post in Model.Posts)
+	<div class="container w-50">
+	@foreach (var post in Model.Posts)
 	{
-		<div class="container w-50">
-			<div class="row g-0">
+			<div class="row g-0 mt-3">
 				<div class="col-8 me-2 align-self-center">
 					<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 						<div class="underlinehover col fs-4 fw-bold" style="font-family:'Book Antiqua'">
@@ -27,22 +28,20 @@
 						</div>
 					</a>
 				</div>
-				<div class="col-2 border border-1">
+				<div class="col-2 border border-1 rounded-2 border-dark-subtle" style="max-width:150px">
 					<img src="@post.UserImageUrl" class="border border-2 border-black rounded-2 img-fluid">
 					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" />
 				</div>
 			</div>
-			<div class="row">
-				<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
-			</div>
+			<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
 
 			@if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 			{
 				<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)" />
 			}
-		</div>
 		<br />
-	}
+		}
+	</div>
 	string controllerName = "Post";
 	string actionName = "Index";
 	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)" />
