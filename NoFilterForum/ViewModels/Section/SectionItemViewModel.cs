@@ -8,5 +8,6 @@ namespace Web.ViewModels.Section
         public string Id { get; set; }
         public string Description { get; set; }
         public string EncodedTitle { get; set; }
+        public int PostsCount { get; set; }
     }
 }

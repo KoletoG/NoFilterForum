@@ -14,6 +14,7 @@ namespace Web.Mappers
             Description = dto.Description,
             Id = dto.Id,
             Title = dto.Title,
+            PostsCount = dto.PostsCount,
             EncodedTitle = HttpUtility.UrlEncode(dto.Title)
         };
         public static IndexSectionViewModel MapToViewModel(List<SectionItemViewModel> itemVMs, bool isAdmin) => new()

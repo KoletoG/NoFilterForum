@@ -53,6 +53,10 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle);
         }
+        public async Task<int> GetPostsCount(string sectionId)
+        {
+            return await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
+        }
         public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest)
         {
             if (!await _userService.IsAdminRoleByIdAsync(createSectionRequest.UserId))

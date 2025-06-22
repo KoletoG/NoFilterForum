@@ -19,6 +19,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.FindAsync(id);
         }
+        public async Task<int> GetPostsCountByIdAsync(string id)
+        {
+            return await _context.SectionDataModels.Where(x => x.Id == id).Select(x => x.Posts).CountAsync();
+        }
         public async Task<SectionDataModel> GetByIdWithPostsAndRepliesAndUsersAsync(string id)
         {
             return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x=>x.User).Include(x=>x.Posts).ThenInclude(x=>x.User).FirstOrDefaultAsync(x => x.Id == id);
@@ -38,7 +42,8 @@ namespace NoFilterForum.Infrastructure.Repositories
                 {
                     Description = x.Description,
                     Id = x.Id,
-                    Title = x.Title
+                    Title = x.Title,
+                    PostsCount = x.Posts.Count
                 }).ToListAsync();
         }
         public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage)
