@@ -1,14 +1,19 @@
 ﻿@using Web.ViewModels.Post
 @model CreatePostViewModel
 
-<form asp-action="Create" asp-controller="Post" method="post">
+<form asp-action="Create" class="border p-4 border-2 border-dark-subtle rounded-2" asp-controller="Post" method="post">
 	<input type="hidden" asp-for="TitleOfSection" value="@Model.TitleOfSection" />
-	<span asp-validation-for="Title" class="text-danger"></span>
-	<label asp-for="Title"></label>
-	<input asp-for="Title" placeholder="Title of the post" />
-	<span asp-validation-for="Body" class="text-danger"></span>
-	<label asp-for="Body"></label>
-	<input asp-for="Body" placeholder="Body of the post" />
+	<div class="row">
+		<span asp-validation-for="Title" class="text-danger"></span>
+		<label asp-for="Title" class="fs-4 fw-bold"></label>
+		<input asp-for="Title" class="mt-2"  placeholder="Title of the post" />
+	</div><div class="row mt-2">
+		<span asp-validation-for="Body" class="text-danger"></span>
+		<label asp-for="Body" class="fs-5 fw-bold"></label>
+		<textarea asp-for="Body" class="mt-2 form-control" placeholder="Body of the post" ></textarea>
+	</div>
 	@Html.AntiForgeryToken()
-	<button type="submit">Create post</button>
+	<div class="d-flex justify-content-center">
+		<button type="submit" class="btn btn-secondary mt-4">Create post</button>
+	</div>
 </form>
