@@ -11,7 +11,7 @@ namespace Web.ViewModels.Post
     {
         [Required]
         [MinLength(10)]
-        [MaxLength(60)]
+        [MaxLength(45)]
         public string Title { get; set; }
         [Required]
         [MinLength(20)]
