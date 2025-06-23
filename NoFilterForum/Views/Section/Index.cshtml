@@ -17,6 +17,7 @@
 		}
 		.section-card a:hover {
 			text-decoration:underline;
+			text-decoration-color:black;
 		}
 		.section-card h6 {
 			transition: text-align 0.5s ease; 
@@ -42,7 +43,7 @@
 		<div class="container shadow section-card mb-3 mt-3 w-50" style="font-family:Verdana;">
 			<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
 				<div class="bg-dark-subtle pt-1 pb-1 row ps-1 pe-1 border border-2 border-dark">
-					<h2 class="fs-5  text-center" style="font-family:Georgia; font-weight:bold">@section1.Title</h2>
+					<h2 class="fs-5  text-center" style="font-family:Century; font-weight:bold">@section1.Title</h2>
 				</div>
 				<div class="mb-2 row border border-2 pt-1 border-dark-subtle border-top-0">
 					<h6 class="fst-italic col" style="font-family:'Global Serif'">@section1.Description</h6>
