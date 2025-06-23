@@ -5,11 +5,11 @@
 	<input type="hidden" asp-for="TitleOfSection" value="@Model.TitleOfSection" />
 	<div class="row">
 		<span asp-validation-for="Title" class="text-danger"></span>
-		<label asp-for="Title" class="fs-4 fw-bold"></label>
+		<label asp-for="Title" class="fs-4 text-center fw-bold"></label>
 		<input asp-for="Title" class="mt-2"  placeholder="Title of the post" />
 	</div><div class="row mt-2">
 		<span asp-validation-for="Body" class="text-danger"></span>
-		<label asp-for="Body" class="fs-5 fw-bold"></label>
+		<label asp-for="Body" class="fs-5 fw-bold text-center"></label>
 		<textarea asp-for="Body" class="mt-2 form-control" placeholder="Body of the post" ></textarea>
 	</div>
 	@Html.AntiForgeryToken()
