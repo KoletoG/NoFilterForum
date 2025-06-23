@@ -3,6 +3,19 @@
 
 <form asp-action="Create" class="border p-4 border-2 border-dark-subtle rounded-2" asp-controller="Post" method="post">
 	<input type="hidden" asp-for="TitleOfSection" value="@Model.TitleOfSection" />
+	<button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+		Toggle Legend
+	</button>
+	<div class="collapse" id="collapseExample">
+		<div class="card card-body">
+			Type:
+			<br />
+			#.# (&bull;)
+			<h3>##example##</h3>
+			<b>#example#</b>
+			You can combine these however you want
+		</div>
+	</div>
 	<div class="row">
 		<span asp-validation-for="Title" class="text-danger"></span>
 		<label asp-for="Title" class="fs-4 text-center fw-bold"></label>
