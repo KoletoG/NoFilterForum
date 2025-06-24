@@ -16,5 +16,6 @@ namespace Core.Models.DTOs.OutputDTOs.Post
         public bool IsPinned { get; set; }
         public DateTime DateCreated { get; set; }
         public string ImageUrl { get; set; }
+        public short PostLikes { get; set; }
     }
 }

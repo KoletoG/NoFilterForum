@@ -63,7 +63,8 @@ namespace NoFilterForum.Infrastructure.Repositories
                         Username = x.User.UserName,
                         Title = x.Title,
                         IsPinned = x.IsPinned,
-                        ImageUrl = x.User.ImageUrl
+                        ImageUrl = x.User.ImageUrl,
+                        PostLikes = x.Likes
                     })
                     .ToListAsync();
         }

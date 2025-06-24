@@ -11,5 +11,6 @@ namespace Web.ViewModels.Post
         public bool IsPinned { get; set; }
         public DateTime DateCreated { get; set; }
         public string UserImageUrl { get; set; }
+        public short PostLikes { get; set; }
     }
 }

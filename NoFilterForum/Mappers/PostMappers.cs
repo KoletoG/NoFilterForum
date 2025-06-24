@@ -31,7 +31,8 @@ namespace Web.Mappers
             Title = dto.Title,
             Role= dto.Role,
             Username= dto.Username,
-            UserImageUrl = dto.ImageUrl
+            UserImageUrl = dto.ImageUrl,
+            PostLikes = dto.PostLikes
         };
         public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new()
         {
