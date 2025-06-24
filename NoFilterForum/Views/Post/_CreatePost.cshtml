@@ -23,7 +23,7 @@
 	</div><div class="row mt-2">
 		<span asp-validation-for="Body" class="text-danger"></span>
 		<label asp-for="Body" class="fs-5 fw-bold text-center"></label>
-		<textarea asp-for="Body" class="mt-2 form-control" placeholder="Body of the post" ></textarea>
+		<textarea asp-for="Body" class="mt-2 form-control" rows="15" placeholder="Body of the post" ></textarea>
 	</div>
 	@Html.AntiForgeryToken()
 	<div class="d-flex justify-content-center">
