@@ -74,8 +74,8 @@
 		</div>
 		@foreach (var reply in Model.Replies)
 		{
-			<div class="row border-bottom">
-				<div class="col-10 align-self-center">
+			<div class="row border-top border-black border-3 mt-5 bg-secondary-subtle">
+				<div class="col-10 align-self-center pt-2 pb-2">
 
 					@if (reply.Id == Model.ReplyId)
 					{
@@ -83,7 +83,7 @@
 					}
 					else
 					{
-						<h5>@Html.Raw(reply.Content)</h5>
+						<h5 class="text-break">@Html.Raw(reply.Content)</h5>
 						// BIO HERE BELOW
 					}
 				</div>
@@ -100,12 +100,12 @@
 					<h5 style="text-decoration:line-through">@reply.Username</h5>
 				}
 			</div>
-			<div class="row mt-3 border-bottom">
-				<div class="col-10 align-content-end pb-2">
+			<div class="row pt-3 border-secondary pb-3 border-top border-bottom">
+				<div class="col-10 align-content-end pb-2 border-end border-black">
 					<h1 class="text-center">Bio here with new row</h1>
 					<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
 				</div>
-				<div class="col-2 text-center">
+				<div class="col-2 text-center border-2 ">
 					@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 					{
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
@@ -135,7 +135,10 @@
 				</div>
 			</div>
 			string usernameContent = $"@{reply.Username}";
-			<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
+			<div class="row border-bottom border-3 border-dark">
+				<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
+
+			</div>
 		}
 		<br />
 		@if (Model.Replies.Count > 0)
