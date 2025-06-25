@@ -18,7 +18,7 @@
 
 				<h1 class="fw-bold">@Model.Post.Title</h1>
 		</div>
-			<div class="col-2 border rounded-1 border-2 border-black">
+			<div class="col-2 border rounded-1 border-2 border-black text-center ">
 				<img src="@Model.Post.ImageUrl" class="img-fluid mt-3 border border-1" width="150" height="150" />
 				<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true)" />
 			</div>
