@@ -9,7 +9,7 @@
 
 @model IndexReplyViewModel
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
-<div class="container w-75 border">
+<div class="container w-75">
 	@if (Model.Post.Username != UserConstants.DefaultUser.UserName)
 	{
 		<div class="row border-bottom">
@@ -69,7 +69,7 @@
 		<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
 	}
 	@{
-		<div class="row border border-black">
+		<div class="row border border-black mt-3 mb-3 shadow">
 			<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 		</div>
 		@foreach (var reply in Model.Replies)
@@ -83,8 +83,9 @@
 					}
 					else
 					{
-						<h5>@Html.Raw(reply.Content)</h5> // BIO HERE BELOW
-					} 
+						<h5>@Html.Raw(reply.Content)</h5>
+						// BIO HERE BELOW
+					}
 				</div>
 				@if (reply.Username != UserConstants.DefaultUser.UserName)
 				{
@@ -101,6 +102,7 @@
 			</div>
 			<div class="row mt-3 border-bottom">
 				<div class="col-10 align-content-end pb-2">
+					<h1 class="text-center">Bio here with new row</h1>
 					<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
 				</div>
 				<div class="col-2 text-center">
@@ -136,7 +138,14 @@
 			<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
 		}
 		<br />
-		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
+		@if (Model.Replies.Count > 0)
+		{
+			<div class="row border border-black  mt-3 mb-3 shadow">
+
+				<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
+			</div>
+		}
+
 		string controllerName = "Reply";
 		string actionName = "Index";
 		<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)" />
