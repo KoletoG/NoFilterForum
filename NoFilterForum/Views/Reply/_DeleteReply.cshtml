@@ -4,5 +4,5 @@
 	<input hidden asp-for="ReplyId" value="@Model.ReplyId" />
 	<input hidden asp-for="PostId" value="@Model.PostId" />
 	@Html.AntiForgeryToken()
-	<button type="submit">Delete Reply</button>
+	<button type="submit" class="btn btn-danger">Delete Reply</button>
 </form>
