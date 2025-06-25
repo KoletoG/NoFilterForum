@@ -33,20 +33,28 @@
 				@if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 				{
 					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,true)" />
-					<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+					<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
 				}
 				else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
 				{
 					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-					<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+					<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,true)" />
 				}
 				else
 				{
 					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-					<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+					<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
+				}
+				@if (Model.Post.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
+				{
+					<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}" />
+				}
+				else
+				{
+					<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=true,IdOfPostReply=Model.Post.Id,UserIdTo= Model.Post.UserId}" />
 				}
 			</div>
 		</div>
@@ -59,16 +67,6 @@
 	else
 	{
 		<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
-	}
-	@{
-	}
-	@if (Model.Post.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
-	{
-		<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}" />
-	}
-	else
-	{
-		<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=true,IdOfPostReply=Model.Post.Id,UserIdTo= Model.Post.UserId}" />
 	}
 	@{
 		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
