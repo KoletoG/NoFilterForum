@@ -69,10 +69,12 @@
 		<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
 	}
 	@{
-		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
+		<div class="row border border-black">
+			<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
+		</div>
 		@foreach (var reply in Model.Replies)
 		{
-			<div class="row">
+			<div class="row border-bottom">
 				<div class="col-10 align-self-center">
 
 					@if (reply.Id == Model.ReplyId)
@@ -81,8 +83,8 @@
 					}
 					else
 					{
-						<h5>@Html.Raw(reply.Content)</h5>
-					}
+						<h5>@Html.Raw(reply.Content)</h5> // BIO HERE BELOW
+					} 
 				</div>
 				@if (reply.Username != UserConstants.DefaultUser.UserName)
 				{
@@ -97,8 +99,8 @@
 					<h5 style="text-decoration:line-through">@reply.Username</h5>
 				}
 			</div>
-			<div class="row mt-3">
-				<div class="col-10">
+			<div class="row mt-3 border-bottom">
+				<div class="col-10 align-content-end pb-2">
 					<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
 				</div>
 				<div class="col-2 text-center">
@@ -120,16 +122,16 @@
 						<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
 					}
+					@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
+					{
+						<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
+					}
+					else
+					{
+						<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=false,IdOfPostReply=reply.Id,UserIdTo= reply.UserId}" />
+					}
 				</div>
 			</div>
-			@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
-			{
-				<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
-			}
-			else
-			{
-				<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=false,IdOfPostReply=reply.Id,UserIdTo= reply.UserId}" />
-			}
 			string usernameContent = $"@{reply.Username}";
 			<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
 		}
