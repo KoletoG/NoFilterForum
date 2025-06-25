@@ -9,8 +9,17 @@
 
 @model IndexReplyViewModel
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
+<div class="container w-75 border">
 @if (Model.Post.Username != UserConstants.DefaultUser.UserName)
 {
+	<div class="row">
+
+		<div class="col">
+
+				<h1>@Model.Post.Title</h1>
+		</div>
+			<h5>@Html.Raw(Model.Post.Content)</h5>
+	</div>
 	<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true)" />
 	<img src="@Model.Post.ImageUrl" width="125" height="125" />
 }
@@ -18,8 +27,6 @@ else
 {
 	<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
 }
-<h1>@Model.Post.Title</h1>
-<h5>@Html.Raw(Model.Post.Content)</h5>
 @{
 	<partial name="_ShowTime" model="new ShowTimeViewModel(Model.Post.DateCreated)" />
 }
@@ -107,7 +114,10 @@ else
 	string controllerName = "Reply";
 	string actionName = "Index";
 	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)"/>
-}
+	}
+
+
+</div>
 @section Scripts{
 	<partial name="_ValidationScriptsPartial" />
 	<script>

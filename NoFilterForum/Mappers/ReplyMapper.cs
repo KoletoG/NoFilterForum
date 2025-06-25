@@ -47,7 +47,8 @@ namespace Web.Mappers
             Likes = dto.Likes,
             Role = dto.Role,
             UserId = dto.UserId,
-            Username = dto.Username
+            Username = dto.Username,
+            Title = dto.Title
         };
         public static CurrentUserReplyIndexViewModel MapToViewModel(CurrentUserReplyIndexDto dto) => new()
         {
