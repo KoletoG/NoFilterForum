@@ -10,117 +10,127 @@
 @model IndexReplyViewModel
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
 <div class="container w-75 border">
-@if (Model.Post.Username != UserConstants.DefaultUser.UserName)
-{
-	<div class="row">
+	@if (Model.Post.Username != UserConstants.DefaultUser.UserName)
+	{
+		<div class="row border-bottom">
 
-		<div class="col-10 text-center align-content-center">
+			<div class="col-10 text-center align-content-center">
 
 				<h1 class="fw-bold">@Model.Post.Title</h1>
-		</div>
-			<div class="col-2 border rounded-1 border-2 border-black text-center ">
+			</div>
+			<div class="col-2 border rounded-1 border-2 border-black text-center">
 				<img src="@Model.Post.ImageUrl" class="img-fluid mt-3 border border-1" width="150" height="150" />
 				<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true)" />
 			</div>
-			<h5>@Html.Raw(Model.Post.Content)</h5>
-	</div>
-}
-else
-{
-	<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
-}
-@{
-	<partial name="_ShowTime" model="new ShowTimeViewModel(Model.Post.DateCreated)" />
-}
-@{
-	if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
-	{
-		<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,true)" />
-		<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
-		<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
-	}
-	else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
-	{
-		<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-		<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
-		<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,true)" />
+		</div>
+		<div class="row mt-3">
+			<div class="col-10">
+
+				<h5 class="fs-5">@Html.Raw(Model.Post.Content)</h5>
+			</div>
+			<div class="col-2 text-center">
+
+				@if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
+				{
+					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,true)" />
+					<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
+				}
+				else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
+				{
+					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
+					<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,true)" />
+				}
+				else
+				{
+					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
+					<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+					<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
+				}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-10">
+				<partial name="_ShowTime" model="new ShowTimeViewModel(Model.Post.DateCreated)" />
+			</div>
+		</div>
 	}
 	else
 	{
-		<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-		<h6 id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
-		<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
+		<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
 	}
-}
-@if (Model.Post.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
-{
-	<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}"/>
-}
-else
-{
-	<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=true,IdOfPostReply=Model.Post.Id,UserIdTo= Model.Post.UserId}"/>
-}
-@{
-	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
-	@foreach (var reply in Model.Replies)
+	@{
+	}
+	@if (Model.Post.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 	{
-		if (reply.Username != UserConstants.DefaultUser.UserName)
-		{
-			<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)"/>
-			<img src="@reply.ImageUrl" width="125" height="125" />
-		}
-		else
-		{
-			<h5 style="text-decoration:line-through">@reply.Username</h5>
-		}
-		if (reply.Id == Model.ReplyId)
-		{
-			<h5 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
-		}
-		else
-		{
-			<h5>@Html.Raw(reply.Content)</h5>
-		}
-		<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
-		if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
-		{
-			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
-			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
-		}
-		else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
-		{
-			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)"/>
-		}
-		else
-		{
-			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)"/>
-			<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-			<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
-		}
-		@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
-		{
-			<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}"/>
-		}
-		else
-		{
-			<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=false,IdOfPostReply=reply.Id,UserIdTo= reply.UserId}" />
-		}
-		string usernameContent = $"@{reply.Username}";
-		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
+		<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}" />
 	}
-	<br />
-	<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}"/>
-	string controllerName = "Reply";
-	string actionName = "Index";
-	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)"/>
+	else
+	{
+		<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=true,IdOfPostReply=Model.Post.Id,UserIdTo= Model.Post.UserId}" />
+	}
+	@{
+		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
+		@foreach (var reply in Model.Replies)
+		{
+			if (reply.Username != UserConstants.DefaultUser.UserName)
+			{
+				<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
+				<img src="@reply.ImageUrl" width="125" height="125" />
+			}
+			else
+			{
+				<h5 style="text-decoration:line-through">@reply.Username</h5>
+			}
+			if (reply.Id == Model.ReplyId)
+			{
+				<h5 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
+			}
+			else
+			{
+				<h5>@Html.Raw(reply.Content)</h5>
+			}
+			<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
+			if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
+			{
+				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
+				<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+			}
+			else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
+			{
+				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
+				<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
+			}
+			else
+			{
+				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
+				<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+			}
+			@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
+			{
+				<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
+			}
+			else
+			{
+				<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=false,IdOfPostReply=reply.Id,UserIdTo= reply.UserId}" />
+			}
+			string usernameContent = $"@{reply.Username}";
+			<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
+		}
+		<br />
+		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
+		string controllerName = "Reply";
+		string actionName = "Index";
+		<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)" />
 	}
 
 
 </div>
-@section Scripts{
+@section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
