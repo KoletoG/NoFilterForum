@@ -72,42 +72,56 @@
 		<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 		@foreach (var reply in Model.Replies)
 		{
-			if (reply.Username != UserConstants.DefaultUser.UserName)
-			{
-				<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
-				<img src="@reply.ImageUrl" width="125" height="125" />
-			}
-			else
-			{
-				<h5 style="text-decoration:line-through">@reply.Username</h5>
-			}
-			if (reply.Id == Model.ReplyId)
-			{
-				<h5 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
-			}
-			else
-			{
-				<h5>@Html.Raw(reply.Content)</h5>
-			}
-			<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
-			if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
-			{
-				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
-				<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
-			}
-			else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
-			{
-				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-				<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
-			}
-			else
-			{
-				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-				<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
-				<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
-			}
+			<div class="row">
+				<div class="col-10 align-self-center">
+
+					@if (reply.Id == Model.ReplyId)
+					{
+						<h5 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
+					}
+					else
+					{
+						<h5>@Html.Raw(reply.Content)</h5>
+					}
+				</div>
+				@if (reply.Username != UserConstants.DefaultUser.UserName)
+				{
+					<div class="col-2 border-black border-2 rounded-1 border">
+						<img src="@reply.ImageUrl" class="mt-3 border border-1" width="125" height="125" />
+						<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
+
+					</div>
+				}
+				else
+				{
+					<h5 style="text-decoration:line-through">@reply.Username</h5>
+				}
+			</div>
+			<div class="row mt-3">
+				<div class="col-10">
+					<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
+				</div>
+				<div class="col-2 text-center">
+					@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
+					{
+						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
+						<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+					}
+					else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
+					{
+						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
+						<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
+					}
+					else
+					{
+						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
+						<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+						<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+					}
+				</div>
+			</div>
 			@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
 			{
 				<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
