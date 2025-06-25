@@ -1,11 +1,9 @@
 ﻿@using Web.ViewModels.Reply
 @model CreateReplyViewModel
-
-<form asp-action="Create" asp-controller="Reply" method="post">
+<form asp-action="Create" class="mt-3 mb-3 row g-0 justify-content-around" asp-controller="Reply" method="post">
 	@Html.AntiForgeryToken()
 	<span asp-validation-for="Content" class="text-danger"></span>
-	<label asp-for="Content"></label>
-	<input asp-for="Content" placeholder="Write a reply..." />
+	<textarea asp-for="Content" class="col-9" placeholder="Write a reply..." rows="3" cols="80"></textarea>
 	<input type="hidden" asp-for="PostId" value="@Model.PostId" />
-	<button type="submit">Create reply</button>
+	<button type="submit" class="btn btn-secondary align-self-center col-2">Create reply</button>
 </form>

@@ -8,6 +8,7 @@ namespace Web.ViewModels.Reply
         public string PostId { get; set; }
         [Required]
         [MinLength(2)]
+        [Display(Name ="Reply: ")]
         public string Content { get; set; }
     }
 }
