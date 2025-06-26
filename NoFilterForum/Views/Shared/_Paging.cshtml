@@ -5,7 +5,7 @@
 {
     if (Model.HasPrevious)
     {
-        <a asp-action="@Model.ActionName"
+        <a class="btn btn-secondary" asp-action="@Model.ActionName"
            asp-controller="@Model.ControllerName"
            asp-route-page="@Model.PreviousPage"
            asp-route-title="@Model.TitleOfSection"
@@ -14,7 +14,7 @@
     }
     if (Model.HasNext)
     {
-        <a asp-action="@Model.ActionName"
+        <a class="btn btn-secondary" asp-action="@Model.ActionName"
            asp-controller="@Model.ControllerName"
            asp-route-page="@Model.NextPage"
            asp-route-title="@Model.TitleOfSection"
