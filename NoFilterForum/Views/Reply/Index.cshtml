@@ -18,9 +18,8 @@
 
 				<h1 class="fw-bold">@Model.Post.Title</h1>
 			</div>
-			<div class="col-2 border rounded-1 border-2 border-black text-center">
-				<img src="@Model.Post.ImageUrl" class="img-fluid mt-3 border border-1" width="150" height="150" />
-				<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true)" />
+			<div class="col-2 border rounded-1 border-2 border-black text-center pt-2">
+				<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true, Model.Post.ImageUrl)" />
 			</div>
 		</div>
 		<div class="row mt-3">
@@ -76,8 +75,7 @@
 		{
 			<div class="row border-top border-black border-3 mt-5 bg-secondary-subtle border-bottom">
 				<div class="col-2 align-content-center border-end border-1 border-black text-center">
-					<img src="@reply.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
-					<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
+					<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true,reply.ImageUrl)" />
 
 				</div>
 				<div class="col-8 align-self-center pt-2 pb-2">

@@ -50,9 +50,8 @@
 						</div>
 					}
 				</div>
-				<div class="col-2 mt-4  rounded-2 border-dark-subtle" style="max-width:150px">
-					<img src="@post.UserImageUrl" class="border border-2 border-black rounded-2 img-fluid">
-					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false)" />
+				<div class="col-2 mt-4 text-center rounded-2 border-dark-subtle align-content-center">
+					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
 				</div>
 					<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
 			</div>

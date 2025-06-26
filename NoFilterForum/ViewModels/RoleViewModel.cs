@@ -9,12 +9,14 @@ namespace Web.ViewModels
         public string UserId { get; set; }
         public bool ShouldRoute {  get; set; }
         public string Username { get; set; }
-        public RoleViewModel(UserRoles role, string userId,string username, bool shouldRoute)
+        public string ImageUrl { get; set; }
+        public RoleViewModel(UserRoles role, string userId,string username, bool shouldRoute, string imageUrl)
         {
             Role = role;
             UserId = userId;
             Username = username;
             ShouldRoute = shouldRoute;
+            ImageUrl = imageUrl;
         }
     }
 }
