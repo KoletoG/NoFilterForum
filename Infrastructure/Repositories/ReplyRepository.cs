@@ -25,7 +25,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(string postId, int page, int repliesPerPage)
         {
-            return await _context.ReplyDataModels.Where(x => x.Post.Id == postId).Select(x => new ReplyIndexItemDto()
+            return await _context.ReplyDataModels.Where(x => x.Post.Id == postId).OrderBy(x=>x.DateCreated).Select(x => new ReplyIndexItemDto()
             {
                 Id = x.Id,
                 Content = x.Content,
