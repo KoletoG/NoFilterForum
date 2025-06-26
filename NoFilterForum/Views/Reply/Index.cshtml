@@ -75,7 +75,7 @@
 		@foreach (var reply in Model.Replies)
 		{
 			<div class="row border-top border-black border-3 mt-5 bg-secondary-subtle border-bottom">
-				<div class="col-2 align-content-center border-end border-1 border-black">
+				<div class="col-2 align-content-center border-end border-1 border-black text-center">
 					<img src="@reply.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
 					<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
 
