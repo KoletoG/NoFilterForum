@@ -10,7 +10,7 @@
            asp-route-page="@Model.PreviousPage"
            asp-route-title="@Model.TitleOfSection"
            asp-route-userName="@Model.Username"
-           asp-route-id="@Model.Id">Previous page</a>
+           asp-route-postId="@Model.Id">Previous page</a>
     }
     if (Model.HasNext)
     {
@@ -19,6 +19,6 @@
            asp-route-page="@Model.NextPage"
            asp-route-title="@Model.TitleOfSection"
            asp-route-userName="@Model.Username"
-           asp-route-id="@Model.Id">Next page</a>
+           asp-route-postId="@Model.Id">Next page</a>
     }
 }
