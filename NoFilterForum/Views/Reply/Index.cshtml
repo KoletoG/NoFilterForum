@@ -74,18 +74,25 @@
 		</div>
 		@foreach (var reply in Model.Replies)
 		{
-			<div class="row border-top border-black border-3 mt-5 bg-secondary-subtle">
-				<div class="col-10 align-self-center pt-2 pb-2">
+			<div class="row border-top border-black border-3 mt-5 bg-secondary-subtle border-bottom">
+				<div class="col-2 align-content-center border-end border-1 border-black">
+					<img src="@reply.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
+					<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
+
+				</div>
+				<div class="col-8 align-self-center pt-2 pb-2">
 
 					@if (reply.Id == Model.ReplyId)
 					{
-						<h5 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h5>
+						<h6 id="idrep_@reply.Id" style="background-color:lightgrey;">@Html.Raw(reply.Content)</h6>
 					}
 					else
 					{
-						<h5 class="text-break">@Html.Raw(reply.Content)</h5>
-						// BIO HERE BELOW
+						<h6 class="text-break">@Html.Raw(reply.Content)</h6>
+						
 					}
+
+					<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
 				</div>
 				@if (reply.Username != UserConstants.DefaultUser.UserName)
 				{
@@ -122,22 +129,6 @@
 				{
 					<h5 style="text-decoration:line-through">@reply.Username</h5>
 				}
-			</div>
-			<div class="row pt-3 border-secondary pb-3 border-top border-bottom">
-				<div class="col-10 align-content-end pb-2 border-end border-black">
-					<h1 class="text-center">Bio here with new row</h1>
-					<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
-				</div>
-				<div class="col-2 text-center border-2">
-					<img src="@reply.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
-					<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true)" />
-
-				</div>
-			</div>
-			string usernameContent = $"@{reply.Username}";
-			<div class="row border-bottom border-3 border-dark">
-				<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id, Content=usernameContent}" />
-
 			</div>
 		}
 		<br />
