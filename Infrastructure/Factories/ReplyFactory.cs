@@ -17,11 +17,13 @@ namespace Infrastructure.Factories
         public ReplyFactory(IHtmlSanitizer htmlSanitizer)
         {
             _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
+            _htmlSanitizer.AllowedTags.Add("a");
         }
         public ReplyDataModel Create(string body, UserDataModel user, PostDataModel post)
         {
             var sanitizedFormattedBody = TextFormatter.FormatBody(_htmlSanitizer.Sanitize(body));
-            return new(body, user, post);
+            return new(sanitizedFormattedBody, user, post);
         }
     }
 }
