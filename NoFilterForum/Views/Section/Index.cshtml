@@ -12,51 +12,57 @@
 			transition: font-weight 0.5s ease;
 			color: black;
 		}
-		.section-card a{
-			text-decoration:none;
+
+		.section-card a {
+			text-decoration: none;
 		}
-		.section-card a:hover {
-			text-decoration:underline;
-			text-decoration-color:black;
-		}
+
+			.section-card a:hover {
+				text-decoration: underline;
+				text-decoration-color: black;
+			}
+
 		.section-card h6 {
-			transition: text-align 0.5s ease; 
+			transition: text-align 0.5s ease;
 			color: gray;
 		}
-			.section-card:hover h2 {
-				color: white;
-				font-weight: bold;
+
+		.section-card:hover h2 {
+			color: white;
+			font-weight: bold;
 		}
 
 		.section-card:hover h6 {
-			font-weight:bolder
+			font-weight: bolder
 		}
 
-			</style>
-@{
-	if (Model.IsAdmin)
-	{ // MAKE THE TITLE IN THE LEFT, DESCRIPTION IN THE RIGHT
-		<partial name="_CreateSection" model="new CreateSectionViewModel()" />
-	}
-	foreach (var section1 in Model.Sections)
-	{
-		<div class="container shadow section-card mb-3 mt-3 w-50" style="font-family:Verdana;">
-			<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
-				<div class="bg-dark-subtle pt-1 pb-1 row ps-1 pe-1 border border-2 border-dark">
-					<h2 class="fs-5  text-center" style="font-family:Century; font-weight:bold">@section1.Title</h2>
-				</div>
-				<div class="mb-2 row border border-2 pt-1 border-dark-subtle border-top-0">
-					<h6 class="fst-italic col" style="font-family:'Global Serif'">@section1.Description</h6>
-					<h6 class="fst-italic col text-end" style="font-family:'Global Serif'">Posts: @section1.PostsCount</h6>
-				</div>
-			</a>
-			@if (Model.IsAdmin)
-			{
-				<partial name="_DeleteSection" model="new DeleteSectionViewModel(){SectionId=section1.Id}" />
+</style>
+<body class="bg-body-secondary">
+	@{
+		<div class="container shadow section-card mb-3 mt-3 w-50 p-4" style="font-family:Verdana;">
+		@if (Model.IsAdmin)
+		{ // MAKE THE TITLE IN THE LEFT, DESCRIPTION IN THE RIGHT
+			<partial name="_CreateSection" model="new CreateSectionViewModel()" />
+		}
+		@foreach (var section1 in Model.Sections)
+		{
+				<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
+					<div class="bg-dark-subtle pt-1 pb-1 row ps-1 pe-1 border border-2 border-dark">
+						<h2 class="fs-5  text-center" style="font-family:Century; font-weight:bold">@section1.Title</h2>
+					</div>
+					<div class="mb-2 row border border-2 pt-1 border-dark-subtle border-top-0">
+						<h6 class="fst-italic col" style="font-family:'Global Serif'">@section1.Description</h6>
+						<h6 class="fst-italic col text-end" style="font-family:'Global Serif'">Posts: @section1.PostsCount</h6>
+					</div>
+				</a>
+				@if (Model.IsAdmin)
+				{
+					<partial name="_DeleteSection" model="new DeleteSectionViewModel(){SectionId=section1.Id}" />
+				}
 			}
 		</div>
 	}
-}
+</body>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }

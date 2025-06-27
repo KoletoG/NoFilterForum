@@ -15,8 +15,9 @@
 	color: gray;
 	}
 </style>
-@{
-	<div class="container w-50">
+<body class="bg-body-secondary">
+	@{
+	<div class="container w-50 bg-white shadow p-3">
 		<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
 
 		@foreach (var post in Model.Posts)
@@ -67,6 +68,7 @@
 	string actionName = "Index";
 	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)" />
 }
+</body>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }
