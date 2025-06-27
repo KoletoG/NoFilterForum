@@ -13,8 +13,9 @@
 			<div class="row border-bottom border-2 border-black">
 				<div class="col-10 border-end border-1 border-dark-subtle mb-2">
 					<h4>Bio:</h4> <h3 class="fw-bold">@Html.Raw(Model.Profile.Bio)</h3>
+					<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
 				</div>
-				<div class="col-2 text-center">
+				<div class="col-2 text-center align-self-center">
 					<partial name="_RoleColor" model="new RoleViewModel(Model.Profile.Role,Model.Profile.Id,Model.Profile.UserName,false,Model.Profile.ImageUrl)" />
 				</div>
 			</div>
@@ -25,7 +26,27 @@
 				<div class="col-2">
 					<h6 class="fst-italic text-center">@Model.Profile.DateCreated.ToShortDateString()</h6>
 					<h6 class="text-danger fw-bold fst-italic text-center">@Model.Profile.WarningsCount warning(s)</h6>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+				</div>
+				<div class="col-6 text-end">
+					<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
+				</div>
+			</div><div class="row">
+				<div class="col-6">
+				</div>
+				<div class="col-6 text-end">
+					<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
+				</div>
+			</div>
 
+			<div class="row">
+				<div class="col-6">
+				</div>
+				<div class="col-6 text-end">
+					<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
 				</div>
 			</div>
 			if (Model.IsSameUser)
@@ -34,12 +55,6 @@
 				{
 					<h1 style="color:red">@ViewBag.Error</h1>
 				}
-				<div class="row w-50">
-						<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
-				</div>
-				<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
-				<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
-				<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
 			}
 			else
 			{
