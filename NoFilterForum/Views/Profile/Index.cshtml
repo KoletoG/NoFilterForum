@@ -8,82 +8,84 @@
 
 @model ProfileViewModel
 <body class="bg-body-secondary">
-<div class="container border-2 border p-3 shadow border-black bg-white">
-	@{
-		<div class="row border-bottom border-2 border-black">
-			<div class="col-10 border-end border-1 border-dark-subtle mb-2">
-				<h4>Bio:</h4> <h3 class="fw-bold">@Html.Raw(Model.Profile.Bio)</h3>
+	<div class="container border-2 border p-3 shadow border-black bg-white">
+		@{
+			<div class="row border-bottom border-2 border-black">
+				<div class="col-10 border-end border-1 border-dark-subtle mb-2">
+					<h4>Bio:</h4> <h3 class="fw-bold">@Html.Raw(Model.Profile.Bio)</h3>
+				</div>
+				<div class="col-2 text-center">
+					<partial name="_RoleColor" model="new RoleViewModel(Model.Profile.Role,Model.Profile.Id,Model.Profile.UserName,false,Model.Profile.ImageUrl)" />
+				</div>
 			</div>
-			<div class="col-2 text-center">
-				<partial name="_RoleColor" model="new RoleViewModel(Model.Profile.Role,Model.Profile.Id,Model.Profile.UserName,false,Model.Profile.ImageUrl)" />
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-10 align-content-center">
-				<h3 class="fs-4">@Model.Profile.Email</h3>
-			</div>
-			<div class="col-2">
-				<h6 class="fst-italic text-center">@Model.Profile.DateCreated.ToShortDateString()</h6>
-				<h6 class="text-danger fw-bold fst-italic text-center">@Model.Profile.WarningsCount warning(s)</h6>
+			<div class="row">
+				<div class="col-10 align-content-center">
+					<h3 class="fs-4">@Model.Profile.Email</h3>
+				</div>
+				<div class="col-2">
+					<h6 class="fst-italic text-center">@Model.Profile.DateCreated.ToShortDateString()</h6>
+					<h6 class="text-danger fw-bold fst-italic text-center">@Model.Profile.WarningsCount warning(s)</h6>
 
+				</div>
 			</div>
-		</div>
-		if (Model.IsSameUser)
-		{
-			if (!string.IsNullOrEmpty(ViewBag.Error))
+			if (Model.IsSameUser)
 			{
-				<h1 style="color:red">@ViewBag.Error</h1>
-			}
-			<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
-			<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
-			<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
-			<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
-		}
-		else
-		{
-			<h3>@Model.Profile.UserName's bio: @Html.Raw(Model.Profile.Bio)</h3>
-		}
-		if (UserConstants.adminNames.Contains(this.User.Identity.Name))
-		{
-			<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
-			<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
-		}
-	}
-	<h1>@Model.Profile.UserName</h1>
-	<h5>Posts count: @Model.Profile.PostsCount</h5>
-	@{
-		foreach (var key in Model.UserIdDate.Keys)
-		{
-			foreach (var post in Model.Posts)
-			{
-				if (post.Id == key)
+				if (!string.IsNullOrEmpty(ViewBag.Error))
 				{
-					<a asp-action="Index" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">Post: @post.Title</h4></a>
-					<br />
-					break;
+					<h1 style="color:red">@ViewBag.Error</h1>
+				}
+				<div class="row w-50">
+						<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
+				</div>
+				<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
+				<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
+				<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
+			}
+			else
+			{
+				<h3>@Model.Profile.UserName's bio: @Html.Raw(Model.Profile.Bio)</h3>
+			}
+			if (UserConstants.adminNames.Contains(this.User.Identity.Name))
+			{
+				<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
+				<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
+			}
+		}
+		<h1>@Model.Profile.UserName</h1>
+		<h5>Posts count: @Model.Profile.PostsCount</h5>
+		@{
+			foreach (var key in Model.UserIdDate.Keys)
+			{
+				foreach (var post in Model.Posts)
+				{
+					if (post.Id == key)
+					{
+						<a asp-action="Index" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">Post: @post.Title</h4></a>
+						<br />
+						break;
+					}
+				}
+				foreach (var reply in Model.Replies)
+				{
+					if (reply.Id == key)
+					{
+						<a asp-action="Index" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
+						<br />
+						break;
+					}
 				}
 			}
-			foreach (var reply in Model.Replies)
-			{
-				if (reply.Id == key)
-				{
-					<a asp-action="Index" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
-					<br />
-					break;
-				}
-			}
+			int previousPage = Model.Page - 1;
+			int nextPage = Model.Page + 1;
+			string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
+			string controllerName = "Profile";
+			string actionName = "Index";
+			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,string.Empty,encodedUsername)" />
 		}
-		int previousPage = Model.Page - 1;
-		int nextPage = Model.Page + 1;
-		string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
-		string controllerName = "Profile";
-		string actionName = "Index";
-		<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,string.Empty,encodedUsername)" />
-	}
 
-	@section Scripts {
-		<partial name="_ValidationScriptsPartial" />
-	}
+		@section Scripts {
+			<partial name="_ValidationScriptsPartial" />
+		}
 
 	</div>
 
