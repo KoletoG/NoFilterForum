@@ -9,7 +9,8 @@
 
 @model IndexReplyViewModel
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
-<div class="container w-75">
+<body class="bg-body-secondary">
+<div class="container w-75 bg-white shadow p-3">
 	@if (Model.Post.Username != UserConstants.DefaultUser.UserName)
 	{
 		<div class="row border-bottom">
@@ -18,7 +19,7 @@
 
 				<h1 class="fw-bold">@Model.Post.Title</h1>
 			</div>
-			<div class="col-2 border rounded-1 border-2 border-black text-center pt-2">
+			<div class="col-2 border rounded-1 border-2 border-black text-center pt-2 mb-2">
 				<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true, Model.Post.ImageUrl)" />
 			</div>
 		</div>
@@ -144,7 +145,8 @@
 	}
 
 
-</div>
+	</div>
+</body>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 	<script>
