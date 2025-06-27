@@ -13,28 +13,7 @@
 	<div class="row">
 			<div class="col-8"></div>
 			<div class="col-4 text-center">
-				<img src="/@Model.Profile.ImageUrl" class="border rounded-2" width="200" height="200" />
-				<h4>Role: @Model.Profile.Role</h4>
-				@if (Model.Profile.Role == UserRoles.Admin)
-				{
-				<h3 class="text-danger">@Model.Profile.UserName</h3>
-				}
-				else if (Model.Profile.Role == UserRoles.VIP)
-				{
-				<h3 class="text-warning">@Model.Profile.UserName</h3>
-				}
-				else if (Model.Profile.Role == UserRoles.Regular)
-				{
-				<h3 class="text-light">@Model.Profile.UserName</h3>
-				}
-				else if (Model.Profile.Role == UserRoles.Dinosaur)
-				{
-				<h3 class="text-primary">@Model.Profile.UserName</h3>
-				}
-				else
-				{
-				<h3 class="text-dark">@Model.Profile.UserName</h3>
-				}
+			<partial name="_RoleColor" model="new RoleViewModel(Model.Profile.Role,Model.Profile.Id,Model.Profile.UserName,false,Model.Profile.ImageUrl)"/>
 			</div>
 	</div>
 	if (Model.IsSameUser)
