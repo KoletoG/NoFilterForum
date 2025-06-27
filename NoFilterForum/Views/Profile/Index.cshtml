@@ -6,9 +6,9 @@
 @using Web.ViewModels.Profile
 @using Web.ViewModels.Warning
 
-
 @model ProfileViewModel
-<div class="container">
+<body class="bg-body-secondary">
+<div class="container border-2 border p-3 shadow border-black bg-white">
 	@{
 		<div class="row border-bottom border-2 border-black">
 			<div class="col-10 border-end border-1 border-dark-subtle mb-2">
@@ -85,4 +85,6 @@
 		<partial name="_ValidationScriptsPartial" />
 	}
 
-</div>
+	</div>
+
+</body>
