@@ -19,7 +19,7 @@
 	}
 	else if (Model.Role == UserRoles.Regular)
 	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-light"><img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />@Model.Username</a>
+		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-success"><img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />@Model.Username</a>
 	}
 	else if (Model.Role == UserRoles.Dinosaur)
 	{
@@ -48,7 +48,7 @@ else
 	else if (Model.Role == UserRoles.Regular)
 	{
 		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
-		<h6 class="text-light text-break fw-bold">@Model.Username</h6>
+		<h6 class="text-success text-break fw-bold">@Model.Username</h6>
 	}
 	else if (Model.Role == UserRoles.Dinosaur)
 	{
