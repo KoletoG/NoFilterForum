@@ -17,6 +17,8 @@
 				</div>
 				<div class="col-2 text-center align-self-center">
 					<partial name="_RoleColor" model="new RoleViewModel(Model.Profile.Role,Model.Profile.Id,Model.Profile.UserName,false,Model.Profile.ImageUrl)" />
+
+					<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
 				</div>
 			</div>
 			<div class="row">
@@ -29,24 +31,18 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-6">
+				<div class="col-6 text-start">
+					<p class="fs-4 fw-bold">@Model.Profile.UserName</p>
 				</div>
 				<div class="col-6 text-end">
 					<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
 				</div>
 			</div><div class="row">
-				<div class="col-6">
+				<div class="col-6 text-start">
+					<p class="fs-4 fw-bold">@Model.Profile.Email</p>
 				</div>
 				<div class="col-6 text-end">
 					<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-6">
-				</div>
-				<div class="col-6 text-end">
-					<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
 				</div>
 			</div>
 			if (Model.IsSameUser)
@@ -66,7 +62,6 @@
 				<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 			}
 		}
-		<h1>@Model.Profile.UserName</h1>
 		<h5>Posts count: @Model.Profile.PostsCount</h5>
 		@{
 			foreach (var key in Model.UserIdDate.Keys)
