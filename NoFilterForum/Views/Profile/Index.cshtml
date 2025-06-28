@@ -76,27 +76,32 @@
 		}
 		<h5>Posts count: @Model.Profile.PostsCount</h5>
 		@{
-			foreach (var key in Model.UserIdDate.Keys)
-			{
-				foreach (var post in Model.Posts)
+			<div class="border p-2 m-2">
+				@foreach (var key in Model.UserIdDate.Keys)
 				{
-					if (post.Id == key)
+					foreach (var post in Model.Posts)
 					{
-						<a asp-action="Index" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">Post: @post.Title</h4></a>
-						<br />
-						break;
+						if (post.Id == key)
+						{
+							<div class="border-bottom p-1">
+								<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">@post.Title</h4> @post.Created.ToShortDateString()</a>
+							</div>
+							break;
+						}
+					}
+					foreach (var reply in Model.Replies)
+					{
+						if (reply.Id == key)
+						{
+							<div class="border-bottom p-1">
+								<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()</a>
+
+							</div>
+							break;
+						}
 					}
 				}
-				foreach (var reply in Model.Replies)
-				{
-					if (reply.Id == key)
-					{
-						<a asp-action="Index" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5>Reply: @reply.Content</h5></a>
-						<br />
-						break;
-					}
-				}
-			}
+			</div>
 			int previousPage = Model.Page - 1;
 			int nextPage = Model.Page + 1;
 			string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
