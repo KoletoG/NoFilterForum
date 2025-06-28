@@ -3,8 +3,7 @@
 
 <form asp-action="ChangeEmail" asp-controller="Profile" method="post">
 	@Html.AntiForgeryToken()
-	<label asp-for="Email"></label>
 	<span asp-validation-for="Email" class="text-danger"></span>
-	<input asp-for="Email" />
+	<input asp-for="Email" placeholder="Type your new email..." />
 	<button type="submit">Change Email</button>
 </form>

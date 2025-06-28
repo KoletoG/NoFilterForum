@@ -2,7 +2,6 @@
 @model UpdateImageViewModel
 <form asp-action="UpdateImage" asp-controller="Profile" method="post" enctype="multipart/form-data">
 	@Html.AntiForgeryToken()
-	<label asp-for="Image"></label>
 	<span asp-validation-for="Image"></span>
 	<input asp-for="Image" accept="image/*">
 	<button type="submit">Change image</button>
