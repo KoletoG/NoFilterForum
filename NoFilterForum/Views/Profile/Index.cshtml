@@ -107,7 +107,7 @@
 			string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
 			string controllerName = "Profile";
 			string actionName = "Index";
-			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.Profile.Id,string.Empty)" />
+			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,string.Empty,string.Empty,Model.Profile.Id)" />
 		}
 
 		@section Scripts {
