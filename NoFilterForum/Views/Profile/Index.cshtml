@@ -71,33 +71,63 @@
 			if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 			{
 				<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
-				<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
+					<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 			}
 		}
 		<h5>Posts count: @Model.Profile.PostsCount</h5>
 		@{
 			<div class="border p-2 m-2">
+				@{int count =1;}
 				@foreach (var key in Model.UserIdDate.Keys)
 				{
 					foreach (var post in Model.Posts)
 					{
 						if (post.Id == key)
 						{
-							<div class="border-bottom p-1">
-								<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">@post.Title</h4> @post.Created.ToShortDateString()</a>
-							</div>
-							break;
+							if (count % 2 == 0)
+							{
+
+								<div class="border-bottom bg-body-secondary p-1">
+									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">@post.Title</h4> @post.Created.ToShortDateString()</a>
+								</div>
+								count++;
+								break;
+							}
+							else
+							{
+
+								<div class="border-bottom p-1">
+									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id"><h4 style="font-weight:bold">@post.Title</h4> @post.Created.ToShortDateString()</a>
+								</div>
+								count++;
+								break;
+							}
 						}
 					}
 					foreach (var reply in Model.Replies)
 					{
 						if (reply.Id == key)
 						{
-							<div class="border-bottom p-1">
-								<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()</a>
+							if (count % 2 == 0)
+							{
 
-							</div>
-							break;
+								<div class="border-bottom p-1 bg-body-secondary">
+									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()</a>
+
+								</div>
+								count++;
+								break;
+							}
+							else
+							{
+
+								<div class="border-bottom p-1">
+									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()</a>
+
+								</div>
+								count++;
+								break;
+							}
 						}
 					}
 				}
