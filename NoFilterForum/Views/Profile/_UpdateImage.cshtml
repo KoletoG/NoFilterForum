@@ -3,6 +3,6 @@
 <form asp-action="UpdateImage" asp-controller="Profile" method="post" enctype="multipart/form-data">
 	@Html.AntiForgeryToken()
 	<span asp-validation-for="Image"></span>
-	<input asp-for="Image" accept="image/*">
-	<button type="submit">Change image</button>
+	<input asp-for="Image" class="btn btn-outline-secondary" accept="image/*">
+	<button type="submit" class="btn btn-secondary">Change Image</button>
 </form>
