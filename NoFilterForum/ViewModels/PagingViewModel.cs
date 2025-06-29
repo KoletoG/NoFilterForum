@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using System.Web;
+using Microsoft.Extensions.Primitives;
 
 namespace Web.ViewModels
 {
@@ -24,7 +25,7 @@ namespace Web.ViewModels
             TotalPages = totalPages;
             ControllerName = controllerName;
             ActionName = actionName;
-            TitleOfSection = titleOfSection;
+            TitleOfSection =titleOfSection;
             Id = id;
             UserId= userId;
             Username = username;

@@ -1,6 +1,6 @@
 ﻿@using Web.ViewModels
 @model PagingViewModel
-<nav aria-label="Page navigation example" >
+<nav aria-label="Page navigation example">
 	<ul class="pagination">
 		@if (Model.TotalPages > 1)
 		{
@@ -8,12 +8,12 @@
 			{
 				<li class="page-item">
 					<a class="btn btn-secondary" asp-action="@Model.ActionName"
-					asp-controller="@Model.ControllerName"
-					asp-route-page="@Model.PreviousPage"
-					asp-route-title="@Model.TitleOfSection"
-					asp-route-userName="@Model.Username"
-					asp-route-postId="@Model.Id"
-					asp-route-userId="@Model.UserId">&laquo;</a>
+					   asp-controller="@Model.ControllerName"
+					   asp-route-page="@Model.PreviousPage"
+					   asp-route-titleOfSection="@Model.TitleOfSection"
+					   asp-route-userName="@Model.Username"
+					   asp-route-postId="@Model.Id"
+					   asp-route-userId="@Model.UserId">&laquo;</a>
 				</li>
 			}
 			if (Model.TotalPages > 2)
@@ -23,23 +23,23 @@
 				int count = 0;
 				int maximumPagesToNavigate = 4;
 				int startingPage = page - maximumPagesToNavigate;
-				if (Model.Page > maximumPagesToNavigate+1)
+				if (Model.Page > maximumPagesToNavigate + 1)
 				{
 					<li class="page-item">
 						<a class="btn btn-secondary" asp-action="@Model.ActionName"
-						asp-controller="@Model.ControllerName"
-						asp-route-page="1"
-						asp-route-title="@Model.TitleOfSection"
-						asp-route-userName="@Model.Username"
-						asp-route-postId="@Model.Id"
-						asp-route-userId="@Model.UserId">1</a>
+						   asp-controller="@Model.ControllerName"
+						   asp-route-page="1"
+						   asp-route-titleOfSection="@Model.TitleOfSection"
+						   asp-route-userName="@Model.Username"
+						   asp-route-postId="@Model.Id"
+						   asp-route-userId="@Model.UserId">1</a>
 					</li>
 				}
 				if (startingPage < 1)
 				{
 					startingPage = 1;
 				}
-				for(int i = startingPage; i < page; i++)
+				for (int i = startingPage; i < page; i++)
 				{
 					if (count == maximumPagesToNavigate)
 					{
@@ -47,12 +47,12 @@
 					}
 					<li class="page-item">
 						<a class="btn btn-secondary" asp-action="@Model.ActionName"
-						asp-controller="@Model.ControllerName"
-						asp-route-page="@i"
-						asp-route-title="@Model.TitleOfSection"
-						asp-route-userName="@Model.Username"
-						asp-route-postId="@Model.Id"
-						asp-route-userId="@Model.UserId">@i</a>
+						   asp-controller="@Model.ControllerName"
+						   asp-route-page="@i"
+						   asp-route-titleOfSection="@Model.TitleOfSection"
+						   asp-route-userName="@Model.Username"
+						   asp-route-postId="@Model.Id"
+						   asp-route-userId="@Model.UserId">@i</a>
 					</li>
 					count++;
 				}
@@ -60,13 +60,13 @@
 					<a class="btn btn-outline-secondary disabled" asp-action="@Model.ActionName"
 					   asp-controller="@Model.ControllerName"
 					   asp-route-page="@Model.Page"
-					   asp-route-title="@Model.TitleOfSection"
+					   asp-route-titleOfSection="@Model.TitleOfSection"
 					   asp-route-userName="@Model.Username"
 					   asp-route-postId="@Model.Id"
 					   asp-route-userId="@Model.UserId">@Model.Page</a>
 				</li>
 				count = 0;
-				for(int i = page + 1; i <= totalPages; i++)
+				for (int i = page + 1; i <= totalPages; i++)
 				{
 
 					if (count == maximumPagesToNavigate)
@@ -78,7 +78,7 @@
 						<a class="btn btn-secondary" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="@i"
-						   asp-route-title="@Model.TitleOfSection"
+						   asp-route-titleOfSection="@Model.TitleOfSection"
 						   asp-route-userName="@Model.Username"
 						   asp-route-postId="@Model.Id"
 						   asp-route-userId="@Model.UserId">@i</a>
@@ -91,7 +91,7 @@
 						<a class="btn btn-secondary" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="@totalPages"
-						   asp-route-title="@Model.TitleOfSection"
+						   asp-route-titleOfSection="@Model.TitleOfSection"
 						   asp-route-userName="@Model.Username"
 						   asp-route-postId="@Model.Id"
 						   asp-route-userId="@Model.UserId">@totalPages</a>
@@ -104,7 +104,7 @@
 					<a class="btn btn-secondary" asp-action="@Model.ActionName"
 					   asp-controller="@Model.ControllerName"
 					   asp-route-page="@Model.NextPage"
-					   asp-route-title="@Model.TitleOfSection"
+					   asp-route-titleOfSection="@Model.TitleOfSection"
 					   asp-route-userName="@Model.Username"
 					   asp-route-postId="@Model.Id"
 					   asp-route-userId="@Model.UserId">&raquo;</a>
