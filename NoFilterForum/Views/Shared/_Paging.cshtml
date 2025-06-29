@@ -44,6 +44,15 @@
 					</li>
 					count++;
 				}
+				<li class="page-item">
+					<a class="btn btn-outline-secondary disabled" asp-action="@Model.ActionName"
+					   asp-controller="@Model.ControllerName"
+					   asp-route-page="@Model.Page"
+					   asp-route-title="@Model.TitleOfSection"
+					   asp-route-userName="@Model.Username"
+					   asp-route-postId="@Model.Id"
+					   asp-route-userId="@Model.UserId">@Model.Page</a>
+				</li>
 				count = 0;
 				for(int i = page + 1; i <= Model.TotalPages; i++)
 				{
