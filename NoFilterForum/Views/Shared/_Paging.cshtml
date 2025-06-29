@@ -1,26 +1,50 @@
 ﻿@using Web.ViewModels
 @model PagingViewModel
+<nav aria-label="Page navigation example">
+	<ul class="pagination">
+		@if (Model.TotalPages > 1)
+		{
+			if (Model.HasPrevious)
+			{
+				<li class="page-item">
+					<a class="btn btn-secondary" asp-action="@Model.ActionName"
+					asp-controller="@Model.ControllerName"
+					asp-route-page="@Model.PreviousPage"
+					asp-route-title="@Model.TitleOfSection"
+					asp-route-userName="@Model.Username"
+					asp-route-postId="@Model.Id"
+					asp-route-userId="@Model.UserId">&laquo;</a>
+				</li>
+			}
+			if (Model.TotalPages > 2)
+			{
+				for (int i = 1; i <= Model.TotalPages; i++)
+				{
+					if (Model.Page != i)
+					{
 
-@if (Model.TotalPages > 1)
-{
-    if (Model.HasPrevious)
-    {
-        <a class="btn btn-secondary" asp-action="@Model.ActionName"
-           asp-controller="@Model.ControllerName"
-           asp-route-page="@Model.PreviousPage"
-           asp-route-title="@Model.TitleOfSection"
-           asp-route-userName="@Model.Username"
-           asp-route-postId="@Model.Id"
-           asp-route-userId="@Model.UserId">Previous page</a>
-    }
-    if (Model.HasNext)
-    {
-        <a class="btn btn-secondary" asp-action="@Model.ActionName"
-           asp-controller="@Model.ControllerName"
-           asp-route-page="@Model.NextPage"
-           asp-route-title="@Model.TitleOfSection"
-           asp-route-userName="@Model.Username"
-           asp-route-postId="@Model.Id"
-           asp-route-userId="@Model.UserId">Next page</a>
-    }
-}
+						<a class="btn btn-secondary" asp-action="@Model.ActionName"
+						   asp-controller="@Model.ControllerName"
+						   asp-route-page="@i"
+						   asp-route-title="@Model.TitleOfSection"
+						   asp-route-userName="@Model.Username"
+						   asp-route-postId="@Model.Id"
+						   asp-route-userId="@Model.UserId">@i</a>
+					}
+				}
+			}
+			if (Model.HasNext)
+			{
+				<li class="page-item">
+					<a class="btn btn-secondary" asp-action="@Model.ActionName"
+					   asp-controller="@Model.ControllerName"
+					   asp-route-page="@Model.NextPage"
+					   asp-route-title="@Model.TitleOfSection"
+					   asp-route-userName="@Model.Username"
+					   asp-route-postId="@Model.Id"
+					   asp-route-userId="@Model.UserId">&raquo;</a>
+				</li>
+			}
+		}
+	</ul>
+</nav>
