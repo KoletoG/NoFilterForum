@@ -54,7 +54,7 @@
 					   asp-route-userId="@Model.UserId">@Model.Page</a>
 				</li>
 				count = 0;
-				for(int i = page + 1; i <= Model.TotalPages; i++)
+				for(int i = page + 1; i <= totalPages; i++)
 				{
 
 					if (count == maximumPagesToNavigate)
