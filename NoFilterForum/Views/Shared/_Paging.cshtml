@@ -18,11 +18,42 @@
 			}
 			if (Model.TotalPages > 2)
 			{
-				for (int i = 1; i <= Model.TotalPages; i++)
+				int page = Model.Page;
+				int totalPages = Model.TotalPages;
+				int count = 0;
+				int maximumPagesToNavigate = 4;
+				int startingPage = page - maximumPagesToNavigate;
+				if (startingPage < 1)
 				{
-					if (Model.Page != i)
+					startingPage = 1;
+				}
+				for(int i = startingPage; i < page; i++)
+				{
+					if (count == maximumPagesToNavigate)
 					{
+						break;
+					}
+					<li class="page-item">
+						<a class="btn btn-secondary" asp-action="@Model.ActionName"
+						asp-controller="@Model.ControllerName"
+						asp-route-page="@i"
+						asp-route-title="@Model.TitleOfSection"
+						asp-route-userName="@Model.Username"
+						asp-route-postId="@Model.Id"
+						asp-route-userId="@Model.UserId">@i</a>
+					</li>
+					count++;
+				}
+				count = 0;
+				for(int i = page + 1; i <= Model.TotalPages; i++)
+				{
 
+					if (count == maximumPagesToNavigate)
+					{
+						count = 0;
+						break;
+					}
+					<li class="page-item">
 						<a class="btn btn-secondary" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="@i"
@@ -30,7 +61,8 @@
 						   asp-route-userName="@Model.Username"
 						   asp-route-postId="@Model.Id"
 						   asp-route-userId="@Model.UserId">@i</a>
-					}
+					</li>
+					count++;
 				}
 			}
 			if (Model.HasNext)

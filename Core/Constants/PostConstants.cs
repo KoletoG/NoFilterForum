@@ -9,6 +9,6 @@ namespace Core.Constants
     public static class PostConstants
     {
         public static readonly int TimeoutPosts = 15;
-        public static readonly int PostsPerSection = 10;
+        public static readonly int PostsPerSection = 1;
     }
 }
