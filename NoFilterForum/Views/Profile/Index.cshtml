@@ -71,13 +71,15 @@
 			if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 			{
 				<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
-					<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
+				<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 			}
 		}
 		<h5>Posts count: @Model.Profile.PostsCount</h5>
 		@{
 			<div class="border p-2 m-2">
-				@{int count =1;}
+				@{
+					int count = 1;
+				}
 				@foreach (var key in Model.UserIdDate.Keys)
 				{
 					foreach (var post in Model.Posts)
@@ -109,16 +111,16 @@
 
 								<div class="border-bottom p-1">
 									<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id">
-							
-											<div class="row">
-												<h5 class="text-center fw-bold fs-4">@post.Title</h5>
-											</div>
-											<div class="row">
-												<div class="text-center">
 
-													@post.Created.ToShortDateString()
-												</div>
+										<div class="row">
+											<h5 class="text-center fw-bold fs-4">@post.Title</h5>
+										</div>
+										<div class="row">
+											<div class="text-center">
+
+												@post.Created.ToShortDateString()
 											</div>
+										</div>
 									</a>
 								</div>
 								count++;
@@ -135,6 +137,7 @@
 
 								<div class="border-bottom p-1 bg-body-secondary">
 									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
+
 										<div class="row">
 											<div class="col-6">
 												<h5 class="fst-italic">@reply.Content</h5>
@@ -144,13 +147,13 @@
 												<h5 class="text-end fw-bold">@reply.PostTitle</h5>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-2">
-
-												@reply.Created.ToShortDateString()
-											</div>
-										</div>
 									</a>
+									<div class="row">
+										<div class="col-2">
+
+											@reply.Created.ToShortDateString()
+										</div>
+									</div>
 
 								</div>
 								count++;
@@ -161,22 +164,23 @@
 
 								<div class="border-bottom p-1 bg-white">
 									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
+
 										<div class="row">
 											<div class="col-6">
 												<h5 class="fst-italic">@reply.Content</h5>
 
 											</div>
 											<div class="col-6">
-											<h5 class="text-end fw-bold">@reply.PostTitle</h5>
+												<h5 class="text-end fw-bold">@reply.PostTitle</h5>
 											</div>
 										</div>
-										<div class="row">
+									</a>
+									<div class="row">
 										<div class="col-2">
 
-												@reply.Created.ToShortDateString()
-</div>
+											@reply.Created.ToShortDateString()
 										</div>
-									</a>
+									</div>
 
 								</div>
 								count++;
