@@ -113,7 +113,7 @@
 							{
 
 								<div class="border-bottom p-1 bg-body-secondary">
-									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()</a>
+									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString() @reply.PostTitle</a>
 
 								</div>
 								count++;
@@ -123,7 +123,7 @@
 							{
 
 								<div class="border-bottom p-1">
-									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()</a>
+									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)"><h5 class="fst-italic">@reply.Content</h5> @reply.Created.ToShortDateString()  @reply.PostTitle</a>
 
 								</div>
 								count++;
