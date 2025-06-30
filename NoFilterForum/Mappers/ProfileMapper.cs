@@ -31,7 +31,8 @@ namespace Web.Mappers
             Content = dto.Content,
             Id = dto.Id,
             PostId = dto.PostId,
-            Created = dto.Created
+            Created = dto.Created,
+            PostTitle = dto.PostTitle
         };
         public static PostItemViewModel MapToViewModel(ProfilePostDto dto) => new()
         {

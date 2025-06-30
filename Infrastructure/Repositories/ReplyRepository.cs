@@ -44,7 +44,8 @@ namespace NoFilterForum.Infrastructure.Repositories
                 Content = x.Content,
                 Id = x.Id,
                 PostId = x.Post.Id,
-                Created = x.DateCreated
+                Created = x.DateCreated,
+                PostTitle = x.Post.Title
             }).ToListAsync();
         }
         public async Task<ReplyDataModel> GetWithUserByIdAsync(string id)
