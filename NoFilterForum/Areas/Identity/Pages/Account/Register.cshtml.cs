@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Constants;
 using Core.Enums;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Models.DataModels;
-using NoFilterForum.Global_variables;
 
 namespace NoFilterForum.Areas.Identity.Pages.Account
 {
