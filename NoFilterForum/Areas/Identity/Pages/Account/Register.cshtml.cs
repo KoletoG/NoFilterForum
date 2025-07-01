@@ -134,11 +134,11 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                 var user = new UserDataModel(Input.Username, Input.Email);
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                if (UserConstants.adminNames.Contains(user.UserName))
+                if (UserConstants.adminNames.Contains(Input.Username))
                 {
                     user.Role = UserRoles.Admin;
                     user.IsConfirmed = true;
-                    user.Reason = "Admin";
+                    user.Reason = "Adminnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
                 }
                 else
                 {
