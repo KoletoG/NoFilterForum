@@ -15,9 +15,6 @@ namespace NoFilterForum.Infrastructure.Data
             base.OnModelCreating(builder);
             builder.Entity<WarningDataModel>().Property(x => x.IsAccepted).HasDefaultValue(false);
             builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts);
-            builder.Entity<UserDataModel>().HasData(new UserDataModel("Admin", "admin@email.com") { 
-            Reason = "I am Admin, i don't need reason lol"
-            });
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }
