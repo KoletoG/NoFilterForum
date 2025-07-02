@@ -1,4 +1,5 @@
-﻿using NoFilterForum.Core.Models.DataModels;
+﻿using Core.Constants;
+using NoFilterForum.Core.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,14 @@ namespace UnitTests
             Assert.Equal(-1,post.Likes);
             post.DecrementLikes();
             Assert.Equal(-2, post.Likes);
-
+        }
+        [Fact]
+        public void SetDefaultUser_ShouldAssignDefaultUser()
+        {
+            var post = new PostDataModel();
+            Assert.Null(post.User);
+            post.SetDefaultUser();
+            Assert.Equal(UserConstants.DefaultUser, post.User);
         }
     }
 }
