@@ -11,6 +11,24 @@ namespace UnitTests
     public class PostTests
     {
         [Fact]
+        public void Constructor_ShouldInitializePropertiesCorrectly()
+        {
+            var title = "Test Title";
+            var content = "Test Content";
+            var user = new UserDataModel("TestUsername","TestEmail");
+            var post = new PostDataModel(title, content, user);
+            Assert.False(string.IsNullOrEmpty(post.Id));
+            Assert.Equal(title, post.Title);
+            Assert.Equal(content, post.Content);
+            Assert.Equal(user, post.User);
+            Assert.True((DateTime.UtcNow - post.DateCreated).TotalSeconds < 5);
+            Assert.NotNull(post.Replies);
+            Assert.Empty(post.Replies);
+            Assert.Equal(0, post.Likes);
+            Assert.False(post.IsPinned);
+            // Should add Section in constructor of Post
+        }
+        [Fact]
         public void TogglePin_ShouldInvertIsPinned() {
             var post = new PostDataModel();
             Assert.False(post.IsPinned);
