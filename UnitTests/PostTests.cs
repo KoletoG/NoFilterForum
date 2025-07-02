@@ -28,5 +28,16 @@ namespace UnitTests
             post.IncrementLikes();
             Assert.Equal(2,post.Likes);
         }
+        [Fact]
+        public void DecrementLikes_ShouldDecreaseLikesByOne()
+        {
+            var post = new PostDataModel();
+            Assert.Equal(0,post.Likes);
+            post.DecrementLikes();
+            Assert.Equal(-1,post.Likes);
+            post.DecrementLikes();
+            Assert.Equal(-2, post.Likes);
+
+        }
     }
 }
