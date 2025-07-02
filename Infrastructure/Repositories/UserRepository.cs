@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Core.Constants;
 using Core.Enums;
 using Core.Models.DTOs.OutputDTOs.Admin;
 using Core.Models.DTOs.OutputDTOs.Profile;
@@ -7,7 +8,6 @@ using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Models.DataModels;
-using NoFilterForum.Global_variables;
 using NoFilterForum.Infrastructure.Data;
 
 namespace NoFilterForum.Infrastructure.Repositories
