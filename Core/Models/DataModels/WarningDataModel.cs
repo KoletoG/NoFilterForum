@@ -16,6 +16,7 @@ namespace NoFilterForum.Core.Models.DataModels
             Id = Guid.NewGuid().ToString();
             Content = content;
             User = user;
+            IsAccepted = false;
         }
     }
 }
