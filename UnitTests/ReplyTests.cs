@@ -19,5 +19,15 @@ namespace UnitTests
             reply.IncrementLikes();
             Assert.Equal(2,reply.Likes);
         }
+        [Fact]
+        public void DecrementLikes_ShouldRemoveOneOfLikes()
+        {
+            var reply = new ReplyDataModel();
+            Assert.Equal(0, reply.Likes);
+            reply.DecrementLikes();
+            Assert.Equal(-1, reply.Likes);
+            reply.DecrementLikes();
+            Assert.Equal(-2,reply.Likes);
+        }
     }
 }
