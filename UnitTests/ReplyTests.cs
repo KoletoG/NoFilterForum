@@ -3,6 +3,7 @@ using NoFilterForum.Core.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,6 +38,20 @@ namespace UnitTests
             Assert.Null(reply.User);
             reply.SetDefaultUser();
             Assert.Equal(UserConstants.DefaultUser,reply.User);
+        }
+        [Fact]
+        public void Constructor_ShouldSetCorrectValues()
+        {
+            string content = "Testing Content";
+            var user = new UserDataModel();
+            var post = new PostDataModel();
+            var reply = new ReplyDataModel(content, user, post);
+            Assert.False(string.IsNullOrEmpty(reply.Id));
+            Assert.Equal(content, reply.Content);
+            Assert.Equal(user, reply.User);
+            Assert.Equal(post, reply.Post);
+            Assert.Equal(0,reply.Likes);
+            Assert.True((DateTime.UtcNow - reply.DateCreated).TotalSeconds < 2);
         }
     }
 }
