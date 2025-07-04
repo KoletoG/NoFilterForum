@@ -17,5 +17,13 @@ namespace UnitTests.DataModelsTests
             user.Confirm();
             Assert.True(user.IsConfirmed);
         }
+        [Fact]
+        public void DecrementPostCount_ShouldLowerPostCountWithOne()
+        {
+            var user = new UserDataModel();
+            Assert.Equal(0, user.PostsCount);
+            user.DecrementPostCount();
+            Assert.Equal(-1, user.PostsCount);
+        }
     }
 }
