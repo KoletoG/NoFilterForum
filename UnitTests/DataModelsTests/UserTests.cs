@@ -25,5 +25,13 @@ namespace UnitTests.DataModelsTests
             user.DecrementPostCount();
             Assert.Equal(-1, user.PostsCount);
         }
+        [Fact]
+        public void IncrementPostCount_ShouldIncreasePostCountWithOne()
+        {
+            var user = new UserDataModel();
+            Assert.Equal(0, user.PostsCount);
+            user.IncrementPostCount();
+            Assert.Equal(1, user.PostsCount);
+        }
     }
 }
