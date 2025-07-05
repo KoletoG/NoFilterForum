@@ -42,5 +42,14 @@ namespace UnitTests.DataModelsTests
             user.ChangeBio(bio);
             Assert.Equal(bio, user.Bio);
         }
+        [Fact]
+        public void ChangeUsername_ShouldChangeUsernameProperty()
+        {
+            string username = "Test username";
+            var user = new UserDataModel();
+            Assert.True(string.IsNullOrEmpty(user.UserName));
+            user.ChangeUsername(username);
+            Assert.Equal(username, user.UserName);
+        }
     }
 }
