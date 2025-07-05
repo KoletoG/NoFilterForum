@@ -60,5 +60,14 @@ namespace UnitTests.DataModelsTests
             user.ChangeEmail(email);
             Assert.Equal(email, user.Email);
         }
+        [Fact]
+        public void ChangeImageUrl_ShouldChangeImageUrlProperty()
+        {
+            string imageUrl = "Test image URL";
+            var user = new UserDataModel();
+            Assert.True(string.IsNullOrEmpty(user.ImageUrl));
+            user.ChangeImageUrl(imageUrl);
+            Assert.Equal(imageUrl, user.ImageUrl);
+        }
     }
 }
