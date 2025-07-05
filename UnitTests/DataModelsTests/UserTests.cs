@@ -51,5 +51,14 @@ namespace UnitTests.DataModelsTests
             user.ChangeUsername(username);
             Assert.Equal(username, user.UserName);
         }
+        [Fact]
+        public void ChangeEmail_ShouldChangeEmailProperty()
+        {
+            string email = "Test email";
+            var user = new UserDataModel();
+            Assert.True(string.IsNullOrEmpty(user.Email));
+            user.ChangeEmail(email);
+            Assert.Equal(email, user.Email);
+        }
     }
 }
