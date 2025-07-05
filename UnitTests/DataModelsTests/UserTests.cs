@@ -33,5 +33,14 @@ namespace UnitTests.DataModelsTests
             user.IncrementPostCount();
             Assert.Equal(1, user.PostsCount);
         }
+        [Fact]
+        public void ChangeBio_ShouldChangeBioProperty()
+        {
+            string bio = "Test bio";
+            var user = new UserDataModel();
+            Assert.True(string.IsNullOrEmpty(user.Bio));
+            user.ChangeBio(bio);
+            Assert.Equal(bio, user.Bio);
+        }
     }
 }
