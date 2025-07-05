@@ -1,4 +1,5 @@
-﻿using NoFilterForum.Core.Models.DataModels;
+﻿using Core.Enums;
+using NoFilterForum.Core.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,25 @@ namespace UnitTests.DataModelsTests
             Assert.True(string.IsNullOrEmpty(user.ImageUrl));
             user.ChangeImageUrl(imageUrl);
             Assert.Equal(imageUrl, user.ImageUrl);
+        }
+        [Fact]
+        public void Constructor_ShouldSetValuesProperly()
+        {
+            string username = "Test username";
+            string email = "Test email";
+            var user =new UserDataModel(username, email);
+            Assert.Equal(username, user.UserName);
+            Assert.Equal(email, user.Email);
+            Assert.False(string.IsNullOrEmpty(user.Id));
+            Assert.NotEmpty(user.ImageUrl);
+            Assert.Empty(user.Bio);
+            Assert.True((DateTime.UtcNow - user.DateCreated).TotalSeconds < 3);
+            Assert.Equal(0, user.PostsCount);
+            Assert.Equal(UserRoles.Newbie, user.Role);
+            Assert.NotNull(user.Warnings);
+            Assert.NotNull(user.LikesPostRepliesIds);
+            Assert.NotNull(user.DislikesPostRepliesIds);
+            Assert.False(user.IsConfirmed);
         }
     }
 }
