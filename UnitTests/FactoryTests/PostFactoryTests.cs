@@ -19,6 +19,7 @@ namespace UnitTests.FactoryTests
             var htmlSanitizerMock = new Mock<IHtmlSanitizer>();
             string title = "Test Title";
             string content = "Test Content";
+            htmlSanitizerMock.Setup(x => x.AllowedTags.Add(It.IsAny<string>())).Returns(true);
             htmlSanitizerMock
      .Setup(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>()))
      .Returns((string input1, string input2, IMarkupFormatter formatter) => input1);
