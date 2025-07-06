@@ -16,6 +16,8 @@ namespace Infrastructure.Factories
         public PostFactory(IHtmlSanitizer htmlSanitizer)
         {
             _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
+            _htmlSanitizer.AllowedTags.Add("a");
         }
         public PostDataModel Create(string title, string body, UserDataModel user)
         {
