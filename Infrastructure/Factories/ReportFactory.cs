@@ -17,7 +17,6 @@ namespace Infrastructure.Factories
         {
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
-            _htmlSanitizer.AllowedTags.Add("a");
         }
         public ReportDataModel CreateReport(string content, UserDataModel userFrom, UserDataModel userTo, string idOfPostReply, bool isPost) 
         { 
