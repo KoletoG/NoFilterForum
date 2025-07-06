@@ -21,6 +21,7 @@ namespace UnitTests.FactoryTests
             var user = new UserDataModel();
             var post = new PostDataModel();
             var htmlSanitizerMock = new Mock<IHtmlSanitizer>();
+            htmlSanitizerMock.Setup(x => x.AllowedTags.Add(It.IsAny<string>())).Returns(true);
             htmlSanitizerMock.Setup(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<IMarkupFormatter>())).Returns((string input, string a, IMarkupFormatter b) => input);
             var replyFactory = new ReplyFactory(htmlSanitizerMock.Object);
