@@ -17,8 +17,10 @@ namespace UnitTests.FactoryTests
         public void CreateReport_ShouldCreateReportInstance()
         {
             var htmlSanitizerMock = new Mock<IHtmlSanitizer>();
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
-            htmlSanitizerMock.Setup(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>())).Returns((string input, string a, IMarkupFormatter b) => input);
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags)
+                .Returns(new HashSet<string>());
+            htmlSanitizerMock.Setup(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>()))
+                .Returns((string input, string a, IMarkupFormatter b) => input);
             var reportFactory = new ReportFactory(htmlSanitizerMock.Object);
             string content = "Test content";
             var userTo = new UserDataModel();
@@ -32,7 +34,10 @@ namespace UnitTests.FactoryTests
             Assert.Equal(isPost, report.IsPost);
             Assert.Equal(userTo,report.UserTo);
             Assert.Equal(userFrom,report.UserFrom);
-            Assert.IsType<ReportDataModel>(report);
+            Assert.IsType<ReportDataModel>(report); 
+            htmlSanitizerMock.Verify(
+    x => x.Sanitize(content, It.IsAny<string>(), It.IsAny<IMarkupFormatter>()),
+    Times.Once);
         }
     }
 }
