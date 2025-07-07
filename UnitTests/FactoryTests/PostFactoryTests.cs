@@ -2,6 +2,7 @@
 using Ganss.Xss;
 using Infrastructure.Factories;
 using Moq;
+using Newtonsoft.Json.Serialization;
 using NoFilterForum.Core.Models.DataModels;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace UnitTests.FactoryTests
             Assert.Equal(title, post.Title);
             Assert.Equal(content, post.Content);
             Assert.Equal(user, post.User);
+            htmlSanitizerMock.Verify(x => x.Sanitize(title, It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Once);
+            htmlSanitizerMock.Verify(x => x.Sanitize(content, It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Once);
         }
     }
 }
