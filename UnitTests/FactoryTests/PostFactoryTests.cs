@@ -19,6 +19,7 @@ namespace UnitTests.FactoryTests
             var htmlSanitizerMock = new Mock<IHtmlSanitizer>();
             string title = "Test Title";
             string content = "Test Content";
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             htmlSanitizerMock.Setup(x => x.AllowedTags.Add(It.IsAny<string>())).Returns(true);
             htmlSanitizerMock
      .Setup(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>()))
@@ -27,6 +28,7 @@ namespace UnitTests.FactoryTests
             var user = new UserDataModel();
             var post = postFactory.Create(title, content, user);
             Assert.NotNull(post);
+            Assert.IsType<PostDataModel>(post);
             Assert.Equal(title, post.Title);
             Assert.Equal(content, post.Content);
             Assert.Equal(user, post.User);
