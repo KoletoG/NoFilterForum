@@ -15,6 +15,7 @@ namespace Infrastructure.Factories
         public SectionFactory(IHtmlSanitizer htmlSanitizer)
         {
             _htmlSanitizer = htmlSanitizer;
+            _htmlSanitizer.AllowedTags.Clear();
         }
         public SectionDataModel Create(string title, string description)
         {

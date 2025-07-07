@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ganss.Xss;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,11 @@ namespace UnitTests.FactoryTests
 {
     public class SectionFactoryTests
     {
+        [Fact]
+        public void Create_ShouldCreateSectionInstance()
+        {
+            var htmlSanitizerMock = new Mock<IHtmlSanitizer>();
+
+        }
     }
 }
