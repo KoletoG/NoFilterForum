@@ -28,7 +28,8 @@ namespace UnitTests.FactoryTests
             Assert.IsType<SectionDataModel>(section);
             Assert.Equal(title, section.Title);
             Assert.Equal(description, section.Description);
-            htmlSanitizerMock.Verify(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Exactly(2));
+            htmlSanitizerMock.Verify(x => x.Sanitize(title, It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Once);
+            htmlSanitizerMock.Verify(x => x.Sanitize(description, It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Once);
         }
     }
 }
