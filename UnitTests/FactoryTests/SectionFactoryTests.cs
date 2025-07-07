@@ -1,6 +1,7 @@
 ﻿using AngleSharp;
 using Ganss.Xss;
 using Infrastructure.Factories;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NoFilterForum.Core.Models.DataModels;
 using System;
@@ -27,6 +28,7 @@ namespace UnitTests.FactoryTests
             Assert.IsType<SectionDataModel>(section);
             Assert.Equal(title, section.Title);
             Assert.Equal(description, section.Description);
+            htmlSanitizerMock.Verify(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Exactly(2));
         }
     }
 }
