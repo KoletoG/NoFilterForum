@@ -32,6 +32,7 @@ namespace UnitTests.FactoryTests
             Assert.Equal(body, reply.Content);
             Assert.Equal(user, reply.User);
             Assert.Equal(post, reply.Post);
+            htmlSanitizerMock.Verify(x => x.Sanitize(body, It.IsAny<string>(), It.IsAny<IMarkupFormatter>()), Times.Once);
         }
     }
 }
