@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,14 @@ namespace UnitTests.Utility
 {
     public class PageUtilityTests
     {
+        [Fact]
+        public void ValidatePageNumber_WhenPageIsLessThanOne_ReturnsOne()
+        {
+            int totalPages = 10;
+            var result1 = PageUtility.ValidatePageNumber(-1, totalPages);
+            var result2 = PageUtility.ValidatePageNumber(-5, totalPages);
+            Assert.Equal(1, result1);
+            Assert.Equal(1, result2);
+        }
     }
 }
