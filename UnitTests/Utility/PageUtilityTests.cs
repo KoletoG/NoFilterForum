@@ -18,5 +18,13 @@ namespace UnitTests.Utility
             Assert.Equal(1, result1);
             Assert.Equal(1, result2);
         }
+        [Fact]
+        public void ValidatePageNumber_WhenTotalPagesAreOne_ReturnsOne()
+        {
+            int totalPages = 1;
+            int page = -5;
+            var result = PageUtility.ValidatePageNumber(page, totalPages);
+            Assert.Equal(1, result);
+        }
     }
 }
