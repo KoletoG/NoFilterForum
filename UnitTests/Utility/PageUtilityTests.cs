@@ -9,14 +9,15 @@ namespace UnitTests.Utility
 {
     public class PageUtilityTests
     {
-        [Fact]
-        public void ValidatePageNumber_ShouldReturnOne_WhenPageIsLessThanOne()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(int.MinValue)]
+        public void ValidatePageNumber_ShouldReturnOne_WhenPageIsLessThanOne(int page)
         {
             int totalPages = 10;
-            var result1 = PageUtility.ValidatePageNumber(0, totalPages);
-            var result2 = PageUtility.ValidatePageNumber(-1, totalPages);
-            Assert.Equal(1, result1);
-            Assert.Equal(1, result2);
+            var result = PageUtility.ValidatePageNumber(page, totalPages);
+            Assert.Equal(1, result);
         }
         [Fact]
         public void ValidatePageNumber_ShouldReturnOne_WhenTotalPagesAreOne()
