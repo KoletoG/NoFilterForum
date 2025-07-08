@@ -38,7 +38,7 @@ namespace UnitTests.Utility
         public void ValidatePageNumber_ShouldReturnTotalPages_WhenPageExceedsTotalPages()
         {
             int totalPages = 10;
-            int page = totalPages + 1;
+            int page = 11;
             var result = PageUtility.ValidatePageNumber(page, totalPages);
             Assert.Equal(totalPages, result);
         }
