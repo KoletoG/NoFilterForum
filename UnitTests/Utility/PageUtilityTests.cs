@@ -26,5 +26,13 @@ namespace UnitTests.Utility
             var result = PageUtility.ValidatePageNumber(page, totalPages);
             Assert.Equal(1, result);
         }
+        [Fact]
+        public void ValidatePageNumber_ShouldReturnSamePage_WhenPageIsWithinRange()
+        {
+            int totalPages = 10;
+            int page = 5;
+            var result = PageUtility.ValidatePageNumber(page, totalPages);
+            Assert.Equal(page, result);
+        }
     }
 }
