@@ -34,5 +34,13 @@ namespace UnitTests.Utility
             var result = PageUtility.ValidatePageNumber(page, totalPages);
             Assert.Equal(page, result);
         }
+        [Fact]
+        public void ValidatePageNumber_ShouldReturnTotalPages_WhenPageExceedsTotalPages()
+        {
+            int totalPages = 10;
+            int page = totalPages + 1;
+            var result = PageUtility.ValidatePageNumber(page, totalPages);
+            Assert.Equal(totalPages, result);
+        }
     }
 }
