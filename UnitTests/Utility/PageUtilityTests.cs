@@ -52,5 +52,13 @@ namespace UnitTests.Utility
             var result = PageUtility.GetTotalPagesCount(totalCount, countPerPage);
             Assert.Equal(1, result);
         }
+        [Fact]
+        public void GetTotalPagesCount_ShouldReturnCeilingOfDivision_WhenTotalCountIsNotZeroOrOne()
+        {
+            int countPerPage = 5;
+            int totalPages = 9;
+            var result = PageUtility.GetTotalPagesCount(totalPages, countPerPage);
+            Assert.Equal(2, result);
+        }
     }
 }
