@@ -46,7 +46,8 @@ namespace UnitTests.Utility
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
-        public void GetTotalPagesCount_ShouldReturnOne_WhenTotalIsZeroOrOne(int totalCount)
+        [InlineData(-59)]
+        public void GetTotalPagesCount_ShouldReturnOne_WhenTotalIsLessThanTwo(int totalCount)
         {
             int countPerPage = 5;
             var result = PageUtility.GetTotalPagesCount(totalCount, countPerPage);
