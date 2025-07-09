@@ -11,7 +11,7 @@ namespace Core.Utility
     {
         public static int GetTotalPagesCount(int totalCount, int countPerPage)
         {
-            if (totalCount==1 || totalCount==0)
+            if (totalCount<=1)
             {
                 return 1;
             }
