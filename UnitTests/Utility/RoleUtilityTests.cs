@@ -43,5 +43,16 @@ namespace UnitTests.Utility
             RoleUtility.AdjustRoleByPostCount(user);
             Assert.Equal(UserRoles.Regular, user.Role);
         }
+        [Theory]
+        [InlineData(20)]
+        [InlineData(1)]
+        public void AdjustRoleByPostCount_ShouldChangeRoleToNewbie_WhenPostsCountIsLessThanTwentyOne(int postsCount)
+        {
+            var user = new UserDataModel();
+            user.PostsCount = postsCount;
+            user.Role = UserRoles.Newbie;
+            RoleUtility.AdjustRoleByPostCount(user);
+            Assert.Equal(UserRoles.Newbie, user.Role);
+        }
     }
 }
