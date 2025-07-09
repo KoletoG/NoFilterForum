@@ -43,5 +43,14 @@ namespace UnitTests.Utility
             var result = PageUtility.ValidatePageNumber(page, totalPages);
             Assert.Equal(totalPages, result);
         }
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void GetTotalPagesCount_ShouldReturnOne_WhenTotalIsOneOrZero(int totalCount)
+        {
+            int countPerPage = 5;
+            var result = PageUtility.GetTotalPagesCount(totalCount, countPerPage);
+            Assert.Equal(1, result);
+        }
     }
 }
