@@ -59,5 +59,13 @@ namespace UnitTests.Utility
             var result = TextFormatter.FormatBody(text);
             Assert.Equal("<a href=\"https://www.randomlink.com/\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">https://www.randomlink.com/</a> is <b>cool</b> tho", result);
         }
+        [Fact]
+        public void MarkTagsOfContent_ShouldMarkTagsOfUser_WhenTheUserIsTheCurrentUser()
+        {
+            string currentUsername = "jane";
+            string content = "@john is not here @jane is tho";
+            var result = TextFormatter.MarkTagsOfContent(content, currentUsername);
+            Assert.Equal("@john is not here <span style=\"background-color: #e0e0e0;\">@jane</span> is tho", result);
+        }
     }
 }
