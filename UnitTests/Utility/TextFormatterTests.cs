@@ -52,5 +52,12 @@ namespace UnitTests.Utility
             var result = TextFormatter.MarkTags(input, username);
             Assert.Equal(expected, result);
         }
+        [Fact]
+        public void FormatBody_ShouldConvertLinksAndHashtags_WhenLinksAndHashtagsArePresent()
+        {
+            string text = "https://www.randomlink.com/ is #cool# tho";
+            var result = TextFormatter.FormatBody(text);
+            Assert.Equal("<a href=\"https://www.randomlink.com/\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">https://www.randomlink.com/</a> is <b>cool</b> tho", result);
+        }
     }
 }
