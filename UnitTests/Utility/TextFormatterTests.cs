@@ -93,7 +93,7 @@ namespace UnitTests.Utility
         {
             string text = "###example###";
             var result = TextFormatter.CheckForHashTags(text);
-            Assert.Equal("<h3><b>example</h3></b>", result);
+            Assert.Equal("<h3><b>example</b></h3>", result);
         }
     }
 }
