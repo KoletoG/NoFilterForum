@@ -22,7 +22,7 @@ namespace Core.Utility
         {
             text = Regex.Replace(text, "##(.+?)##", "<h3>$1</h3>");
             text = Regex.Replace(text, "#(.+?)#", "<b>$1</b>");
-            text = Regex.Replace(text, "#.#", "&bull;");
+            text = Regex.Replace(text, @"#\.#", "&bull;");
             return text;
         }
         public static string MarkTags(string text, string username)
