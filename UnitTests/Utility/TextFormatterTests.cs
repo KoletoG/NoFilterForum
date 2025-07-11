@@ -67,5 +67,12 @@ namespace UnitTests.Utility
             var result = TextFormatter.MarkTagsOfContent(content, currentUsername);
             Assert.Equal("@john is not here <span style=\"background-color: #e0e0e0;\">@jane</span> is tho", result);
         }
+        [Fact]
+        public void CheckForHashTags_ShouldSwapHashTagsWithH3_WhenThereAreFourHashTags()
+        {
+            string text = "##example##";
+            var result = TextFormatter.CheckForHashTags(text);
+            Assert.Equal("<h3>example</h3>", result);
+        }
     }
 }
