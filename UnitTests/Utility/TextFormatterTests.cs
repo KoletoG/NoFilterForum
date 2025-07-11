@@ -91,7 +91,9 @@ namespace UnitTests.Utility
         [Fact]
         public void CheckForHashTags_ShouldSwapHashTagsWithBoldAndH3_WhenThereAreSixHashTags()
         {
-            
+            string text = "###example###";
+            var result = TextFormatter.CheckForHashTags(text);
+            Assert.Equal("<b><h3>example</h3></b>", result);
         }
     }
 }
