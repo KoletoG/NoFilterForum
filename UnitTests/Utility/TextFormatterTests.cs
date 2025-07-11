@@ -77,10 +77,16 @@ namespace UnitTests.Utility
         [Fact]
         public void CheckForHashTags_ShouldSwapHashTagsWithB_WhenThereAreTwoHashTags()
         {
-
             string text = "#example#";
             var result = TextFormatter.CheckForHashTags(text);
             Assert.Equal("<b>example</b>", result);
+        }
+        [Fact]
+        public void CheckForHashTags_ShouldSwapHashTagsAndDotWithBullpoint_WhenThereAreTwoHashTagsAndADott()
+        {
+            string text = "example #.#";
+            var result = TextFormatter.CheckForHashTags(text);
+            Assert.Equal("example &bull;", result);
         }
     }
 }
