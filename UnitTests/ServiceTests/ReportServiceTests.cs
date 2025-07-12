@@ -51,5 +51,16 @@ namespace UnitTests.ServiceTests
             var result = await reportService.AnyReportsAsync();
             Assert.True(result);
         }
+        [Fact]
+        public async Task AnyReportsAsync_ShouldReturnFalse_WhenReportsDontExist()
+        {
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync()).ReturnsAsync(false);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.AnyReportsAsync();
+            Assert.False(result);
+        }
     }
 }
