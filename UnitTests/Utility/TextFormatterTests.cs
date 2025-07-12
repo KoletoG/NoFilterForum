@@ -95,5 +95,13 @@ namespace UnitTests.Utility
             var result = TextFormatter.CheckForHashTags(text);
             Assert.Equal("<h3><b>example</b></h3>", result);
         }
+        [Fact]
+        public void CheckForTags_ShouldReturnEmptyArray_WhenThereAreNoTags()
+        {
+            string text = "EXAMPLE NO TAGS TEXT";
+            var result = TextFormatter.CheckForTags(text);
+            Assert.Empty(result);
+            Assert.IsType<string[]>(result);
+        }
     }
 }
