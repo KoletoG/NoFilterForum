@@ -103,5 +103,15 @@ namespace UnitTests.Utility
             Assert.Empty(result);
             Assert.IsType<string[]>(result);
         }
+        [Fact]
+        public void CheckForTags_ShouldReturnNames_WhenThereAreTags()
+        {
+            string text = "@name1 2 tags here @name2 example";
+            var result = TextFormatter.CheckForTags(text);
+            Assert.NotEmpty(result);
+            Assert.IsType<string[]>(result);
+            Assert.Contains("name1",result);
+            Assert.Contains("name2", result);
+        }
     }
 }
