@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Castle.Core.Logging;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.OutputDTOs.Report;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NoFilterForum.Core.Models.DataModels;
@@ -25,6 +26,18 @@ namespace UnitTests.ServiceTests
             var reportService = new ReportService(iUnitOfWorkMock.Object,reportFactoryMock.Object,iLoggerMock.Object);
             var result = await reportService.GetAllReportsAsync();
             Assert.IsType<List<ReportDataModel>>(result);
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task GetAllDtosAsync_ShouldReturnEmptyListOfReportDtos_WhenCalled()
+        {
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Reports.GetReportDtosAsync()).ReturnsAsync(new List<ReportItemDto>());
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.GetAllDtosAsync();
+            Assert.IsType<List<ReportItemDto>>(result);
             Assert.NotNull(result);
         }
     }
