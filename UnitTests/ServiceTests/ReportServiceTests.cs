@@ -40,5 +40,16 @@ namespace UnitTests.ServiceTests
             Assert.IsType<List<ReportItemDto>>(result);
             Assert.NotNull(result);
         }
+        [Fact]
+        public async Task AnyReportsAsync_ShouldReturnTrue_WhenReportsExist()
+        {
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync()).ReturnsAsync(true);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.AnyReportsAsync();
+            Assert.True(result);
+        }
     }
 }
