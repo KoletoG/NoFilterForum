@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter.Xml;
 using Castle.Core.Logging;
+using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.InputDTOs.Report;
 using Core.Models.DTOs.OutputDTOs.Report;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -61,6 +64,20 @@ namespace UnitTests.ServiceTests
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.AnyReportsAsync();
             Assert.False(result);
+        }
+        [Theory]
+        [InlineData("TestId1")]
+        [InlineData("TestId2")]
+        public async Task DeleteReportByIdAsync_ShouldDeleteReport_WhenReportExists(string reportId)
+        {
+            var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((string id)=>new ReportDataModel() { Id= id });
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
+            Assert.Equal(PostResult.Success, result);
         }
     }
 }
