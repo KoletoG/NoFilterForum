@@ -15,7 +15,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<ReportDataModel> GetByIdAsync(string id)
+        public async Task<ReportDataModel?> GetByIdAsync(string id)
         {
             return await _context.ReportDataModels.FindAsync(id);
         }
