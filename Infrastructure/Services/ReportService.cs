@@ -4,6 +4,7 @@ using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Report;
 using Core.Models.DTOs.OutputDTOs.Report;
 using Microsoft.Build.Framework;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
@@ -59,28 +60,21 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest)
         {
             var userTo = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserToId);
-            if(userTo == null)
+            if(userTo is null)
             {
                 return PostResult.NotFound;
             }
             var userFrom = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserFromId);
-            if(userFrom == null)
+            if(userFrom is null)
             {
                 return PostResult.NotFound;
             }
-            if (createReportRequest.IsPost)
+            var exists = createReportRequest.IsPost 
+                ? await _unitOfWork.Posts.ExistByIdAsync(createReportRequest.IdOfPostOrReply)
+                : await _unitOfWork.Replies.ExistByIdAsync(createReportRequest.IdOfPostOrReply);
+            if (!exists)
             {
-                if(!await _unitOfWork.Posts.ExistByIdAsync(createReportRequest.IdOfPostOrReply))
-                {
-                    return PostResult.NotFound;
-                }
-            }
-            else
-            {
-                if (!await _unitOfWork.Replies.ExistByIdAsync(createReportRequest.IdOfPostOrReply))
-                {
-                    return PostResult.NotFound;
-                }
+                return PostResult.NotFound;
             }
             var report = _reportFactory.CreateReport(createReportRequest.Content,userFrom,userTo,createReportRequest.IdOfPostOrReply,createReportRequest.IsPost);
             try
