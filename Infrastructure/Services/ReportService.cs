@@ -59,13 +59,13 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest)
         {
-            var userTo = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserToId);
-            if(userTo is null)
+            var userSentTo = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserToId);
+            if(userSentTo is null)
             {
                 return PostResult.NotFound;
             }
-            var userFrom = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserFromId);
-            if(userFrom is null)
+            var userSentFrom = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserFromId);
+            if(userSentFrom is null)
             {
                 return PostResult.NotFound;
             }
@@ -76,7 +76,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var report = _reportFactory.CreateReport(createReportRequest.Content,userFrom,userTo,createReportRequest.IdOfPostOrReply,createReportRequest.IsPost);
+            var report = _reportFactory.CreateReport(createReportRequest.Content, userSentFrom, userSentTo, createReportRequest.IdOfPostOrReply,createReportRequest.IsPost);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
