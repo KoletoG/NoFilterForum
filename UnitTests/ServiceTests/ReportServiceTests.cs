@@ -68,13 +68,26 @@ namespace UnitTests.ServiceTests
         [Theory]
         [InlineData("TestId1")]
         [InlineData("TestId2")]
-        public async Task DeleteReportByIdAsync_ShouldDeleteReport_WhenReportExists(string reportId)
+        public async Task DeleteReportByIdAsync_ShouldReturnSuccess_WhenReportExists(string reportId)
         {
             var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((string id)=>new ReportDataModel() { Id= id });
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
+            Assert.Equal(PostResult.Success, result);
+        }
+        [Fact]
+        public async Task DeleteReportByIdAsync_ShouldReturnNotFound_WhenReportDoesNotExist()
+        {
+            string reportId = "ExampleId";
+            var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((string id) => new ReportDataModel() { Id = id });
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
             Assert.Equal(PostResult.Success, result);
