@@ -205,6 +205,7 @@ namespace UnitTests.ServiceTests
             iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
             reportFactoryMock.Setup(x => x.CreateReport(It.IsAny<string>(), It.IsAny<UserDataModel>(), It.IsAny<UserDataModel>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(new ReportDataModel());
+            iUnitOfWorkMock.Setup(x => x.Reports.CreateAsync(It.IsAny<ReportDataModel>())).ThrowsAsync(new Exception());
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
