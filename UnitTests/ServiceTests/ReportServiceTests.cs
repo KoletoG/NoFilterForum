@@ -92,5 +92,27 @@ namespace UnitTests.ServiceTests
             var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
+        [Fact]
+        public async Task CreateReportAsync_ShouldReturnSuccess_WhenReportIsCreated()
+        {
+            var createReportRequest = new CreateReportRequest()
+            {
+                Content = "Test content",
+                IdOfPostOrReply = "Test id",
+                UserFromId = "User1Id",
+                UserToId = "User2Id",
+                IsPost = true
+            };
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
+            iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            iUnitOfWorkMock.Setup(x => x.Reports.CreateAsync(It.IsAny<ReportDataModel>())).ReturnsAsync((ReportDataModel report) => report);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.CreateReportAsync(createReportRequest);
+            Assert.Equal(PostResult.Success, result);
+
+        }
     }
 }
