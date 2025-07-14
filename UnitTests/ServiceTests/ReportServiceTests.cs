@@ -114,7 +114,7 @@ namespace UnitTests.ServiceTests
             Assert.Equal(PostResult.Success, result);
         }
         [Fact]
-        public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserToIsNull()
+        public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserToIsInvalid()
         {
             var createReportRequest = new CreateReportRequest()
             {
@@ -133,7 +133,7 @@ namespace UnitTests.ServiceTests
             Assert.Equal(PostResult.NotFound, result);
         }
         [Fact]
-        public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserFromIsNull()
+        public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserFromIsInvalid()
         {
             var createReportRequest = new CreateReportRequest()
             {
