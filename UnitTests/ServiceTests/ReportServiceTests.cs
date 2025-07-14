@@ -127,7 +127,7 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
-            iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((UserDataModel?)null);
+            iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync("User2Id")).ReturnsAsync((UserDataModel?)null);
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.NotFound, result);
