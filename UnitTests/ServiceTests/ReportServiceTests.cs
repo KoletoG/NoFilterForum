@@ -93,6 +93,20 @@ namespace UnitTests.ServiceTests
             Assert.Equal(PostResult.NotFound, result);
         }
         [Fact]
+        public async Task DeleteReportByIdAsync_ShouldReturnUpdateFailed_WhenThereIsAProblemWithDB()
+        {
+            string reportId = "ExampleId";
+            var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReportDataModel());
+            iUnitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
+            Assert.Equal(PostResult.UpdateFailed, result);
+        }
+        [Fact]
         public async Task CreateReportAsync_ShouldReturnSuccess_WhenReportIsCreated()
         {
             var createReportRequest = new CreateReportRequest()
