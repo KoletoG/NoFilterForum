@@ -108,6 +108,7 @@ namespace UnitTests.ServiceTests
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
             iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            reportFactoryMock.Setup(x => x.CreateReport(It.IsAny<string>(), It.IsAny<UserDataModel>(), It.IsAny<UserDataModel>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(new ReportDataModel());
             iUnitOfWorkMock.Setup(x => x.Reports.CreateAsync(It.IsAny<ReportDataModel>())).ReturnsAsync((ReportDataModel report) => report);
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
@@ -155,7 +156,6 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task CreateReportAsync_ShouldReturnNotFound_WhenIdOfPostOrReplyIsInvalid()
         {
-
             var createReportRequest = new CreateReportRequest()
             {
                 Content = "Test content",
@@ -173,6 +173,24 @@ namespace UnitTests.ServiceTests
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.NotFound, result);
+        }
+        [Fact]
+        public async Task CreateReportAsync_ShouldReturnUpdateFailed_WhenThereIsAProblemWithSavingToDB()
+        {
+
+            var createReportRequest = new CreateReportRequest()
+            {
+                Content = "Test content",
+                IdOfPostOrReply = "Test id",
+                UserFromId = "User1Id",
+                UserToId = "User2Id",
+                IsPost = true
+            };
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
         }
     }
 }
