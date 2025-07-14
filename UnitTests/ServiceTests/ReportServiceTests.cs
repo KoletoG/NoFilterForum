@@ -132,5 +132,25 @@ namespace UnitTests.ServiceTests
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
+        [Fact]
+        public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserFromIsNull()
+        {
+            var createReportRequest = new CreateReportRequest()
+            {
+                Content = "Test content",
+                IdOfPostOrReply = "Test id",
+                UserFromId = "User1Id",
+                UserToId = "User2Id",
+                IsPost = true
+            };
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var reportFactoryMock = new Mock<IReportFactory>();
+            var iLoggerMock = new Mock<ILogger<ReportService>>();
+            iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync("User1Id")).ReturnsAsync((UserDataModel?)null);
+            iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync("User2Id")).ReturnsAsync(new UserDataModel());
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var result = await reportService.CreateReportAsync(createReportRequest);
+            Assert.Equal(PostResult.NotFound, result);
+        }
     }
 }
