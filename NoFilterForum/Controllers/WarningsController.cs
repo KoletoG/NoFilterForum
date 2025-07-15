@@ -33,7 +33,7 @@ namespace Web.Controllers
             {
                 return BadRequest("Id cannot be null");
             }
-            var warningsDto = await _warningService.GetWarningsByUserIdAsync(id);
+            var warningsDto = await _warningService.GetWarningsContentDtosByUserIdAsync(id);
             var warningsVM = warningsDto.Select(WarningMappers.MapToViewModel).ToList();
             return View(warningsVM);
         }
