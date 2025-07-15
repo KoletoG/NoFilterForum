@@ -43,5 +43,18 @@ namespace UnitTests.ServiceTests
             var result = await warningService.AcceptWarningsAsync(userId);
             Assert.Equal(PostResult.Success, result);
         }
+        [Fact]
+        public async Task AcceptWarningsAsync_ShouldReturnSuccess_WhenWarningsAreAccepted()
+        {
+            string userId = "TestUserId";
+            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iLoggerMock = new Mock<ILogger<WarningService>>();
+            iUnitOfWorkMock.Setup(x => x.Warnings.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<WarningDataModel>());
+            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var result = await warningService.AcceptWarningsAsync(userId);
+            Assert.Equal(PostResult.Success, result);
+        }
     }
 }
