@@ -28,7 +28,7 @@ namespace UnitTests.ServiceTests
             Assert.IsType<List<NotificationsDto>>(result);
         }
         [Fact]
-        public async Task DeleteByUserIdAsync()
+        public async Task DeleteByUserIdAsync_ShouldReturnSuccess_WhenExistNotifications()
         {
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
