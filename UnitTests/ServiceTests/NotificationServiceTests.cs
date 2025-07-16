@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
 using Microsoft.Extensions.Logging;
@@ -34,7 +35,8 @@ namespace UnitTests.ServiceTests
             var userId = "TestUserId";
             iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
-
+            var result = await notificationService.DeleteByUserIdAsync(userId);
+            Assert.Equal(PostResult.Success, result);
         }
     }
 }

@@ -213,7 +213,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
+                _unitOfWork.Notifications.DeleteRange(notifications);
                 await _unitOfWork.Users.UpdateAsync(reply.User);
                 await _unitOfWork.Replies.DeleteAsync(reply);
                 await _unitOfWork.CommitAsync();

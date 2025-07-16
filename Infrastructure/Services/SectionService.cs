@@ -123,7 +123,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.Posts.DeleteRangeAsync(posts);
                 await _unitOfWork.Replies.DeleteRangeAsync(replies);
                 await _unitOfWork.Sections.DeleteAsync(section);
-                await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
+                _unitOfWork.Notifications.DeleteRange(notifications);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 _memoryCache.Remove("sections");
