@@ -26,7 +26,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Notifications.DeleteRangeAsync(notifications);
+                _unitOfWork.Notifications.DeleteRange(notifications);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
