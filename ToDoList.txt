@@ -1,1 +1,2 @@
 Make a separate Domain folder and create models with encapsulation
+Use paralellism
