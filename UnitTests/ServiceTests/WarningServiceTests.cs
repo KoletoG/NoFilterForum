@@ -87,5 +87,18 @@ namespace UnitTests.ServiceTests
             var result = await warningService.AddWarningAsync(createWarningRequest);
             Assert.Equal(PostResult.Success, result);
         }
+        [Fact]
+        public async Task AddWarningAsync_ShouldReturnNotFound_WhenRequestIsInvalid()
+        {
+            var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
+            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iLoggerMock = new Mock<ILogger<WarningService>>();
+            iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync((UserDataModel?)null);
+            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var result = await warningService.AddWarningAsync(createWarningRequest);
+            Assert.Equal(PostResult.NotFound, result);
+        }
     }
 }
