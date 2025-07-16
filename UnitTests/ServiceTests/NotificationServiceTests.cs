@@ -7,6 +7,7 @@ using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Services;
 
 namespace UnitTests.ServiceTests
@@ -24,6 +25,16 @@ namespace UnitTests.ServiceTests
             var result = await notificationService.GetNotificationsDtosByUserIdAsync(userId);
             Assert.NotNull(result);
             Assert.IsType<List<NotificationsDto>>(result);
+        }
+        [Fact]
+        public async Task DeleteByUserIdAsync()
+        {
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iLoggerMock = new Mock<ILogger<NotificationService>>();
+            var userId = "TestUserId";
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
+
         }
     }
 }

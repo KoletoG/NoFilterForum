@@ -65,7 +65,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                 })
                 .ToListAsync();
         }
-        public async Task DeleteRangeAsync(List<NotificationDataModel> notifications)
+        public void DeleteRange(List<NotificationDataModel> notifications)
         {
             _context.NotificationDataModels.RemoveRange(notifications);
         }
