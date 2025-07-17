@@ -38,5 +38,16 @@ namespace UnitTests.ServiceTests
             var result = await notificationService.DeleteByUserIdAsync(userId);
             Assert.Equal(PostResult.Success, result);
         }
+        [Fact]
+        public async Task DeleteByUserIdAsync_ShouldReturnSuccess_WhenExistNotNotifications()
+        {
+            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iLoggerMock = new Mock<ILogger<NotificationService>>();
+            var userId = "TestUserId";
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
+            var result = await notificationService.DeleteByUserIdAsync(userId);
+            Assert.Equal(PostResult.Success, result);
+        }
     }
 }
