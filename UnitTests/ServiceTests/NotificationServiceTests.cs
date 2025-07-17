@@ -33,7 +33,7 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
-            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>() {new NotificationDataModel() });
             var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
             var result = await notificationService.DeleteByUserIdAsync(userId);
             Assert.Equal(PostResult.Success, result);
