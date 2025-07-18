@@ -78,10 +78,9 @@ namespace UnitTests.ServiceTests
         }
 
         [Fact]
-        public async Task GetAllSectionItemDtosAsync_ShouldReturnList_WhenTitleIsValid()
+        public async Task GetAllSectionItemDtosAsync_ShouldReturnList_WhenExistSections()
         {
 
-            var sectionTitle = "Example section title";
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             var userServiceMock = new Mock<IUserService>();
