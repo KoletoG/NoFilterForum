@@ -35,5 +35,25 @@ namespace UnitTests.ServiceTests
             var result = await sectionService.GetPostsCountByIdAsync(sectionId);
             Assert.Equal(5, result);
         }
+
+        [Fact]
+        public async Task ExistsSectionByTitleAsync_ShouldReturnTrue_WhenSectionTitleIsValid()
+        {
+            var sectionTitle = "Example section title";
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            unitOfWorkMock.Setup(x => x.Sections.ExistsByTitleAsync(It.IsAny<string>())).ReturnsAsync(true);
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle);
+            Assert.True(result);
+        }
     }
 }
