@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.OutputDTOs.Section;
 using Infrastructure.Factories;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -73,6 +75,29 @@ namespace UnitTests.ServiceTests
                 );
             var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle);
             Assert.False(result);
+        }
+
+        [Fact]
+        public async Task GetAllSectionItemDtosAsync_ShouldReturnList_WhenTitleIsValid()
+        {
+
+            var sectionTitle = "Example section title";
+            var memoryCache = new MemoryCache(new MemoryCacheOptions());
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            object dummy = null;
+            unitOfWorkMock.Setup(x => x.Sections.GetAllItemsDtoAsync()).ReturnsAsync(new List<SectionItemDto>());
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCache,
+                loggerMock.Object
+                );
+            var result = await sectionService.GetAllSectionItemDtosAsync();
+            Assert.IsType<List<SectionItemDto>>(result);
+            Assert.NotNull(result);
         }
     }
 }
