@@ -87,7 +87,6 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            object dummy = null;
             unitOfWorkMock.Setup(x => x.Sections.GetAllItemsDtoAsync()).ReturnsAsync(new List<SectionItemDto>());
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
