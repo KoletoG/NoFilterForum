@@ -17,7 +17,7 @@ namespace UnitTests.ServiceTests
     public class SectionServiceTests
     {
         [Fact]
-        public async Task GetPostsCount_ShouldReturnFive_WhenSectionIdIsValid()
+        public async Task GetPostsCountByIdAsync_ShouldReturnFive_WhenSectionIdIsValid()
         {
             var sectionId = "Example section id";
             var memoryCacheMock = new Mock<IMemoryCache>();
@@ -32,7 +32,7 @@ namespace UnitTests.ServiceTests
                 memoryCacheMock.Object,
                 loggerMock.Object
                 );
-            var result = await sectionService.GetPostsCount(sectionId);
+            var result = await sectionService.GetPostsCountByIdAsync(sectionId);
             Assert.Equal(5, result);
         }
     }

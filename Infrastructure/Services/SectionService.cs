@@ -53,7 +53,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle);
         }
-        public async Task<int> GetPostsCount(string sectionId)
+        public async Task<int> GetPostsCountByIdAsync(string sectionId)
         {
             return await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
         }
