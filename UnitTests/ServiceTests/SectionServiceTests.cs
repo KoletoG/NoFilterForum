@@ -14,6 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Services;
 
 namespace UnitTests.ServiceTests
@@ -121,6 +122,32 @@ namespace UnitTests.ServiceTests
             };
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
             Assert.Equal(PostResult.Forbid, result);
+        }
+        [Fact]
+        public async Task CreateSectionAsync_ShouldReturnSuccess_WhenRequestIsValid()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            sectionFactoryMock.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>())).Returns(new SectionDataModel());
+            unitOfWorkMock.Setup(x => x.Sections.CreateAsync(It.IsAny<SectionDataModel>())).ReturnsAsync((SectionDataModel?)null);
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var createSectionRequest = new CreateSectionRequest()
+            {
+                Description = "Test description",
+                Title = "Test title",
+                UserId = "UserId EXAMPLE"
+            };
+            var result = await sectionService.CreateSectionAsync(createSectionRequest);
+            Assert.Equal(PostResult.Success, result);
         }
     }
 }
