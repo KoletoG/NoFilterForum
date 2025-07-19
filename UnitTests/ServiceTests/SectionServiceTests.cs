@@ -16,6 +16,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
+using NoFilterForum.Infrastructure.Data;
+using NoFilterForum.Infrastructure.Repositories;
 using NoFilterForum.Infrastructure.Services;
 
 namespace UnitTests.ServiceTests
@@ -207,6 +209,11 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
+            var applicationDbContextMock = new Mock<ApplicationDbContext>();
+            unitOfWorkMock.Setup(x => x.Users.UpdateRange(It.IsAny<List<UserDataModel>>())).Verifiable();
+            unitOfWorkMock.Setup(x => x.Posts.DeleteRangeAsync(It.IsAny<List<PostDataModel>>())).Verifiable();
+            unitOfWorkMock.Setup(x => x.Replies.DeleteRangeAsync(It.IsAny<List<ReplyDataModel>>())).Verifiable();
+            unitOfWorkMock.Setup(x => x.Sections.DeleteAsync(It.IsAny<SectionDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x =>
             x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))
@@ -240,6 +247,50 @@ namespace UnitTests.ServiceTests
             };
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.Success, result);
+        }
+        [Fact]
+        public async Task DeleteSectionAsync_ShouldReturnUpdateFailed_WhenExistsProblemWithDB()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            var applicationDbContextMock = new Mock<ApplicationDbContext>(); 
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
+            unitOfWorkMock.Setup(x =>
+            x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))
+                .ReturnsAsync(
+                new SectionDataModel()
+                {
+                    Posts = new List<PostDataModel>()
+                    {
+                        new PostDataModel()
+                        {
+                            User = new UserDataModel(),
+                            Replies =new List<ReplyDataModel>()
+                            {
+                                new ReplyDataModel()
+                                {
+                                    User = new UserDataModel()
+                                }
+                            }
+                        }
+                    }
+                });
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var deleteSectionRequest = new DeleteSectionRequest()
+            {
+                SectionId = "Example ID"
+            };
+            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
+            Assert.Equal(PostResult.UpdateFailed, result);
         }
     }
 }
