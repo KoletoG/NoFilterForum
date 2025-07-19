@@ -149,5 +149,31 @@ namespace UnitTests.ServiceTests
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
             Assert.Equal(PostResult.Success, result);
         }
+        [Fact]
+        public async Task CreateSectionAsync_ShouldReturnUpdateFailed_WhenExistsProblemWithDB()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            sectionFactoryMock.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>())).Returns(new SectionDataModel());
+            unitOfWorkMock.Setup(x => x.Sections.CreateAsync(It.IsAny<SectionDataModel>())).ThrowsAsync(new Exception());
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var createSectionRequest = new CreateSectionRequest()
+            {
+                Description = "Test description",
+                Title = "Test title",
+                UserId = "UserId EXAMPLE"
+            };
+            var result = await sectionService.CreateSectionAsync(createSectionRequest);
+            Assert.Equal(PostResult.UpdateFailed, result);
+        }
     }
 }
