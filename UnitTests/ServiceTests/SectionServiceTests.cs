@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Section;
 using Core.Models.DTOs.OutputDTOs.Section;
 using Infrastructure.Factories;
@@ -174,6 +175,29 @@ namespace UnitTests.ServiceTests
             };
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
+        }
+
+        [Fact]
+        public async Task DeleteSectionAsync_ShouldReturnNotFound_WhenSectionIdIsInvalid()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            unitOfWorkMock.Setup(x => x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>())).ReturnsAsync((SectionDataModel?)null);
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var deleteSectionRequest = new DeleteSectionRequest()
+            {
+                SectionId = "Example ID"
+            };
+            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
+            Assert.Equal(PostResult.NotFound, result);
         }
     }
 }
