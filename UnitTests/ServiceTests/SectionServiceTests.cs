@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Models.DTOs.InputDTOs.Section;
 using Core.Models.DTOs.OutputDTOs.Section;
 using Infrastructure.Factories;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
@@ -80,7 +82,6 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task GetAllSectionItemDtosAsync_ShouldReturnList_WhenExistSections()
         {
-
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             var userServiceMock = new Mock<IUserService>();
@@ -96,6 +97,30 @@ namespace UnitTests.ServiceTests
             var result = await sectionService.GetAllSectionItemDtosAsync();
             Assert.IsType<List<SectionItemDto>>(result);
             Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task CreateSectionAsync_ShouldReturnForbid_WhenUserIsNotAdmin()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var createSectionRequest = new CreateSectionRequest()
+            {
+                Description = "Test description",
+                Title = "Test title",
+                UserId = "UserId EXAMPLE"
+            };
+            var result = await sectionService.CreateSectionAsync(createSectionRequest);
+            Assert.Equal(PostResult.Forbid, result);
         }
     }
 }
