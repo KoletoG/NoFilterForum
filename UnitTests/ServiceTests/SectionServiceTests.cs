@@ -207,7 +207,6 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            unitOfWorkMock.Setup(x => x.Users.UpdateRangeAsync(It.IsAny<List<UserDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x =>
             x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))

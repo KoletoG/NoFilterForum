@@ -199,7 +199,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
@@ -275,7 +275,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
@@ -318,7 +318,7 @@ namespace NoFilterForum.Infrastructure.Services
                 {
                     await updateImageRequest.Image.CopyToAsync(stream);
                 }
-                await _unitOfWork.Users.UpdateAsync(currentUser);
+                _unitOfWork.Users.Update(currentUser);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 if (currentUserImageUrl != Path.Combine("images", "defaultimage.gif")) // Avoid hardcoding

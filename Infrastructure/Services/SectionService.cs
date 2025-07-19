@@ -119,7 +119,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateRangeAsync(users);
+                _unitOfWork.Users.UpdateRange(users);
                 await _unitOfWork.Posts.DeleteRangeAsync(posts);
                 await _unitOfWork.Replies.DeleteRangeAsync(replies);
                 await _unitOfWork.Sections.DeleteAsync(section);

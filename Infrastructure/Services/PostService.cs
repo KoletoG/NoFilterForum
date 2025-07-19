@@ -71,7 +71,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.Posts.UpdateAsync(post);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -116,7 +116,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.Posts.UpdateAsync(post);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -202,7 +202,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 await _unitOfWork.Sections.UpdateAsync(section);
                 await _unitOfWork.Posts.CreateAsync(post);
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
@@ -252,7 +252,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 await _unitOfWork.Replies.DeleteRangeAsync(repliesOfPost);
                 _unitOfWork.Notifications.DeleteRange(notifications);
-                await _unitOfWork.Users.UpdateRangeAsync(users.ToList());
+                _unitOfWork.Users.UpdateRange(users.ToList());
                 await _unitOfWork.Posts.DeleteAsync(post);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();

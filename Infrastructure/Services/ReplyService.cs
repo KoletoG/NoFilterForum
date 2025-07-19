@@ -64,7 +64,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.Replies.UpdateAsync(reply);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -109,7 +109,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.Replies.UpdateAsync(reply);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -214,7 +214,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
                 _unitOfWork.Notifications.DeleteRange(notifications);
-                await _unitOfWork.Users.UpdateAsync(reply.User);
+                _unitOfWork.Users.Update(reply.User);
                 await _unitOfWork.Replies.DeleteAsync(reply);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -268,7 +268,7 @@ namespace NoFilterForum.Infrastructure.Services
                 }
                 await _unitOfWork.Replies.CreateAsync(reply);
                 await _unitOfWork.Posts.UpdateAsync(post);
-                await _unitOfWork.Users.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
