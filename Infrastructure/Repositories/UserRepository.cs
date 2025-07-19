@@ -75,11 +75,11 @@ namespace NoFilterForum.Infrastructure.Repositories
             await _context.Users.AddAsync(user);
             return user;
         }
-        public async Task UpdateAsync(UserDataModel user)
+        public void Update(UserDataModel user)
         {
             _context.Users.Update(user);
         }
-        public async Task UpdateRangeAsync(List<UserDataModel> users)
+        public void UpdateRange(List<UserDataModel> users)
         {
             _context.Users.UpdateRange(users);
         }

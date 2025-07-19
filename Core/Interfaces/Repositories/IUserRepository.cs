@@ -16,10 +16,10 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<UserDataModel> GetUserWithWarningsByIdAsync(string id);
         public Task<List<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync();
         public Task<List<UserDataModel>> GetAllAsync();
-        public Task UpdateRangeAsync(List<UserDataModel> users);
+        public void UpdateRange(List<UserDataModel> users);
         public Task<UserDataModel> CreateAsync(UserDataModel user);
         public Task<bool> ExistsByNotConfirmedAsync();
-        public Task UpdateAsync(UserDataModel user);
+        public void Update(UserDataModel user);
         public Task DeleteAsync(UserDataModel user);
         public Task<List<UserDataModel>> GetAllNoDefaultAsync();
         public Task<bool> UsernameExistsAsync(string username);

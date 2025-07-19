@@ -199,5 +199,48 @@ namespace UnitTests.ServiceTests
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
+        [Fact]
+        public async Task DeleteSectionAsync_ShouldReturnSuccess_WhenRequestIsValid()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var userServiceMock = new Mock<IUserService>();
+            var loggerMock = new Mock<ILogger<SectionService>>();
+            var sectionFactoryMock = new Mock<ISectionFactory>();
+            unitOfWorkMock.Setup(x => x.Users.UpdateRangeAsync(It.IsAny<List<UserDataModel>>())).Verifiable();
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x =>
+            x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))
+                .ReturnsAsync(
+                new SectionDataModel()
+                {
+                    Posts = new List<PostDataModel>()
+                    {
+                        new PostDataModel()
+                        {
+                            User = new UserDataModel(),
+                            Replies =new List<ReplyDataModel>()
+                            {
+                                new ReplyDataModel()
+                                {
+                                    User = new UserDataModel()
+                                }
+                            }
+                        }
+                    }
+                });
+            var sectionService = new SectionService(unitOfWorkMock.Object,
+                userServiceMock.Object,
+                sectionFactoryMock.Object,
+                memoryCacheMock.Object,
+                loggerMock.Object
+                );
+            var deleteSectionRequest = new DeleteSectionRequest()
+            {
+                SectionId = "Example ID"
+            };
+            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
+            Assert.Equal(PostResult.Success, result);
+        }
     }
 }
