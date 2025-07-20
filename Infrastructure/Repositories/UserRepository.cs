@@ -20,19 +20,19 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<UserDataModel> GetByIdAsync(string id)
+        public async Task<UserDataModel?> GetByIdAsync(string id)
         {
             return await _context.Users.FindAsync(id);
         }
-        public async Task<UserDataModel> GetUserWithWarningsByIdAsync(string id)
+        public async Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id)
         {
             return await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<UserDataModel> GetByUsernameAsync(string username)
+        public async Task<UserDataModel?> GetByUsernameAsync(string username)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
         }
-        public async Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id)
+        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)
         {
             return await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto()
             {
@@ -40,7 +40,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                 LikesPostRepliesIds = x.LikesPostRepliesIds
             }).FirstOrDefaultAsync();
         }
-        public async Task<ProfileUserDto> GetProfileUserDtoByIdAsync(string id)
+        public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id)
         {
             return await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto
             {
@@ -109,7 +109,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                 Username = x.UserName
             }).ToListAsync();
         }
-        public async Task DeleteAsync(UserDataModel user)
+        public void Delete(UserDataModel user)
         {
             _context.Users.Remove(user);
         }

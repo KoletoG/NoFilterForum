@@ -3,3 +3,4 @@ Use paralellism
 Change asyns methods to sync in Repositories
 Try fixing warnings wherever needed
 Use is instead of == for null checks
+Use records for DTOs

@@ -11,8 +11,8 @@ namespace Core.Models.DTOs.OutputDTOs.Profile
     {
         public string Id { get; set; }
         public int WarningsCount { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
         public string? Bio { get; set; }
         public UserRoles Role { get; set; }
         public int PostsCount { get; set; }
