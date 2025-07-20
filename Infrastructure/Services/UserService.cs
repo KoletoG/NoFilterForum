@@ -234,7 +234,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 _unitOfWork.Posts.UpdateRange(posts);
                 _unitOfWork.Replies.UpdateRange(replies);
-                await _unitOfWork.Users.DeleteAsync(user);
+                _unitOfWork.Users.Delete(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
