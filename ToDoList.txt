@@ -4,3 +4,5 @@ Change asyns methods to sync in Repositories
 Try fixing warnings wherever needed
 Use is instead of == for null checks
 Use records for DTOs
+Change to init for models wherever suitable or private set or whatever haha
+In postService for example, make the code follow DRY

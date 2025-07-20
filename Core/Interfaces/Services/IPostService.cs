@@ -16,9 +16,9 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<bool> HasTimeoutAsync(string userId);
         public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);
-        public Task<string> GetSectionTitleByPostIdAsync(string postId);
-        public Task<PostReplyIndexDto> GetPostReplyIndexDtoByIdAsync(string id);
-        public Task<string> GetPostIdByReplyId(string replyId);
+        public Task<string?> GetSectionTitleByPostIdAsync(string postId);
+        public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id);
+        public Task<string?> GetPostIdByReplyId(string replyId);
         public Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest);
         public Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest);
         public Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle);

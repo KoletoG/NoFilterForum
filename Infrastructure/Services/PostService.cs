@@ -129,15 +129,15 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<string> GetSectionTitleByPostIdAsync(string postId)
+        public async Task<string?> GetSectionTitleByPostIdAsync(string postId)
         {
             return await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
         }
-        public async Task<string> GetPostIdByReplyId(string replyId)
+        public async Task<string?> GetPostIdByReplyId(string replyId)
         {
             return await _unitOfWork.Replies.GetPostIdById(replyId);
         }
-        public async Task<PostReplyIndexDto> GetPostReplyIndexDtoByIdAsync(string postId)
+        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId)
         {
             return await _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync(postId);
         }
@@ -164,7 +164,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError($"Problem (un)pinning post with ID: {postId}.");
+                _logger.LogError(ex,"Problem (un)pinning post with ID: {PostId}.",postId);
                 return PostResult.UpdateFailed;
             }
         }
