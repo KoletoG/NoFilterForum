@@ -15,7 +15,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<WarningDataModel> GetByIdAsync(string id)
+        public async Task<WarningDataModel?> GetByIdAsync(string id)
         {
             return await _context.WarningDataModels.FindAsync(id);
         }
@@ -40,15 +40,15 @@ namespace NoFilterForum.Infrastructure.Repositories
             await _context.WarningDataModels.AddAsync(warning);
             return warning;
         }
-        public async Task UpdateAsync(WarningDataModel warning)
+        public void Update(WarningDataModel warning)
         {
             _context.WarningDataModels.Update(warning);
         }
-        public async Task UpdateRangeAsync(List<WarningDataModel> warnings)
+        public void UpdateRange(List<WarningDataModel> warnings)
         {
             _context.WarningDataModels.UpdateRange(warnings);
         }
-        public async Task DeleteAsync(WarningDataModel warning)
+        public void Delete(WarningDataModel warning)
         {
             _context.WarningDataModels.Remove(warning);
         }
