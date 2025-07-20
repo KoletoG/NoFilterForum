@@ -39,11 +39,11 @@ namespace NoFilterForum.Infrastructure.Repositories
             await _context.ReportDataModels.AddAsync(report);
             return report;
         }
-        public async Task UpdateAsync(ReportDataModel report)
+        public void Update(ReportDataModel report)
         {
             _context.ReportDataModels.Update(report);
         }
-        public async Task DeleteAsync(ReportDataModel report)
+        public void Delete(ReportDataModel report)
         {
             _context.ReportDataModels.Remove(report);
         }
