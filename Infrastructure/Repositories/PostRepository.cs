@@ -16,27 +16,27 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<PostDataModel> GetByIdAsync(string id)
+        public async Task<PostDataModel?> GetByIdAsync(string id)
         {
             return await _context.PostDataModels.FindAsync(id);
         }
-        public async Task<string> GetSectionTitleByIdAsync(string postId)
+        public async Task<string?> GetSectionTitleByIdAsync(string postId)
         {
             return await _context.PostDataModels.Where(x => x.Id == postId).Select(x => x.Section.Title).FirstOrDefaultAsync();
         }
-        public async Task<PostDataModel> GetWithRepliesByIdAsync(string id)
+        public async Task<PostDataModel?> GetWithRepliesByIdAsync(string id)
         {
             return await _context.PostDataModels.Where(x => x.Id == id)
                 .Include(x => x.Replies)
                 .FirstOrDefaultAsync();
         }
-        public async Task<PostDataModel> GetWithUserByIdAsync(string id)
+        public async Task<PostDataModel?> GetWithUserByIdAsync(string id)
         {
             return await _context.PostDataModels.Where(x => x.Id == id)
                 .Include(x => x.User)
                 .FirstOrDefaultAsync();
         }
-        public async Task<PostReplyIndexDto> GetPostReplyIndexDtoByIdAsync(string id)
+        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id)
         {
             return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostReplyIndexDto()
             {
@@ -77,22 +77,19 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.Where(x => x.Id == id).CountAsync();
         }
-        public async Task<bool> UpdateAsync(PostDataModel post)
+        public void Update(PostDataModel post)
         {
-            // need error handling
             _context.PostDataModels.Update(post);
-            return true;
         }
-        public async Task<bool> UpdateRangeAsync(List<PostDataModel> posts)
+        public void UpdateRange(List<PostDataModel> posts)
         {
             _context.PostDataModels.UpdateRange(posts);
-            return true;
         }
-        public async Task DeleteAsync(PostDataModel post)
+        public void Delete(PostDataModel post)
         {
             _context.PostDataModels.Remove(post);
         }
-        public async Task DeleteRangeAsync(List<PostDataModel> posts)
+        public void DeleteRange(List<PostDataModel> posts)
         {
             _context.PostDataModels.RemoveRange(posts);
         }
