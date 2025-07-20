@@ -12,6 +12,6 @@ namespace Core.Models.DTOs.OutputDTOs.Notification
         public string PostId { get; set; }
         public string PostTitle { get; set; }
         public string ReplyContent { get; set; }
-        public string UserFromUsername {  get; set; }
+        public string? UserFromUsername {  get; set; }
     }
 }

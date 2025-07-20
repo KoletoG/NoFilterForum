@@ -14,7 +14,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<NotificationDataModel> GetByIdAsync(string id)
+        public async Task<NotificationDataModel?> GetByIdAsync(string id)
         {
             return await _context.NotificationDataModels.FindAsync(id);
         }
@@ -44,11 +44,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.NotificationDataModels.Where(x => x.Reply.Id == replyId).ToListAsync();
         }
-        public async Task UpdateAsync(NotificationDataModel notification)
+        public void Update(NotificationDataModel notification)
         {
             _context.NotificationDataModels.Update(notification);
         }
-        public async Task DeleteAsync(NotificationDataModel notification)
+        public void Delete(NotificationDataModel notification)
         {
             _context.NotificationDataModels.Remove(notification);
         }
