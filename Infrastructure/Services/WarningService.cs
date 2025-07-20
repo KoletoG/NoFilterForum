@@ -68,7 +68,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Warnings.UpdateRangeAsync(warnings);
+                _unitOfWork.Warnings.UpdateRange(warnings);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
