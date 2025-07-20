@@ -104,7 +104,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
         {
             var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(deleteSectionRequest.SectionId);
-            if (section == null)
+            if (section is null)
             {
                 return PostResult.NotFound;
             }

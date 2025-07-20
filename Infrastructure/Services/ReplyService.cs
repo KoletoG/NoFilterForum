@@ -35,12 +35,12 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
             var reply = await _unitOfWork.Replies.GetByIdAsync(likeDislikeRequest.PostReplyId);
-            if (reply == null)
+            if (reply is null)
             {
                 return PostResult.NotFound;
             }
@@ -80,12 +80,12 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
             var reply = await _unitOfWork.Replies.GetByIdAsync(likeDislikeRequest.PostReplyId);
-            if (reply == null)
+            if (reply is null)
             {
                 return PostResult.NotFound;
             }
@@ -193,7 +193,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
-            if(reply == null)
+            if(reply is null)
             {
                 return PostResult.NotFound;
             }
@@ -230,12 +230,12 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest)
         {
             var user = await _userService.GetUserByIdAsync(createReplyRequest.UserId);
-            if(user == null)
+            if(user is null)
             {
                 return PostResult.NotFound;
             }
             var post = await _unitOfWork.Posts.GetWithRepliesByIdAsync(createReplyRequest.PostId);
-            if (post == null)
+            if (post is null)
             {
                 return PostResult.NotFound;
             }

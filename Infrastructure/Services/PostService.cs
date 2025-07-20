@@ -42,12 +42,12 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
             var post = await _unitOfWork.Posts.GetByIdAsync(likeDislikeRequest.PostReplyId);
-            if (post == null)
+            if (post is null)
             {
                 return PostResult.NotFound;
             }
@@ -87,12 +87,12 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
             var post = await _unitOfWork.Posts.GetByIdAsync(likeDislikeRequest.PostReplyId);
-            if (post == null)
+            if (post is null)
             {
                 return PostResult.NotFound;
             }
@@ -148,7 +148,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> PinPostAsync(string postId)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(postId);
-            if (post == null)
+            if (post is null)
             {
                 return PostResult.NotFound;
             }
@@ -184,12 +184,12 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(createPost.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
             var section = await _unitOfWork.Sections.GetWithPostsByTitleAsync(createPost.TitleOfSection);
-            if (section == null)
+            if (section is null)
             {
                 return PostResult.NotFound;
             }
@@ -225,7 +225,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest)
         {
             var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId);
-            if (post == null)
+            if (post is null)
             {
                 return PostResult.NotFound;
             }

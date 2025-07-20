@@ -28,7 +28,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {
             var user = await _unitOfWork.Users.GetUserWithWarningsByIdAsync(createWarningRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -57,7 +57,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> AcceptWarningsAsync(string userId)
         {
             var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
-            if (warnings == null)
+            if (warnings is null)
             {
                 return PostResult.Success;
             }

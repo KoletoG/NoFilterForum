@@ -71,7 +71,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
-            if(user == null)
+            if(user is null)
             {
                 return new ProfileDto()
                 {
@@ -98,7 +98,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -142,7 +142,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -186,7 +186,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> ConfirmUserAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -215,7 +215,7 @@ namespace NoFilterForum.Infrastructure.Services
         {
 
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -261,7 +261,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeBioRequest.UserId);
-            if (user == null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -304,7 +304,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
         {
             var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);
-            if (currentUser == null) 
+            if (currentUser is null) 
             {
                 return PostResult.NotFound;
             }
