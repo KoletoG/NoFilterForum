@@ -267,7 +267,7 @@ namespace NoFilterForum.Infrastructure.Services
                     await _unitOfWork.Notifications.CreateRangeAsync(notificationsList);
                 }
                 await _unitOfWork.Replies.CreateAsync(reply);
-                await _unitOfWork.Posts.UpdateAsync(post);
+                _unitOfWork.Posts.Update(post);
                 _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();

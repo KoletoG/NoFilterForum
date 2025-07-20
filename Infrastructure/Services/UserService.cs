@@ -232,7 +232,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Posts.UpdateRangeAsync(posts);
+                _unitOfWork.Posts.UpdateRange(posts);
                 await _unitOfWork.Replies.UpdateRangeAsync(replies);
                 await _unitOfWork.Users.DeleteAsync(user);
                 await _unitOfWork.CommitAsync();
