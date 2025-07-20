@@ -200,7 +200,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Sections.UpdateAsync(section);
+                _unitOfWork.Sections.Update(section);
                 await _unitOfWork.Posts.CreateAsync(post);
                 _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();

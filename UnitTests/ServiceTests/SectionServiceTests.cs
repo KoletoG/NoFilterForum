@@ -213,7 +213,7 @@ namespace UnitTests.ServiceTests
             unitOfWorkMock.Setup(x => x.Users.UpdateRange(It.IsAny<List<UserDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Posts.DeleteRangeAsync(It.IsAny<List<PostDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Replies.DeleteRangeAsync(It.IsAny<List<ReplyDataModel>>())).Verifiable();
-            unitOfWorkMock.Setup(x => x.Sections.DeleteAsync(It.IsAny<SectionDataModel>())).Verifiable();
+            unitOfWorkMock.Setup(x => x.Sections.Delete(It.IsAny<SectionDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x =>
             x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))

@@ -122,7 +122,7 @@ namespace NoFilterForum.Infrastructure.Services
                 _unitOfWork.Users.UpdateRange(users);
                 await _unitOfWork.Posts.DeleteRangeAsync(posts);
                 await _unitOfWork.Replies.DeleteRangeAsync(replies);
-                await _unitOfWork.Sections.DeleteAsync(section);
+                _unitOfWork.Sections.Delete(section);
                 _unitOfWork.Notifications.DeleteRange(notifications);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
