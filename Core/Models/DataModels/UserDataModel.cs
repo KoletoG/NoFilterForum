@@ -24,7 +24,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public List<string> DislikesPostRepliesIds { get; set; }
         public List<WarningDataModel> Warnings { get; set; }
         public DateTime DateCreated { get; set; }
-        public string Reason { get; set; }
+        public string? Reason { get; set; }
         public string Bio {  get; set; }
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
