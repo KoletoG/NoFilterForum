@@ -250,7 +250,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Replies.DeleteRangeAsync(repliesOfPost);
+                _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 _unitOfWork.Notifications.DeleteRange(notifications);
                 _unitOfWork.Users.UpdateRange(users.ToList());
                 _unitOfWork.Posts.Delete(post);
