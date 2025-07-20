@@ -15,7 +15,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<ReplyDataModel> GetByIdAsync(string id)
+        public async Task<ReplyDataModel?> GetByIdAsync(string id)
         {
             return await _context.ReplyDataModels.FindAsync(id);
         }
@@ -48,11 +48,11 @@ namespace NoFilterForum.Infrastructure.Repositories
                 PostTitle = x.Post.Title
             }).ToListAsync();
         }
-        public async Task<ReplyDataModel> GetWithUserByIdAsync(string id)
+        public async Task<ReplyDataModel?> GetWithUserByIdAsync(string id)
         {
             return await _context.ReplyDataModels.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<string> GetPostIdById(string id)
+        public async Task<string?> GetPostIdById(string id)
         {
             return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.Post.Id).FirstOrDefaultAsync();
         }
@@ -60,7 +60,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.Post.Id==postId).ToListAsync();
         }
-        public async Task<UserDataModel> GetUserByReplyIdAsync(string replyId)
+        public async Task<UserDataModel?> GetUserByReplyIdAsync(string replyId)
         {
             return await _context.ReplyDataModels.Where(x => x.Id == replyId).Select(x => x.User).FirstOrDefaultAsync();
         }
@@ -72,7 +72,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<ReplyDataModel>();
         }
-        public async Task<string> GetUserIdByReplyIdAsync(string replyId)
+        public async Task<string?> GetUserIdByReplyIdAsync(string replyId)
         {
             return await _context.ReplyDataModels.Where(x=>x.Id==replyId).Select(x=>x.User.Id).FirstOrDefaultAsync();
         }
@@ -89,21 +89,19 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x=>x.Post.Id==postId).CountAsync();
         }
-        public async Task<bool> UpdateAsync(ReplyDataModel reply)
+        public void Update(ReplyDataModel reply)
         {
             _context.ReplyDataModels.Update(reply);
-            return true;
         }
         public async Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId)
         {
             return await _context.ReplyDataModels.Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
         }
-        public async Task<bool> UpdateRangeAsync(List<ReplyDataModel> replies)
+        public void UpdateRange(List<ReplyDataModel> replies)
         {
             _context.ReplyDataModels.UpdateRange(replies);
-            return true;
         }
-        public async Task DeleteAsync(ReplyDataModel reply)
+        public void Delete(ReplyDataModel reply)
         {
             _context.ReplyDataModels.Remove(reply);
         }
@@ -111,7 +109,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.AnyAsync(x => x.Id == id);
         }
-        public async Task DeleteRangeAsync(List<ReplyDataModel> replies)
+        public void DeleteRange(List<ReplyDataModel> replies)
         {
             _context.ReplyDataModels.RemoveRange(replies);
         }
