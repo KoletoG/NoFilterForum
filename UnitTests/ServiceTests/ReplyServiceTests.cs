@@ -181,7 +181,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
-            unitOfWorkMock.Setup(x => x.Users.Update(It.IsAny<UserDataModel>())).Verifiable();
+            unitOfWorkMock.Setup(x=>x.Users.Update(It.IsAny<UserDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel() {
                 User = new UserDataModel() 
@@ -200,6 +200,35 @@ namespace UnitTests.ServiceTests
             var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
             Assert.Equal(PostResult.Success, result);
+        }
+        [Fact]
+        public async Task DeleteReplyAsync_ShouldReturnUpdateFailed_WhenExistsProblemWithDB()
+        {
+            Mock<IUnitOfWork> unitOfWorkMock = new();
+            Mock<IUserService> userServiceMock = new();
+            Mock<ILogger<ReplyService>> loggerMock = new();
+            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
+            Mock<IReplyFactory> replyFactoryMock = new();
+            unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
+            {
+                User = new UserDataModel()
+                {
+                    Id = "UserIdExample"
+                }
+            });
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            var replyService = new ReplyService(
+                unitOfWorkMock.Object,
+                replyFactoryMock.Object,
+                userServiceMock.Object,
+                loggerMock.Object,
+                htmlSanitizerMock.Object
+                );
+            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            Assert.Equal(PostResult.UpdateFailed, result);
         }
     }
 }
