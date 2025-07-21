@@ -128,5 +128,27 @@ namespace UnitTests.ServiceTests
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
             Assert.False(result);
         }
+        [Fact]
+        public void MarkTagsOfContents_ShouldMarkTagsOfContent_WhenParametersAreValid()
+        {
+            Mock<IUnitOfWork> unitOfWorkMock = new();
+            Mock<IUserService> userServiceMock = new();
+            Mock<ILogger<ReplyService>> loggerMock = new();
+            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
+            Mock<IReplyFactory> replyFactoryMock = new();
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            List<ReplyIndexItemDto> replyIndexItems = new List<ReplyIndexItemDto>();
+            PostReplyIndexDto post = new PostReplyIndexDto() { Content="Example content"};
+            string currentUsername = "Current username Example";
+            var replyService = new ReplyService(
+                unitOfWorkMock.Object,
+                replyFactoryMock.Object,
+                userServiceMock.Object,
+                loggerMock.Object,
+                htmlSanitizerMock.Object
+                );
+            replyService.MarkTagsOfContents(ref replyIndexItems, ref post, currentUsername);
+            Assert.Equal("Example content",post.Content);
+        }
     }
 }
