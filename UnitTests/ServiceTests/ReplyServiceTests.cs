@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Reply;
@@ -11,6 +12,7 @@ using Ganss.Xss;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Services;
 
 namespace UnitTests.ServiceTests
@@ -149,6 +151,27 @@ namespace UnitTests.ServiceTests
                 );
             replyService.MarkTagsOfContents(ref replyIndexItems, ref post, currentUsername);
             Assert.Equal("Example content",post.Content);
+        }
+        [Fact]
+        public async Task DeleteReplyAsync_ShouldReturnNotFound_WhenReplyIdIsInvalid()
+        {
+            Mock<IUnitOfWork> unitOfWorkMock = new();
+            Mock<IUserService> userServiceMock = new();
+            Mock<ILogger<ReplyService>> loggerMock = new();
+            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
+            Mock<IReplyFactory> replyFactoryMock = new();
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync((ReplyDataModel?)null);
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            var replyService = new ReplyService(
+                unitOfWorkMock.Object,
+                replyFactoryMock.Object,
+                userServiceMock.Object,
+                loggerMock.Object,
+                htmlSanitizerMock.Object
+                );
+            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            Assert.Equal(PostResult.NotFound, result);
         }
     }
 }
