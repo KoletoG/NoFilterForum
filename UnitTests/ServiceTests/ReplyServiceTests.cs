@@ -230,5 +230,33 @@ namespace UnitTests.ServiceTests
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
+        [Fact]
+        public async Task DeleteReplyAsync_ShouldReturnForbid_WhenUserIdIsNotTheSameAndNotAdmin()
+        {
+            Mock<IUnitOfWork> unitOfWorkMock = new();
+            Mock<IUserService> userServiceMock = new();
+            Mock<ILogger<ReplyService>> loggerMock = new();
+            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
+            Mock<IReplyFactory> replyFactoryMock = new();
+            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
+            {
+                User = new UserDataModel()
+                {
+                    Id = "ExampleUserId"
+                }
+            });
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            var replyService = new ReplyService(
+                unitOfWorkMock.Object,
+                replyFactoryMock.Object,
+                userServiceMock.Object,
+                loggerMock.Object,
+                htmlSanitizerMock.Object
+                );
+            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            Assert.Equal(PostResult.Forbid, result);
+        }
     }
 }
