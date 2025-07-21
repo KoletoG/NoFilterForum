@@ -106,5 +106,27 @@ namespace UnitTests.ServiceTests
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
             Assert.True(result);
         }
+        [Fact]
+        public async Task HasTimeoutByUserIdAsync_ShouldReturnFalse_WhenUserIsAdmin()
+        {
+            Mock<IUnitOfWork> unitOfWorkMock = new();
+            Mock<IUserService> userServiceMock = new();
+            Mock<ILogger<ReplyService>> loggerMock = new();
+            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
+            Mock<IReplyFactory> replyFactoryMock = new();
+            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
+            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
+            var replyService = new ReplyService(
+                unitOfWorkMock.Object,
+                replyFactoryMock.Object,
+                userServiceMock.Object,
+                loggerMock.Object,
+                htmlSanitizerMock.Object
+                );
+            var userId = "Example user Id";
+            var result = await replyService.HasTimeoutByUserIdAsync(userId);
+            Assert.False(result);
+        }
     }
 }
