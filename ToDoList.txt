@@ -11,5 +11,6 @@ A lot of the request models could be simplified
 Might add Application proj
 Use () syntax
 Use nameof()
+Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging
