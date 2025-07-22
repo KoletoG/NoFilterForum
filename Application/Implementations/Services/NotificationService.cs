@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using System.Data.Common;
+using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,12 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
+            catch (DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Notifications from user with Id: {UserId} were not deleted / Problem with DB", userId);
+                return PostResult.UpdateFailed;
+            }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
@@ -38,9 +45,6 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId)
-        {
-            return await _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync(userId);
-        }            
+        public async Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId) => await _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync(userId);           
     }
 }
