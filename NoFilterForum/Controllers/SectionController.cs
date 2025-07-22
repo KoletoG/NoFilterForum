@@ -53,7 +53,7 @@ namespace Web.Controllers
             var result = await _sectionService.CreateSectionAsync(createSectionRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index"),
+                PostResult.Success => RedirectToAction(nameof(Index)),
                 PostResult.Forbid => Forbid(),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
@@ -81,7 +81,7 @@ namespace Web.Controllers
             var result = await _sectionService.DeleteSectionAsync(deleteSectionRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index"),
+                PostResult.Success => RedirectToAction(nameof(Index)),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()

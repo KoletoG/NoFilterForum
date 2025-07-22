@@ -54,7 +54,7 @@ namespace Web.Controllers
             var result = await _warningService.AddWarningAsync(createWarningRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Profile", new { userId = createWarningRequest.UserId }),
+                PostResult.Success => RedirectToAction(nameof(ProfileController.Index), "Profile", new { userId = createWarningRequest.UserId }),
                 PostResult.UpdateFailed => Problem(),
                 PostResult.NotFound => NotFound(createWarningViewModel.UserId),
                 _ => Problem()
@@ -74,7 +74,7 @@ namespace Web.Controllers
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("Index", "Notifications"),
+                PostResult.Success => RedirectToAction(nameof(NotificationsController.Index), "Notifications"),
                 _ => Problem()
             };
         }

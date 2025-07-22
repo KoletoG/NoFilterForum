@@ -85,7 +85,7 @@ namespace Web.Controllers
             var result = await _userService.ConfirmUserAsync(confirmUserViewModel.UserId);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Reasons"),
+                PostResult.Success => RedirectToAction(nameof(Reasons)),
                 PostResult.NotFound => NotFound(confirmUserViewModel.UserId),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem("Unknown result")

@@ -9,6 +9,7 @@ KISS principle need to follow
 SOLID wherever i can
 A lot of the request models could be simplified
 Might add Application proj
-
+Use () syntax
+Use nameof()
 //
 Logger.IsEnabled() to not allocate memory when debug logging

@@ -115,7 +115,7 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound($"Reply with Id: {deleteReplyViewModel.ReplyId} was not found"),
-                PostResult.Success => RedirectToAction("Index", new { postId = deleteReplyViewModel.PostId }),
+                PostResult.Success => RedirectToAction(nameof(Index), new { postId = deleteReplyViewModel.PostId }),
                 _ => Problem()
             };
         }
@@ -145,7 +145,7 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound(),
-                PostResult.Success => RedirectToAction("Index", new { postId = createReplyViewModel.PostId}),
+                PostResult.Success => RedirectToAction(nameof(Index), new { postId = createReplyViewModel.PostId}),
                 _ => Problem()
             };
         }

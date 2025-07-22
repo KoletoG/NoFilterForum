@@ -43,7 +43,7 @@ namespace Web.Controllers
             }
             if (await _postService.HasTimeoutAsync(userId))
             {
-                return RedirectToAction("Index", "Post", new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
+                return RedirectToAction(nameof(Index), new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
             createVM.TitleOfSection = HttpUtility.UrlDecode(createVM.TitleOfSection);
             var createPostRequest = PostMappers.MapToRequest(createVM, userId);
@@ -52,7 +52,7 @@ namespace Web.Controllers
             {
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction("Index", "Post", new { titleOfSection = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
+                PostResult.Success => RedirectToAction(nameof(Index), new { titleOfSection = HttpUtility.UrlEncode(createVM.TitleOfSection) }),
                 _ => Problem("Invalid result")
             };
         }
@@ -142,7 +142,7 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            return RedirectToAction("Index", new { titleOfSection = sectionTitle });
+            return RedirectToAction(nameof(Index), new { titleOfSection = sectionTitle });
 
         }
     }

@@ -54,7 +54,7 @@ namespace Web.Controllers
             var result = await _reportService.DeleteReportByIdAsync(deleteReportRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index"),
+                PostResult.Success => RedirectToAction(nameof(Index)),
                 PostResult.NotFound => NotFound(deleteReportViewModel.Id),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
@@ -84,12 +84,12 @@ namespace Web.Controllers
             {
                 if (createReportRequest.IsPost)
                 {
-                    return RedirectToAction("Index", "Reply", new { postId = createReportViewModel.IdOfPostReply});
+                    return RedirectToAction(nameof(Index), "Reply", new { postId = createReportViewModel.IdOfPostReply});
                 }
                 else
                 {
                     var postId1 = await _postService.GetPostIdByReplyId(createReportRequest.IdOfPostOrReply);
-                    return RedirectToAction("Index", "Reply", new { postId = postId1});
+                    return RedirectToAction(nameof(Index), "Reply", new { postId = postId1});
                 }
             }
             return result switch

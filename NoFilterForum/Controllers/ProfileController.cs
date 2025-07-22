@@ -51,7 +51,7 @@ namespace Web.Controllers
             var result = await _userService.ChangeEmailByIdAsync(changeEmailRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Profile", new {userId}),
+                PostResult.Success => RedirectToAction(nameof(Index), new {userId}),
                 PostResult.NotFound => NotFound($"User with Id: {userId} was not found."),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
@@ -80,7 +80,7 @@ namespace Web.Controllers
             var result = await _userService.ChangeUsernameByIdAsync(changeUsernameRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Profile", new { userId }),
+                PostResult.Success => RedirectToAction(nameof(Index), new { userId }),
                 PostResult.NotFound => NotFound($"User with Id: {userId} was not found"),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
@@ -104,7 +104,7 @@ namespace Web.Controllers
             var result = await _userService.ChangeBioAsync(changeUserRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction("Index", "Profile", new {userId= currentUserId }),
+                PostResult.Success => RedirectToAction(nameof(Index), new {userId= currentUserId }),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
