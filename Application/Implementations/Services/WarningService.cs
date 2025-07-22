@@ -19,15 +19,12 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<WarningService> _logger;
-        private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IWarningFactory _warningFactory;
-        public WarningService(IUnitOfWork unitOfWork,IWarningFactory warningFactory, ILogger<WarningService> logger, IHtmlSanitizer htmlSanitizer)
+        public WarningService(IUnitOfWork unitOfWork,IWarningFactory warningFactory, ILogger<WarningService> logger)
         {
             _unitOfWork = unitOfWork;
             _warningFactory = warningFactory;
             _logger = logger;
-            _htmlSanitizer = htmlSanitizer;
-            _htmlSanitizer.AllowedTags.Clear();
         }
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {
