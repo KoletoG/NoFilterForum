@@ -1,5 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Data.Common;
+using System.Runtime.CompilerServices;
 using Core.Enums;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs;
 using Core.Models.DTOs.InputDTOs.Warning;
@@ -18,9 +20,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<WarningService> _logger;
         private readonly IHtmlSanitizer _htmlSanitizer;
-        public WarningService(IUnitOfWork unitOfWork, ILogger<WarningService> logger, IHtmlSanitizer htmlSanitizer)
+        private readonly IWarningFactory _warningFactory;
+        public WarningService(IUnitOfWork unitOfWork,IWarningFactory warningFactory, ILogger<WarningService> logger, IHtmlSanitizer htmlSanitizer)
         {
             _unitOfWork = unitOfWork;
+            _warningFactory = warningFactory;
             _logger = logger;
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
@@ -32,8 +36,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            createWarningRequest.Content = _htmlSanitizer.Sanitize(createWarningRequest.Content);
-            var warning = new WarningDataModel(createWarningRequest.Content, user);
+            var warning = _warningFactory.Create(createWarningRequest.Content, user);
             user.Warnings.Add(warning);
             try
             {
@@ -43,17 +46,20 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
+            catch (DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Warning hasn't been added to user with Id: {UserId} / Problem with DB", user.Id);
+                return PostResult.UpdateFailed;
+            }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, $"Warning hasn't been added to user with Id: {user.Id}");
+                _logger.LogError(ex, "Warning hasn't been added to user with Id: {UserId}",user.Id);
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId)
-        {
-            return await _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync(userId);
-        }
+        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) => await _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync(userId);
         public async Task<PostResult> AcceptWarningsAsync(string userId)
         {
             var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
@@ -72,6 +78,12 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
+            }
+            catch(DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Warnings of user with Id: {UserId} were not accepted / Problem with DB", userId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

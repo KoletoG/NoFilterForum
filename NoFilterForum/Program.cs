@@ -63,6 +63,7 @@ namespace Web
             builder.Services.AddScoped<ISectionFactory, SectionFactory>();
             builder.Services.AddScoped<IReportFactory, ReportFactory>();
             builder.Services.AddScoped<IReplyFactory, ReplyFactory>();
+            builder.Services.AddScoped<IWarningFactory, WarningFactory>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
