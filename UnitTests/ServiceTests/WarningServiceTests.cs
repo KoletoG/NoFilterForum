@@ -22,13 +22,12 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task GetWarningsContentDtosByUserIdAsync_ShouldReturnListWarningsContentDto_WhenUserIdIsValid()
         {
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
             string userId = "TestUserId";
-            iHtmlSanitizerMock.SetupGet(x=>x.AllowedTags).Returns(new HashSet<string>());
+            var iWarningFactory = new Mock<IWarningFactory>();
             iUnitOfWorkMock.Setup(x => x.Warnings.GetWarningsContentAsDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<WarningsContentDto>());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.GetWarningsContentDtosByUserIdAsync(userId);
             Assert.IsType<List<WarningsContentDto>>(result);
         }
@@ -36,12 +35,11 @@ namespace UnitTests.ServiceTests
         public async Task AcceptWarningsAsync_ShouldReturnSuccess_WhenListWarningsIsEmpty()
         {
             string userId = "TestUserId";
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
+            var iWarningFactory = new Mock<IWarningFactory>();
             iUnitOfWorkMock.Setup(x => x.Warnings.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync((List<WarningDataModel>?)null);
-            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AcceptWarningsAsync(userId);
             Assert.Equal(PostResult.Success, result);
         }
@@ -49,12 +47,11 @@ namespace UnitTests.ServiceTests
         public async Task AcceptWarningsAsync_ShouldReturnSuccess_WhenWarningsAreAccepted()
         {
             string userId = "TestUserId";
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
             iUnitOfWorkMock.Setup(x => x.Warnings.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<WarningDataModel>());
-            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AcceptWarningsAsync(userId);
             Assert.Equal(PostResult.Success, result);
         }
@@ -63,13 +60,12 @@ namespace UnitTests.ServiceTests
         public async Task AcceptWarningsAsync_ShouldReturnUpdateFailed_ExistProblemWithDB()
         {
             string userId = "TestUserId";
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
             iUnitOfWorkMock.Setup(x => x.Warnings.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<WarningDataModel>());
-            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             iUnitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AcceptWarningsAsync(userId);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
@@ -77,13 +73,11 @@ namespace UnitTests.ServiceTests
         public async Task AddWarningAsync_ShouldReturnSuccess_WhenRequestIsValid()
         {
             var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
-            iHtmlSanitizerMock.Setup(x=>x.Sanitize(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<IMarkupFormatter>())).Returns((string input, string a, IMarkupFormatter b) => input);
             iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel() { Warnings = new List<WarningDataModel>()});
-            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AddWarningAsync(createWarningRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -91,12 +85,11 @@ namespace UnitTests.ServiceTests
         public async Task AddWarningAsync_ShouldReturnNotFound_WhenRequestIsInvalid()
         {
             var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
+            var iWarningFactory = new Mock<IWarningFactory>();
             iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync((UserDataModel?)null);
-            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AddWarningAsync(createWarningRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -104,14 +97,12 @@ namespace UnitTests.ServiceTests
         public async Task AddWarningAsync_ShouldReturnUpdateFailed_WhenExistsProblemWithDB()
         {
             var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
-            var iHtmlSanitizerMock = new Mock<IHtmlSanitizer>();
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
+            var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
-            iHtmlSanitizerMock.Setup(x => x.Sanitize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IMarkupFormatter>())).Returns((string input, string a, IMarkupFormatter b) => input);
             iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel() { Warnings = new List<WarningDataModel>() });
-            iHtmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             iUnitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
-            var warningService = new WarningService(iUnitOfWorkMock.Object, iLoggerMock.Object, iHtmlSanitizerMock.Object);
+            var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AddWarningAsync(createWarningRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
