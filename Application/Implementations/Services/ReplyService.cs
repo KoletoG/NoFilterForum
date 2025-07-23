@@ -173,18 +173,11 @@ namespace NoFilterForum.Infrastructure.Services
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
             if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
             {
-                if (await _userService.IsAdminRoleByIdAsync(userId))
-                {
-                    return false;
-                }
-                return true;
+                return await _userService.IsAdminRoleByIdAsync(userId);
             }
             return false;
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest)
-        {
-            return await _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync(getReplyItemRequest.UserId);
-        }
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest) => await _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync(getReplyItemRequest.UserId);
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
