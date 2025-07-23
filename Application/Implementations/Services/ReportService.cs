@@ -23,18 +23,9 @@ namespace NoFilterForum.Infrastructure.Services
             _reportFactory = reportFactory;
             _unitOfWork = unitOfWork;
         }
-        public async Task<List<ReportDataModel>> GetAllReportsAsync()
-        {
-            return await _unitOfWork.Reports.GetAllAsync();
-        }
-        public async Task<List<ReportItemDto>> GetAllDtosAsync()
-        {
-            return await _unitOfWork.Reports.GetReportDtosAsync();
-        }
-        public async Task<bool> AnyReportsAsync()
-        {
-            return await _unitOfWork.Reports.ExistsReportsAsync();
-        }
+        public async Task<List<ReportDataModel>> GetAllReportsAsync() =>await _unitOfWork.Reports.GetAllAsync();
+        public async Task<List<ReportItemDto>> GetAllDtosAsync() => await _unitOfWork.Reports.GetReportDtosAsync();
+        public async Task<bool> AnyReportsAsync() => await _unitOfWork.Reports.ExistsReportsAsync();
         public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest)
         {
             var report = await _unitOfWork.Reports.GetByIdAsync(deleteReportRequest.ReportId);
