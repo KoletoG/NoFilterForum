@@ -155,10 +155,7 @@ namespace NoFilterForum.Infrastructure.Services
             post.TogglePin();
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Posts.Update(post);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<PostDataModel>(_unitOfWork.Posts.Update, post);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -214,14 +211,8 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle)
-        {
-            return await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
-        }
-        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest)
-        {
-            return await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(getIndexPostRequest.TitleOfSection, getIndexPostRequest.Page, PostConstants.PostsPerSection);
-        }
+        public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle) => await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
+        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest) => await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(getIndexPostRequest.TitleOfSection, getIndexPostRequest.Page, PostConstants.PostsPerSection);
         public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest)
         {
             var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId);
