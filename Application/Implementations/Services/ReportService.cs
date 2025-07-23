@@ -70,10 +70,7 @@ namespace NoFilterForum.Infrastructure.Services
             var report = _reportFactory.CreateReport(createReportRequest.Content, userSentFrom, userSentTo, createReportRequest.IdOfPostOrReply,createReportRequest.IsPost);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Reports.CreateAsync(report);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.CreateAsync,report);
                 return PostResult.Success;
             }
             catch (Exception ex) 

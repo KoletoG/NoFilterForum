@@ -17,7 +17,7 @@ namespace Core.Interfaces.Repositories
         IReportRepository Reports { get; }
         IWarningRepository Warnings { get; }
         Task<int> CommitAsync();
-        Task RunPOSTOperationAsync<T>(T obj, Action<T> action) where T : class;
+        Task RunPOSTOperationAsync<T>(Func<T, Task> func, T obj) where T : class;
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();

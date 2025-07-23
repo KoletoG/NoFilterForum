@@ -51,10 +51,10 @@ namespace Infrastructure.Repositories
         {
             _transaction = await _context.Database.BeginTransactionAsync();
         }
-        public async Task RunPOSTOperationAsync<T>(T obj, Action<T> action) where T : class
+        public async Task RunPOSTOperationAsync<T>(Func<T, Task> func, T obj) where T : class
         {
             await BeginTransactionAsync();
-            action.Invoke(obj);
+            await func.Invoke(obj);
             await CommitAsync();
             await CommitTransactionAsync();
         }
