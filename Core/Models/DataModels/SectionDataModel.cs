@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static System.Collections.Specialized.BitVector32;
 
 namespace NoFilterForum.Core.Models.DataModels
 {

@@ -10,8 +10,8 @@ namespace Core.Constants
 {
     public static class UserConstants
     {
-        public static HashSet<string> adminNames = new HashSet<string>() { "Admin" };
-        public static UserDataModel DefaultUser = new UserDataModel()
+        public static readonly HashSet<string> adminNames = new HashSet<string>() { "Admin" };
+        public static readonly UserDataModel DefaultUser = new UserDataModel()
         {
             Id = "DefaultUserId",
             Email = "null@email.c",

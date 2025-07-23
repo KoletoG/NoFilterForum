@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NoFilterForum.Infrastructure.Services
 {
@@ -91,10 +90,7 @@ namespace NoFilterForum.Infrastructure.Services
                 UserDto = profileUserDto
             };
         }
-        public bool IsDefaultUserId(string id)
-        {
-            return id == UserConstants.DefaultUser.Id;
-        }
+        public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id;
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
@@ -127,18 +123,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> UsernameExistsAsync(string username)
-        {
-            return await _unitOfWork.Users.UsernameExistsAsync(username);
-        }
-        public async Task<bool> EmailExistsAsync(string email)
-        {
-            return await _unitOfWork.Users.EmailExistsAsync(email);
-        }
-        public int GetTotalCountByPostsAndReplies(List<ReplyItemDto> replies, List<ProfilePostDto> posts)
-        {
-            return replies.Count + posts.Count;
-        }
+        public async Task<bool> UsernameExistsAsync(string username) => await _unitOfWork.Users.UsernameExistsAsync(username);
+        public async Task<bool> EmailExistsAsync(string email) => await _unitOfWork.Users.EmailExistsAsync(email);
+        public int GetTotalCountByPostsAndReplies(List<ReplyItemDto> replies, List<ProfilePostDto> posts) => replies.Count + posts.Count;
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);
@@ -171,18 +158,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> AnyNotConfirmedUsersAsync()
-        {
-            return await _unitOfWork.Users.ExistsByNotConfirmedAsync();
-        }
-        public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUsersAsync()
-        {
-            return await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
-        }
-        public async Task<UserDataModel> GetUserByIdAsync(string id)
-        {
-            return await _unitOfWork.Users.GetByIdAsync(id);
-        }
+        public async Task<bool> AnyNotConfirmedUsersAsync()=> await _unitOfWork.Users.ExistsByNotConfirmedAsync();
+        public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUsersAsync() => await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
+        public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
         public async Task<PostResult> ConfirmUserAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -213,7 +191,6 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> BanUserByIdAsync(string userId)
         {
-
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user is null)
             {
@@ -297,10 +274,7 @@ namespace NoFilterForum.Infrastructure.Services
             string randomImgUrl = NanoidDotNet.Nanoid.Generate() + "_" + imageFileName;
             return randomImgUrl;
         }
-        private string GetImageUrl(string imageName)
-        {
-            return Path.Combine("images", imageName);
-        }
+        private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
         {
             var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);

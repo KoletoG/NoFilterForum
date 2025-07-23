@@ -11,6 +11,8 @@ A lot of the request models could be simplified
 Might add Application proj
 Use () syntax
 Use nameof()
+YAGNI DRY KISS SOLID 
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging
+Query / Handler / Commands - CQRS with MediatR
