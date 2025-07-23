@@ -35,10 +35,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Reports.Delete(report);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.Delete, report);
                 return PostResult.Success;
             }
             catch (Exception ex)
