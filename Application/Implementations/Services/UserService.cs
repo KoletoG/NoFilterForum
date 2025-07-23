@@ -49,7 +49,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return users;
         }
-        public async Task<CurrentUserReplyIndexDto> GetCurrentUserReplyIndexDtoByIdAsync(string id)
+        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)
         {
             return await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(id);
         }
@@ -226,14 +226,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> IsAdminRoleByIdAsync(string userId)
         {
             var userRole = await _unitOfWork.Users.GetUserRoleIdAsync(userId);
-            if(userRole == UserRoles.Admin)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return userRole == UserRoles.Admin;
         }
         public async Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest)
         {
@@ -266,13 +259,12 @@ namespace NoFilterForum.Infrastructure.Services
         }
         private string GetImageFileUrl(string imageFileName)
         {
-            imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName));
-            imageFileName = imageFileName.Replace(' ', '_');
-            imageFileName = imageFileName.ToLower(); 
             var invalidChars = Path.GetInvalidFileNameChars();
+            imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName))
+                                .Replace(' ', '_')
+                                .ToLower();
             imageFileName = new string(imageFileName.Where(c => !invalidChars.Contains(c)).ToArray());
-            string randomImgUrl = NanoidDotNet.Nanoid.Generate() + "_" + imageFileName;
-            return randomImgUrl;
+            return string.Concat(NanoidDotNet.Nanoid.Generate(), "_", imageFileName);
         }
         private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
