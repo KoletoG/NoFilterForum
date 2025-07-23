@@ -19,6 +19,7 @@ namespace Core.Interfaces.Repositories
         Task<int> CommitAsync();
         Task RunPOSTOperationAsync<T>(Func<T, Task> func, T obj) where T : class;
         Task RunPOSTOperationAsync<T>(Action<T> func, T obj) where T : class;
+        Task RunPOSTOperationAsync<T>(Action<List<T>> func, List<T> obj) where T : class;
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();

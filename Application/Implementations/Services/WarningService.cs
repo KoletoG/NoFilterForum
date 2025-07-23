@@ -37,10 +37,7 @@ namespace NoFilterForum.Infrastructure.Services
             user.Warnings.Add(warning);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
                 return PostResult.Success;
             }
             catch (DbException ex)
@@ -70,10 +67,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Warnings.UpdateRange(warnings);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<WarningDataModel>(_unitOfWork.Warnings.UpdateRange, warnings);
                 return PostResult.Success;
             }
             catch(DbException ex)

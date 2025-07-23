@@ -59,6 +59,13 @@ namespace Infrastructure.Repositories
             await CommitAsync();
             await CommitTransactionAsync();
         }
+        public async Task RunPOSTOperationAsync<T>(Action<List<T>> func, List<T> obj) where T : class
+        {
+            await BeginTransactionAsync();
+            func.Invoke(obj);
+            await CommitAsync();
+            await CommitTransactionAsync();
+        }
         public async Task CommitTransactionAsync() => await _transaction.CommitAsync();
         public async Task RollbackTransactionAsync() => await _transaction.RollbackAsync();
     }
