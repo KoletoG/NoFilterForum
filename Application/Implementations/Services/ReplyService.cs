@@ -124,13 +124,12 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
         {
-            var listReplyIndexItemDto = new List<ReplyIndexItemDto>();
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostId);
             if (repliesCount > 0) 
             {
-                listReplyIndexItemDto = await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page,PostConstants.PostsPerSection);
+                return await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page,PostConstants.PostsPerSection);
             }
-            return listReplyIndexItemDto;
+            return new();
         }
         public async Task<(int page,int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId ="")
         {
