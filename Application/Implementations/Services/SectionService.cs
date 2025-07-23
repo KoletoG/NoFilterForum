@@ -31,7 +31,7 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _memoryCache = memoryCache;
         }
-        public async Task<List<SectionItemDto>> GetAllSectionItemDtosAsync()
+        public async Task<List<SectionItemDto>> GetAllSectionItemDtosAsync() // Move caching to another class
         {
             if (!_memoryCache.TryGetValue("sections", out List<SectionItemDto> sections))
             {
@@ -53,10 +53,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle);
         }
-        public async Task<int> GetPostsCountByIdAsync(string sectionId)
-        {
-            return await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
-        }
+        public async Task<int> GetPostsCountByIdAsync(string sectionId) => await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
         public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest)
         {
             if (!await _userService.IsAdminRoleByIdAsync(createSectionRequest.UserId))
@@ -66,10 +63,7 @@ namespace NoFilterForum.Infrastructure.Services
             var section = _sectionFactory.Create(createSectionRequest.Title, createSectionRequest.Description);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                await _unitOfWork.Sections.CreateAsync(section);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<SectionDataModel>(_unitOfWork.Sections.CreateAsync, section);
                 return PostResult.Success;
             }
             catch (Exception ex)
