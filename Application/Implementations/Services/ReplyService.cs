@@ -20,15 +20,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         private readonly ILogger<ReplyService> _logger;
-        private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IReplyFactory _replyFactory;
-        public ReplyService(IUnitOfWork unitOfWork,IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger, IHtmlSanitizer htmlSanitizer)
+        public ReplyService(IUnitOfWork unitOfWork,IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger)
         {
             _unitOfWork = unitOfWork;
             _replyFactory = replyFactory;
-            _htmlSanitizer = htmlSanitizer;
-            _htmlSanitizer.AllowedTags.Clear();
-            _htmlSanitizer.AllowedTags.Add("a");
             _logger = logger;
             _userService = userService;
         }

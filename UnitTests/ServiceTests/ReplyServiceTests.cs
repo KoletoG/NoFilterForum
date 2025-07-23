@@ -25,17 +25,14 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new(); 
             unitOfWorkMock.Setup(x => x.Replies.GetCountByPostIdAsync(It.IsAny<string>())).ReturnsAsync(5);
             unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<ReplyIndexItemDto>());
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest() { Page = 1,PostId="ExampleId" };
             var result = await replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
@@ -49,17 +46,14 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<ReplyItemDto>());
             var getReplyItemRequest = new GetReplyItemRequest() { UserId = "UserIdExample" };
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var result = await replyService.GetListReplyItemDtoAsync(getReplyItemRequest);
             Assert.IsType<List<ReplyItemDto>>(result);
@@ -72,16 +66,13 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.MinValue);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
@@ -93,16 +84,13 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
@@ -114,17 +102,14 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
@@ -136,9 +121,7 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             List<ReplyIndexItemDto> replyIndexItems = new List<ReplyIndexItemDto>();
             PostReplyIndexDto post = new PostReplyIndexDto() { Content="Example content"};
             string currentUsername = "Current username Example";
@@ -146,8 +129,7 @@ namespace UnitTests.ServiceTests
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             replyService.MarkTagsOfContents(ref replyIndexItems, ref post, currentUsername);
             Assert.Equal("Example content",post.Content);
@@ -158,16 +140,13 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync((ReplyDataModel?)null);
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
@@ -179,7 +158,6 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             unitOfWorkMock.Setup(x=>x.Users.Update(It.IsAny<UserDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
@@ -189,13 +167,11 @@ namespace UnitTests.ServiceTests
                     Id= "UserIdExample"
                 }
             });
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
@@ -207,7 +183,6 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
@@ -218,13 +193,11 @@ namespace UnitTests.ServiceTests
                     Id = "UserIdExample"
                 }
             });
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
@@ -236,7 +209,6 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IHtmlSanitizer> htmlSanitizerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
@@ -246,13 +218,11 @@ namespace UnitTests.ServiceTests
                     Id = "ExampleUserId"
                 }
             });
-            htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object,
-                htmlSanitizerMock.Object
+                loggerMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
