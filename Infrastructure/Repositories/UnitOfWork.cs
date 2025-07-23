@@ -42,15 +42,8 @@ namespace Infrastructure.Repositories
         public ISectionRepository Sections { get; }
         public IWarningRepository Warnings { get; }
 
-        public async Task<int> CommitAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task BeginTransactionAsync()
-        {
-            _transaction = await _context.Database.BeginTransactionAsync();
-        }
+        public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
+        public async Task BeginTransactionAsync() => _transaction = await _context.Database.BeginTransactionAsync();
         public async Task RunPOSTOperationAsync<T>(Func<T, Task> func, T obj) where T : class
         {
             await BeginTransactionAsync();
@@ -58,6 +51,7 @@ namespace Infrastructure.Repositories
             await CommitAsync();
             await CommitTransactionAsync();
         }
+        // If not used outside, make transaction methods private
         public async Task RunPOSTOperationAsync<T>(Action<T> func, T obj) where T : class
         {
             await BeginTransactionAsync();
@@ -65,14 +59,7 @@ namespace Infrastructure.Repositories
             await CommitAsync();
             await CommitTransactionAsync();
         }
-        public async Task CommitTransactionAsync()
-        {
-            await _transaction.CommitAsync();
-        }
-
-        public async Task RollbackTransactionAsync()
-        {
-            await _transaction.RollbackAsync();
-        }
+        public async Task CommitTransactionAsync() => await _transaction.CommitAsync();
+        public async Task RollbackTransactionAsync() => await _transaction.RollbackAsync();
     }
 }
