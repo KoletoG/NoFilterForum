@@ -51,7 +51,7 @@ namespace Infrastructure.Repositories
         {
             _transaction = await _context.Database.BeginTransactionAsync();
         }
-        public async Task RunPOSTOperation<T>(T obj, Action<T> action) where T : class
+        public async Task RunPOSTOperationAsync<T>(T obj, Action<T> action) where T : class
         {
             await BeginTransactionAsync();
             action.Invoke(obj);
