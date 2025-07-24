@@ -98,10 +98,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<string?> GetSectionTitleByPostIdAsync(string postId)
-        {
-            return await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
-        }
+        public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
         public async Task<string?> GetPostIdByReplyId(string replyId) => await _unitOfWork.Replies.GetPostIdById(replyId);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync(postId);
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest) => await _unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync(getProfilePostDtoRequest.UserId);
@@ -128,10 +125,11 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> HasTimeoutAsync(string userId)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
-            bool hasTimeout = dateOfLastPost == default 
-                ? false 
-                : dateOfLastPost.AddMinutes(PostConstants.TimeoutPosts) > DateTime.Now;
-            return hasTimeout;
+            if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
+            {
+                return await _userService.IsAdminRoleByIdAsync(userId);
+            }
+            return false;
         }
         public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {

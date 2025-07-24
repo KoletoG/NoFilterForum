@@ -12,6 +12,7 @@ Might add Application proj
 Use () syntax
 Use nameof()
 YAGNI DRY KISS SOLID 
+Move utility methods from Core
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging
