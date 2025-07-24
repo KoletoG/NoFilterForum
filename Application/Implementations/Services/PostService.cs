@@ -133,18 +133,9 @@ namespace NoFilterForum.Infrastructure.Services
         {
             return await _unitOfWork.Posts.GetSectionTitleByIdAsync(postId);
         }
-        public async Task<string?> GetPostIdByReplyId(string replyId)
-        {
-            return await _unitOfWork.Replies.GetPostIdById(replyId);
-        }
-        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId)
-        {
-            return await _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync(postId);
-        }
-        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest)
-        {
-            return await _unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync(getProfilePostDtoRequest.UserId);
-        }
+        public async Task<string?> GetPostIdByReplyId(string replyId) => await _unitOfWork.Replies.GetPostIdById(replyId);
+        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync(postId);
+        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest) => await _unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync(getProfilePostDtoRequest.UserId);
         public async Task<PostResult> PinPostAsync(string postId)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(postId);
