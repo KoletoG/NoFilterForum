@@ -188,10 +188,7 @@ namespace NoFilterForum.Infrastructure.Services
             bool shouldForbid = reply.User.Id == request.UserId
                 ? false
                 : !(await _userService.IsAdminRoleByIdAsync(request.UserId));
-            if (shouldForbid)
-            {
-                return PostResult.Forbid;
-            }
+            if (shouldForbid) return PostResult.Forbid;
             if (reply.User != UserConstants.DefaultUser)
             {
                 reply.User.DecrementPostCount();

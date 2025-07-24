@@ -206,29 +206,25 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            if (post.User.Id != deletePostRequest.UserId)
-            {
-                bool isAdmin = await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId);
-                if (!isAdmin)
-                {
-                    return PostResult.Forbid;
-                }
-            }
+            bool shouldForbid = post.User.Id == deletePostRequest.UserId 
+                ? false 
+                : !(await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId));
+            if (shouldForbid) return PostResult.Forbid;
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
-            HashSet<UserDataModel> users = repliesOfPost.Select(x => x.User).ToHashSet();
+            var usersSet = repliesOfPost.Select(x => x.User).ToHashSet();
             var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x => x.Id).ToHashSet());
             foreach(var reply in repliesOfPost)
             {
                 reply.User.DecrementPostCount();
             }
             post.User.DecrementPostCount();
-            users.Add(post.User);
+            usersSet.Add(post.User);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
                 if(repliesOfPost.Count > 0) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
-                _unitOfWork.Users.UpdateRange(users.ToList());
+                _unitOfWork.Users.UpdateRange(usersSet.ToList());
                 _unitOfWork.Posts.Delete(post);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
