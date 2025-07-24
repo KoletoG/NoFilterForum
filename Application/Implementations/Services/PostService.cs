@@ -213,19 +213,20 @@ namespace NoFilterForum.Infrastructure.Services
             }
             if (post.User.Id != deletePostRequest.UserId)
             {
-                if(!await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId))
+                bool isAdmin = await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId);
+                if (!isAdmin)
                 {
                     return PostResult.Forbid;
                 }
             }
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
-            HashSet<UserDataModel> users = new HashSet<UserDataModel>();
+            HashSet<UserDataModel> users = repliesOfPost.Select(x => x.User).ToHashSet();
             var notifications = new List<NotificationDataModel>();
+            notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x=>x.Id).ToHashSet()));
             foreach(var reply in repliesOfPost)
             {
                 notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
                 reply.User.DecrementPostCount();
-                users.Add(reply.User);
             }
             post.User.DecrementPostCount();
             users.Add(post.User);
