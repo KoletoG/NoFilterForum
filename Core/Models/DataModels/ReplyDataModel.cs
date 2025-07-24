@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Core.Constants;
+using Core.Interfaces.Business_Logic;
 
 namespace NoFilterForum.Core.Models.DataModels
 {
-    public class ReplyDataModel
+    public class ReplyDataModel : ILikeDislike
     {
         [Key]
         public string Id { get; set; }

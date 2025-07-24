@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Core.Constants;
+using Core.Interfaces.Business_Logic;
 
 namespace NoFilterForum.Core.Models.DataModels
 {
-    public class PostDataModel
+    public class PostDataModel : ILikeDislike
     {
         [Key]
         public string Id { get; set; }
