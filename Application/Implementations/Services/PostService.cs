@@ -221,11 +221,9 @@ namespace NoFilterForum.Infrastructure.Services
             }
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
             HashSet<UserDataModel> users = repliesOfPost.Select(x => x.User).ToHashSet();
-            var notifications = new List<NotificationDataModel>();
-            notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x=>x.Id).ToHashSet()));
+            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x => x.Id).ToHashSet());
             foreach(var reply in repliesOfPost)
             {
-                notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
                 reply.User.DecrementPostCount();
             }
             post.User.DecrementPostCount();
@@ -233,8 +231,8 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Replies.DeleteRange(repliesOfPost);
-                _unitOfWork.Notifications.DeleteRange(notifications);
+                if(repliesOfPost.Count > 0) _unitOfWork.Replies.DeleteRange(repliesOfPost);
+                if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
                 _unitOfWork.Users.UpdateRange(users.ToList());
                 _unitOfWork.Posts.Delete(post);
                 await _unitOfWork.CommitAsync();
