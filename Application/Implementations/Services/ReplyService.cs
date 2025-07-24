@@ -185,13 +185,12 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            if (reply.User.Id != request.UserId)
+            bool shouldForbid = reply.User.Id == request.UserId
+                ? false
+                : !(await _userService.IsAdminRoleByIdAsync(request.UserId));
+            if (shouldForbid)
             {
-                bool isAdmin = await _userService.IsAdminRoleByIdAsync(request.UserId);
-                if (!isAdmin)
-                {
-                    return PostResult.Forbid;
-                }
+                return PostResult.Forbid;
             }
             if (reply.User != UserConstants.DefaultUser)
             {
@@ -201,7 +200,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Notifications.DeleteRange(notifications);
+                if(notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);
                 await _unitOfWork.CommitAsync();
