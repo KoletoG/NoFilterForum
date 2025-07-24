@@ -81,7 +81,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            LikeDislikeHelper.ApplyLikeLogic(user, post, likeDislikeRequest.PostReplyId);
+            LikeDislikeHelper.ApplyDislikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();

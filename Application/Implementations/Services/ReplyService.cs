@@ -1,4 +1,5 @@
-﻿using Core.Constants;
+﻿using Application.Helpers;
+using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Business_Logic;
 using Core.Interfaces.Factories;
@@ -41,23 +42,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var wasLiked = user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
-            var wasDisliked = user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
-            if (wasDisliked)
-            {
-                reply.IncrementLikes();
-                user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
-            }
-            if (wasLiked)
-            {
-                reply.DecrementLikes();
-                user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
-            }
-            else
-            {
-                reply.IncrementLikes();
-                user.LikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
-            }
+            LikeDislikeHelper.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -86,23 +71,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var wasLiked = user.LikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
-            var wasDisliked = user.DislikesPostRepliesIds.Contains(likeDislikeRequest.PostReplyId);
-            if (wasLiked)
-            {
-                reply.DecrementLikes();
-                user.LikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
-            }
-            if (wasDisliked)
-            {
-                reply.IncrementLikes();
-                user.DislikesPostRepliesIds.Remove(likeDislikeRequest.PostReplyId);
-            }
-            else
-            {
-                reply.DecrementLikes();
-                user.DislikesPostRepliesIds.Add(likeDislikeRequest.PostReplyId);
-            }
+            LikeDislikeHelper.ApplyDislikeLogic(user,reply,likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
