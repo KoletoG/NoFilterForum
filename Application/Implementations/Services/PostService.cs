@@ -159,15 +159,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> HasTimeoutAsync(string userId)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
-            if (dateOfLastPost == default)
-            {
-                return false;
-            }
-            if (dateOfLastPost.AddMinutes(PostConstants.TimeoutPosts) > DateTime.Now)
-            {
-                return true;
-            }
-            return false;
+            bool hasTimeout = dateOfLastPost == default 
+                ? false 
+                : dateOfLastPost.AddMinutes(PostConstants.TimeoutPosts) > DateTime.Now;
+            return hasTimeout;
         }
         public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {
