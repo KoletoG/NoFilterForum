@@ -1,9 +1,9 @@
-﻿using Application.Helpers;
-using Core.Constants;
+﻿using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Business_Logic;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Interfaces.Services;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
@@ -23,9 +23,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<ReplyService> _logger;
         private readonly IReplyFactory _replyFactory;
-        public ReplyService(IUnitOfWork unitOfWork, IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger)
+        private readonly IReactionService _reactionService;
+        public ReplyService(IUnitOfWork unitOfWork,IReactionService reactionService, IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger)
         {
             _unitOfWork = unitOfWork;
+            _reactionService = reactionService;
             _replyFactory = replyFactory;
             _logger = logger;
             _userService = userService;
@@ -42,7 +44,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            LikeDislikeHelper.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
+            _reactionService.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -71,7 +73,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            LikeDislikeHelper.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
+            _reactionService.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();

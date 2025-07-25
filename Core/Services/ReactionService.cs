@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Interfaces.Business_Logic;
-using Core.Models.DTOs.InputDTOs;
-using Microsoft.Extensions.Hosting;
+using Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 
-namespace Application.Helpers
+namespace Core.Services
 {
-    public static class LikeDislikeHelper
+    public class ReactionService : IReactionService
     {
-        public static void ApplyDislikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike
+        public void ApplyDislikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike
         {
             var wasLiked = user.LikesPostRepliesIds.Contains(requestId);
             var wasDisliked = user.DislikesPostRepliesIds.Contains(requestId);
@@ -32,7 +31,7 @@ namespace Application.Helpers
                 user.DislikesPostRepliesIds.Add(requestId);
             }
         }
-        public static void ApplyLikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike
+        public void ApplyLikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike
         {
             var wasLiked = user.LikesPostRepliesIds.Contains(requestId);
             var wasDisliked = user.DislikesPostRepliesIds.Contains(requestId);
