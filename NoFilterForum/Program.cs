@@ -1,8 +1,8 @@
 using Application.Interfaces.Services;
+using Core.Implementations.Services;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using Core.Services;
 using Ganss.Xss;
 using Infrastructure.Factories;
 using Infrastructure.Repositories;

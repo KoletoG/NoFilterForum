@@ -7,7 +7,7 @@ using Core.Interfaces.Business_Logic;
 using Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 
-namespace Core.Services
+namespace Core.Implementations.Services
 {
     public class ReactionService : IReactionService
     {
