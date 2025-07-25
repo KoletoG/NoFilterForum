@@ -1,8 +1,10 @@
+using Application.Interfaces.Services;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Ganss.Xss;
 using Infrastructure.Factories;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -64,6 +66,7 @@ namespace Web
             builder.Services.AddScoped<IReportFactory, ReportFactory>();
             builder.Services.AddScoped<IReplyFactory, ReplyFactory>();
             builder.Services.AddScoped<IWarningFactory, WarningFactory>();
+            builder.Services.AddSingleton<ICacheService, CacheService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
