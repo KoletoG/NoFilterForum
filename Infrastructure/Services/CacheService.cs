@@ -22,7 +22,7 @@ namespace Infrastructure.Services
             if (!_memoryCache.TryGetValue(key, out T? obj))
             {
                 obj = await unitOfWorkMethod.Invoke();
-                _memoryCache.Set(key, obj, minutes > 0 ? TimeSpan.FromMinutes(seconds) : TimeSpan.FromSeconds(seconds));
+                _memoryCache.Set(key, obj, minutes > 0 ? TimeSpan.FromMinutes(minutes) : TimeSpan.FromSeconds(seconds));
             }
             return obj;
         }

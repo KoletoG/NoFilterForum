@@ -8,6 +8,6 @@ namespace Application.Interfaces.Services
 {
     public interface ICacheService
     {
-        public Task<T> TryGetValue<T>(string key, Func<Task<T>> unitOfWorkMethod, int seconds = 15, int minutes = 0);
+        public Task<T?> TryGetValue<T>(string key, Func<Task<T>> unitOfWorkMethod, int seconds = 15, int minutes = 0);
     }
 }
