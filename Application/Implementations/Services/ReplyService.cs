@@ -143,7 +143,7 @@ namespace NoFilterForum.Infrastructure.Services
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
             if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
             {
-                return await _userService.IsAdminRoleByIdAsync(userId);
+                return !await _userService.IsAdminRoleByIdAsync(userId);
             }
             return false;
         }
