@@ -30,18 +30,14 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<PostService> _logger;
         private readonly IPostFactory _postFactory;
-        private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IReactionService _reactionService;
-        public PostService(IUnitOfWork unitOfWork,IReactionService reactionService,IUserService userService ,ILogger<PostService> logger,IPostFactory postFactory, IHtmlSanitizer htmlSanitizer)
+        public PostService(IUnitOfWork unitOfWork,IReactionService reactionService,IUserService userService ,ILogger<PostService> logger,IPostFactory postFactory)
         {
             _unitOfWork = unitOfWork;
             _reactionService = reactionService;
             _logger = logger;
             _userService = userService;
             _postFactory = postFactory;
-            _htmlSanitizer = htmlSanitizer;
-            _htmlSanitizer.AllowedTags.Clear();
-            _htmlSanitizer.AllowedTags.Add("a");
         }
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {

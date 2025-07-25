@@ -12,6 +12,7 @@ Might add Application proj
 Use () syntax
 Use nameof()
 YAGNI DRY KISS SOLID 
+Instance state changing should be encapsulated OOP 101
 Move utility methods from Core
 TRY TO THINK OF A WAY TO HAVE MULTIPLE ACTIONS OR FUNCS IN UNITOFWORK METHOD
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
