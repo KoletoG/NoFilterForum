@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Core.Utility
 {
-    public static class TextFormatter
+    public static class TextFormatterHelper
     {
         public static string LinkCheckText(string text)
         {

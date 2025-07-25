@@ -8,6 +8,7 @@ using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
+using Core.Utility;
 using Ganss.Xss;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -131,7 +132,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            replyService.MarkTagsOfContents(ref replyIndexItems, ref post, currentUsername);
+            TextFormatterHelper.MarkTagsOfContents(replyIndexItems, post, currentUsername);
             Assert.Equal("Example content",post.Content);
         }
         [Fact]
