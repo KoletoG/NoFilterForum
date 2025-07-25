@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices.Marshalling;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.Marshalling;
+using Application.Interfaces.Services;
 using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Repositories;
@@ -22,16 +24,16 @@ namespace NoFilterForum.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly ICacheService _cacheService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<UserService> _logger;
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
         private readonly IHtmlSanitizer _htmlSanitizer; 
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public UserService(IMemoryCache memoryCache,IHtmlSanitizer htmlSanitizer,IWebHostEnvironment webHostEnvironment, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        public UserService(ICacheService cacheService,IHtmlSanitizer htmlSanitizer,IWebHostEnvironment webHostEnvironment, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
-            _memoryCache = memoryCache;
+            _cacheService = cacheService;
             _htmlSanitizer = htmlSanitizer;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -42,11 +44,7 @@ namespace NoFilterForum.Infrastructure.Services
         // Add paging
         public async Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()
         {
-            if (!_memoryCache.TryGetValue($"usersListNoDefault", out List<UserForAdminPanelDto> users))
-            {
-                users = await _unitOfWork.Users.GetUserItemsForAdminDtoAsync();
-                _memoryCache.Set($"usersListNoDefault", users, TimeSpan.FromMinutes(5));
-            }
+            var users = await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync);
             return users;
         }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(userId);
