@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
+using Web.Helpers;
 using Web.Mappers;
 using Web.ViewModels.Profile;
 
@@ -168,7 +169,7 @@ namespace Web.Controllers
             page = PageUtility.ValidatePageNumber(page,totalPageCount);
             var replyViewModelList = replyDtoList.Select(ProfileMapper.MapToViewModel).ToList();
             var postViewModelList = postDtoList.Select(ProfileMapper.MapToViewModel).ToList();
-            var dictionary = _userService.OrderDates(postDtoList, replyDtoList,page, PostConstants.PostsPerSection);
+            var dictionary = DateHelper.OrderDates(postDtoList, replyDtoList,page, PostConstants.PostsPerSection);
             var profileViewModel = ProfileMapper.MapToViewModel(postViewModelList,
                 replyViewModelList,
                 resultUser.IsSameUser,

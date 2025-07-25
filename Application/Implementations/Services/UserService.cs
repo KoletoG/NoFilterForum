@@ -48,20 +48,6 @@ namespace NoFilterForum.Infrastructure.Services
             return users;
         }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(userId);
-        public Dictionary<string,DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemDto> replyItemDtos, int page, int countPerPage)
-        {
-            Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
-            foreach (var post in postItemDtos)
-            {
-                dateOrder[post.Id] = post.Created;
-            }
-            foreach (var reply in replyItemDtos)
-            {
-                reply.Content = TextFormatter.ReplaceLinkText(reply.Content);
-                dateOrder[reply.Id] = reply.Created;
-            }
-            return dateOrder.OrderByDescending(x => x.Value).Skip((page - 1) * countPerPage).Take(countPerPage).ToDictionary();
-        }
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
@@ -231,7 +217,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             changeBioRequest.Bio = _htmlSanitizer.Sanitize(changeBioRequest.Bio);
-            changeBioRequest.Bio = TextFormatter.FormatBody(changeBioRequest.Bio);
+            changeBioRequest.Bio = TextFormatter.FormatBody(changeBioRequest.Bio); // Move that
             if(user.Bio == changeBioRequest.Bio)
             {
                 return PostResult.Success;
