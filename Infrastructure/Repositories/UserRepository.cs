@@ -32,6 +32,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
         }
+        public async Task<List<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames)
+        {
+            return await _context.Users.Where(x=>usernames.Contains(x.UserName)).ToListAsync();
+        }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)
         {
             return await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto()

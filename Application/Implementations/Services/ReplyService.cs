@@ -173,6 +173,18 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        private async Task<List<NotificationDataModel>> CreateNotificationsOfReplyContentAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user)
+        {
+            var notificationsList = new List<NotificationDataModel>();
+            string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
+            taggedUsernames = taggedUsernames.Where(x => x != defaultUsername).ToArray();
+            var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernames);
+            foreach(var taggedUser in listOfTaggedUsers)
+            {
+                notificationsList.Add(new(reply, user, taggedUser));
+            }
+            return notificationsList;
+        }
         public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest)
         {
             var user = await _userService.GetUserByIdAsync(createReplyRequest.UserId);
@@ -187,20 +199,9 @@ namespace NoFilterForum.Infrastructure.Services
             }
             var reply = _replyFactory.Create(createReplyRequest.Content, user, post);
             string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
-            var notificationsList = new List<NotificationDataModel>();
             user.IncrementPostCount();
             RoleUtility.AdjustRoleByPostCount(user);
-            foreach (string taggedUsername in taggedUsernames)
-            {
-                if (taggedUsername != UserConstants.DefaultUser.UserName)
-                {
-                    var taggedUser = await _unitOfWork.Users.GetByUsernameAsync(taggedUsername);
-                    if (taggedUser != null)
-                    {
-                        notificationsList.Add(new(reply, user, taggedUser));
-                    }
-                }
-            }
+            var notificationsList = await CreateNotificationsOfReplyContentAsync(taggedUsernames, reply, user);
             post.Replies.Add(reply);
             try
             {
