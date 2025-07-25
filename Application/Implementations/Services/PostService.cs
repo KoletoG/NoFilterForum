@@ -127,7 +127,7 @@ namespace NoFilterForum.Infrastructure.Services
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
             if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
             {
-                return await _userService.IsAdminRoleByIdAsync(userId);
+                return !await _userService.IsAdminRoleByIdAsync(userId);
             }
             return false;
         }
