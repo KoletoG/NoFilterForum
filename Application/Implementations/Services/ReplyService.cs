@@ -173,7 +173,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private async Task<List<NotificationDataModel>> CreateNotificationsOfReplyContentAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user)
+        private async Task<List<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user)
         {
             var notificationsList = new List<NotificationDataModel>();
             string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
@@ -201,7 +201,7 @@ namespace NoFilterForum.Infrastructure.Services
             string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
             user.IncrementPostCount();
             RoleUtility.AdjustRoleByPostCount(user);
-            var notificationsList = await CreateNotificationsOfReplyContentAsync(taggedUsernames, reply, user);
+            var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(taggedUsernames, reply, user);
             post.Replies.Add(reply);
             try
             {
