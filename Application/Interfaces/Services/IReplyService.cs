@@ -14,7 +14,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest);
         public Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId = "");
-        public void MarkTagsOfContents(ref List<ReplyIndexItemDto> replies, ref PostReplyIndexDto post, string currentUsername);
         public Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest);
         public Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest);
     }

@@ -23,7 +23,7 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<ReplyService> _logger;
         private readonly IReplyFactory _replyFactory;
-        public ReplyService(IUnitOfWork unitOfWork,IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger)
+        public ReplyService(IUnitOfWork unitOfWork, IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger)
         {
             _unitOfWork = unitOfWork;
             _replyFactory = replyFactory;
@@ -71,7 +71,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            LikeDislikeHelper.ApplyDislikeLogic(user,reply,likeDislikeRequest.PostReplyId);
+            LikeDislikeHelper.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -91,17 +91,17 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostId);
-            if (repliesCount > 0) 
+            if (repliesCount > 0)
             {
-                return await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page,PostConstants.PostsPerSection);
+                return await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page, PostConstants.PostsPerSection);
             }
             return new();
         }
-        public async Task<(int page,int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId ="")
+        public async Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId = "")
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
-            int totalPages=1;
-            if (repliesCount>0)
+            int totalPages = 1;
+            if (repliesCount > 0)
             {
                 totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
                 if (string.IsNullOrEmpty(replyId))
@@ -151,7 +151,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
-            if(reply is null)
+            if (reply is null)
             {
                 return PostResult.NotFound;
             }
@@ -167,14 +167,14 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if(notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
+                if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Reply with Id: {ReplyId} wasn't deleted.", request.ReplyId);
@@ -184,7 +184,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest)
         {
             var user = await _userService.GetUserByIdAsync(createReplyRequest.UserId);
-            if(user is null)
+            if (user is null)
             {
                 return PostResult.NotFound;
             }
@@ -198,17 +198,14 @@ namespace NoFilterForum.Infrastructure.Services
             var notificationsList = new List<NotificationDataModel>();
             user.IncrementPostCount();
             RoleUtility.AdjustRoleByPostCount(user);
-            if (taggedUsernames.Length > 0)
+            foreach (string taggedUsername in taggedUsernames)
             {
-                foreach(string taggedUsername in taggedUsernames)
+                if (taggedUsername != UserConstants.DefaultUser.UserName)
                 {
-                    if(taggedUsername != UserConstants.DefaultUser.UserName)
+                    var taggedUser = await _unitOfWork.Users.GetByUsernameAsync(taggedUsername);
+                    if (taggedUser != null)
                     {
-                        var taggedUser = await _unitOfWork.Users.GetByUsernameAsync(taggedUsername);
-                        if (taggedUser != null)
-                        {
-                            notificationsList.Add(new(reply,user,taggedUser));
-                        }
+                        notificationsList.Add(new(reply, user, taggedUser));
                     }
                 }
             }
@@ -227,7 +224,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "There was a problem creating reply from user with Id: {UserId}", createReplyRequest.UserId);

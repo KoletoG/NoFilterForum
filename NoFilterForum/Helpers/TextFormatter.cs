@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Core.Utility
@@ -30,6 +31,14 @@ namespace Core.Utility
         public static string MarkTags(string text, string username)
         {
             return Regex.Replace(text, $@"(@{username})", "<span style=\"background-color: #e0e0e0;\">$1</span>");
+        }
+        public static void MarkTagsOfContents(List<ReplyIndexItemDto> replies, PostReplyIndexDto post, string currentUsername)
+        {
+            post.Content = MarkTagsOfContent(post.Content, currentUsername);
+            foreach (var reply in replies)
+            {
+                reply.Content = MarkTagsOfContent(reply.Content, currentUsername); ;
+            }
         }
         public static string[] CheckForTags(string text)
         {

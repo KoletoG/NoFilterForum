@@ -13,6 +13,7 @@ Use () syntax
 Use nameof()
 YAGNI DRY KISS SOLID 
 Move utility methods from Core
+TRY TO THINK OF A WAY TO HAVE MULTIPLE ACTIONS OR FUNCS IN UNITOFWORK METHOD
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging

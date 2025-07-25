@@ -41,7 +41,7 @@ namespace Web.Controllers
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             var currentUsername = User.Identity.Name;
-            _replyService.MarkTagsOfContents(ref listReplyIndexDto,ref post, currentUsername);
+            TextFormatter.MarkTagsOfContents(listReplyIndexDto,post, currentUsername);
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
             var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
