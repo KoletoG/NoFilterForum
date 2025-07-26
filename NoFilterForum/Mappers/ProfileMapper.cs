@@ -11,21 +11,9 @@ namespace Web.Mappers
 {
     public class ProfileMapper
     {
-        public static ChangeBioRequest MapToRequest(ChangeBioViewModel vm, string userId) => new()
-        {
-            Bio = vm.Bio,
-            UserId = userId
-        };
-        public static UpdateImageRequest MapToRequest(UpdateImageViewModel vm, string userId) => new()
-        {
-            Image = vm.Image,
-            UserId = userId
-        };
-        public static GetProfileDtoRequest MapToRequest(string userId, string currentUserId) => new()
-        {
-            UserId = userId,
-            CurrentUserId = currentUserId
-        };
+        public static ChangeBioRequest MapToRequest(ChangeBioViewModel vm, string userId) => new(vm.Bio, userId);
+        public static UpdateImageRequest MapToRequest(UpdateImageViewModel vm, string userId) => new(userId, vm.Image);
+        public static GetProfileDtoRequest MapToRequest(string userId, string currentUserId) => new(userId, currentUserId);
         public static ReplyItemViewModel MapToViewModel(ReplyItemDto dto) => new()
         {
             Content = dto.Content,
@@ -62,15 +50,7 @@ namespace Web.Mappers
             UserName = dto.Username ?? string.Empty,
             WarningsCount = dto.WarningsCount,
         };
-        public static ChangeEmailRequest MapToRequest(ChangeEmailViewModel changeEmailViewModel, string userId) => new()
-        {
-            Email = changeEmailViewModel.Email,
-            UserId = userId
-        };
-        public static ChangeUsernameRequest MapToRequest(ChangeUsernameViewModel changeUsernameViewModel, string userId) => new()
-        {
-            UserId = userId,
-            Username = changeUsernameViewModel.Username
-        };
+        public static ChangeEmailRequest MapToRequest(ChangeEmailViewModel vm, string userId) => new(userId, vm.Email);
+        public static ChangeUsernameRequest MapToRequest(ChangeUsernameViewModel vm, string userId) => new(userId, vm.Username);
     }
 }
