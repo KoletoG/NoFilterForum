@@ -38,10 +38,10 @@ namespace Web.Controllers
             }
             postId = HttpUtility.UrlDecode(postId);
             var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
-            (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId);
+            (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId); // Need to refactor this 
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
-            var currentUsername = User.Identity.Name; // Added Unauthorized error?
+            var currentUsername = User.Identity.Name; // Add Unauthorized error?
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
             postVM.MarkTagsOfContent(currentUsername);

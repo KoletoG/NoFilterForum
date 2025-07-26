@@ -5,12 +5,12 @@ namespace Web.ViewModels.Reply
 {
     public class ReplyIndexItemViewModel : MarkTagsAbstract
     {
-        public string Username { get; set; }
-        public UserRoles Role {  get; set; }
-        public string ImageUrl { get; set; }
-        public string UserId { get; set; }
-        public string Id { get; set; }
-        public short Likes { get; set; }
-        public DateTime DateCreated { get; set; }
+        public string Username { get; init; }
+        public UserRoles Role { get; init; }
+        public string ImageUrl { get; init; }
+        public string UserId { get; init; }
+        public string Id { get; init; }
+        public short Likes { get; init; }
+        public DateTime DateCreated { get; init; }
     }
 }
