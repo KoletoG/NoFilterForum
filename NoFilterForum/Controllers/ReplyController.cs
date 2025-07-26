@@ -44,10 +44,10 @@ namespace Web.Controllers
             var currentUsername = User.Identity.Name; // Add Unauthorized error?
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
-            postVM.MarkTagsOfContent(currentUsername);
+            postVM.MarkTags(currentUsername);
             foreach(var replyVM in replyIndexVMList)
             {
-                replyVM.MarkTagsOfContent(currentUsername);
+                replyVM.MarkTags(currentUsername);
             }
             var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);

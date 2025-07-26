@@ -29,10 +29,6 @@ namespace Core.Utility
 
             return text;
         }
-        public static string MarkTags(string text, string username)
-        {
-            return Regex.Replace(text, $@"(@{username})", "<span style=\"background-color: #e0e0e0;\">$1</span>");
-        }
         public static string[] CheckForTags(string text)
         {
             if (Regex.IsMatch(text, @"@\w+"))
@@ -55,11 +51,6 @@ namespace Core.Utility
             text = LinkCheckText(text);
             text = CheckForHashTags(text);
             return text;
-        }
-        public static string MarkTagsOfContent(string content, string currentUsername)
-        {
-            content = string.Join(" ", content.Split(' ').Select(x => MarkTags(x, currentUsername)));
-            return content;
         }
     }
 }
