@@ -6,11 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs
 {
-    public class CreatePostRequest
-    {
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public string TitleOfSection { get; set; }
-        public string UserId { get; set; }
-    }
+    public record CreatePostRequest(string? Title, string? Body, string? TitleOfSection, string? UserId);
 }

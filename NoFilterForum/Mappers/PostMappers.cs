@@ -9,13 +9,7 @@ namespace Web.Mappers
 {
     public static class PostMappers
     {
-        public static CreatePostRequest MapToRequest(CreatePostViewModel vm, string userId) => new()
-        {
-            Body = vm.Body,
-            Title = vm.Title,
-            TitleOfSection = vm.TitleOfSection,
-            UserId = userId
-        };
+        public static CreatePostRequest MapToRequest(CreatePostViewModel vm, string userId) => new(vm.Title, vm.Body, vm.TitleOfSection, userId);
         public static PostIndexViewModel MapToViewModel(List<PostIndexItemViewModel> itemVMs, int page, int totalPages, string titleOfSection) => new()
         {
             Posts = itemVMs,
@@ -34,20 +28,9 @@ namespace Web.Mappers
             UserImageUrl = dto.ImageUrl,
             PostLikes = dto.PostLikes
         };
-        public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new()
-        {
-            Page = page,
-            TitleOfSection = titleOfSection
-        };
-        public static DeletePostRequest MapToRequest(DeletePostViewModel vm, string userId) => new()
-        {
-            PostId = vm.PostId,
-            UserId = userId
-        };
-        public static GetProfilePostDtoRequest MapToRequest(string userId) => new()
-        {
-            UserId = userId
-        };
+        public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new(titleOfSection, page);
+        public static DeletePostRequest MapToRequest(DeletePostViewModel vm, string userId) => new(vm.PostId, userId);
+        public static GetProfilePostDtoRequest MapToRequest(string userId) => new(userId);
         public static LikeDislikeRequest MapToRequest(string postId, string userId) => new()
         {
             PostReplyId = postId,

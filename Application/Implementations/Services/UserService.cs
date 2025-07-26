@@ -208,13 +208,13 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            changeBioRequest.Bio = _htmlSanitizer.Sanitize(changeBioRequest.Bio);
-            changeBioRequest.Bio = TextFormatter.FormatBody(changeBioRequest.Bio); // Move that
-            if(user.Bio == changeBioRequest.Bio)
+            string sanitizedFormattedBio = _htmlSanitizer.Sanitize(changeBioRequest.Bio);
+            sanitizedFormattedBio = TextFormatter.FormatBody(changeBioRequest.Bio); // Move that
+            if(user.Bio == sanitizedFormattedBio)
             {
                 return PostResult.Success;
             }
-            user.ChangeBio(changeBioRequest.Bio);
+            user.ChangeBio(sanitizedFormattedBio);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();

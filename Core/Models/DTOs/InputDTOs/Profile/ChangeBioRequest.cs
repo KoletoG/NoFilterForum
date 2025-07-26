@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public class ChangeBioRequest
-    {
-        public string Bio { get; set; }
-        public string UserId { get; set; }
-    }
+    public record ChangeBioRequest(string? Bio, string? UserId);
 }

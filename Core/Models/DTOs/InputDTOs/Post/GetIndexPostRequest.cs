@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Post
 {
-    public class GetIndexPostRequest
-    {
-        public string TitleOfSection { get; set; }
-        public int Page {  get; set; }
-    }
+    public record GetIndexPostRequest(string? TitleOfSection,int Page);
 }

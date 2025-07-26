@@ -6,10 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Post
 {
-    public class DeletePostRequest
-    {
-        public string PostId { get; set; }
-        public string UserId { get; set; }
-
-    }
+    public record DeletePostRequest(string? PostId, string? UserId);
 }

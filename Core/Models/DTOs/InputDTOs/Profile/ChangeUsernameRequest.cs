@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public class ChangeUsernameRequest
-    {
-        public string UserId { get; set; }
-        public string Username { get; set; }
-    }
+    public record ChangeUsernameRequest(string? UserId, string? Username);
 }
