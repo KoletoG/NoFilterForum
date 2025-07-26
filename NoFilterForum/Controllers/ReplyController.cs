@@ -64,7 +64,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Unauthorized();
@@ -84,7 +84,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Dislike(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Unauthorized();
