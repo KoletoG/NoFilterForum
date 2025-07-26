@@ -169,7 +169,7 @@ namespace Web.Controllers
             page = PageUtility.ValidatePageNumber(page,totalPageCount);
             var replyViewModelList = replyDtoList.Select(ProfileMapper.MapToViewModel).ToList();
             var postViewModelList = postDtoList.Select(ProfileMapper.MapToViewModel).ToList();
-            var dictionary = DateHelper.OrderDates(postDtoList, replyDtoList,page, PostConstants.PostsPerSection);
+            var dictionary = DateHelper.OrderDates(postDtoList, replyViewModelList,page, PostConstants.PostsPerSection);
             var profileViewModel = ProfileMapper.MapToViewModel(postViewModelList,
                 replyViewModelList,
                 resultUser.IsSameUser,

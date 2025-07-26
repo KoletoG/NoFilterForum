@@ -3,6 +3,7 @@ using Core.Models.DTOs.OutputDTOs;
 using Core.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NoFilterForum.Core.Interfaces.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -40,10 +41,10 @@ namespace Web.Controllers
             (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId);
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
-            var currentUsername = User.Identity.Name;
-            TextFormatterHelper.MarkTagsOfContents(listReplyIndexDto,post, currentUsername);
+            var currentUsername = User.Identity.Name; // Added Unauthorized error?
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
+            TextFormatterHelper.MarkTagsOfContents(replyIndexVMList, postVM, currentUsername);
             var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
             var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM, 

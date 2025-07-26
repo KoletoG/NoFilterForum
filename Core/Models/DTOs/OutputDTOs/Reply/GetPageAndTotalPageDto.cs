@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.OutputDTOs.Reply
 {
-    public class GetPageAndTotalPageDto
-    {
-        public int Page { get; set; }
-        public int TotalPage { get; set; }
-    }
+    public record GetPageAndTotalPageDto(int Page, int TotalPage);
 }

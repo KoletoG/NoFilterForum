@@ -38,11 +38,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)
         {
-            return await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto()
-            {
-                DislikesPostRepliesIds = x.DislikesPostRepliesIds,
-                LikesPostRepliesIds = x.LikesPostRepliesIds
-            }).FirstOrDefaultAsync();
+            return await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto(x.LikesPostRepliesIds,x.DislikesPostRepliesIds)).FirstOrDefaultAsync();
         }
         public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id)
         {

@@ -1,12 +1,13 @@
 ﻿using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
+using Web.ViewModels.Reply;
 
 namespace Web.Helpers
 {
     public static class DateHelper
     {
-        public static Dictionary<string, DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemDto> replyItemDtos, int page, int countPerPage)
+        public static Dictionary<string, DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemViewModel> replyItemDtos, int page, int countPerPage)
         {
             Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
             foreach (var post in postItemDtos)

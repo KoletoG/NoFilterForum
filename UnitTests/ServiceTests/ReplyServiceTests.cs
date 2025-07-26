@@ -16,6 +16,7 @@ using Moq;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Services;
+using Web.ViewModels.Reply;
 
 namespace UnitTests.ServiceTests
 {
@@ -135,8 +136,8 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
-            List<ReplyIndexItemDto> replyIndexItems = new List<ReplyIndexItemDto>();
-            PostReplyIndexDto post = new PostReplyIndexDto() { Content="Example content"};
+            var replyIndexItemsVM = new List<ReplyIndexItemViewModel>();
+            var post = new PostReplyIndexViewModel();
             string currentUsername = "Current username Example";
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
@@ -145,7 +146,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            TextFormatterHelper.MarkTagsOfContents(replyIndexItems, post, currentUsername);
+            TextFormatterHelper.MarkTagsOfContents(replyIndexItemsVM, post, currentUsername);
             Assert.Equal("Example content",post.Content);
         }
         [Fact]

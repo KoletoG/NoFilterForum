@@ -38,18 +38,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id)
         {
-            return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostReplyIndexDto()
-            {
-                Content = x.Content,
-                Id = x.Id,
-                DateCreated = x.DateCreated,
-                Likes = x.Likes,
-                Role = x.User.Role,
-                Title = x.Title,
-                UserId = x.User.Id,
-                Username = x.User.UserName,
-                ImageUrl = x.User.ImageUrl
-            }).FirstOrDefaultAsync();
+            return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync();
         }
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
         {

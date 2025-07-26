@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Web.ViewModels.Reply;
 
 namespace Core.Utility
 {
@@ -32,7 +33,7 @@ namespace Core.Utility
         {
             return Regex.Replace(text, $@"(@{username})", "<span style=\"background-color: #e0e0e0;\">$1</span>");
         }
-        public static void MarkTagsOfContents(List<ReplyIndexItemDto> replies, PostReplyIndexDto post, string currentUsername)
+        public static void MarkTagsOfContents(List<ReplyIndexItemViewModel> replies, PostReplyIndexViewModel post, string currentUsername)
         {
             post.Content = MarkTagsOfContent(post.Content, currentUsername);
             foreach (var reply in replies)

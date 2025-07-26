@@ -7,12 +7,5 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace Core.Models.DTOs.OutputDTOs.Reply
 {
-    public class ReplyItemDto
-    {
-        public string Id { get; set; }
-        public string PostId { get; set; }
-        public string Content { get; set; }
-        public DateTime Created { get; set; }
-        public string PostTitle { get; set; }
-    }
+    public record ReplyItemDto(string Id, string PostId, string Content, DateTime Created, string PostTitle);
 }
