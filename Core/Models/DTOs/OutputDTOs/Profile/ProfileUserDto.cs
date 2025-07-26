@@ -7,16 +7,5 @@ using Core.Enums;
 
 namespace Core.Models.DTOs.OutputDTOs.Profile
 {
-    public class ProfileUserDto
-    {
-        public string Id { get; set; }
-        public int WarningsCount { get; set; }
-        public string? UserName { get; set; }
-        public string? Email { get; set; }
-        public string? Bio { get; set; }
-        public UserRoles Role { get; set; }
-        public int PostsCount { get; set; }
-        public string ImageUrl { get; set; }
-        public DateTime DateCreated { get; set; }
-    }
+    public record ProfileUserDto(string? Id, int WarningsCount, string? Username, string? Email, string? Bio, UserRoles Role, int PostsCount, string? ImageUrl, DateTime DateCreated);
 }

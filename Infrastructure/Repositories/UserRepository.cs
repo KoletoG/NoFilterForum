@@ -46,18 +46,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id)
         {
-            return await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto
-            {
-                Bio = x.Bio,
-                DateCreated = x.DateCreated,
-                Email = x.Email,
-                Id = x.Id,
-                PostsCount = x.PostsCount,
-                Role = x.Role,
-                UserName = x.UserName,
-                WarningsCount = x.Warnings.Count,
-                ImageUrl = x.ImageUrl
-            }).FirstOrDefaultAsync();
+            return await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto(x.Id,x.Warnings.Count,x.UserName,x.Email,x.Bio,x.Role,x.PostsCount,x.ImageUrl,x.DateCreated)).FirstOrDefaultAsync();
         }
         public async Task<List<UserDataModel>> GetAllAsync()
         {

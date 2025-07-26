@@ -53,10 +53,7 @@ namespace NoFilterForum.Infrastructure.Services
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
             if(user is null)
             {
-                return new ProfileDto()
-                {
-                    GetResult = GetResult.NotFound
-                };
+                return new(GetResult.NotFound,default,null);
             }
             var profileUserDto = await _unitOfWork.Users.GetProfileUserDtoByIdAsync(user.Id);
             bool isSameUser = false;
@@ -64,12 +61,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 isSameUser = true;
             }
-            return new()
-            {
-                GetResult = GetResult.Success,
-                IsSameUser = isSameUser,
-                UserDto = profileUserDto
-            };
+            return new(GetResult.Success, isSameUser, profileUserDto);
         }
         public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id;
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)

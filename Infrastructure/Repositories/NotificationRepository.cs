@@ -59,14 +59,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
         {
             return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId)
-                .Select(x => new NotificationsDto
-                {
-                    PostId = x.Reply.Post.Id,
-                    ReplyContent = x.Reply.Content,
-                    ReplyId = x.Reply.Id,
-                    PostTitle = x.Reply.Post.Title,
-                    UserFromUsername = x.UserFrom.UserName
-                })
+                .Select(x => new NotificationsDto(x.Reply.Id,x.Reply.Post.Id,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
                 .ToListAsync();
         }
         public void DeleteRange(List<NotificationDataModel> notifications)

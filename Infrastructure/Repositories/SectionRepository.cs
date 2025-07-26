@@ -55,17 +55,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .ThenByDescending(x => x.DateCreated)
                     .Skip((page - 1) * countPerPage)
                     .Take(countPerPage)
-                    .Select(x => new PostItemDto
-                    {
-                        DateCreated = x.DateCreated,
-                        Id = x.Id,
-                        Role = x.User.Role,
-                        Username = x.User.UserName,
-                        Title = x.Title,
-                        IsPinned = x.IsPinned,
-                        ImageUrl = x.User.ImageUrl,
-                        PostLikes = x.Likes
-                    })
+                    .Select(x => new PostItemDto(x.Id,x.User.UserName,x.User.Role,x.Title,x.IsPinned,x.DateCreated,x.User.ImageUrl,x.Likes))
                     .ToListAsync();
         }
         public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)

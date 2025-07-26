@@ -6,10 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.OutputDTOs.Profile
 {
-    public class ProfilePostDto
-    {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public DateTime Created { get; set; }
-    }
+    public record ProfilePostDto(string? Id, string? Title, DateTime Created);
 }

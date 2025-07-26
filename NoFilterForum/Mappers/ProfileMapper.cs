@@ -54,12 +54,12 @@ namespace Web.Mappers
         {
             Bio = dto.Bio,
             DateCreated = dto.DateCreated,
-            Email = dto.Email,
-            Id = dto.Id,
-            ImageUrl = dto.ImageUrl,
+            Email = dto.Email ?? string.Empty,
+            Id = dto.Id ?? string.Empty,
+            ImageUrl = dto.ImageUrl ?? string.Empty,
             PostsCount = dto.PostsCount,
             Role = dto.Role,
-            UserName = dto.UserName,
+            UserName = dto.Username ?? string.Empty,
             WarningsCount = dto.WarningsCount,
         };
         public static ChangeEmailRequest MapToRequest(ChangeEmailViewModel changeEmailViewModel, string userId) => new()

@@ -53,12 +53,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
         {
-            return await _context.PostDataModels.Where(x => x.User.Id == userId).Select(x => new ProfilePostDto()
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Created = x.DateCreated
-            }).ToListAsync();
+            return await _context.PostDataModels.Where(x => x.User.Id == userId).Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated)).ToListAsync();
         }
         public async Task<List<PostDataModel>> GetAllByUserIdAsync(string userId)
         {

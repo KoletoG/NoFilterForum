@@ -6,12 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.OutputDTOs.Notification
 {
-    public class NotificationsDto
-    {
-        public string ReplyId { get; set; }
-        public string PostId { get; set; }
-        public string PostTitle { get; set; }
-        public string ReplyContent { get; set; }
-        public string? UserFromUsername {  get; set; }
-    }
+    public record NotificationsDto(string? ReplyId, string? PostId, string? PostTitle, string? ReplyContent, string? UserFromUsername);
 }
