@@ -117,12 +117,7 @@ namespace UnitTests.ServiceTests
                 memoryCacheMock.Object,
                 loggerMock.Object
                 );
-            var createSectionRequest = new CreateSectionRequest()
-            {
-                Description = "Test description",
-                Title = "Test title",
-                UserId = "UserId EXAMPLE"
-            };
+            var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
             Assert.Equal(PostResult.Forbid, result);
         }
@@ -142,13 +137,8 @@ namespace UnitTests.ServiceTests
                 sectionFactoryMock.Object,
                 memoryCacheMock.Object,
                 loggerMock.Object
-                );
-            var createSectionRequest = new CreateSectionRequest()
-            {
-                Description = "Test description",
-                Title = "Test title",
-                UserId = "UserId EXAMPLE"
-            };
+                ); 
+            var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -169,12 +159,7 @@ namespace UnitTests.ServiceTests
                 memoryCacheMock.Object,
                 loggerMock.Object
                 );
-            var createSectionRequest = new CreateSectionRequest()
-            {
-                Description = "Test description",
-                Title = "Test title",
-                UserId = "UserId EXAMPLE"
-            };
+            var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
@@ -194,10 +179,7 @@ namespace UnitTests.ServiceTests
                 memoryCacheMock.Object,
                 loggerMock.Object
                 );
-            var deleteSectionRequest = new DeleteSectionRequest()
-            {
-                SectionId = "Example ID"
-            };
+            var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -241,10 +223,7 @@ namespace UnitTests.ServiceTests
                 memoryCacheMock.Object,
                 loggerMock.Object
                 );
-            var deleteSectionRequest = new DeleteSectionRequest()
-            {
-                SectionId = "Example ID"
-            };
+            var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -285,10 +264,7 @@ namespace UnitTests.ServiceTests
                 memoryCacheMock.Object,
                 loggerMock.Object
                 );
-            var deleteSectionRequest = new DeleteSectionRequest()
-            {
-                SectionId = "Example ID"
-            };
+            var deleteSectionRequest = new DeleteSectionRequest("Example Id");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }

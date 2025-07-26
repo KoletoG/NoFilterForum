@@ -22,15 +22,7 @@ namespace Web.Mappers
             Sections = itemVMs,
             IsAdmin = isAdmin
         };
-        public static CreateSectionRequest MapToRequest(CreateSectionViewModel vm, string userId) => new()
-        {
-            Title = vm.Title,
-            Description = vm.Description,
-            UserId = userId
-        };
-        public static DeleteSectionRequest MapToRequest(DeleteSectionViewModel vm) => new()
-        {
-            SectionId = vm.SectionId
-        };
+        public static CreateSectionRequest MapToRequest(CreateSectionViewModel vm, string userId) => new(vm.Description, vm.Title, userId);
+        public static DeleteSectionRequest MapToRequest(DeleteSectionViewModel vm) => new(vm.SectionId);
     }
 }

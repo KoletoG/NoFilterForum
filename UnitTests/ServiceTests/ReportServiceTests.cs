@@ -70,7 +70,7 @@ namespace UnitTests.ServiceTests
         [InlineData("TestId2")]
         public async Task DeleteReportByIdAsync_ShouldReturnSuccess_WhenReportExists(string reportId)
         {
-            var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
+            var deleteReportRequest = new DeleteReportRequest(ReportId: reportId);
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -83,7 +83,7 @@ namespace UnitTests.ServiceTests
         public async Task DeleteReportByIdAsync_ShouldReturnNotFound_WhenReportDoesNotExist()
         {
             string reportId = "ExampleId";
-            var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
+            var deleteReportRequest = new DeleteReportRequest(ReportId: reportId);
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -96,7 +96,7 @@ namespace UnitTests.ServiceTests
         public async Task DeleteReportByIdAsync_ShouldReturnUpdateFailed_WhenThereIsAProblemWithDB()
         {
             string reportId = "ExampleId";
-            var deleteReportRequest = new DeleteReportRequest() { ReportId = reportId };
+            var deleteReportRequest = new DeleteReportRequest(ReportId: reportId);
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -109,14 +109,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task CreateReportAsync_ShouldReturnSuccess_WhenReportIsCreated()
         {
-            var createReportRequest = new CreateReportRequest()
-            {
-                Content = "Test content",
-                IdOfPostOrReply = "Test id",
-                UserFromId = "User1Id",
-                UserToId = "User2Id",
-                IsPost = true
-            };
+            var createReportRequest = new CreateReportRequest("User2Id", "TestContent", "User1Id", true, "Test id");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -131,14 +124,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserToIsInvalid()
         {
-            var createReportRequest = new CreateReportRequest()
-            {
-                Content = "Test content",
-                IdOfPostOrReply = "Test id",
-                UserFromId = "User1Id",
-                UserToId = "User2Id",
-                IsPost = true
-            };
+            var createReportRequest = new CreateReportRequest("User2Id", "TestContent", "User1Id", true, "Test id");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -150,14 +136,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task CreateReportAsync_ShouldReturnNotFound_WhenUserFromIsInvalid()
         {
-            var createReportRequest = new CreateReportRequest()
-            {
-                Content = "Test content",
-                IdOfPostOrReply = "Test id",
-                UserFromId = "User1Id",
-                UserToId = "User2Id",
-                IsPost = true
-            };
+            var createReportRequest = new CreateReportRequest("User2Id", "TestContent", "User1Id", true, "Test id");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -170,14 +149,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task CreateReportAsync_ShouldReturnNotFound_WhenIdOfPostOrReplyIsInvalid()
         {
-            var createReportRequest = new CreateReportRequest()
-            {
-                Content = "Test content",
-                IdOfPostOrReply = "Test id",
-                UserFromId = "User1Id",
-                UserToId = "User2Id",
-                IsPost = true
-            };
+            var createReportRequest = new CreateReportRequest("User2Id", "TestContent", "User1Id", true, "Test id");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
@@ -191,14 +163,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task CreateReportAsync_ShouldReturnUpdateFailed_WhenThereIsAProblemWithSavingToDB()
         {
-            var createReportRequest = new CreateReportRequest()
-            {
-                Content = "Test content",
-                IdOfPostOrReply = "Test id",
-                UserFromId = "User1Id",
-                UserToId = "User2Id",
-                IsPost = true
-            };
+            var createReportRequest = new CreateReportRequest("User2Id", "TestContent", "User1Id", true, "Test id");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();

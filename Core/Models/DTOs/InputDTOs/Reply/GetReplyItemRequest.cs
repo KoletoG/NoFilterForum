@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Reply
 {
-    public class GetReplyItemRequest
-    {
-        public string UserId { get; set; }
-    }
+    public record GetReplyItemRequest(string? UserId);
 }

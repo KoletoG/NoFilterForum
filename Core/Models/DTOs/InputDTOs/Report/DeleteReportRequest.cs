@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Report
 {
-    public class DeleteReportRequest
-    {
-        public string ReportId { get; set; }
-    }
+    public record DeleteReportRequest(string ReportId);
 }

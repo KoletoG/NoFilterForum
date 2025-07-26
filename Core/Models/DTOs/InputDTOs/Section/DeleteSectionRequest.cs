@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs
 {
-    public class DeleteSectionRequest
-    {
-        public string SectionId { get; set; }
-    }
+    public record DeleteSectionRequest(string? SectionId);
 }

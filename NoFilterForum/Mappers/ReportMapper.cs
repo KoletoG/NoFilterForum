@@ -8,18 +8,8 @@ namespace Web.Mappers
 {
     public class ReportMapper
     {
-        public static CreateReportRequest MapToRequest(CreateReportViewModel vm, string userFromId) => new()
-        {
-            Content = vm.Content,
-            IdOfPostOrReply = vm.IdOfPostReply,
-            UserFromId = userFromId,
-            UserToId = vm.UserIdTo,
-            IsPost = vm.IsPost
-        };
-        public static DeleteReportRequest MapToRequest(DeleteReportViewModel vm) => new()
-        {
-            ReportId = vm.Id
-        };
+        public static CreateReportRequest MapToRequest(CreateReportViewModel vm, string userFromId) => new(vm.UserIdTo, vm.Content, userFromId, vm.IsPost, vm.IdOfPostReply);
+        public static DeleteReportRequest MapToRequest(DeleteReportViewModel vm) => new(vm.Id);
         public static ReportItemViewModel MapToViewModel(ReportItemDto dto) => new()
         {
             Content = dto.Content,

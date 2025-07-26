@@ -39,7 +39,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest() { Page = 1,PostId="ExampleId" };
+            var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest(Page: 1,PostId: "ExampleId");
             var result = await replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             Assert.NotNull(result);
             Assert.IsType<List<ReplyIndexItemDto>>(result);
@@ -54,7 +54,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<ReplyItemDto>());
-            var getReplyItemRequest = new GetReplyItemRequest() { UserId = "UserIdExample" };
+            var getReplyItemRequest = new GetReplyItemRequest(UserId : "UserIdExample");
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
@@ -165,7 +165,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -192,7 +192,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -220,7 +220,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
@@ -247,7 +247,7 @@ namespace UnitTests.ServiceTests
                 userServiceMock.Object,
                 loggerMock.Object
                 );
-            var deleteReplyRequest = new DeleteReplyRequest() { ReplyId = "ReplyIdExample", UserId = "UserIdExample" };
+            var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
             Assert.Equal(PostResult.Forbid, result);
         }

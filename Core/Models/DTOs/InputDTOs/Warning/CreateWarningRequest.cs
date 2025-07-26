@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Warning
 {
-    public class CreateWarningRequest
-    {
-        public string UserId { get; set; }
-        public string Content { get; set; }
-    }
+    public record CreateWarningRequest(string? UserId, string? Content);
 }

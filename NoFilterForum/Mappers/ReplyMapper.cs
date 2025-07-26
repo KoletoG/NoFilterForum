@@ -7,26 +7,10 @@ namespace Web.Mappers
 {
     public static class ReplyMapper
     {
-        public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm, string userId) => new()
-        {
-            ReplyId = vm.ReplyId,
-            UserId = userId
-        };
-        public static CreateReplyRequest MapToRequest(CreateReplyViewModel vm, string userId) => new()
-        {
-            UserId = userId,
-            Content = vm.Content,
-            PostId = vm.PostId
-        };
-        public static GetListReplyIndexItemRequest MapToRequest(int page, string postId) => new()
-        {
-            Page = page,
-            PostId = postId
-        };
-        public static GetReplyItemRequest MapToRequest(string userId) => new()
-        {
-            UserId = userId
-        };
+        public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm, string userId) => new(vm.ReplyId, userId);
+        public static CreateReplyRequest MapToRequest(CreateReplyViewModel vm, string userId) => new(userId, vm.Content, vm.PostId);
+        public static GetListReplyIndexItemRequest MapToRequest(int page, string postId) => new(page, postId);
+        public static GetReplyItemRequest MapToRequest(string userId) => new(userId);
         public static ReplyIndexItemViewModel MapToViewModel(ReplyIndexItemDto dto) => new()
         {
             Content = dto.Content,

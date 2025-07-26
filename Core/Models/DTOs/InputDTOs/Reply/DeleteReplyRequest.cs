@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Reply
 {
-    public class DeleteReplyRequest
-    {
-        public string ReplyId { get; set; }
-        public string UserId { get; set; }
-    }
+    public record DeleteReplyRequest(string? ReplyId, string? UserId);
 }

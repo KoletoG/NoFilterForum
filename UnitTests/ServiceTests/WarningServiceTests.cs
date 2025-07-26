@@ -72,7 +72,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task AddWarningAsync_ShouldReturnSuccess_WhenRequestIsValid()
         {
-            var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
+            var createWarningRequest = new CreateWarningRequest(Content: "TestContent", UserId: "TestUserId");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
@@ -84,7 +84,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task AddWarningAsync_ShouldReturnNotFound_WhenRequestIsInvalid()
         {
-            var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
+            var createWarningRequest = new CreateWarningRequest(Content:"TestContent",UserId:"TestUserId");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
             var iWarningFactory = new Mock<IWarningFactory>();
@@ -96,7 +96,7 @@ namespace UnitTests.ServiceTests
         [Fact]
         public async Task AddWarningAsync_ShouldReturnUpdateFailed_WhenExistsProblemWithDB()
         {
-            var createWarningRequest = new CreateWarningRequest() { Content = "TestContent", UserId = "TestUserId" };
+            var createWarningRequest = new CreateWarningRequest("TestUserId", "TestContent");
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();

@@ -11,10 +11,6 @@ namespace Web.Mappers
         {
             Content = dto.Content
         };
-        public static CreateWarningRequest MapToRequest(CreateWarningViewModel vm) => new()
-        {
-            Content = vm.Content,
-            UserId = vm.UserId
-        };
+        public static CreateWarningRequest MapToRequest(CreateWarningViewModel vm) => new(vm.UserId, vm.Content);
     }
 }
