@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
+using Core.Interfaces.Services;
 using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
@@ -26,11 +27,13 @@ namespace UnitTests.ServiceTests
             Mock<IUnitOfWork> unitOfWorkMock = new();
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IReplyFactory> replyFactoryMock = new(); 
+            Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetCountByPostIdAsync(It.IsAny<string>())).ReturnsAsync(5);
             unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<ReplyIndexItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -48,10 +51,12 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<ReplyItemDto>());
             var getReplyItemRequest = new GetReplyItemRequest() { UserId = "UserIdExample" };
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -68,9 +73,11 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.MinValue);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -86,9 +93,11 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -104,10 +113,12 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -123,11 +134,13 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             List<ReplyIndexItemDto> replyIndexItems = new List<ReplyIndexItemDto>();
             PostReplyIndexDto post = new PostReplyIndexDto() { Content="Example content"};
             string currentUsername = "Current username Example";
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -142,9 +155,11 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync((ReplyDataModel?)null);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -160,6 +175,7 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x=>x.Users.Update(It.IsAny<UserDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel() {
@@ -170,6 +186,7 @@ namespace UnitTests.ServiceTests
             });
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -185,6 +202,7 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
@@ -196,6 +214,7 @@ namespace UnitTests.ServiceTests
             });
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object
@@ -211,6 +230,7 @@ namespace UnitTests.ServiceTests
             Mock<IUserService> userServiceMock = new();
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
+            Mock<IReactionService> reactionServiceMock = new();
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
             {
@@ -221,6 +241,7 @@ namespace UnitTests.ServiceTests
             });
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
+                reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object

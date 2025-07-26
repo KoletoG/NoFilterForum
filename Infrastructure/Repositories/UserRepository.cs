@@ -105,13 +105,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync()
         {
-            return await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto()
-            {
-                Email= x.Email,
-                Id=x.Id,
-                Reason=x.Reason,
-                Username = x.UserName
-            }).ToListAsync();
+            return await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto(x.Email,x.UserName,x.Reason,x.Id)).ToListAsync();
         }
         public void Delete(UserDataModel user)
         {
