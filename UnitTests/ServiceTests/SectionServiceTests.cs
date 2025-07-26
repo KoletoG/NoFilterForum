@@ -152,7 +152,7 @@ namespace UnitTests.ServiceTests
             var sectionFactoryMock = new Mock<ISectionFactory>();
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             sectionFactoryMock.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>())).Returns(new SectionDataModel());
-            unitOfWorkMock.Setup(x => x.Sections.CreateAsync(It.IsAny<SectionDataModel>())).ThrowsAsync(new Exception());
+            unitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<SectionDataModel>(It.IsAny<Func<SectionDataModel,Task>>(), It.IsAny<SectionDataModel>())).ThrowsAsync(new Exception());
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,

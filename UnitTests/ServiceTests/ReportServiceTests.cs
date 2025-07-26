@@ -101,7 +101,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReportDataModel());
-            iUnitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
+            iUnitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<ReportDataModel>(It.IsAny<Action<ReportDataModel>>(), It.IsAny<ReportDataModel>())).ThrowsAsync(new Exception());
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
@@ -170,7 +170,7 @@ namespace UnitTests.ServiceTests
             iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
             reportFactoryMock.Setup(x => x.CreateReport(It.IsAny<string>(), It.IsAny<UserDataModel>(), It.IsAny<UserDataModel>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(new ReportDataModel());
-            iUnitOfWorkMock.Setup(x => x.Reports.CreateAsync(It.IsAny<ReportDataModel>())).ThrowsAsync(new Exception());
+            iUnitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<ReportDataModel>(It.IsAny<Func<ReportDataModel,Task>>(),It.IsAny<ReportDataModel>())).ThrowsAsync(new Exception());
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
