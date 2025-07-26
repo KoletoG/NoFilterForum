@@ -38,13 +38,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<SectionItemDto>> GetAllItemsDtoAsync()
         {
             return await _context.SectionDataModels
-                .Select(x => new SectionItemDto
-                {
-                    Description = x.Description,
-                    Id = x.Id,
-                    Title = x.Title,
-                    PostsCount = x.Posts.Count
-                }).ToListAsync();
+                .Select(x => new SectionItemDto(x.Title,x.Description,x.Id,x.Posts.Count)).ToListAsync();
         }
         public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage)
         {

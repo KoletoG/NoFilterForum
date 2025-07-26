@@ -21,14 +21,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<ReportItemDto>> GetReportDtosAsync()
         {
-            return await _context.ReportDataModels.Select(x => new ReportItemDto()
-            {
-                Content = x.Content,
-                Id = x.Id,
-                IdOfPostReply = x.IdOfPostReply,
-                UserFromUsername = x.UserFrom.UserName,
-                UserToUsername = x.UserTo.UserName
-            }).ToListAsync();
+            return await _context.ReportDataModels.Select(x => new ReportItemDto(x.IdOfPostReply,x.UserTo.UserName,x.UserFrom.UserName,x.Content,x.Id)).ToListAsync();
         }
         public async Task<List<ReportDataModel>> GetAllAsync()
         {

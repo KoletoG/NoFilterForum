@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.OutputDTOs.Warning
 {
-    public class WarningsContentDto
-    {
-        public string Content { get; set; }
-    }
+    public record WarningsContentDto(string Content);
 }

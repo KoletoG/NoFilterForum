@@ -30,10 +30,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId && !x.IsAccepted)
-                .Select(x => new WarningsContentDto
-                {
-                    Content = x.Content
-                }).ToListAsync();
+                .Select(x => new WarningsContentDto(x.Content)).ToListAsync();
         }
         public async Task<WarningDataModel> CreateAsync(WarningDataModel warning)
         {
@@ -59,10 +56,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId)
-                .Select(u => new WarningsContentDto
-                {
-                    Content = u.Content
-                }).ToListAsync();
+                .Select(u => new WarningsContentDto(u.Content)).ToListAsync();
         }
     }
 }
