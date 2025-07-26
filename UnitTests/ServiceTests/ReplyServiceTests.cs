@@ -129,27 +129,6 @@ namespace UnitTests.ServiceTests
             Assert.False(result);
         }
         [Fact]
-        public void MarkTagsOfContents_ShouldMarkTagsOfContent_WhenParametersAreValid()
-        {
-            Mock<IUnitOfWork> unitOfWorkMock = new();
-            Mock<IUserService> userServiceMock = new();
-            Mock<ILogger<ReplyService>> loggerMock = new();
-            Mock<IReplyFactory> replyFactoryMock = new();
-            Mock<IReactionService> reactionServiceMock = new();
-            var replyIndexItemsVM = new List<ReplyIndexItemViewModel>();
-            var post = new PostReplyIndexViewModel();
-            string currentUsername = "Current username Example";
-            var replyService = new ReplyService(
-                unitOfWorkMock.Object,
-                reactionServiceMock.Object,
-                replyFactoryMock.Object,
-                userServiceMock.Object,
-                loggerMock.Object
-                );
-            TextFormatterHelper.MarkTagsOfContents(replyIndexItemsVM, post, currentUsername);
-            Assert.Equal("Example content",post.Content);
-        }
-        [Fact]
         public async Task DeleteReplyAsync_ShouldReturnNotFound_WhenReplyIdIsInvalid()
         {
             Mock<IUnitOfWork> unitOfWorkMock = new();

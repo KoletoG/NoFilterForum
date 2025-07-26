@@ -33,15 +33,6 @@ namespace Core.Utility
         {
             return Regex.Replace(text, $@"(@{username})", "<span style=\"background-color: #e0e0e0;\">$1</span>");
         }
-        // This shouldn't be static
-        public static void MarkTagsOfContents(List<ReplyIndexItemViewModel> replies, PostReplyIndexViewModel post, string currentUsername)
-        {
-            post.Content = MarkTagsOfContent(post.Content, currentUsername);
-            foreach (var reply in replies)
-            {
-                reply.Content = MarkTagsOfContent(reply.Content, currentUsername); ;
-            }
-        }
         public static string[] CheckForTags(string text)
         {
             if (Regex.IsMatch(text, @"@\w+"))
