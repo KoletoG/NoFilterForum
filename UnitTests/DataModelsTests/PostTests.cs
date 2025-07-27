@@ -30,7 +30,7 @@ namespace UnitTests.DataModelsTests
         }
         [Fact]
         public void TogglePin_ShouldInvertIsPinned() {
-            var post = new PostDataModel();
+            var post = new PostDataModel("example title", "exampel content", new());
             Assert.False(post.IsPinned);
             post.TogglePin();
             Assert.True(post.IsPinned);
@@ -40,7 +40,7 @@ namespace UnitTests.DataModelsTests
         [Fact]
         public void IncrementLikes_ShouldIncrementLikesByOne()
         {
-            var post = new PostDataModel();
+            var post = new PostDataModel("example title", "exampel content", new());
             Assert.Equal(0,post.Likes);
             post.IncrementLikes();
             Assert.Equal(1,post.Likes);
@@ -50,7 +50,7 @@ namespace UnitTests.DataModelsTests
         [Fact]
         public void DecrementLikes_ShouldDecreaseLikesByOne()
         {
-            var post = new PostDataModel();
+            var post = new PostDataModel("example title", "exampel content", new());
             Assert.Equal(0,post.Likes);
             post.DecrementLikes();
             Assert.Equal(-1,post.Likes);
@@ -60,7 +60,7 @@ namespace UnitTests.DataModelsTests
         [Fact]
         public void SetDefaultUser_ShouldAssignDefaultUser()
         {
-            var post = new PostDataModel();
+            var post = new PostDataModel("example title", "exampel content", new());
             Assert.Null(post.User);
             post.SetDefaultUser();
             Assert.Equal(UserConstants.DefaultUser, post.User);

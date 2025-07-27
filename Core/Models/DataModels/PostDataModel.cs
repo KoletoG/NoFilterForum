@@ -8,15 +8,15 @@ namespace NoFilterForum.Core.Models.DataModels
     public class PostDataModel : ILikeDislike
     {
         [Key]
-        public string Id { get; set; }
-        public string Content { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string Title { get; set; }
-        public UserDataModel User { get; set; }
-        public short Likes { get; set; }
-        public List<ReplyDataModel> Replies { get; set; }
-        public bool IsPinned { get; set; }
-        public SectionDataModel Section { get; set; }
+        public string Id { get;private set; }
+        public string Content { get; private init; }
+        public DateTime DateCreated { get; private init; }
+        public string Title { get; init; }
+        public UserDataModel User { get; private set; }
+        public short Likes { get; private set; }
+        public List<ReplyDataModel> Replies { get; private init; }
+        public bool IsPinned { get; private set; }
+        public SectionDataModel Section { get; private set; }
         public void TogglePin() => IsPinned = !IsPinned;
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public void IncrementLikes() => Likes++;
@@ -32,7 +32,7 @@ namespace NoFilterForum.Core.Models.DataModels
             Likes = 0;
             IsPinned = false;
         }
-        public PostDataModel()
+        private PostDataModel()
         {
 
         }

@@ -204,17 +204,7 @@ namespace UnitTests.ServiceTests
                 {
                     Posts = new List<PostDataModel>()
                     {
-                        new PostDataModel()
-                        {
-                            User = new UserDataModel(),
-                            Replies =new List<ReplyDataModel>()
-                            {
-                                new ReplyDataModel()
-                                {
-                                    User = new UserDataModel()
-                                }
-                            }
-                        }
+                        new PostDataModel("example title","example content",new())
                     }
                 });
             var sectionService = new SectionService(unitOfWorkMock.Object,
@@ -245,17 +235,7 @@ namespace UnitTests.ServiceTests
                 {
                     Posts = new List<PostDataModel>()
                     {
-                        new PostDataModel()
-                        {
-                            User = new UserDataModel(),
-                            Replies =new List<ReplyDataModel>()
-                            {
-                                new ReplyDataModel()
-                                {
-                                    User = new UserDataModel()
-                                }
-                            }
-                        }
+                        new PostDataModel("example title","exampel content",new())
                     }
                 });
             var sectionService = new SectionService(unitOfWorkMock.Object,

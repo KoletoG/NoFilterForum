@@ -24,7 +24,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<ReplyService> _logger;
         private readonly IReplyFactory _replyFactory;
         private readonly IReactionService _reactionService;
-        public ReplyService(IUnitOfWork unitOfWork,IReactionService reactionService, IReplyFactory replyFactory, IUserService userService, ILogger<ReplyService> logger)
+        public ReplyService(IUnitOfWork unitOfWork,
+            IReactionService reactionService,
+            IReplyFactory replyFactory,
+            IUserService userService,
+            ILogger<ReplyService> logger)
         {
             _unitOfWork = unitOfWork;
             _reactionService = reactionService;
@@ -99,6 +103,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return new();
         }
+        // Change this tomorrow
         public async Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId = "")
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
