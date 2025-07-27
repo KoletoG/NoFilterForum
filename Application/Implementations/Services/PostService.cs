@@ -145,7 +145,6 @@ namespace NoFilterForum.Infrastructure.Services
             var post = _postFactory.Create(createPost.Title, createPost.Body, user);
             section.Posts.Add(post);
             user.IncrementPostCount();
-            RoleUtility.AdjustRoleByPostCount(user);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();

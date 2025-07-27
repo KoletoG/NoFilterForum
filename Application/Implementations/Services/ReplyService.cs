@@ -207,7 +207,6 @@ namespace NoFilterForum.Infrastructure.Services
             var reply = _replyFactory.Create(createReplyRequest.Content, user, post);
             string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
             user.IncrementPostCount();
-            RoleUtility.AdjustRoleByPostCount(user);
             var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(taggedUsernames, reply, user);
             post.Replies.Add(reply);
             try

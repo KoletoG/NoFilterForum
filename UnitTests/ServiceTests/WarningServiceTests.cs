@@ -76,7 +76,7 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
-            iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel() { Warnings = new List<WarningDataModel>()});
+            iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel("Custom Id"));
             var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AddWarningAsync(createWarningRequest);
             Assert.Equal(PostResult.Success, result);
@@ -100,7 +100,7 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iWarningFactory = new Mock<IWarningFactory>();
             var iLoggerMock = new Mock<ILogger<WarningService>>();
-            iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel() { Warnings = new List<WarningDataModel>() });
+            iUnitOfWorkMock.Setup(x => x.Users.GetUserWithWarningsByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel("Custom Id"));
             iUnitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<UserDataModel>(It.IsAny<Action<UserDataModel>>(), It.IsAny<UserDataModel>())).ThrowsAsync(new Exception());
             var warningService = new WarningService(iUnitOfWorkMock.Object, iWarningFactory.Object, iLoggerMock.Object);
             var result = await warningService.AddWarningAsync(createWarningRequest);

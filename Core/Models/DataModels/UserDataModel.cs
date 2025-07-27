@@ -45,6 +45,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public void ChangeEmail(string email) => Email = email;
         public void ChangeUsername(string username) => UserName = username;
         public void ChangeRole(UserRoles role) => Role = role;
+        public void SetReason(string reason) => Reason = reason;
         private void ValidateRole()
         {
             if (Role == UserRoles.VIP || Role == UserRoles.Admin) return;
@@ -77,6 +78,7 @@ namespace NoFilterForum.Core.Models.DataModels
         {
             Id = id;
             Role = UserRoles.Deleted;
+            Warnings = new List<WarningDataModel>();
         }
         public UserDataModel()
         {

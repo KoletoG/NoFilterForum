@@ -9,7 +9,7 @@ using NoFilterForum.Core.Models.DataModels;
 
 namespace Core.Utility
 {
-    public static class RoleUtility
+    public static class RoleUtlity
     {
         public static void AdjustRoleByPostCount(UserDataModel user)
         {

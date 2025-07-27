@@ -136,13 +136,13 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 if (UserConstants.adminNames.Contains(Input.Username))
                 {
-                    user.Role = UserRoles.Admin;
-                    user.IsConfirmed = true;
-                    user.Reason = "Adminnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+                    user.ChangeRole(UserRoles.Admin);
+                    user.Confirm();
+                    user.SetReason("Adminnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
                 }
                 else
                 {
-                    user.Reason=Input.Reason;
+                    user.SetReason(Input.Reason);
                 }
                     var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
