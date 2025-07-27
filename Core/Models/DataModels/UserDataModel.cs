@@ -18,17 +18,17 @@ namespace NoFilterForum.Core.Models.DataModels
         [Required]
         [EmailAddress]
         public override string? Email { get; set; }
-        public int PostsCount { get; set; }
-        public bool IsConfirmed { get; set; }
-        public UserRoles Role { get; set; }
-        public List<string> LikesPostRepliesIds { get; set; }
-        public List<string> DislikesPostRepliesIds { get; set; }
-        public List<WarningDataModel> Warnings { get; set; }
-        public DateTime DateCreated { get; set; }
-        public string? Reason { get; set; }
-        public string Bio {  get; set; }
+        public int PostsCount { get;private set; }
+        public bool IsConfirmed { get; private set; }
+        public UserRoles Role { get; private set; }
+        public List<string> LikesPostRepliesIds { get; private init; }
+        public List<string> DislikesPostRepliesIds { get; private init; }
+        public List<WarningDataModel> Warnings { get;private init; }
+        public DateTime DateCreated { get;private set; }
+        public string? Reason { get; private set; }
+        public string Bio {  get; private set; }
         [DataType(DataType.ImageUrl)]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get;private set; }
         public void Confirm() => IsConfirmed = true;
         public void ChangeImageUrl(string imageUrl) => ImageUrl = imageUrl;
         public void IncrementPostCount() => PostsCount++;
@@ -36,6 +36,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public void ChangeBio(string bio) => Bio = bio;
         public void ChangeEmail(string email) => Email = email;
         public void ChangeUsername(string username) => UserName = username;
+        public void ChangeRole(UserRoles role) => Role = role;
         public UserDataModel(string userName,string email)
         {
             Id = Nanoid.Generate();
@@ -50,6 +51,11 @@ namespace NoFilterForum.Core.Models.DataModels
             DislikesPostRepliesIds = new List<string>();
             Bio = "";
             ImageUrl = @"images\defaultimage.gif";
+        }
+        public UserDataModel(string id)
+        {
+            Id = id;
+            Role = UserRoles.Deleted;
         }
         public UserDataModel()
         {

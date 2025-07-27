@@ -20,21 +20,21 @@ namespace Core.Utility
                 {
                     if (user.Role != UserRoles.Dinosaur)
                     {
-                        user.Role = UserRoles.Dinosaur;
+                        user.ChangeRole(UserRoles.Dinosaur);
                     }
                 }
                 else if (user.PostsCount > 20)
                 {
                     if (user.Role != UserRoles.Regular)
                     {
-                        user.Role = UserRoles.Regular;
+                        user.ChangeRole(UserRoles.Regular);
                     }
                 }
                 else
                 {
                     if (user.Role != UserRoles.Newbie)
                     {
-                        user.Role = UserRoles.Newbie;
+                        user.ChangeRole(UserRoles.Newbie);
                     }
                 }
             }
