@@ -11,6 +11,7 @@ using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -105,7 +106,6 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return new();
         }
-        // Change this tomorrow
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
@@ -127,6 +127,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return new(page, totalPages);
         }
+        private async Task<int> GetCountByPostIdAsync(string postId) => await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
         public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
@@ -137,32 +138,7 @@ namespace NoFilterForum.Infrastructure.Services
             page = PageUtility.ValidatePageNumber(page, totalPages);
             return new(page, totalPages);
         }
-        public async Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId = "")
-        {
-            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
-            int totalPages = 1;
-            if (repliesCount == 0) return (1, totalPages);
-            totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
-            if (string.IsNullOrEmpty(replyId))
-            {
-                page = PageUtility.ValidatePageNumber(page, totalPages);
-                return (page, totalPages);
-            }
-            page = 1;
-            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
-            for (int i = 0; i < replyIds.Count; i++)
-            {
-                if (replyIds[i] == replyId)
-                {
-                    break;
-                }
-                if ((i + 1) % PostConstants.PostsPerSection == 0)
-                {
-                    page++;
-                }
-            }
-            return (page, totalPages);
-        }
+       
         public async Task<bool> HasTimeoutByUserIdAsync(string userId)
         {
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
