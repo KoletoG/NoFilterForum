@@ -32,30 +32,32 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
+            postId = HttpUtility.UrlDecode(postId);
             if (!string.IsNullOrEmpty(replyId))
             {
                 replyId = HttpUtility.UrlDecode(replyId);
             }
-            postId = HttpUtility.UrlDecode(postId);
+            var pageTotalPagesDto = string.IsNullOrEmpty(replyId) 
+                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page) 
+                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
             var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
-            (page,var totalPages) = await _replyService.GetPageAndTotalPage(page, postId); // Need to refactor this 
-            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(page, postId);
+            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             var currentUsername = User.Identity.Name; // Add Unauthorized error?
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
             postVM.MarkTags(currentUsername);
-            foreach(var replyVM in replyIndexVMList)
+            foreach (var replyVM in replyIndexVMList)
             {
                 replyVM.MarkTags(currentUsername);
             }
             var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
-            var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM, 
+            var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM,
                 postVM,
                 replyIndexVMList,
-                page, 
-                totalPages, 
+                pageTotalPagesDto.Page,
+                pageTotalPagesDto.TotalPages,
                 replyId);
             return View(indexReplyVM);
         }
@@ -150,7 +152,7 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound(),
-                PostResult.Success => RedirectToAction(nameof(Index), new { postId = createReplyViewModel.PostId}),
+                PostResult.Success => RedirectToAction(nameof(Index), new { postId = createReplyViewModel.PostId }),
                 _ => Problem()
             };
         }

@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
 using Core.Interfaces.Business_Logic;
 using Core.Interfaces.Factories;
@@ -9,6 +10,7 @@ using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -104,6 +106,37 @@ namespace NoFilterForum.Infrastructure.Services
             return new();
         }
         // Change this tomorrow
+        public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
+        {
+            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
+            if (repliesCount == 0) return new(1, 1);
+
+            int totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+            int page = 1;
+            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
+            for (int i = 0; i < replyIds.Count; i++)
+            {
+                if (replyIds[i] == replyId)
+                {
+                    break;
+                }
+                if ((i + 1) % PostConstants.PostsPerSection == 0)
+                {
+                    page++;
+                }
+            }
+            return new(page, totalPages);
+        }
+        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
+        {
+            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
+            if (repliesCount == 0) return new(1, 1);
+
+            int totalPages = 1;
+            totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+            page = PageUtility.ValidatePageNumber(page, totalPages);
+            return new(page, totalPages);
+        }
         public async Task<(int page, int totalPages)> GetPageAndTotalPage(int page, string postId, string replyId = "")
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
