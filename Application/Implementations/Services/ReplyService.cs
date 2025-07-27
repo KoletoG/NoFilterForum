@@ -108,10 +108,9 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
-            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
-            if (repliesCount == 0) return new(1, 1);
+            int totalPages = await GetTotalPagesByPostIdAsync(postId);
+            if (totalPages == 1) return new(1, 1);
 
-            int totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
             int page = 1;
             var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
             for (int i = 0; i < replyIds.Count; i++)
@@ -127,14 +126,17 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return new(page, totalPages);
         }
-        private async Task<int> GetCountByPostIdAsync(string postId) => await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
-        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
+        private async Task<int> GetTotalPagesByPostIdAsync(string postId)
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
-            if (repliesCount == 0) return new(1, 1);
-
-            int totalPages = 1;
-            totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+            if (repliesCount == 0) return 1;
+            int totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+            return totalPages;
+        }
+        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
+        {
+            int totalPages = await GetTotalPagesByPostIdAsync(postId);
+            if (totalPages == 1) return new(1, 1);
             page = PageUtility.ValidatePageNumber(page, totalPages);
             return new(page, totalPages);
         }

@@ -37,6 +37,7 @@ namespace Web.Controllers
             {
                 replyId = HttpUtility.UrlDecode(replyId);
             }
+             // Organize this shit
             var pageTotalPagesDto = string.IsNullOrEmpty(replyId) 
                 ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page) 
                 : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
