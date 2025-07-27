@@ -18,26 +18,47 @@ namespace NoFilterForum.Core.Models.DataModels
         [Required]
         [EmailAddress]
         public override string? Email { get; set; }
-        public int PostsCount { get;private set; }
+        public int PostsCount { get; private set; }
         public bool IsConfirmed { get; private set; }
         public UserRoles Role { get; private set; }
         public List<string> LikesPostRepliesIds { get; private init; }
         public List<string> DislikesPostRepliesIds { get; private init; }
-        public List<WarningDataModel> Warnings { get;private init; }
-        public DateTime DateCreated { get;private set; }
+        public List<WarningDataModel> Warnings { get; private init; }
+        public DateTime DateCreated { get; private set; }
         public string? Reason { get; private set; }
-        public string Bio {  get; private set; }
+        public string Bio { get; private set; }
         [DataType(DataType.ImageUrl)]
-        public string ImageUrl { get;private set; }
+        public string ImageUrl { get; private set; }
         public void Confirm() => IsConfirmed = true;
         public void ChangeImageUrl(string imageUrl) => ImageUrl = imageUrl;
-        public void IncrementPostCount() => PostsCount++;
-        public void DecrementPostCount() => PostsCount--;
+        public void IncrementPostCount()
+        {
+            PostsCount++;
+            ValidateRole();
+        }
+        public void DecrementPostCount()
+        {
+            PostsCount--;
+            ValidateRole();
+        }
         public void ChangeBio(string bio) => Bio = bio;
         public void ChangeEmail(string email) => Email = email;
         public void ChangeUsername(string username) => UserName = username;
         public void ChangeRole(UserRoles role) => Role = role;
-        public UserDataModel(string userName,string email)
+        private void ValidateRole()
+        {
+            if (Role == UserRoles.VIP || Role == UserRoles.Admin) return;
+
+            var role = PostsCount switch
+            {
+                > 500 => UserRoles.Dinosaur,
+                > 20 => UserRoles.Regular,
+                _ => UserRoles.Newbie
+            };
+
+            if (role != Role) ChangeRole(role);
+        }
+        public UserDataModel(string userName, string email)
         {
             Id = Nanoid.Generate();
             UserName = userName;

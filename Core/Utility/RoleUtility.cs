@@ -13,7 +13,6 @@ namespace Core.Utility
     {
         public static void AdjustRoleByPostCount(UserDataModel user)
         {
-
             if (user.Role != UserRoles.VIP && user.Role != UserRoles.Admin)
             {
                 if (user.PostsCount > 500)
