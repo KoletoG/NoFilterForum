@@ -108,32 +108,25 @@ namespace NoFilterForum.Infrastructure.Services
         {
             var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
             int totalPages = 1;
-            if (repliesCount > 0)
+            if (repliesCount == 0) return (1, totalPages);
+            totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+            if (string.IsNullOrEmpty(replyId))
             {
-                totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
-                if (string.IsNullOrEmpty(replyId))
-                {
-                    page = PageUtility.ValidatePageNumber(page, totalPages);
-                }
-                else
-                {
-                    var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
-                    for (int i = 0; i < replyIds.Count; i++)
-                    {
-                        if (replyIds[i] == replyId)
-                        {
-                            break;
-                        }
-                        if ((i + 1) % PostConstants.PostsPerSection == 0)
-                        {
-                            page++;
-                        }
-                    }
-                }
+                page = PageUtility.ValidatePageNumber(page, totalPages);
+                return (page, totalPages);
             }
-            else
+            page = 1;
+            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
+            for (int i = 0; i < replyIds.Count; i++)
             {
-                page = 1;
+                if (replyIds[i] == replyId)
+                {
+                    break;
+                }
+                if ((i + 1) % PostConstants.PostsPerSection == 0)
+                {
+                    page++;
+                }
             }
             return (page, totalPages);
         }
@@ -186,7 +179,7 @@ namespace NoFilterForum.Infrastructure.Services
             string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
             taggedUsernames = taggedUsernames.Where(x => x != defaultUsername).ToArray();
             var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernames);
-            foreach(var taggedUser in listOfTaggedUsers)
+            foreach (var taggedUser in listOfTaggedUsers)
             {
                 notificationsList.Add(new(reply, user, taggedUser));
             }
