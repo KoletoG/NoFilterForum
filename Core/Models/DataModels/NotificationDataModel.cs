@@ -5,10 +5,10 @@ namespace NoFilterForum.Core.Models.DataModels
     public class NotificationDataModel
     {
         [Key]
-        public string Id { get; set; }
-        public ReplyDataModel Reply { get; set; }
-        public UserDataModel UserFrom { get; set; }
-        public UserDataModel UserTo { get; set; }
+        public string Id { get; init; }
+        public ReplyDataModel Reply { get; init; }
+        public UserDataModel UserFrom { get; init; }
+        public UserDataModel UserTo { get; init; }
         public NotificationDataModel()
         {
 
