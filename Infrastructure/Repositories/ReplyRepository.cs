@@ -21,7 +21,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<List<string>> GetIdsByPostIdAsync(string postId)
         {
-            return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).Select(x=>x.Id).ToListAsync();
+            return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync();
         }
         public async Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(string postId, int page, int repliesPerPage)
         {
