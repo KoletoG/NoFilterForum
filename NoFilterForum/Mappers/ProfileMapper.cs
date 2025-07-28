@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.InputDTOs.Profile;
+﻿using Core.DTOs.OutputDTOs.Reply;
+using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.Extensions.Configuration.UserSecrets;
@@ -28,13 +29,13 @@ namespace Web.Mappers
             Title = dto.Title,
             Created = dto.Created
         };
-        public static ProfileViewModel MapToViewModel(List<PostItemViewModel> posts, List<ReplyItemViewModel> replies, bool isSameUser, ProfileUserViewModel profileUserDto, int page, Dictionary<string, DateTime> UserIdDate, int totalPages) => new()
+        public static ProfileViewModel MapToViewModel(List<PostItemViewModel> posts, List<ReplyItemViewModel> replies, bool isSameUser, ProfileUserViewModel profileUserDto, Dictionary<string, DateTime> UserIdDate, PageTotalPagesDTO pageTotalPages) => new()
         {
             IsSameUser = isSameUser,
             Posts = posts,
             Replies = replies,
-            TotalPages = totalPages,
-            Page = page,
+            TotalPages = pageTotalPages.TotalPages,
+            Page = pageTotalPages.Page,
             UserIdDate = UserIdDate,
             Profile = profileUserDto
         };

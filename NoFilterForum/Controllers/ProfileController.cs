@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Web;
 using Core.Constants;
+using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Profile;
@@ -116,7 +117,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateImage(UpdateImageViewModel changeImageViewModel)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
@@ -134,6 +135,13 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
             };
+        }
+        private PageTotalPagesDTO GetPageTotalPages(List<ReplyItemDto> replyItems, List<ProfilePostDto> profilePostItems, int page)
+        {
+            var totalCount = replyItems.Count + profilePostItems.Count; 
+            int totalPageCount = PageUtility.GetTotalPagesCount(totalCount, PostConstants.PostsPerSection);
+            page = PageUtility.ValidatePageNumber(page, totalPageCount);
+            return new(page, totalPageCount);
         }
         [HttpGet]
         [Authorize]
@@ -167,9 +175,8 @@ namespace Web.Controllers
             var postDtoRequest = PostMappers.MapToRequest(userId);
             List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
 
-            var totalCount = _userService.GetTotalCountByPostsAndReplies(replyDtoList, postDtoList);
-            int totalPageCount = PageUtility.GetTotalPagesCount(totalCount,PostConstants.PostsPerSection);
-            page = PageUtility.ValidatePageNumber(page,totalPageCount);
+            var pageTotalPagesDto = GetPageTotalPages(replyDtoList, postDtoList, page);
+
             var replyViewModelList = replyDtoList.Select(ProfileMapper.MapToViewModel).ToList();
             var postViewModelList = postDtoList.Select(ProfileMapper.MapToViewModel).ToList();
             var dictionary = DateHelper.OrderDates(postDtoList, replyViewModelList,page, PostConstants.PostsPerSection);
@@ -177,9 +184,8 @@ namespace Web.Controllers
                 replyViewModelList,
                 resultUser.IsSameUser,
                 profileUserViewModel, 
-                page, 
                 dictionary, 
-                totalPageCount);
+                pageTotalPagesDto);
             return View(profileViewModel);
         }
     }
