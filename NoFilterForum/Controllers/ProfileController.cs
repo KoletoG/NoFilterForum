@@ -155,7 +155,8 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
-            var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, currentUserId);
             var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest);
             if (resultUser.GetResult != GetResult.Success)
             {

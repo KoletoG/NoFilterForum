@@ -45,7 +45,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()
         {
             var users = await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync);
-            return users;
+            return users ?? new();
         }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(userId);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
