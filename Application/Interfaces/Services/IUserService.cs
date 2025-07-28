@@ -22,7 +22,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> BanUserByIdAsync(string userId);
         public Task<UserDataModel?> GetUserByIdAsync(string id);
         public Task<bool> UsernameExistsAsync(string username);
-        public int GetTotalCountByPostsAndReplies(List<ReplyItemDto> replies, List<ProfilePostDto> posts);
         public Task<bool> EmailExistsAsync(string email);
         public Task<bool> IsAdminRoleByIdAsync(string userId);
         public Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest);

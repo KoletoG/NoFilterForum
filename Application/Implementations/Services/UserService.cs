@@ -98,7 +98,6 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<bool> UsernameExistsAsync(string username) => await _unitOfWork.Users.UsernameExistsAsync(username);
         public async Task<bool> EmailExistsAsync(string email) => await _unitOfWork.Users.EmailExistsAsync(email);
-        public int GetTotalCountByPostsAndReplies(List<ReplyItemDto> replies, List<ProfilePostDto> posts) => replies.Count + posts.Count;
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);
