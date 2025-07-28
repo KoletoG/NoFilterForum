@@ -37,7 +37,8 @@ namespace Web.Controllers
             {
                 replyId = HttpUtility.UrlDecode(replyId);
             }
-             // Organize this shit
+             // Organize this shit 
+             // CREATE A SERVICE NOT STATIC FOR HANDLING TOTAL PAGES AND PAGES
             var pageTotalPagesDto = string.IsNullOrEmpty(replyId) 
                 ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page) 
                 : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);

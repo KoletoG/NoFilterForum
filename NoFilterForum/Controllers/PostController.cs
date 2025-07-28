@@ -106,6 +106,7 @@ namespace Web.Controllers
             {
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
+            // Change that
             var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
             var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
             page = PageUtility.ValidatePageNumber(page, totalPages);

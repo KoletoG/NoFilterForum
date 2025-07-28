@@ -140,7 +140,6 @@ namespace NoFilterForum.Infrastructure.Services
             page = PageUtility.ValidatePageNumber(page, totalPages);
             return new(page, totalPages);
         }
-       
         public async Task<bool> HasTimeoutByUserIdAsync(string userId)
         {
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
