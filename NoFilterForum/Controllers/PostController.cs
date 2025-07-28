@@ -15,6 +15,7 @@ using Core.Utility;
 using Web.Mappers;
 using Web.ViewModels.Post;
 using System.Runtime.CompilerServices;
+using Core.DTOs.OutputDTOs.Reply;
 
 namespace Web.Controllers
 {
@@ -37,7 +38,7 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -62,7 +63,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Like(LikeDislikePostViewModel likeDislikePostViewModel)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -82,7 +83,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Dislike(LikeDislikePostViewModel likeDislikePostViewModel)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -96,13 +97,15 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        private async Task<PageTotalPagesDTO> GetPagesTotalPagesDtoAsync(string titleOfSection)
+        {
+
+        }
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Index(string titleOfSection, int page = 1)
         {
-            titleOfSection = HttpUtility.UrlDecode(titleOfSection);
-            bool sectionExists = await _sectionService.ExistsSectionByTitleAsync(titleOfSection);
-            if (!sectionExists)
+            if (!await _sectionService.ExistsSectionByTitleAsync(titleOfSection))
             {
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
@@ -126,11 +129,10 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
-            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId);
             var deletePostRequest = PostMappers.MapToRequest(deletePostViewModel, userId);
             var result = await _postService.DeletePostByIdAsync(deletePostRequest);
             if (result != PostResult.Success)
@@ -143,8 +145,8 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
+            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId);
             return RedirectToAction(nameof(Index), new { titleOfSection = sectionTitle });
-
         }
     }
 }

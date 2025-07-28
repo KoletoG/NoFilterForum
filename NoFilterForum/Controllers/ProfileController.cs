@@ -155,6 +155,7 @@ namespace Web.Controllers
             {
                 return Forbid();
             }
+
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, currentUserId);
             var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest);
@@ -168,8 +169,7 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto!); // cannot be null as we checked it earlier
-            
+
             var replyDtoRequest = ReplyMapper.MapToRequest(userId);
             List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
 
@@ -181,6 +181,7 @@ namespace Web.Controllers
             var replyViewModelList = replyDtoList.Select(ProfileMapper.MapToViewModel).ToList();
             var postViewModelList = postDtoList.Select(ProfileMapper.MapToViewModel).ToList();
             var dictionary = DateHelper.OrderDates(postDtoList, replyViewModelList,page, PostConstants.PostsPerSection);
+            var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto!); // cannot be null as we checked it earlier
             var profileViewModel = ProfileMapper.MapToViewModel(postViewModelList,
                 replyViewModelList,
                 resultUser.IsSameUser,
