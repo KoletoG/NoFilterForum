@@ -44,7 +44,7 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -73,7 +73,7 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -97,7 +97,7 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (currentUserId == null)
+            if (currentUserId is null)
             {
                 return Unauthorized();
             }
@@ -121,7 +121,7 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -159,11 +159,14 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto);
+            var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto!); // cannot be null as we checked it earlier
+            
             var replyDtoRequest = ReplyMapper.MapToRequest(userId);
             List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
+
             var postDtoRequest = PostMappers.MapToRequest(userId);
             List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
+
             var totalCount = _userService.GetTotalCountByPostsAndReplies(replyDtoList, postDtoList);
             int totalPageCount = PageUtility.GetTotalPagesCount(totalCount,PostConstants.PostsPerSection);
             page = PageUtility.ValidatePageNumber(page,totalPageCount);

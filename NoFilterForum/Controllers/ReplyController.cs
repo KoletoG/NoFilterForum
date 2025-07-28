@@ -37,7 +37,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index(string postId, string replyId = "", int page = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -80,7 +80,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -100,7 +100,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Dislike(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -124,7 +124,7 @@ namespace Web.Controllers
                 return View(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -149,7 +149,7 @@ namespace Web.Controllers
                 return View(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
