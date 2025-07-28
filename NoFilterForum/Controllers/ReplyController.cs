@@ -27,6 +27,12 @@ namespace Web.Controllers
             _postService = postService;
             _userService = userService;
         }
+        private async Task<PageTotalPagesDTO> GetPageInfoAsync(string postId, string replyId, int page)
+        {
+            return string.IsNullOrEmpty(replyId)
+                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
+                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
+        }
         [Authorize]
         public async Task<IActionResult> Index(string postId, string replyId = "", int page = 1)
         {
@@ -46,13 +52,9 @@ namespace Web.Controllers
             if (post is null)
             {
                 return BadRequest();
-            } 
+            }
 
-            // Combine this into one method
-            var pageTotalPagesDto = string.IsNullOrEmpty(replyId)
-                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
-                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
-
+            var pageTotalPagesDto = await GetPageInfoAsync(postId, replyId, page);
 
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
@@ -60,7 +62,7 @@ namespace Web.Controllers
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
 
-            var currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
+            string currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
             postVM.MarkTags(currentUsername);
             replyIndexVMList.ForEach(x => x.MarkTags(currentUsername));
 
