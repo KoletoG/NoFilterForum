@@ -36,32 +36,34 @@ namespace Web.Controllers
                 return Unauthorized();
             }
 
-            var pageTotalPagesDto = string.IsNullOrEmpty(replyId)
-                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
-                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
-
-            var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
-            if(post is null)
-            {
-                return BadRequest();
-            }
-
-            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
-            var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
-
-            var currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
-
-            var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
-            var postVM = ReplyMapper.MapToViewModel(post);
-
-            postVM.MarkTags(currentUsername);
-            replyIndexVMList.ForEach(x => x.MarkTags(currentUsername));
-
             var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
             if (currentUserDto is null)
             {
                 return Unauthorized();
             }
+
+            var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
+            if (post is null)
+            {
+                return BadRequest();
+            } 
+
+            // Combine this into one method
+            var pageTotalPagesDto = string.IsNullOrEmpty(replyId)
+                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
+                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
+
+
+            var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
+            var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
+
+            var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
+            var postVM = ReplyMapper.MapToViewModel(post);
+
+            var currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
+            postVM.MarkTags(currentUsername);
+            replyIndexVMList.ForEach(x => x.MarkTags(currentUsername));
+
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
             var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM,
                 postVM,
