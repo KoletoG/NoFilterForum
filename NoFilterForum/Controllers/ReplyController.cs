@@ -36,12 +36,6 @@ namespace Web.Controllers
                 return Unauthorized();
             }
 
-            postId = HttpUtility.UrlDecode(postId);
-            if (!string.IsNullOrEmpty(replyId))
-            {
-                replyId = HttpUtility.UrlDecode(replyId);
-            }
-
             var pageTotalPagesDto = string.IsNullOrEmpty(replyId)
                 ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
                 : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
@@ -54,21 +48,14 @@ namespace Web.Controllers
 
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
-            
-            var currentUsername = User.Identity?.Name ?? string.Empty;
-            if (string.IsNullOrEmpty(currentUsername))
-            {
-                return Unauthorized();
-            }
+
+            var currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
 
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
 
             postVM.MarkTags(currentUsername);
-            foreach (var replyVM in replyIndexVMList)
-            {
-                replyVM.MarkTags(currentUsername);
-            }
+            replyIndexVMList.ForEach(x => x.MarkTags(currentUsername));
 
             var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
             if (currentUserDto is null)
@@ -79,8 +66,7 @@ namespace Web.Controllers
             var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM,
                 postVM,
                 replyIndexVMList,
-                pageTotalPagesDto.Page,
-                pageTotalPagesDto.TotalPages,
+                pageTotalPagesDto,
                 replyId);
             return View(indexReplyVM);
         }

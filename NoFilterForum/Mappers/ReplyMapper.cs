@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.InputDTOs;
+﻿using Core.DTOs.OutputDTOs.Reply;
+using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Web.ViewModels.Reply;
@@ -42,13 +43,12 @@ namespace Web.Mappers
         public static IndexReplyViewModel MapToViewModel(CurrentUserReplyIndexViewModel userVM,
             PostReplyIndexViewModel postVM,
             List<ReplyIndexItemViewModel> repliesVM,
-            int page,
-            int totalPages,
+            PageTotalPagesDTO pageTotalPagesDTO,
             string replyId)
         => new()
         {
-            Page = page,
-            TotalPages = totalPages,
+            Page = pageTotalPagesDTO.Page,
+            TotalPages = pageTotalPagesDTO.TotalPages,
             ReplyId = replyId,
             CurrentUser = userVM,
             Post = postVM,
