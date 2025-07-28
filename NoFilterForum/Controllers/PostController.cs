@@ -97,10 +97,15 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
-        private async Task<PageTotalPagesDTO> GetPagesTotalPagesDtoAsync(string titleOfSection)
+        //Totalpages and page needs to be combined
+        private async Task<PageTotalPagesDTO> GetPagesTotalPagesDtoAsync(string titleOfSection, int page)
         {
-
+            var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
+            var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
+            page = PageUtility.ValidatePageNumber(page, totalPages);
+            return new(page, totalPages);
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Index(string titleOfSection, int page = 1)
@@ -110,13 +115,11 @@ namespace Web.Controllers
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
             // Change that
-            var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
-            var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
-            page = PageUtility.ValidatePageNumber(page, totalPages);
+            var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
             var getIndexPostRequest = PostMappers.MapToRequest(page, titleOfSection);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
             var postIndexItemsVMs = postDtoList.Select(PostMappers.MapToViewModel).ToList();
-            var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, page, totalPages, titleOfSection);
+            var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection);
             return View(postIndexViewModel);
         }
         [HttpPost]

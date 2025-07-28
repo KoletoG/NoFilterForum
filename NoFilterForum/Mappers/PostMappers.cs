@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Core.DTOs.OutputDTOs.Reply;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Post;
 using Core.Models.DTOs.InputDTOs.Profile;
@@ -10,11 +11,11 @@ namespace Web.Mappers
     public static class PostMappers
     {
         public static CreatePostRequest MapToRequest(CreatePostViewModel vm, string userId) => new(vm.Title, vm.Body, vm.TitleOfSection, userId);
-        public static PostIndexViewModel MapToViewModel(List<PostIndexItemViewModel> itemVMs, int page, int totalPages, string titleOfSection) => new()
+        public static PostIndexViewModel MapToViewModel(List<PostIndexItemViewModel> itemVMs, PageTotalPagesDTO pageTotalPages, string titleOfSection) => new()
         {
             Posts = itemVMs,
-            Page = page,
-            TotalPages = totalPages,
+            Page = pageTotalPages.Page,
+            TotalPages = pageTotalPages.TotalPages,
             TitleOfSection = HttpUtility.UrlEncode(titleOfSection)
         };
         public static PostIndexItemViewModel MapToViewModel(PostItemDto dto) => new()
