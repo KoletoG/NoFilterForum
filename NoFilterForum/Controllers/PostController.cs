@@ -108,6 +108,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index(string titleOfSection, int page = 1)
         {
+            titleOfSection = HttpUtility.UrlDecode(titleOfSection);
             if (!await _sectionService.ExistsSectionByTitleAsync(titleOfSection))
             {
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
