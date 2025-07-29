@@ -1,10 +1,21 @@
 ﻿using Core.Enums;
-using Web.ViewModels.Abstract;
+using Web.Services.Implementations;
+using Web.Services.Interfaces;
 
 namespace Web.ViewModels.Reply
 {
-    public class ReplyIndexItemViewModel : MarkTagsClass
+    public class ReplyIndexItemViewModel
     {
+        private readonly IMarkTagsService _markTagsService;
+        public ReplyIndexItemViewModel(IMarkTagsService markTagsService)
+        {
+            _markTagsService = markTagsService;
+        }
+        public void MarkTags(string currentUsername)
+        {
+            Content = _markTagsService.MarkTags(Content, currentUsername);
+        }
+        public string Content { get; set; }
         public string Username { get; init; }
         public UserRoles Role { get; init; }
         public string ImageUrl { get; init; }
