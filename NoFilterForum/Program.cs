@@ -20,16 +20,16 @@ namespace Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString)); 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddDefaultIdentity<UserDataModel>(
+            builder.Services.AddIdentity<UserDataModel,IdentityRole>(
                 options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
@@ -45,7 +45,16 @@ namespace Web
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddRazorPages();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("Regular", policy => policy.RequireRole("Regular"));
+                options.AddPolicy("VIP", policy => policy.RequireRole("VIP"));
+                options.AddPolicy("Dinosaur", policy => policy.RequireRole("Dinosaur"));
+                options.AddPolicy("Newbie", policy => policy.RequireRole("Newbie"));
+                options.AddPolicy("Deleted", policy => policy.RequireRole("Deleted"));
+            });
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
@@ -80,6 +89,19 @@ namespace Web
                 c.Cookie.MaxAge = TimeSpan.FromDays(14);
             });
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[] { "Admin", "VIP", "Regular","Dinosaur","Newbie","Deleted" };
+
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -101,7 +123,7 @@ namespace Web
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.MapStaticAssets(); 
             app.MapControllerRoute(
                 name: "default",

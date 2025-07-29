@@ -25,10 +25,11 @@ namespace Web.Controllers
         {
             // Add errors check 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
+           
             var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
             bool isAdmin = await _userService.IsAdminRoleByIdAsync(userId);
             var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
@@ -41,7 +42,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create(CreateSectionViewModel createSectionViewModel)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -69,7 +70,7 @@ namespace Web.Controllers
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId==null)
+            if (userId is null)
             {
                 return Unauthorized();
             }

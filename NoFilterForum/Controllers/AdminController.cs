@@ -91,7 +91,7 @@ namespace Web.Controllers
                 _ => Problem("Unknown result")
             };
         }
-        [Authorize] // make authorize with roles
+        [Authorize(Roles ="Admin")] // make authorize with roles
         [Route("Adminpanel")]
         public async Task<IActionResult> Index()
         {
