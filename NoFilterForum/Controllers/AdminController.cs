@@ -34,15 +34,11 @@ namespace Web.Controllers
             _userService = userService;
             _postService = postService;
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PinPost(PinPostViewModel pinPostViewModel)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             if (!ModelState.IsValid) 
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
@@ -56,28 +52,20 @@ namespace Web.Controllers
                 _ => Problem("Unknown result.")
             };
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("Reasons")]
         public async Task<IActionResult> Reasons()
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             var users = await _userService.GetAllUnconfirmedUsersAsync();
             var usersVM = users.Select(AdminMappers.MapToViewModel).ToList();
             var reasonsViewModel = AdminMappers.MapToViewModel(usersVM);
             return View(reasonsViewModel);
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmUser(ConfirmUserViewModel confirmUserViewModel)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
@@ -95,10 +83,6 @@ namespace Web.Controllers
         [Route("Adminpanel")]
         public async Task<IActionResult> Index()
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             var usersDto = await _userService.GetAllUsersWithoutDefaultAsync();
             var userViewModel = usersDto.Select(AdminMappers.MapToViewModel).ToList();
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
@@ -106,15 +90,11 @@ namespace Web.Controllers
             var adminPanelVM = AdminMappers.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
             return View(adminPanelVM);
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> BanUser(BanUserViewModel banUserViewModel)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
