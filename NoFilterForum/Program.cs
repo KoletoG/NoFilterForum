@@ -27,9 +27,9 @@ namespace Web
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString)); 
+                options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddIdentity<UserDataModel,IdentityRole>(
+            builder.Services.AddDefaultIdentity<UserDataModel>(
                 options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
@@ -89,19 +89,6 @@ namespace Web
                 c.Cookie.MaxAge = TimeSpan.FromDays(14);
             });
             var app = builder.Build();
-            using (var scope = app.Services.CreateScope())
-            {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var roles = new[] { "Admin", "VIP", "Regular","Dinosaur","Newbie","Deleted" };
-
-                foreach (var role in roles)
-                {
-                    if (!await roleManager.RoleExistsAsync(role))
-                    {
-                        await roleManager.CreateAsync(new IdentityRole(role));
-                    }
-                }
-            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -121,7 +108,7 @@ namespace Web
             });
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             
             app.MapStaticAssets(); 

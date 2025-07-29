@@ -191,7 +191,7 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            var applicationDbContextMock = new Mock<ApplicationDbContext>();
+            var applicationDbContextMock = new Mock<NoFilterForum.Infrastructure.Data.ApplicationDbContext>();
             unitOfWorkMock.Setup(x => x.Users.UpdateRange(It.IsAny<List<UserDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Posts.DeleteRange(It.IsAny<List<PostDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Replies.DeleteRange(It.IsAny<List<ReplyDataModel>>())).Verifiable();
