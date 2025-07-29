@@ -1,14 +1,14 @@
 ﻿using System.Text.RegularExpressions;
-using Web.Services.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Web.Services.Implementations
+namespace Web.Areas 
 {
-    public class MarkTagsService : IMarkTagsService
+    public class MarkTagsViewModel
     {
-        public string MarkTags(string text, string currentUsername)
+        public string Content { get; set; }
+        public void MarkTags(string currentUsername)
         {
-            return string.Join(" ", text.Split(' ')
+            Content = string.Join(" ", Content.Split(' ')
                 .Select(x => Regex.Replace(x, $@"(@{currentUsername})", "<span style=\"background-color: #e0e0e0;\">$1</span>")));
         }
     }
