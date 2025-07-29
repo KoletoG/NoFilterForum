@@ -139,9 +139,7 @@ namespace Web.Controllers
         private PageTotalPagesDTO GetPageTotalPages(List<ReplyItemDto> replyItems, List<ProfilePostDto> profilePostItems, int page)
         {
             var totalCount = replyItems.Count + profilePostItems.Count; 
-            int totalPageCount = PageUtility.GetTotalPagesCount(totalCount, PostConstants.PostsPerSection);
-            page = PageUtility.ValidatePageNumber(page, totalPageCount);
-            return new(page, totalPageCount);
+            return PageUtility.GetPageTotalPagesDTO(page,totalCount);
         }
         [HttpGet]
         [Authorize]

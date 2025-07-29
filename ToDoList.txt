@@ -21,6 +21,18 @@ Query / Handler / Commands - CQRS with MediatR
 
 // Done / Interesting
 
+        // Work on controllers tomorrow, follow DRY
+        // Delete unused methods in repositories - YAGNI
+        // Group common logic into methods in controllers so they don't fill unnecessary space
+        // Change PostsConstants
+        // Viewmodels might need some methods
+        // Use cache service
+        // Modelstate is valid everywhere
+        // SEARCH BAR
+        // Paging wherever needed such as user service get method
+        // REACT
+        // Lava flow, poltergeists, golden hammer, the blob, spaghetti code
+        // CHAT WITH SignalR
 Use is instead of == for null checks
 Use records for DTOs
 ! at the end of variable name makes it non-nullable

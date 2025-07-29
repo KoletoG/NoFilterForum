@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Constants;
+using Core.DTOs.OutputDTOs.Reply;
 
 namespace Core.Utility
 {
     public static class PageUtility
     {
+        public static PageTotalPagesDTO GetPageTotalPagesDTO(int page, int totalCount)
+        {
+            var totalPages = GetTotalPagesCount(totalCount, PostConstants.PostsPerSection);
+            page = ValidatePageNumber(page, totalPages);
+            return new(page,totalPages);
+        }
         public static int GetTotalPagesCount(int totalCount, int countPerPage)
         {
             if (totalCount<=1)

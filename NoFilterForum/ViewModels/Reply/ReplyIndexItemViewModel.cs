@@ -3,7 +3,7 @@ using Web.ViewModels.Abstract;
 
 namespace Web.ViewModels.Reply
 {
-    public class ReplyIndexItemViewModel : MarkTagsAbstract
+    public class ReplyIndexItemViewModel : MarkTagsClass
     {
         public string Username { get; init; }
         public UserRoles Role { get; init; }

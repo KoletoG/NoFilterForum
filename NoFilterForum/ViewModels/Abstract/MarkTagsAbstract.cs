@@ -3,7 +3,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Web.ViewModels.Abstract
 {
-    public abstract class MarkTagsAbstract
+    public class MarkTagsClass
     {
         public string Content { get; set; }
         public void MarkTags(string currentUsername)

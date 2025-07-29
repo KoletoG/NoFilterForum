@@ -101,9 +101,7 @@ namespace Web.Controllers
         private async Task<PageTotalPagesDTO> GetPagesTotalPagesDtoAsync(string titleOfSection, int page)
         {
             var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
-            var totalPages = PageUtility.GetTotalPagesCount(totalPostsCount, PostConstants.PostsPerSection);
-            page = PageUtility.ValidatePageNumber(page, totalPages);
-            return new(page, totalPages);
+            return PageUtility.GetPageTotalPagesDTO(page, totalPostsCount);
         }
 
         [HttpGet]
