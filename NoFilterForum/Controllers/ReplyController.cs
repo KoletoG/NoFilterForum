@@ -33,6 +33,12 @@ namespace Web.Controllers
                 ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
                 : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
         }
+        private void MarkTags(List<ReplyIndexItemViewModel> replyItemsVM, PostReplyIndexViewModel postReplyIndexViewModel)
+        {
+            string currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
+            replyItemsVM.ForEach(x => x.MarkTags(currentUsername));
+            postReplyIndexViewModel.MarkTags(currentUsername);
+        }
         [Authorize]
         public async Task<IActionResult> Index(string postId, string replyId = "", int page = 1)
         {
@@ -62,9 +68,7 @@ namespace Web.Controllers
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
 
-            string currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
-            postVM.MarkTags(currentUsername);
-            replyIndexVMList.ForEach(x => x.MarkTags(currentUsername));
+            MarkTags(replyIndexVMList, postVM);
 
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
             var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM,
