@@ -39,6 +39,7 @@ namespace Web.Controllers
             replyItemsVM.ForEach(x => x.MarkTags(currentUsername));
             postReplyIndexViewModel.MarkTags(currentUsername);
         }
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> Index(string postId, string replyId = "", int page = 1)
         {
@@ -83,6 +84,10 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
@@ -103,6 +108,10 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Dislike(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {

@@ -19,15 +19,11 @@ namespace Web.Controllers
         {
             _warningService = warningService;
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> Details(string id)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             id = HttpUtility.UrlDecode(id);
             if (string.IsNullOrEmpty(id))
             {
@@ -38,14 +34,10 @@ namespace Web.Controllers
             return View(warningsVM);
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateWarningViewModel createWarningViewModel)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));

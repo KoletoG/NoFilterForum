@@ -23,29 +23,21 @@ namespace Web.Controllers
             _reportService = reportService;
         }
 
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         [Route("Reports")]
         public async Task<IActionResult> Index()
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             var reportDtos = await _reportService.GetAllDtosAsync();
             var reportVMs = reportDtos.Select(ReportMapper.MapToViewModel).ToList();
             var reportIndexVM = ReportMapper.MapToViewModel(reportVMs);
             return View(reportIndexVM);
         }
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteReportViewModel deleteReportViewModel)
         {
-            if (!UserConstants.adminNames.Contains(User.Identity.Name))
-            {
-                return Forbid();
-            }
             if (!ModelState.IsValid) 
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
