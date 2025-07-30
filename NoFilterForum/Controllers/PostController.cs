@@ -62,7 +62,11 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Like(LikeDislikePostViewModel likeDislikePostViewModel)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
@@ -82,7 +86,11 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Dislike(LikeDislikePostViewModel likeDislikePostViewModel)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
@@ -97,7 +105,7 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
-        //Totalpages and page needs to be combined
+
         private async Task<PageTotalPagesDTO> GetPagesTotalPagesDtoAsync(string titleOfSection, int page)
         {
             var totalPostsCount = await _postService.GetPostsCountBySectionTitleAsync(titleOfSection);
@@ -113,7 +121,6 @@ namespace Web.Controllers
             {
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
-            // Change that
             var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
             var getIndexPostRequest = PostMappers.MapToRequest(page, titleOfSection);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
