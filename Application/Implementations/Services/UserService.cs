@@ -47,6 +47,29 @@ namespace NoFilterForum.Infrastructure.Services
             var users = await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync);
             return users ?? new();
         }
+        public async Task RoleCheckAsync(UserDataModel user)
+        {
+            if(!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user,nameof(UserRoles.Admin)))
+            {
+                var role = user.PostsCount switch
+                {
+                    > 500 => UserRoles.Dinosaur,
+                    > 20 => UserRoles.Regular,
+                    _ => UserRoles.Newbie
+                };
+                if (!await _userManager.IsInRoleAsync(user, nameof(role)))
+                {
+                    switch (role)
+                    {
+                        case UserRoles.Dinosaur: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Dinosaur)); break;
+                        case UserRoles.Regular: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Regular)); break;
+                        case UserRoles.Newbie: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Newbie)); break;
+                        default: break;
+                    }
+                    user.ChangeRole(role);
+                }
+            }
+        }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(userId);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {

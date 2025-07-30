@@ -34,31 +34,16 @@ namespace NoFilterForum.Core.Models.DataModels
         public void IncrementPostCount()
         {
             PostsCount++;
-            ValidateRole();
         }
         public void DecrementPostCount()
         {
             PostsCount--;
-            ValidateRole();
         }
         public void ChangeBio(string bio) => Bio = bio;
         public void ChangeEmail(string email) => Email = email;
         public void ChangeUsername(string username) => UserName = username;
         public void ChangeRole(UserRoles role) => Role = role;
         public void SetReason(string reason) => Reason = reason;
-        private void ValidateRole()
-        {
-            if (Role == UserRoles.VIP || Role == UserRoles.Admin) return;
-
-            var role = PostsCount switch
-            {
-                > 500 => UserRoles.Dinosaur,
-                > 20 => UserRoles.Regular,
-                _ => UserRoles.Newbie
-            };
-
-            if (role != Role) ChangeRole(role);
-        }
         public UserDataModel(string userName, string email)
         {
             Id = Nanoid.Generate();

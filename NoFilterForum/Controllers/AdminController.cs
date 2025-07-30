@@ -53,6 +53,7 @@ namespace Web.Controllers
             };
         }
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         [Route("Reasons")]
         public async Task<IActionResult> Reasons()
         {
@@ -79,7 +80,8 @@ namespace Web.Controllers
                 _ => Problem("Unknown result")
             };
         }
-        [Authorize(Roles ="Admin")] // make authorize with roles
+        [Authorize(Roles ="Admin")]
+        [HttpGet]
         [Route("Adminpanel")]
         public async Task<IActionResult> Index()
         {
