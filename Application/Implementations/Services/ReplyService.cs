@@ -1,4 +1,5 @@
-﻿using Core.Constants;
+﻿using Application.Interfaces.Services;
+using Core.Constants;
 using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
 using Core.Interfaces.Business_Logic;
@@ -27,12 +28,15 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<ReplyService> _logger;
         private readonly IReplyFactory _replyFactory;
         private readonly IReactionService _reactionService;
+        private readonly ICacheService _cacheService;
         public ReplyService(IUnitOfWork unitOfWork,
             IReactionService reactionService,
             IReplyFactory replyFactory,
             IUserService userService,
-            ILogger<ReplyService> logger)
+            ILogger<ReplyService> logger,
+            ICacheService cacheService)
         {
+            _cacheService = cacheService;
             _unitOfWork = unitOfWork;
             _reactionService = reactionService;
             _replyFactory = replyFactory;
@@ -97,15 +101,8 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
-        {
-            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(getListReplyIndexItemRequest.PostId);
-            if (repliesCount > 0)
-            {
-                return await _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(getListReplyIndexItemRequest.PostId, getListReplyIndexItemRequest.Page, PostConstants.PostsPerSection);
-            }
-            return new();
-        }
+        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, List<ReplyIndexItemDto>>("replyIndexItemsDto", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new();
+
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
             int totalPages = await GetTotalPagesByPostIdAsync(postId);

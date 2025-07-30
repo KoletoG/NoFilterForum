@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Reply
 {
-    public record GetListReplyIndexItemRequest(int Page, string PostId);
+    public record GetListReplyIndexItemRequest(int Page, string PostId, int PostsCount);
 }

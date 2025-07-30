@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs.Reply;
+﻿using Core.Models.DTOs.InputDTOs.Reply;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 
@@ -10,7 +11,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<ReplyDataModel?> GetWithUserByIdAsync(string id);
         public Task<string?> GetPostIdById(string id);
         public Task<List<string>> GetIdsByPostIdAsync(string postId);
-        public Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(string postId, int page, int repliesPerPage);
+        public Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest);
         public Task<List<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId);
         public Task<UserDataModel?> GetUserByReplyIdAsync(string replyId);
         public Task<List<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId);

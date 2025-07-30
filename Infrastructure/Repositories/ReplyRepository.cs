@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs.Reply;
+﻿using Core.Models.DTOs.InputDTOs.Reply;
+using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -23,9 +24,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync();
         }
-        public async Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(string postId, int page, int repliesPerPage)
+        public async Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
         {
-            return await _context.ReplyDataModels.Where(x => x.Post.Id == postId).OrderBy(x=>x.DateCreated).Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated)).Skip((page-1)*repliesPerPage).Take(repliesPerPage).ToListAsync();
+            return await _context.ReplyDataModels.Where(x => x.Post.Id == getListReplyIndexItemRequest.PostId).OrderBy(x=>x.DateCreated).Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated)).Skip((getListReplyIndexItemRequest.Page-1)*getListReplyIndexItemRequest.PostsCount).Take(getListReplyIndexItemRequest.PostsCount).ToListAsync();
         }
         public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId)
         {
