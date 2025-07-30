@@ -172,6 +172,7 @@ namespace NoFilterForum.Infrastructure.Services
                 if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);
+                await _userService.ApplyRoleAsync(reply.User);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
@@ -222,6 +223,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.Replies.CreateAsync(reply);
                 _unitOfWork.Posts.Update(post);
                 _unitOfWork.Users.Update(user);
+                await _userService.ApplyRoleAsync(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
