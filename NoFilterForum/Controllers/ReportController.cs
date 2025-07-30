@@ -58,7 +58,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create(CreateReportViewModel createReportViewModel)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (currentUserId == null)
+            if (currentUserId is null)
             {
                 return Unauthorized();
             }

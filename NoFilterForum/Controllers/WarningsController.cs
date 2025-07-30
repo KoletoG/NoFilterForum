@@ -58,7 +58,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Accept()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }

@@ -25,7 +25,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Delete() // Might change to read with IsMarked property in NotificatonsDataModel
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
@@ -43,7 +43,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId is null)
             {
                 return Unauthorized();
             }
