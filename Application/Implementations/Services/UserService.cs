@@ -47,7 +47,7 @@ namespace NoFilterForum.Infrastructure.Services
             var users = await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync);
             return users ?? new();
         }
-        public async Task RoleCheckAsync(UserDataModel user)
+        public async Task ApplyRoleAsync(UserDataModel user)
         {
             if(!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user,nameof(UserRoles.Admin)))
             {
