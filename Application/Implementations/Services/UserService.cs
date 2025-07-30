@@ -29,9 +29,9 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<UserService> _logger;
         private readonly UserManager<UserDataModel> _userManager;
         private readonly SignInManager<UserDataModel> _signInManager;
-        private readonly IHtmlSanitizer _htmlSanitizer; 
+        private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public UserService(ICacheService cacheService,IHtmlSanitizer htmlSanitizer,IWebHostEnvironment webHostEnvironment, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        public UserService(ICacheService cacheService, IHtmlSanitizer htmlSanitizer, IWebHostEnvironment webHostEnvironment, UserManager<UserDataModel> userManager, SignInManager<UserDataModel> signInManager, IUnitOfWork unitOfWork, ILogger<UserService> logger)
         {
             _cacheService = cacheService;
             _htmlSanitizer = htmlSanitizer;
@@ -49,7 +49,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task ApplyRoleAsync(UserDataModel user)
         {
-            if(!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user,nameof(UserRoles.Admin)))
+            if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
             {
                 var role = user.PostsCount switch
                 {
@@ -57,30 +57,27 @@ namespace NoFilterForum.Infrastructure.Services
                     > 20 => UserRoles.Regular,
                     _ => UserRoles.Newbie
                 };
-                if (!await _userManager.IsInRoleAsync(user, nameof(role)))
+                switch (role)
                 {
-                    switch (role)
-                    {
-                        case UserRoles.Dinosaur: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Dinosaur)); break;
-                        case UserRoles.Regular: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Regular)); break;
-                        case UserRoles.Newbie: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Newbie)); break;
-                        default: break;
-                    }
-                    user.ChangeRole(role);
+                    case UserRoles.Dinosaur: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Dinosaur)); break;
+                    case UserRoles.Regular: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Regular)); break;
+                    case UserRoles.Newbie: await _userManager.AddToRoleAsync(user, nameof(UserRoles.Newbie)); break;
+                    default: break;
                 }
+                user.ChangeRole(role);
             }
         }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(userId);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
-            if(user is null)
+            if (user is null)
             {
-                return new(GetResult.NotFound,default,null);
+                return new(GetResult.NotFound, default, null);
             }
             var profileUserDto = await _unitOfWork.Users.GetProfileUserDtoByIdAsync(user.Id);
             bool isSameUser = false;
-            if(getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId)
+            if (getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId)
             {
                 isSameUser = true;
             }
@@ -153,7 +150,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> AnyNotConfirmedUsersAsync()=> await _unitOfWork.Users.ExistsByNotConfirmedAsync();
+        public async Task<bool> AnyNotConfirmedUsersAsync() => await _unitOfWork.Users.ExistsByNotConfirmedAsync();
         public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUsersAsync() => await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
         public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
         public async Task<PostResult> ConfirmUserAsync(string userId)
@@ -165,7 +162,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             if (user.IsConfirmed)
             {
-                _logger.LogInformation("User with Id: {UserId} has already been confirmed",userId);
+                _logger.LogInformation("User with Id: {UserId} has already been confirmed", userId);
                 return PostResult.Success;
             }
             user.Confirm();
@@ -180,7 +177,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "User with {UserId} was not confirmed.",userId);
+                _logger.LogError(ex, "User with {UserId} was not confirmed.", userId);
                 return PostResult.UpdateFailed;
             }
         }
@@ -214,7 +211,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Failed to ban user with Id: {UserId}",userId);
+                _logger.LogError(ex, "Failed to ban user with Id: {UserId}", userId);
                 return PostResult.UpdateFailed;
             }
         }
@@ -232,7 +229,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             string sanitizedFormattedBio = _htmlSanitizer.Sanitize(changeBioRequest.Bio);
             sanitizedFormattedBio = TextFormatter.FormatBody(changeBioRequest.Bio); // Move that
-            if(user.Bio == sanitizedFormattedBio)
+            if (user.Bio == sanitizedFormattedBio)
             {
                 return PostResult.Success;
             }
@@ -245,7 +242,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "User's bio with Id: {UserId} was not changed", changeBioRequest.UserId);
@@ -265,7 +262,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
         {
             var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);
-            if (currentUser is null) 
+            if (currentUser is null)
             {
                 return PostResult.NotFound;
             }
@@ -275,7 +272,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath,"images", fileUrl), FileMode.Create))
+                using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, "images", fileUrl), FileMode.Create))
                 {
                     await updateImageRequest.Image.CopyToAsync(stream);
                 }
@@ -289,7 +286,7 @@ namespace NoFilterForum.Infrastructure.Services
                 }
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Image of user with Id: {UserId} was not changed", updateImageRequest.UserId);
