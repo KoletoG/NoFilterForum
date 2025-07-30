@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs.Post;
+﻿using Core.Models.DTOs.InputDTOs.Post;
+using Core.Models.DTOs.OutputDTOs.Post;
 using Core.Models.DTOs.OutputDTOs.Section;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
@@ -17,7 +18,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<int> GetPostsCountByIdAsync(string id);
         public Task<bool> ExistsSectionByTitleAsync(string sectionTitle);
         public Task<int> GetPostsCountByTitleAsync(string title);
-        public Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage);
+        public Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest);
         public Task<bool> ExistsByTitleAsync(string title);
         public Task<SectionDataModel?> GetByIdWithPostsAndRepliesAndUsersAsync(string id);
     }

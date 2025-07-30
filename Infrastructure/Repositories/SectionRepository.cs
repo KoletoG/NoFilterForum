@@ -1,4 +1,6 @@
-﻿using Core.Models.DTOs.OutputDTOs.Post;
+﻿using System.Linq;
+using Core.Models.DTOs.InputDTOs.Post;
+using Core.Models.DTOs.OutputDTOs.Post;
 using Core.Models.DTOs.OutputDTOs.Section;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -40,15 +42,15 @@ namespace NoFilterForum.Infrastructure.Repositories
             return await _context.SectionDataModels
                 .Select(x => new SectionItemDto(x.Title,x.Description,x.Id,x.Posts.Count)).ToListAsync();
         }
-        public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(string sectionTitle, int page, int countPerPage)
+        public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest)
         {
             return await _context.SectionDataModels.AsNoTracking()
-                    .Where(x => x.Title == sectionTitle)
+                    .Where(x => x.Title == getIndexPostRequest.TitleOfSection)
                     .SelectMany(x => x.Posts)
                     .OrderByDescending(x => x.IsPinned)
                     .ThenByDescending(x => x.DateCreated)
-                    .Skip((page - 1) * countPerPage)
-                    .Take(countPerPage)
+                    .Skip((getIndexPostRequest.Page - 1) * getIndexPostRequest.PostsCount)
+                    .Take(getIndexPostRequest.PostsCount)
                     .Select(x => new PostItemDto(x.Id,x.User.UserName,x.User.Role,x.Title,x.IsPinned,x.DateCreated,x.User.ImageUrl,x.Likes))
                     .ToListAsync();
         }

@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Core.Constants;
 using Core.DTOs.OutputDTOs.Reply;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Post;
@@ -29,7 +30,7 @@ namespace Web.Mappers
             UserImageUrl = dto.ImageUrl,
             PostLikes = dto.PostLikes
         };
-        public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new(titleOfSection, page);
+        public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new(titleOfSection, page,PostConstants.PostsPerSection);
         public static DeletePostRequest MapToRequest(DeletePostViewModel vm, string userId) => new(vm.PostId, userId);
         public static GetProfilePostDtoRequest MapToRequest(string userId) => new(userId);
         public static LikeDislikeRequest MapToRequest(string postId, string userId) => new()

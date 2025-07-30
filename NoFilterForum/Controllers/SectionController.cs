@@ -19,6 +19,7 @@ namespace Web.Controllers
             _sectionService = sectionService;
             _userService = userService;
         }
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Index()
@@ -29,7 +30,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-           
+
             var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
             bool isAdmin = await _userService.IsAdminRoleByIdAsync(userId);
             var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
@@ -65,7 +66,7 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteSectionViewModel deleteSectionViewModel)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
@@ -74,7 +75,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            if(!await _userService.IsAdminRoleByIdAsync(userId))
+            if (!await _userService.IsAdminRoleByIdAsync(userId))
             {
                 return Forbid();
             }

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Web;
+using Application.Interfaces.Services;
 using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Factories;
@@ -31,9 +32,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly ILogger<PostService> _logger;
         private readonly IPostFactory _postFactory;
         private readonly IReactionService _reactionService;
-        public PostService(IUnitOfWork unitOfWork,IReactionService reactionService,IUserService userService ,ILogger<PostService> logger,IPostFactory postFactory)
+        private readonly ICacheService _cacheService;
+        public PostService(IUnitOfWork unitOfWork,ICacheService cacheService, IReactionService reactionService, IUserService userService, ILogger<PostService> logger, IPostFactory postFactory)
         {
             _unitOfWork = unitOfWork;
+            _cacheService = cacheService;
             _reactionService = reactionService;
             _logger = logger;
             _userService = userService;
@@ -61,7 +64,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Post with Id: {PostId} was not liked", likeDislikeRequest.PostReplyId);
@@ -117,7 +120,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex,"Problem (un)pinning post with ID: {PostId}.",postId);
+                _logger.LogError(ex, "Problem (un)pinning post with ID: {PostId}.", postId);
                 return PostResult.UpdateFailed;
             }
         }
@@ -164,7 +167,10 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle) => await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
-        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest) => await _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync(getIndexPostRequest.TitleOfSection, getIndexPostRequest.Page, PostConstants.PostsPerSection);
+        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest)
+        {
+            return await _cacheService.TryGetValue<GetIndexPostRequest,List<PostItemDto>>("postIndexItems", _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync, getIndexPostRequest) ?? new();
+        }
         public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest)
         {
             var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId);
@@ -172,14 +178,14 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            bool shouldForbid = post.User.Id == deletePostRequest.UserId 
-                ? false 
+            bool shouldForbid = post.User.Id == deletePostRequest.UserId
+                ? false
                 : !(await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId));
             if (shouldForbid) return PostResult.Forbid;
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
             var usersSet = repliesOfPost.Select(x => x.User).ToHashSet();
             var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x => x.Id).ToHashSet());
-            foreach(var reply in repliesOfPost)
+            foreach (var reply in repliesOfPost)
             {
                 reply.User.DecrementPostCount();
             }
@@ -188,7 +194,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if(repliesOfPost.Count > 0) _unitOfWork.Replies.DeleteRange(repliesOfPost);
+                if (repliesOfPost.Count > 0) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
                 await _userService.ApplyRoleAsync(post.User);
                 _unitOfWork.Users.UpdateRange(usersSet.ToList());
@@ -197,7 +203,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Post with Id: {PostId} was not deleted", deletePostRequest.PostId);
