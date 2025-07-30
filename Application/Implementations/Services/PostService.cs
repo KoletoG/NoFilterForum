@@ -150,8 +150,8 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 _unitOfWork.Sections.Update(section);
                 await _unitOfWork.Posts.CreateAsync(post);
-                _unitOfWork.Users.Update(user);
                 await _userService.ApplyRoleAsync(user);
+                _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
@@ -190,9 +190,9 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 if(repliesOfPost.Count > 0) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
+                await _userService.ApplyRoleAsync(post.User);
                 _unitOfWork.Users.UpdateRange(usersSet.ToList());
                 _unitOfWork.Posts.Delete(post);
-                await _userService.ApplyRoleAsync(post.User);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;

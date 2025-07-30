@@ -113,15 +113,15 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
+                foreach (var user in users)
+                {
+                    await _userService.ApplyRoleAsync(user);
+                }
                 _unitOfWork.Users.UpdateRange(users);
                 _unitOfWork.Posts.DeleteRange(posts);
                 _unitOfWork.Replies.DeleteRange(replies);
                 _unitOfWork.Sections.Delete(section);
                 _unitOfWork.Notifications.DeleteRange(notifications);
-                foreach(var user in users)
-                {
-                    await _userService.ApplyRoleAsync(user);
-                }
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 _memoryCache.Remove("sections");
