@@ -28,9 +28,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.Post.Id == getListReplyIndexItemRequest.PostId).OrderBy(x=>x.DateCreated).Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated)).Skip((getListReplyIndexItemRequest.Page-1)*getListReplyIndexItemRequest.PostsCount).Take(getListReplyIndexItemRequest.PostsCount).ToListAsync();
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId)
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(GetReplyItemRequest getReplyItemRequest)
         {
-            return await _context.ReplyDataModels.Where(x=>x.User.Id == userId).Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title)).ToListAsync();
+            return await _context.ReplyDataModels.Where(x=>x.User.Id == getReplyItemRequest.UserId).Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title)).ToListAsync();
         }
         public async Task<ReplyDataModel?> GetWithUserByIdAsync(string id)
         {

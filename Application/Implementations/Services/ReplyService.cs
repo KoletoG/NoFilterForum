@@ -146,7 +146,10 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest) => await _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync(getReplyItemRequest.UserId);
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest)
+        {
+            return await _cacheService.TryGetValue<GetReplyItemRequest,List<ReplyItemDto>>("listReplyItemDto",_unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync,getReplyItemRequest) ?? new();
+        }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);

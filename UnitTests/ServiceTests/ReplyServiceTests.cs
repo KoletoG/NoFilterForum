@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces.Services;
+using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
@@ -30,16 +32,18 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetCountByPostIdAsync(It.IsAny<string>())).ReturnsAsync(5);
-            unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<ReplyIndexItemDto>());
+            unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<GetListReplyIndexItemRequest>())).ReturnsAsync(new List<ReplyIndexItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
-            var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest(Page: 1,PostId: "ExampleId");
+            var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest(Page: 1,PostId: "ExampleId",PostsCount: PostConstants.PostsPerSection);
             var result = await replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
             Assert.NotNull(result);
             Assert.IsType<List<ReplyIndexItemDto>>(result);
@@ -53,14 +57,16 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<ReplyItemDto>());
+            Mock<ICacheService> cacheServiceMock = new();
+            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<GetReplyItemRequest>())).ReturnsAsync(new List<ReplyItemDto>());
             var getReplyItemRequest = new GetReplyItemRequest(UserId : "UserIdExample");
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var result = await replyService.GetListReplyItemDtoAsync(getReplyItemRequest);
             Assert.IsType<List<ReplyItemDto>>(result);
@@ -75,13 +81,15 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.MinValue);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
@@ -95,13 +103,15 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
@@ -115,6 +125,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
@@ -122,7 +133,8 @@ namespace UnitTests.ServiceTests
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId);
@@ -136,13 +148,15 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync((ReplyDataModel?)null);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
@@ -156,6 +170,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x=>x.Users.Update(It.IsAny<UserDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel() {
@@ -169,7 +184,8 @@ namespace UnitTests.ServiceTests
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
@@ -183,6 +199,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
@@ -197,7 +214,8 @@ namespace UnitTests.ServiceTests
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
@@ -211,6 +229,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
+            Mock<ICacheService> cacheServiceMock = new();
             userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
             {
@@ -224,7 +243,8 @@ namespace UnitTests.ServiceTests
                 reactionServiceMock.Object,
                 replyFactoryMock.Object,
                 userServiceMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
