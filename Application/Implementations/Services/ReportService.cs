@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Application.Interfaces.Services;
+using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Report;
@@ -17,14 +18,16 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReportFactory _reportFactory;
         private readonly ILogger<ReportService> _logger;
-        public ReportService(IUnitOfWork unitOfWork,IReportFactory reportFactory, ILogger<ReportService> logger)
+        private readonly ICacheService _cacheService;
+        public ReportService(IUnitOfWork unitOfWork,IReportFactory reportFactory, ILogger<ReportService> logger, ICacheService cacheService)
         { 
             _logger = logger;
             _reportFactory = reportFactory;
             _unitOfWork = unitOfWork;
+            _cacheService = cacheService;
         }
-        public async Task<List<ReportDataModel>> GetAllReportsAsync() =>await _unitOfWork.Reports.GetAllAsync();
-        public async Task<List<ReportItemDto>> GetAllDtosAsync() => await _unitOfWork.Reports.GetReportDtosAsync();
+        public async Task<List<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<List<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? new();
+        public async Task<List<ReportItemDto>> GetAllDtosAsync() => await _cacheService.TryGetValue<List<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync) ?? new();
         public async Task<bool> AnyReportsAsync() => await _unitOfWork.Reports.ExistsReportsAsync();
         public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest)
         {
