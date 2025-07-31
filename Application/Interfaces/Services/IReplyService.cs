@@ -16,7 +16,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId);
         public Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page);
         public Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest);
-        public Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest);
+        public Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(string userId);
         public Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest);
     }
 }

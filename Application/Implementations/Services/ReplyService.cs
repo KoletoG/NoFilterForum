@@ -43,6 +43,53 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
             _userService = userService;
         }
+        // GET methods
+        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, List<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new();
+        public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
+        {
+            int totalPages = await GetTotalPagesByPostIdAsync(postId);
+            if (totalPages == 1) return new(1, 1);
+
+            int page = 1;
+            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
+            for (int i = 0; i < replyIds.Count; i++)
+            {
+                if (replyIds[i] == replyId)
+                {
+                    break;
+                }
+                if ((i + 1) % PostConstants.PostsPerSection == 0)
+                {
+                    page++;
+                }
+            }
+            return new(page, totalPages);
+        }
+        private async Task<int> GetTotalPagesByPostIdAsync(string postId)
+        {
+            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
+            if (repliesCount == 0) return 1;
+            int totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
+            return totalPages;
+        }
+        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
+        {
+            int totalPages = await GetTotalPagesByPostIdAsync(postId);
+            if (totalPages == 1) return new(1, 1);
+            page = PageUtility.ValidatePageNumber(page, totalPages);
+            return new(page, totalPages);
+        }
+        public async Task<bool> HasTimeoutByUserIdAsync(string userId)
+        {
+            var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
+            if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
+            {
+                return !await _userService.IsAdminRoleByIdAsync(userId);
+            }
+            return false;
+        }
+        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(string userId) => await _cacheService.TryGetValue<List<ReplyItemDto>>($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId) ?? new();
+        // POST methods
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
@@ -101,55 +148,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, List<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new();
-
-        public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
-        {
-            int totalPages = await GetTotalPagesByPostIdAsync(postId);
-            if (totalPages == 1) return new(1, 1);
-
-            int page = 1;
-            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
-            for (int i = 0; i < replyIds.Count; i++)
-            {
-                if (replyIds[i] == replyId)
-                {
-                    break;
-                }
-                if ((i + 1) % PostConstants.PostsPerSection == 0)
-                {
-                    page++;
-                }
-            }
-            return new(page, totalPages);
-        }
-        private async Task<int> GetTotalPagesByPostIdAsync(string postId)
-        {
-            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
-            if (repliesCount == 0) return 1;
-            int totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
-            return totalPages;
-        }
-        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
-        {
-            int totalPages = await GetTotalPagesByPostIdAsync(postId);
-            if (totalPages == 1) return new(1, 1);
-            page = PageUtility.ValidatePageNumber(page, totalPages);
-            return new(page, totalPages);
-        }
-        public async Task<bool> HasTimeoutByUserIdAsync(string userId)
-        {
-            var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
-            if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
-            {
-                return !await _userService.IsAdminRoleByIdAsync(userId);
-            }
-            return false;
-        }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest)
-        {
-            return await _cacheService.TryGetValue<GetReplyItemRequest,List<ReplyItemDto>>($"listReplyItemDtoById_{getReplyItemRequest.UserId}",_unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync,getReplyItemRequest) ?? new();
-        }
+        
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
             var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
