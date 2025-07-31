@@ -42,11 +42,7 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
         }
         // Add paging
-        public async Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()
-        {
-            var users = await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync);
-            return users ?? new();
-        }
+        public async Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()=> await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new();
         public async Task ApplyRoleAsync(UserDataModel user)
         {
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
@@ -67,20 +63,17 @@ namespace NoFilterForum.Infrastructure.Services
                 user.ChangeRole(role);
             }
         }
-        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync(userId);
+        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}",_unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync,userId);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
+            // CHECK ON THIS TOMORROW
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
             if (user is null)
             {
                 return new(GetResult.NotFound, default, null);
             }
-            var profileUserDto = await _unitOfWork.Users.GetProfileUserDtoByIdAsync(user.Id);
-            bool isSameUser = false;
-            if (getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId)
-            {
-                isSameUser = true;
-            }
+            var profileUserDto = await _cacheService.TryGetValue<ProfileUserDto?>($"profileUserDtoById_{user.Id}",_unitOfWork.Users.GetProfileUserDtoByIdAsync,user.Id);
+            bool isSameUser = getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId;
             return new(GetResult.Success, isSameUser, profileUserDto);
         }
         public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id;

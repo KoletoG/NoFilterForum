@@ -30,6 +30,9 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
             _cacheService = cacheService;
         }
+        // GET methods
+        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<List<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync, userId) ?? new();
+        // POST methods
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {
             var user = await _unitOfWork.Users.GetUserWithWarningsByIdAsync(createWarningRequest.UserId);
@@ -57,8 +60,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) =>await _cacheService.TryGetValue<List<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync,userId) ?? new();
-        public async Task<PostResult> AcceptWarningsAsync(string userId)
+       public async Task<PostResult> AcceptWarningsAsync(string userId)
         {
             var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
             if (warnings is null)
