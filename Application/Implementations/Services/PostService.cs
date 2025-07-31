@@ -103,7 +103,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _cacheService.TryGetValue<string?>($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId);
         public async Task<string?> GetPostIdByReplyId(string replyId) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdById,replyId);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId);
-        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(GetProfilePostDtoRequest getProfilePostDtoRequest) => await _unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync(getProfilePostDtoRequest.UserId);
+        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(string userId) => await _unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync(userId);
         public async Task<PostResult> PinPostAsync(string postId)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(postId);

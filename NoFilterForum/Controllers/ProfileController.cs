@@ -170,9 +170,7 @@ namespace Web.Controllers
 
             var replyDtoRequest = ReplyMapper.MapToRequest(userId);
             List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
-
-            var postDtoRequest = PostMappers.MapToRequest(userId);
-            List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(postDtoRequest);
+            List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(userId);
 
             var pageTotalPagesDto = GetPageTotalPages(replyDtoList, postDtoList, page);
 
