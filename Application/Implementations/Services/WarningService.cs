@@ -57,7 +57,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) =>await _cacheService.TryGetValue<List<WarningsContentDto>>("listWarningContents", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync,userId) ?? new();
+        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) =>await _cacheService.TryGetValue<List<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync,userId) ?? new();
         public async Task<PostResult> AcceptWarningsAsync(string userId)
         {
             var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);

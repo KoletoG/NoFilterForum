@@ -101,7 +101,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, List<ReplyIndexItemDto>>("replyIndexItemsDto", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new();
+        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, List<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new();
 
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
@@ -148,7 +148,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(GetReplyItemRequest getReplyItemRequest)
         {
-            return await _cacheService.TryGetValue<GetReplyItemRequest,List<ReplyItemDto>>("listReplyItemDto",_unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync,getReplyItemRequest) ?? new();
+            return await _cacheService.TryGetValue<GetReplyItemRequest,List<ReplyItemDto>>($"listReplyItemDtoById_{getReplyItemRequest.UserId}",_unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync,getReplyItemRequest) ?? new();
         }
         public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
         {
