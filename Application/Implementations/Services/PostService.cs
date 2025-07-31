@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Web;
 using Application.Interfaces.Services;
 using Core.Constants;
@@ -42,6 +43,22 @@ namespace NoFilterForum.Infrastructure.Services
             _userService = userService;
             _postFactory = postFactory;
         }
+        // GET methods
+        public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle) => await _cacheService.TryGetValue<int>($"postsCountByTitle_{sectionTitle}", _unitOfWork.Sections.GetPostsCountByTitleAsync, sectionTitle);
+        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest) => await _cacheService.TryGetValue<GetIndexPostRequest, List<PostItemDto>>("postIndexItems", _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync, getIndexPostRequest) ?? new();  
+        public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _cacheService.TryGetValue<string?>($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId);
+        public async Task<string?> GetPostIdByReplyId(string replyId) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdById,replyId);
+        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId);
+        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(string userId) => await _cacheService.TryGetValue<List<ProfilePostDto>>($"profilePostDtoById_{userId}",_unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync,userId) ?? new();
+        public async Task<bool> HasTimeoutAsync(string userId)
+        {
+            var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
+            if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
+            {
+                return !await _userService.IsAdminRoleByIdAsync(userId); // USE USERSERVICE METHOD FOR USERMANAGER
+            }
+            return false;
+        }// POST methods
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
@@ -100,10 +117,6 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _cacheService.TryGetValue<string?>($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId);
-        public async Task<string?> GetPostIdByReplyId(string replyId) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdById,replyId);
-        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId);
-        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(string userId) => await _unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync(userId);
         public async Task<PostResult> PinPostAsync(string postId)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(postId);
@@ -123,15 +136,6 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError(ex, "Problem (un)pinning post with ID: {PostId}.", postId);
                 return PostResult.UpdateFailed;
             }
-        }
-        public async Task<bool> HasTimeoutAsync(string userId)
-        {
-            var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
-            if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
-            {
-                return !await _userService.IsAdminRoleByIdAsync(userId);
-            }
-            return false;
         }
         public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
         {
@@ -165,11 +169,6 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError(ex, "Creating post failed");
                 return PostResult.UpdateFailed;
             }
-        }
-        public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle) => await _unitOfWork.Sections.GetPostsCountByTitleAsync(sectionTitle);
-        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest)
-        {
-            return await _cacheService.TryGetValue<GetIndexPostRequest,List<PostItemDto>>("postIndexItems", _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync, getIndexPostRequest) ?? new();
         }
         public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest)
         {
