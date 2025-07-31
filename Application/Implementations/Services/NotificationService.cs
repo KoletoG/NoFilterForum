@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
@@ -11,11 +12,16 @@ namespace NoFilterForum.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<NotificationService> _logger;
-        public NotificationService(IUnitOfWork unitOfWork, ILogger<NotificationService> logger)
+        private readonly ICacheService _cacheService;
+        public NotificationService(IUnitOfWork unitOfWork, ILogger<NotificationService> logger, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _cacheService = cacheService;
         }
+        // GET methods
+        public async Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<List<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId) ?? new();
+        // POST methods
         public async Task<PostResult> DeleteByUserIdAsync(string userId)
         {
             var notifications = await _unitOfWork.Notifications.GetAllByUserIdAsync(userId);
@@ -44,6 +50,5 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId) => await _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync(userId);           
     }
 }
