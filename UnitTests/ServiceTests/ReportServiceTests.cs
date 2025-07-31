@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces.Services;
 using Castle.Components.DictionaryAdapter.Xml;
 using Castle.Core.Logging;
 using Core.Enums;
@@ -19,6 +20,7 @@ namespace UnitTests.ServiceTests
 {
     public class ReportServiceTests
     {
+        private readonly Mock<ICacheService> _cacheService = new Mock<ICacheService>();
         [Fact]
         public async Task GetAllReportsAsync_ShouldReturnEmptyListOfReports_WhenCalled()
         {
@@ -26,7 +28,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetAllAsync()).ReturnsAsync(new List<ReportDataModel>());
-            var reportService = new ReportService(iUnitOfWorkMock.Object,reportFactoryMock.Object,iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object,reportFactoryMock.Object,iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.GetAllReportsAsync();
             Assert.IsType<List<ReportDataModel>>(result);
             Assert.NotNull(result);
@@ -38,7 +40,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetReportDtosAsync()).ReturnsAsync(new List<ReportItemDto>());
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.GetAllDtosAsync();
             Assert.IsType<List<ReportItemDto>>(result);
             Assert.NotNull(result);
@@ -50,7 +52,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync()).ReturnsAsync(true);
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.AnyReportsAsync();
             Assert.True(result);
         }
@@ -61,7 +63,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync()).ReturnsAsync(false);
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.AnyReportsAsync();
             Assert.False(result);
         }
@@ -75,7 +77,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((string id)=>new ReportDataModel() { Id= id });
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -88,7 +90,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((ReportDataModel?)null);
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -102,7 +104,7 @@ namespace UnitTests.ServiceTests
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Reports.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReportDataModel());
             iUnitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<ReportDataModel>(It.IsAny<Action<ReportDataModel>>(), It.IsAny<ReportDataModel>())).ThrowsAsync(new Exception());
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.DeleteReportByIdAsync(deleteReportRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
@@ -117,7 +119,7 @@ namespace UnitTests.ServiceTests
             iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
             reportFactoryMock.Setup(x => x.CreateReport(It.IsAny<string>(), It.IsAny<UserDataModel>(), It.IsAny<UserDataModel>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(new ReportDataModel());
             iUnitOfWorkMock.Setup(x => x.Reports.CreateAsync(It.IsAny<ReportDataModel>())).ReturnsAsync((ReportDataModel report) => report);
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -129,7 +131,7 @@ namespace UnitTests.ServiceTests
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync("User2Id")).ReturnsAsync((UserDataModel?)null);
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -142,7 +144,7 @@ namespace UnitTests.ServiceTests
             var iLoggerMock = new Mock<ILogger<ReportService>>();
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync("User1Id")).ReturnsAsync((UserDataModel?)null);
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync("User2Id")).ReturnsAsync(new UserDataModel());
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -156,7 +158,7 @@ namespace UnitTests.ServiceTests
             iUnitOfWorkMock.Setup(x => x.Posts.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
             iUnitOfWorkMock.Setup(x => x.Replies.ExistByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -171,7 +173,7 @@ namespace UnitTests.ServiceTests
             iUnitOfWorkMock.Setup(x => x.Users.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(new UserDataModel());
             reportFactoryMock.Setup(x => x.CreateReport(It.IsAny<string>(), It.IsAny<UserDataModel>(), It.IsAny<UserDataModel>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(new ReportDataModel());
             iUnitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<ReportDataModel>(It.IsAny<Func<ReportDataModel,Task>>(),It.IsAny<ReportDataModel>())).ThrowsAsync(new Exception());
-            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object);
+            var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await reportService.CreateReportAsync(createReportRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
