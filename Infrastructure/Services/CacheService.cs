@@ -35,5 +35,14 @@ namespace Infrastructure.Services
             }
             return obj;
         }
+        public async Task<T?> TryGetValue<T>(string key, Func<string,Task<T>> unitOfWorkMethod,string param , int seconds = 15, int minutes = 0)
+        {
+            if (!_memoryCache.TryGetValue(key, out T? obj))
+            {
+                obj = await unitOfWorkMethod.Invoke(param);
+                _memoryCache.Set(key, obj, minutes > 0 ? TimeSpan.FromMinutes(minutes) : TimeSpan.FromSeconds(seconds));
+            }
+            return obj;
+        }
     }
 }

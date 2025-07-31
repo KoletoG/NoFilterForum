@@ -10,5 +10,6 @@ namespace Application.Interfaces.Services
     {
         public Task<T?> TryGetValue<T>(string key, Func<Task<T>> unitOfWorkMethod, int seconds = 15, int minutes = 0);
         public Task<TOutput?> TryGetValue<TInput, TOutput>(string key, Func<TInput, Task<TOutput>> unitOfWorkMethod, TInput inputParams, int seconds = 15, int minutes = 0);
+        public Task<T?> TryGetValue<T>(string key, Func<string, Task<T>> unitOfWorkMethod, string param, int seconds = 15, int minutes = 0);
     }
 }

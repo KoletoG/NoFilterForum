@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using System.Runtime.CompilerServices;
+using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
@@ -7,6 +8,7 @@ using Core.Models.DTOs;
 using Core.Models.DTOs.InputDTOs.Warning;
 using Core.Models.DTOs.OutputDTOs.Warning;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -20,11 +22,13 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<WarningService> _logger;
         private readonly IWarningFactory _warningFactory;
-        public WarningService(IUnitOfWork unitOfWork,IWarningFactory warningFactory, ILogger<WarningService> logger)
+        private readonly ICacheService _cacheService;
+        public WarningService(IUnitOfWork unitOfWork,IWarningFactory warningFactory, ILogger<WarningService> logger, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _warningFactory = warningFactory;
             _logger = logger;
+            _cacheService = cacheService;
         }
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {
@@ -53,7 +57,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) => await _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync(userId);
+        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) =>await _cacheService.TryGetValue<List<WarningsContentDto>>("listWarningContents", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync,userId) ?? new();
         public async Task<PostResult> AcceptWarningsAsync(string userId)
         {
             var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
