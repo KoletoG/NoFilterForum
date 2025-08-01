@@ -16,17 +16,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<WarningDataModel?> GetByIdAsync(string id)
-        {
-            return await _context.WarningDataModels.FindAsync(id);
-        }
         public async Task<IReadOnlyCollection<WarningDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId).ToListAsync();
-        }
-        public async Task<IReadOnlyCollection<WarningDataModel>> GetAllAsync()
-        {
-            return await _context.WarningDataModels.ToListAsync();
         }
         public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
         {
@@ -37,21 +29,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             await _context.WarningDataModels.AddAsync(warning);
         }
-        public void Update(WarningDataModel warning)
-        {
-            _context.WarningDataModels.Update(warning);
-        }
         public void UpdateRange(IEnumerable<WarningDataModel> warnings)
         {
             _context.WarningDataModels.UpdateRange(warnings);
-        }
-        public void Delete(WarningDataModel warning)
-        {
-            _context.WarningDataModels.Remove(warning);
-        }
-        public async Task<bool> ExistsByUserAsync(UserDataModel user)
-        {
-            return await _context.WarningDataModels.AnyAsync(x => x.User == user);
         }
         public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
         {
