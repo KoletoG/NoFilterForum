@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs;
+﻿using System.Collections.Immutable;
+using Core.Models.DTOs;
 using Core.Models.DTOs.OutputDTOs.Warning;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Interfaces.Repositories;
@@ -19,29 +20,28 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.WarningDataModels.FindAsync(id);
         }
-        public async Task<List<WarningDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<WarningDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId).ToListAsync();
         }
-        public async Task<List<WarningDataModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<WarningDataModel>> GetAllAsync()
         {
             return await _context.WarningDataModels.ToListAsync();
         }
-        public async Task<List<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId && !x.IsAccepted)
                 .Select(x => new WarningsContentDto(x.Content)).ToListAsync();
         }
-        public async Task<WarningDataModel> CreateAsync(WarningDataModel warning)
+        public async Task CreateAsync(WarningDataModel warning)
         {
             await _context.WarningDataModels.AddAsync(warning);
-            return warning;
         }
         public void Update(WarningDataModel warning)
         {
             _context.WarningDataModels.Update(warning);
         }
-        public void UpdateRange(List<WarningDataModel> warnings)
+        public void UpdateRange(IEnumerable<WarningDataModel> warnings)
         {
             _context.WarningDataModels.UpdateRange(warnings);
         }
@@ -53,7 +53,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.WarningDataModels.AnyAsync(x => x.User == user);
         }
-        public async Task<List<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId)
                 .Select(u => new WarningsContentDto(u.Content)).ToListAsync();

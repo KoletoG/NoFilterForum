@@ -31,7 +31,7 @@ namespace NoFilterForum.Infrastructure.Services
             _cacheService = cacheService;
         }
         // GET methods
-        public async Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<List<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync, userId) ?? new();
+        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync, userId) ?? new List<WarningsContentDto>();
         // POST methods
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {
@@ -73,7 +73,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<WarningDataModel>(_unitOfWork.Warnings.UpdateRange, warnings);
+                await _unitOfWork.RunPOSTOperationAsync<IReadOnlyCollection<WarningDataModel>>(_unitOfWork.Warnings.UpdateRange, warnings);
                 return PostResult.Success;
             }
             catch(DbException ex)

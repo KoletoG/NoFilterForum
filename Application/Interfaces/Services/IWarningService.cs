@@ -10,6 +10,6 @@ namespace NoFilterForum.Core.Interfaces.Services
     {
         public Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest);
         public Task<PostResult> AcceptWarningsAsync(string userId);
-        public Task<List<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId);
+        public Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId);
     }
 }
