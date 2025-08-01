@@ -12,7 +12,6 @@ namespace Web.Mappers
         public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm, string userId) => new(vm.ReplyId, userId);
         public static CreateReplyRequest MapToRequest(CreateReplyViewModel vm, string userId) => new(userId, vm.Content, vm.PostId);
         public static GetListReplyIndexItemRequest MapToRequest(int page, string postId) => new(page, postId,PostConstants.PostsPerSection);
-        public static GetReplyItemRequest MapToRequest(string userId) => new(userId);
         public static ReplyIndexItemViewModel MapToViewModel(ReplyIndexItemDto dto) => new()
         {
             Content = dto.Content,

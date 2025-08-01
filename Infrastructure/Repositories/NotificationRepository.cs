@@ -14,14 +14,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<NotificationDataModel?> GetByIdAsync(string id)
-        {
-            return await _context.NotificationDataModels.FindAsync(id);
-        }
-        public async Task<List<NotificationDataModel>> GetAllAsync()
-        {
-            return await _context.NotificationDataModels.ToListAsync();
-        }
+       
         public async Task<List<NotificationDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync();

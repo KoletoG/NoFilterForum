@@ -58,8 +58,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<GetReplyItemRequest>())).ReturnsAsync(new List<ReplyItemDto>());
-            var getReplyItemRequest = new GetReplyItemRequest(UserId : "UserIdExample");
+            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<ReplyItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 reactionServiceMock.Object,
@@ -68,7 +67,8 @@ namespace UnitTests.ServiceTests
                 loggerMock.Object,
                 cacheServiceMock.Object
                 );
-            var result = await replyService.GetListReplyItemDtoAsync(getReplyItemRequest);
+            var userId = "ExampleUserId";
+            var result = await replyService.GetListReplyItemDtoAsync(userId);
             Assert.IsType<List<ReplyItemDto>>(result);
             Assert.NotNull(result);
         }

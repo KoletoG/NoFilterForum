@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
@@ -15,6 +17,7 @@ namespace UnitTests.ServiceTests
 {
     public class NotificationServiceTests
     {
+        private readonly Mock<ICacheService> _cacheService = new();
         [Fact]
         public async Task GetNotificationsDtosByUserIdAsync_ShouldReturnListOfNotificationDtos_WhenUserIdIsValid()
         {
@@ -22,7 +25,7 @@ namespace UnitTests.ServiceTests
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
             iUnitOfWorkMock.Setup(x => x.Notifications.GetNotificationsAsDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationsDto>());
-            var notificationService = new NotificationService(iUnitOfWorkMock.Object,iLoggerMock.Object);
+            var notificationService = new NotificationService(iUnitOfWorkMock.Object,iLoggerMock.Object,_cacheService.Object);
             var result = await notificationService.GetNotificationsDtosByUserIdAsync(userId);
             Assert.NotNull(result);
             Assert.IsType<List<NotificationsDto>>(result);
@@ -34,7 +37,7 @@ namespace UnitTests.ServiceTests
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
             iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>() {new NotificationDataModel() });
-            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
+            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await notificationService.DeleteByUserIdAsync(userId);
             Assert.Equal(PostResult.Success, result);
         }
@@ -45,7 +48,7 @@ namespace UnitTests.ServiceTests
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
             iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
-            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
+            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await notificationService.DeleteByUserIdAsync(userId);
             Assert.Equal(PostResult.Success, result);
         }
@@ -57,7 +60,7 @@ namespace UnitTests.ServiceTests
             var userId = "TestUserId";
             iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>() { new NotificationDataModel()} );
             iUnitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
-            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object);
+            var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object, _cacheService.Object);
             var result = await notificationService.DeleteByUserIdAsync(userId);
             Assert.Equal(PostResult.UpdateFailed, result);
         }

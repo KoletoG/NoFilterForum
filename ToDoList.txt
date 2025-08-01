@@ -28,6 +28,9 @@ Fix mappers with the constants
         // Change PostsConstants
         // Viewmodels might need some methods
         // Use cache service
+
+        IENUMERABLE / ICOLLECTION
+
         // SEARCH BAR
         // Paging wherever needed such as user service get method
         // REACT
