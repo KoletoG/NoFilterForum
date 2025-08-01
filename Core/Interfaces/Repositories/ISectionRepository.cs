@@ -8,13 +8,11 @@ namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface ISectionRepository
     {
-        public Task<SectionDataModel?> GetByIdAsync(string id);
         public Task<SectionDataModel?> GetWithPostsByTitleAsync(string title);
-        public Task<IReadOnlyCollection<SectionDataModel>> GetAllAsync();
         public Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync();
         public Task<SectionDataModel> CreateAsync(SectionDataModel section);
         public void Update(SectionDataModel section);
-        public void Delete(SectionDataModel section);
+        public void Delete(SectionDataModel section); 
         public Task<int> GetPostsCountByIdAsync(string id);
         public Task<bool> ExistsSectionByTitleAsync(string sectionTitle);
         public Task<int> GetPostsCountByTitleAsync(string title);
