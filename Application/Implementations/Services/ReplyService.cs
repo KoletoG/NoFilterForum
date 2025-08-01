@@ -44,7 +44,7 @@ namespace NoFilterForum.Infrastructure.Services
             _userService = userService;
         }
         // GET methods
-        public async Task<List<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, List<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new();
+        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, IReadOnlyCollection<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new List<ReplyIndexItemDto>();
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
             int totalPages = await GetTotalPagesByPostIdAsync(postId);
@@ -88,7 +88,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoAsync(string userId) => await _cacheService.TryGetValue<List<ReplyItemDto>>($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId) ?? new();
+        public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<ReplyItemDto>>($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId) ?? new List<ReplyItemDto>();
         // POST methods
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
         {

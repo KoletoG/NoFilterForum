@@ -20,15 +20,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.FindAsync(id);
         }
-        public async Task<List<string>> GetIdsByPostIdAsync(string postId)
+        public async Task<IList<string>> GetIdsByPostIdAsync(string postId)
         {
             return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync();
         }
-        public async Task<List<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
+        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
         {
             return await _context.ReplyDataModels.Where(x => x.Post.Id == getListReplyIndexItemRequest.PostId).OrderBy(x=>x.DateCreated).Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated)).Skip((getListReplyIndexItemRequest.Page-1)*getListReplyIndexItemRequest.PostsCount).Take(getListReplyIndexItemRequest.PostsCount).ToListAsync();
         }
-        public async Task<List<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId)
         {
             return await _context.ReplyDataModels.Where(x=>x.User.Id == userId).Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title)).ToListAsync();
         }
@@ -40,7 +40,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.Post.Id).FirstOrDefaultAsync();
         }
-        public async Task<List<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId)
+        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId)
         {
             return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.Post.Id==postId).ToListAsync();
         }
@@ -48,11 +48,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.Id == replyId).Select(x => x.User).FirstOrDefaultAsync();
         }
-        public async Task<List<ReplyDataModel>> GetAllByPostIdAsync(string postId)
+        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllByPostIdAsync(string postId)
         {
             return await _context.ReplyDataModels.Where(x => x.Post.Id == postId).ToListAsync();
         }
-        public async Task<List<ReplyDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.ReplyDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<ReplyDataModel>();
         }
@@ -60,7 +60,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x=>x.Id==replyId).Select(x=>x.User.Id).FirstOrDefaultAsync();
         }
-        public async Task<List<ReplyDataModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllAsync()
         {
             return await _context.ReplyDataModels.ToListAsync();
         }
@@ -81,7 +81,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
         }
-        public void UpdateRange(List<ReplyDataModel> replies)
+        public void UpdateRange(IReadOnlyCollection<ReplyDataModel> replies)
         {
             _context.ReplyDataModels.UpdateRange(replies);
         }
@@ -93,7 +93,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.AnyAsync(x => x.Id == id);
         }
-        public void DeleteRange(List<ReplyDataModel> replies)
+        public void DeleteRange(IReadOnlyCollection<ReplyDataModel> replies)
         {
             _context.ReplyDataModels.RemoveRange(replies);
         }

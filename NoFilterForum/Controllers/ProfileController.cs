@@ -136,7 +136,7 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
-        private PageTotalPagesDTO GetPageTotalPages(List<ReplyItemDto> replyItems, List<ProfilePostDto> profilePostItems, int page)
+        private PageTotalPagesDTO GetPageTotalPages(IReadOnlyCollection<ReplyItemDto> replyItems, List<ProfilePostDto> profilePostItems, int page)
         {
             var totalCount = replyItems.Count + profilePostItems.Count; 
             return PageUtility.GetPageTotalPagesDTO(page,totalCount);
@@ -167,8 +167,8 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId);
-            List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(userId);
+            var replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId);
+            var postDtoList = await _postService.GetListProfilePostDtoAsync(userId);
 
             var pageTotalPagesDto = GetPageTotalPages(replyDtoList, postDtoList, page);
 
