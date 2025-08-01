@@ -19,11 +19,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReportDataModels.FindAsync(id);
         }
-        public async Task<List<ReportItemDto>> GetReportDtosAsync()
+        public async Task<IReadOnlyCollection<ReportItemDto>> GetReportDtosAsync()
         {
             return await _context.ReportDataModels.Select(x => new ReportItemDto(x.IdOfPostReply,x.UserTo.UserName,x.UserFrom.UserName,x.Content,x.Id)).ToListAsync();
         }
-        public async Task<List<ReportDataModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<ReportDataModel>> GetAllAsync()
         {
             return await _context.ReportDataModels.AsNoTracking().Include(x => x.UserTo).Include(x => x.UserFrom).ToListAsync();
         }

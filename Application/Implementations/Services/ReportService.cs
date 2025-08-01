@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Services;
+﻿using System.Net;
+using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
@@ -26,8 +27,8 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _cacheService = cacheService;
         }
-        public async Task<List<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<List<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? new();
-        public async Task<List<ReportItemDto>> GetAllDtosAsync() => await _cacheService.TryGetValue<List<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync) ?? new();
+        public async Task<IReadOnlyCollection<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<IReadOnlyCollection<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? new List<ReportDataModel>();
+        public async Task<IReadOnlyCollection<ReportItemDto>> GetAllDtosAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync) ?? new List<ReportItemDto>();
         public async Task<bool> AnyReportsAsync() => await _unitOfWork.Reports.ExistsReportsAsync();
         public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest)
         {
