@@ -23,15 +23,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.NotificationDataModels.Where(x=>x.UserFrom.Id == userId).ToListAsync();
         }
-        public async Task<NotificationDataModel> CreateAsync(NotificationDataModel notification)
-        {
-            await _context.NotificationDataModels.AddAsync(notification);
-            return notification;
-        }
-        public async Task<bool> CreateRangeAsync(List<NotificationDataModel> notifications)
+        public async Task CreateRangeAsync(List<NotificationDataModel> notifications)
         {
             await _context.NotificationDataModels.AddRangeAsync(notifications);
-            return true;
         }
         public async Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId)
         {
@@ -40,14 +34,6 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<List<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds)
         {
             return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.Id)).ToListAsync();
-        }
-        public void Update(NotificationDataModel notification)
-        {
-            _context.NotificationDataModels.Update(notification);
-        }
-        public void Delete(NotificationDataModel notification)
-        {
-            _context.NotificationDataModels.Remove(notification);
         }
         public async Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
         {

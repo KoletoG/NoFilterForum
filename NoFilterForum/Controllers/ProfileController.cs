@@ -167,9 +167,7 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-
-            var replyDtoRequest = ReplyMapper.MapToRequest(userId);
-            List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(replyDtoRequest);
+            List<ReplyItemDto> replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId);
             List<ProfilePostDto> postDtoList = await _postService.GetListProfilePostDtoAsync(userId);
 
             var pageTotalPagesDto = GetPageTotalPages(replyDtoList, postDtoList, page);

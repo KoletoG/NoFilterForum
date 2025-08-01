@@ -9,9 +9,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId); 
         public Task<List<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds);
         public Task<List<NotificationDataModel>> GetAllByUserFromIdAsync(string userId);
-        public Task<NotificationDataModel> CreateAsync(NotificationDataModel notification);
-        public Task<bool> CreateRangeAsync(List<NotificationDataModel> notifications);
-        public void Delete(NotificationDataModel notification);
+        public Task CreateRangeAsync(List<NotificationDataModel> notifications);
         public Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId);
         public void DeleteRange(List<NotificationDataModel> notifications);
         public Task<List<NotificationDataModel>> GetAllByUserIdAsync(string userId);
