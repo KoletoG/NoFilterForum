@@ -168,7 +168,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
+                if (notifications.Count() > 0) _unitOfWork.Notifications.DeleteRange(notifications);
                 await _userService.ApplyRoleAsync(reply.User);
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);

@@ -6,6 +6,6 @@ namespace NoFilterForum.Core.Interfaces.Services
     public interface INotificationService
     {
         public Task<PostResult> DeleteByUserIdAsync(string userId);
-        public Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId);
+        public Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId);
     }
 }

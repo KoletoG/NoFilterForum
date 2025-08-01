@@ -1,10 +1,12 @@
-﻿using System.Data.Common;
+﻿using System.Collections.ObjectModel;
+using System.Data.Common;
 using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Services;
+using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Infrastructure.Services
 {
@@ -20,7 +22,7 @@ namespace NoFilterForum.Infrastructure.Services
             _cacheService = cacheService;
         }
         // GET methods
-        public async Task<List<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<List<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId) ?? new();
+        public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId) ?? new List<NotificationsDto>();
         // POST methods
         public async Task<PostResult> DeleteByUserIdAsync(string userId)
         {

@@ -15,33 +15,33 @@ namespace NoFilterForum.Infrastructure.Repositories
             _context = context;
         }
        
-        public async Task<List<NotificationDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync();
         }
-        public async Task<List<NotificationDataModel>> GetAllByUserFromIdAsync(string userId)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserFromIdAsync(string userId)
         {
-            return await _context.NotificationDataModels.Where(x=>x.UserFrom.Id == userId).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => x.UserFrom.Id == userId).ToListAsync();
         }
-        public async Task CreateRangeAsync(List<NotificationDataModel> notifications)
+        public async Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications)
         {
             await _context.NotificationDataModels.AddRangeAsync(notifications);
         }
-        public async Task<List<NotificationDataModel>> GetAllByReplyIdAsync(string replyId)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId)
         {
             return await _context.NotificationDataModels.Where(x => x.Reply.Id == replyId).ToListAsync();
         }
-        public async Task<List<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds)
         {
             return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.Id)).ToListAsync();
         }
-        public async Task<List<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
         {
             return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId)
                 .Select(x => new NotificationsDto(x.Reply.Id,x.Reply.Post.Id,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
                 .ToListAsync();
         }
-        public void DeleteRange(List<NotificationDataModel> notifications)
+        public void DeleteRange(IEnumerable<NotificationDataModel> notifications)
         {
             _context.NotificationDataModels.RemoveRange(notifications);
         }
