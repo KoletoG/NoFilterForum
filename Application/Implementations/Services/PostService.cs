@@ -45,7 +45,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         // GET methods
         public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle) => await _cacheService.TryGetValue<int>($"postsCountByTitle_{sectionTitle}", _unitOfWork.Sections.GetPostsCountByTitleAsync, sectionTitle);
-        public async Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest) => await _cacheService.TryGetValue<GetIndexPostRequest, List<PostItemDto>>($"postIndexItemsByTitle_{getIndexPostRequest.TitleOfSection}_ByPage_{getIndexPostRequest.Page}", _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync, getIndexPostRequest) ?? new();  
+        public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest) => await _cacheService.TryGetValue<GetIndexPostRequest, IReadOnlyCollection<PostItemDto>>($"postIndexItemsByTitle_{getIndexPostRequest.TitleOfSection}_ByPage_{getIndexPostRequest.Page}", _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync, getIndexPostRequest) ?? new List<PostItemDto>();  
         public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _cacheService.TryGetValue<string?>($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId);
         public async Task<string?> GetPostIdByReplyId(string replyId) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdById,replyId);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId);

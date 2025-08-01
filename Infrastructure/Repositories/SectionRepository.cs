@@ -33,16 +33,16 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Title == title);
         }
-        public async Task<List<SectionDataModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<SectionDataModel>> GetAllAsync()
         {
             return await _context.SectionDataModels.AsNoTracking().ToListAsync();
         }
-        public async Task<List<SectionItemDto>> GetAllItemsDtoAsync()
+        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync()
         {
             return await _context.SectionDataModels
                 .Select(x => new SectionItemDto(x.Title,x.Description,x.Id,x.Posts.Count)).ToListAsync();
         }
-        public async Task<List<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest)
+        public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest)
         {
             return await _context.SectionDataModels.AsNoTracking()
                     .Where(x => x.Title == getIndexPostRequest.TitleOfSection)

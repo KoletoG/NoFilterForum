@@ -1,4 +1,6 @@
-﻿using Core.Constants;
+﻿using System.Runtime.CompilerServices;
+using Application.Interfaces.Services;
+using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
@@ -18,32 +20,23 @@ namespace NoFilterForum.Infrastructure.Services
 {
     public class SectionService : ISectionService
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly ICacheService _cacheService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         private readonly ILogger<SectionService> _logger;
         private readonly ISectionFactory _sectionFactory;
-        public SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, IMemoryCache memoryCache, ILogger<SectionService> logger)
+        public SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, ILogger<SectionService> logger, ICacheService cacheService)
         {
             _logger = logger;
             _sectionFactory = sectionFactory;
             _userService = userService;
             _unitOfWork = unitOfWork;
-            _memoryCache = memoryCache;
+            _cacheService = cacheService;
         }
-        public async Task<List<SectionItemDto>> GetAllSectionItemDtosAsync() // Move caching to another class
+        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync() // Move caching to another class
         {
-            if (!_memoryCache.TryGetValue("sections", out List<SectionItemDto> sections))
-            {
-                sections = await _unitOfWork.Sections.GetAllItemsDtoAsync();
-                MemoryCacheEntryOptions memoryCacheOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
-                    SlidingExpiration = TimeSpan.FromMinutes(5)
-                };
-                _memoryCache.Set("sections", sections, memoryCacheOptions);
-            }
-            return sections;
+            var sections = await _cacheService.TryGetValue<IReadOnlyCollection<SectionItemDto>>("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync);
+            return sections ?? new List<SectionItemDto>();
         }
         public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
         {
@@ -124,7 +117,6 @@ namespace NoFilterForum.Infrastructure.Services
                 _unitOfWork.Notifications.DeleteRange(notifications);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
-                _memoryCache.Remove("sections");
                 return PostResult.Success;
             }
             catch (Exception ex)

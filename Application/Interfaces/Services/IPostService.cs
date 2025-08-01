@@ -21,7 +21,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(string userId);
         public Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest);
         public Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle);
-        public Task<List<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest);
+        public Task<IReadOnlyCollection<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest);
         public Task<PostResult> CreatePostAsync(CreatePostRequest createPostRequest);
     }
 }

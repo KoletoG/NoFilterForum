@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
@@ -24,6 +25,7 @@ namespace UnitTests.ServiceTests
 {
     public class SectionServiceTests
     {
+        private readonly Mock<ICacheService> _cacheService = new();
         [Fact]
         public async Task GetPostsCountByIdAsync_ShouldReturnFive_WhenSectionIdIsValid()
         {
@@ -37,8 +39,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var result = await sectionService.GetPostsCountByIdAsync(sectionId);
             Assert.Equal(5, result);
@@ -57,8 +59,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle);
             Assert.True(result);
@@ -76,8 +78,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle);
             Assert.False(result);
@@ -95,8 +97,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCache,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var result = await sectionService.GetAllSectionItemDtosAsync();
             Assert.IsType<List<SectionItemDto>>(result);
@@ -114,8 +116,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
@@ -135,8 +137,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 ); 
             var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
@@ -156,8 +158,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
             var result = await sectionService.CreateSectionAsync(createSectionRequest);
@@ -176,8 +178,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
@@ -210,8 +212,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
@@ -241,8 +243,8 @@ namespace UnitTests.ServiceTests
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
-                memoryCacheMock.Object,
-                loggerMock.Object
+                loggerMock.Object,
+                _cacheService.Object
                 );
             var deleteSectionRequest = new DeleteSectionRequest("Example Id");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);

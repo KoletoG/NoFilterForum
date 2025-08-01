@@ -8,7 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface ISectionService
     {
-        public Task<List<SectionItemDto>> GetAllSectionItemDtosAsync();
+        public Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync();
         public Task<bool> ExistsSectionByTitleAsync(string sectionTitle);
         public Task<int> GetPostsCountByIdAsync(string sectionId);
         public Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest);
