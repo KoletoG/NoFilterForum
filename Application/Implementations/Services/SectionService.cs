@@ -108,7 +108,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 foreach (var user in users)
                 {
-                    await _userService.ApplyRoleAsync(user);
+                    await _userService.ApplyRoleAsync(user); // do something here
                 }
                 _unitOfWork.Users.UpdateRange(users);
                 _unitOfWork.Posts.DeleteRange(posts);

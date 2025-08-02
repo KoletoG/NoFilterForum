@@ -105,11 +105,7 @@ namespace NoFilterForum.Infrastructure.Services
             _reactionService.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                _unitOfWork.Replies.Update(reply);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Replies.Update, reply, _unitOfWork.Users.Update, user);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -134,11 +130,7 @@ namespace NoFilterForum.Infrastructure.Services
             _reactionService.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                _unitOfWork.Replies.Update(reply);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Replies.Update, reply);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -169,7 +161,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
                 if (notifications.Count() > 0) _unitOfWork.Notifications.DeleteRange(notifications);
-                await _userService.ApplyRoleAsync(reply.User);
+                await _userService.ApplyRoleAsync(reply.User); // CHANGE THAT
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);
                 await _unitOfWork.CommitAsync();
@@ -221,7 +213,7 @@ namespace NoFilterForum.Infrastructure.Services
                 }
                 await _unitOfWork.Replies.CreateAsync(reply);
                 _unitOfWork.Posts.Update(post);
-                await _userService.ApplyRoleAsync(user);
+                await _userService.ApplyRoleAsync(user); // CHANGE THAT
                 _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();

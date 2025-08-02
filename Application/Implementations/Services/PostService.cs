@@ -74,11 +74,7 @@ namespace NoFilterForum.Infrastructure.Services
             _reactionService.ApplyLikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                _unitOfWork.Posts.Update(post);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -103,11 +99,7 @@ namespace NoFilterForum.Infrastructure.Services
             _reactionService.ApplyDislikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                _unitOfWork.Posts.Update(post);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -157,7 +149,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 _unitOfWork.Sections.Update(section);
                 await _unitOfWork.Posts.CreateAsync(post);
-                await _userService.ApplyRoleAsync(user);
+                await _userService.ApplyRoleAsync(user); // CHANGE MAYBE
                 _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -195,7 +187,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.BeginTransactionAsync();
                 if (repliesOfPost.Count > 0) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 if (notifications.Count > 0) _unitOfWork.Notifications.DeleteRange(notifications);
-                await _userService.ApplyRoleAsync(post.User);
+                await _userService.ApplyRoleAsync(post.User); // HERE TOO
                 _unitOfWork.Users.UpdateRange(usersSet.ToList());
                 _unitOfWork.Posts.Delete(post);
                 await _unitOfWork.CommitAsync();

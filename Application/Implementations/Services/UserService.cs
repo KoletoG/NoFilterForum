@@ -169,12 +169,11 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Posts.UpdateRange(posts);
-                _unitOfWork.Replies.UpdateRange(replies);
-                _unitOfWork.Users.Delete(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(
+                    _unitOfWork.Posts.UpdateRange, posts,
+                    _unitOfWork.Replies.UpdateRange, replies,
+                    _unitOfWork.Users.Delete,user
+                    );
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -205,10 +204,7 @@ namespace NoFilterForum.Infrastructure.Services
             user.ChangeBio(sanitizedFormattedBio);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -244,7 +240,7 @@ namespace NoFilterForum.Infrastructure.Services
                 using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, "images", fileUrl), FileMode.Create))
                 {
                     await updateImageRequest.Image.CopyToAsync(stream);
-                }
+                } // THINK OF ANOTHER WAY
                 _unitOfWork.Users.Update(currentUser);
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();

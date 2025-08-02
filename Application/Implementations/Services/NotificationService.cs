@@ -33,10 +33,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Notifications.DeleteRange(notifications);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Notifications.DeleteRange, notifications);
                 return PostResult.Success;
             }
             catch (DbException ex)
