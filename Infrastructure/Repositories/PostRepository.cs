@@ -38,11 +38,14 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id)
         {
-            return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync();
+            return await _context.PostDataModels.AsNoTracking().Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync();
         }
         public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
         {
-            return await _context.PostDataModels.Where(x => x.User.Id == userId).Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated)).ToListAsync();
+            return await _context.PostDataModels.AsNoTracking()
+                .Where(x => x.User.Id == userId)
+                .Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated))
+                .ToListAsync();
         }
         public async Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId)
         {

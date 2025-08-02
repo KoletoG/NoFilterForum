@@ -16,6 +16,7 @@ Move utility methods from Core
 TRY TO THINK OF A WAY TO HAVE MULTIPLE ACTIONS OR FUNCS IN UNITOFWORK METHOD - Impossible
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
+AsNoTracking() EF for every read QUERY NOW HAHAH!
 Logger.IsEnabled() to not allocate memory when debug logging
 Query / Handler / Commands - CQRS with MediatR
 
