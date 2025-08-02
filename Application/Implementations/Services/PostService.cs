@@ -49,7 +49,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _cacheService.TryGetValue<string?>($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId);
         public async Task<string?> GetPostIdByReplyId(string replyId) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdById,replyId);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId);
-        public async Task<List<ProfilePostDto>> GetListProfilePostDtoAsync(string userId) => await _cacheService.TryGetValue<List<ProfilePostDto>>($"profilePostDtoById_{userId}",_unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync,userId) ?? new();
+        public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<ProfilePostDto>>($"profilePostDtoById_{userId}",_unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync,userId) ?? new List<ProfilePostDto>();
         public async Task<bool> HasTimeoutAsync(string userId)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);

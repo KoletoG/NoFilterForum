@@ -136,7 +136,7 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
-        private PageTotalPagesDTO GetPageTotalPages(IReadOnlyCollection<ReplyItemDto> replyItems, List<ProfilePostDto> profilePostItems, int page)
+        private PageTotalPagesDTO GetPageTotalPages(IReadOnlyCollection<ReplyItemDto> replyItems, IReadOnlyCollection<ProfilePostDto> profilePostItems, int page)
         {
             var totalCount = replyItems.Count + profilePostItems.Count; 
             return PageUtility.GetPageTotalPagesDTO(page,totalCount);

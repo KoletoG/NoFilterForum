@@ -40,15 +40,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync();
         }
-        public async Task<List<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
         {
             return await _context.PostDataModels.Where(x => x.User.Id == userId).Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated)).ToListAsync();
         }
-        public async Task<List<PostDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId)
         {
             return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<PostDataModel>();
         }
-        public async Task<List<PostDataModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<PostDataModel>> GetAllAsync()
         {
             return await _context.PostDataModels.ToListAsync();
         }
@@ -65,7 +65,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.PostDataModels.Update(post);
         }
-        public void UpdateRange(List<PostDataModel> posts)
+        public void UpdateRange(IEnumerable<PostDataModel> posts)
         {
             _context.PostDataModels.UpdateRange(posts);
         }
@@ -73,7 +73,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.PostDataModels.Remove(post);
         }
-        public void DeleteRange(List<PostDataModel> posts)
+        public void DeleteRange(IEnumerable<PostDataModel> posts)
         {
             _context.PostDataModels.RemoveRange(posts);
         }

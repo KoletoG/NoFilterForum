@@ -7,7 +7,7 @@ namespace Web.Helpers
 {
     public static class DateHelper
     {
-        public static Dictionary<string, DateTime> OrderDates(List<ProfilePostDto> postItemDtos, List<ReplyItemViewModel> replyItemDtos, int page, int countPerPage)
+        public static Dictionary<string, DateTime> OrderDates(IReadOnlyCollection<ProfilePostDto> postItemDtos, List<ReplyItemViewModel> replyItemDtos, int page, int countPerPage)
         {
             Dictionary<string, DateTime> dateOrder = new Dictionary<string, DateTime>();
             foreach (var post in postItemDtos)

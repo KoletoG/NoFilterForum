@@ -29,7 +29,7 @@ Fix mappers with the constants
         // Viewmodels might need some methods
         // Use cache service
 
-        IENUMERABLE / ICOLLECTION
+        IENUMERABLE / ICOLLECTION MAKE POST USER SERVICES...
 
         // SEARCH BAR
         // Paging wherever needed such as user service get method

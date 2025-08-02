@@ -12,15 +12,15 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<PostDataModel?> GetWithUserByIdAsync(string id);
         public Task<string?> GetSectionTitleByIdAsync(string postId);
         public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id);
-        public Task<List<PostDataModel>> GetAllByUserIdAsync(string userId);
-        public Task<List<PostDataModel>> GetAllAsync();
+        public Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId);
+        public Task<IReadOnlyCollection<PostDataModel>> GetAllAsync();
         public Task<PostDataModel> CreateAsync(PostDataModel post);
         public Task<int> GetCountByPostIdAsync(string id);
         public void Update(PostDataModel post);
-        public void UpdateRange(List<PostDataModel> posts);
-        public Task<List<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string username);
+        public void UpdateRange(IEnumerable<PostDataModel> posts);
+        public Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string username);
         public void Delete(PostDataModel post);
-        public void DeleteRange(List<PostDataModel> posts);
+        public void DeleteRange(IEnumerable<PostDataModel> posts);
         public Task<DateTime> GetLastPostDateByUsernameAsync(string userId);
         public Task<bool> ExistByIdAsync(string id);
     }
