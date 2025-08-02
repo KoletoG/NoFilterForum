@@ -23,7 +23,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<SectionDataModel?> GetByIdWithPostsAndRepliesAndUsersAsync(string id)
         {
-            return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x=>x.User).Include(x=>x.Posts).ThenInclude(x=>x.User).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x => x.User).Include(x => x.Posts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<SectionDataModel?> GetWithPostsByTitleAsync(string title)
         {
@@ -31,8 +31,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync()
         {
-            return await _context.SectionDataModels
-                .Select(x => new SectionItemDto(x.Title,x.Description,x.Id,x.Posts.Count)).ToListAsync();
+            return await _context.SectionDataModels.AsNoTracking()
+                    .Select(x => new SectionItemDto(x.Title, x.Description, x.Id, x.Posts.Count))
+                    .ToListAsync();
         }
         public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest)
         {
@@ -43,7 +44,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .ThenByDescending(x => x.DateCreated)
                     .Skip((getIndexPostRequest.Page - 1) * getIndexPostRequest.PostsCount)
                     .Take(getIndexPostRequest.PostsCount)
-                    .Select(x => new PostItemDto(x.Id,x.User.UserName,x.User.Role,x.Title,x.IsPinned,x.DateCreated,x.User.ImageUrl,x.Likes))
+                    .Select(x => new PostItemDto(x.Id, x.User.UserName, x.User.Role, x.Title, x.IsPinned, x.DateCreated, x.User.ImageUrl, x.Likes))
                     .ToListAsync();
         }
         public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)

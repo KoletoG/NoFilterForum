@@ -33,7 +33,7 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _cacheService = cacheService;
         }
-        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync() // Move caching to another class
+        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync()
         {
             var sections = await _cacheService.TryGetValue<IReadOnlyCollection<SectionItemDto>>("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync);
             return sections ?? new List<SectionItemDto>();
