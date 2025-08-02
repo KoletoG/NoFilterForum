@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public record ChangeEmailRequest(string? UserId, string? Email);
+    public record ChangeEmailRequest(string UserId, string Email);
 }

@@ -7,5 +7,5 @@ using Microsoft.AspNetCore.Http;
 
 namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public record UpdateImageRequest(string? UserId, IFormFile Image);
+    public record UpdateImageRequest(string UserId, IFormFile Image);
 }

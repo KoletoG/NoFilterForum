@@ -73,8 +73,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return new(GetResult.NotFound, default, null);
             }
             var profileUserDto = await _cacheService.TryGetValue<ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id);
-            bool isSameUser = getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId;
-            return new(GetResult.Success, isSameUser, profileUserDto);
+            return new(GetResult.Success, getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
         }
         public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id;
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
@@ -111,20 +110,10 @@ namespace NoFilterForum.Infrastructure.Services
             user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _unitOfWork.CommitTransactionAsync();
-                    await _signInManager.SignOutAsync();
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return PostResult.Success;
-                }
-                else
-                {
-                    await _unitOfWork.RollbackTransactionAsync();
-                    return PostResult.UpdateFailed;
-                }
+                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return PostResult.Success;
             }
             catch (Exception ex)
             {
