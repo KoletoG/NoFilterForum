@@ -42,7 +42,7 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
         }
         // Add paging
-        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()=> await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
         public async Task ApplyRoleAsync(UserDataModel user)
         {
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
@@ -63,7 +63,7 @@ namespace NoFilterForum.Infrastructure.Services
                 user.ChangeRole(role);
             }
         }
-        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}",_unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync,userId);
+        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
         {
             // CHECK ON THIS TOMORROW
@@ -72,7 +72,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return new(GetResult.NotFound, default, null);
             }
-            var profileUserDto = await _cacheService.TryGetValue<ProfileUserDto?>($"profileUserDtoById_{user.Id}",_unitOfWork.Users.GetProfileUserDtoByIdAsync,user.Id);
+            var profileUserDto = await _cacheService.TryGetValue<ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id);
             bool isSameUser = getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId;
             return new(GetResult.Success, isSameUser, profileUserDto);
         }
@@ -87,20 +87,10 @@ namespace NoFilterForum.Infrastructure.Services
             user.ChangeUsername(changeUsernameRequest.Username);
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _unitOfWork.CommitTransactionAsync();
-                    await _signInManager.SignOutAsync();
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return PostResult.Success;
-                }
-                else
-                {
-                    await _unitOfWork.RollbackTransactionAsync();
-                    return PostResult.UpdateFailed;
-                }
+                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return PostResult.Success;
             }
             catch (Exception ex)
             {
@@ -161,10 +151,7 @@ namespace NoFilterForum.Infrastructure.Services
             user.Confirm();
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
                 return PostResult.Success;
             }
             catch (Exception ex)
