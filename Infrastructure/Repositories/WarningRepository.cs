@@ -22,8 +22,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
         {
-            return await _context.WarningDataModels.Where(x => x.User.Id == userId && !x.IsAccepted)
-                .Select(x => new WarningsContentDto(x.Content)).ToListAsync();
+            return await _context.WarningDataModels.AsNoTracking()
+                .Where(x => x.User.Id == userId && !x.IsAccepted)
+                .Select(x => new WarningsContentDto(x.Content))
+                .ToListAsync();
         }
         public async Task CreateAsync(WarningDataModel warning)
         {
@@ -36,7 +38,8 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId)
-                .Select(u => new WarningsContentDto(u.Content)).ToListAsync();
+                .Select(u => new WarningsContentDto(u.Content))
+                .ToListAsync();
         }
     }
 }
