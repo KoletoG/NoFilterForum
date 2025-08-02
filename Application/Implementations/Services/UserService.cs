@@ -75,7 +75,7 @@ namespace NoFilterForum.Infrastructure.Services
             var profileUserDto = await _cacheService.TryGetValue<ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id);
             return new(GetResult.Success, getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
         }
-        public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id;
+        public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id; // Change to static method
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
