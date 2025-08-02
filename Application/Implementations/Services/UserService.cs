@@ -42,7 +42,7 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
         }
         // Add paging
-        public async Task<List<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()=> await _cacheService.TryGetValue<List<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new();
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync()=> await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
         public async Task ApplyRoleAsync(UserDataModel user)
         {
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
@@ -144,7 +144,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         public async Task<bool> AnyNotConfirmedUsersAsync() => await _unitOfWork.Users.ExistsByNotConfirmedAsync();
-        public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUsersAsync() => await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
+        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync() => await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
         public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
         public async Task<PostResult> ConfirmUserAsync(string userId)
         {

@@ -14,18 +14,18 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id);
         public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id);
         public Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id);
-        public Task<List<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync();
-        public Task<List<UserDataModel>> GetAllAsync();
-        public Task<List<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames);
-        public void UpdateRange(List<UserDataModel> users);
+        public Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync();
+        public Task<IReadOnlyCollection<UserDataModel>> GetAllAsync();
+        public Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames);
+        public void UpdateRange(IEnumerable<UserDataModel> users);
         public Task<UserDataModel> CreateAsync(UserDataModel user);
         public Task<bool> ExistsByNotConfirmedAsync();
         public void Update(UserDataModel user);
         public void Delete(UserDataModel user);
-        public Task<List<UserDataModel>> GetAllNoDefaultAsync();
+        public Task<IReadOnlyCollection<UserDataModel>> GetAllNoDefaultAsync();
         public Task<bool> UsernameExistsAsync(string username);
         public Task<bool> EmailExistsAsync(string email);
         public Task<bool> ExistsByUsernameAsync(string username);
-        public Task<List<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync();
+        public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync();
     }
 }

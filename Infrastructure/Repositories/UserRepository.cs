@@ -32,7 +32,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
         }
-        public async Task<List<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames)
+        public async Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames)
         {
             return await _context.Users.Where(x=>usernames.Contains(x.UserName)).ToListAsync();
         }
@@ -44,15 +44,15 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto(x.Id,x.Warnings.Count,x.UserName,x.Email,x.Bio,x.Role,x.PostsCount,x.ImageUrl,x.DateCreated)).FirstOrDefaultAsync();
         }
-        public async Task<List<UserDataModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<UserDataModel>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
         }
-        public async Task<List<UserDataModel>> GetAllNoDefaultAsync()
+        public async Task<IReadOnlyCollection<UserDataModel>> GetAllNoDefaultAsync()
         {
            return await _context.Users.AsNoTracking().Where(x => x.UserName != UserConstants.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
         }
-        public async Task<List<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync()
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync()
         {
             return await _context.Users.AsNoTracking()
                 .Where(x => x.UserName != UserConstants.DefaultUser.UserName)
@@ -68,7 +68,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.Users.Update(user);
         }
-        public void UpdateRange(List<UserDataModel> users)
+        public void UpdateRange(IEnumerable<UserDataModel> users)
         {
             _context.Users.UpdateRange(users);
         }
@@ -88,7 +88,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync(x => !x.IsConfirmed);
         }
-        public async Task<List<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync()
+        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync()
         {
             return await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto(x.Email,x.UserName,x.Reason,x.Id)).ToListAsync();
         }
