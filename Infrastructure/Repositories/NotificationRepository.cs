@@ -37,7 +37,8 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
         {
-            return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId)
+            return await _context.NotificationDataModels.AsNoTracking()
+                .Where(x => x.UserTo.Id == userId)
                 .Select(x => new NotificationsDto(x.Reply.Id,x.Reply.Post.Id,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
                 .ToListAsync();
         }
