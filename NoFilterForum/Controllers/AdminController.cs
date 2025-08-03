@@ -20,20 +20,11 @@ using Core.Models.DTOs.InputDTOs.Admin;
 
 namespace Web.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController(IReportService reportService, IUserService userService, IPostService postService) : Controller
     {
-        private readonly IReportService _reportService;
-        private readonly IUserService _userService;
-        private readonly IPostService _postService;
-        public AdminController(
-            IReportService reportService,
-            IUserService userService,
-            IPostService postService)
-        {
-            _reportService = reportService;
-            _userService = userService;
-            _postService = postService;
-        }
+        private readonly IReportService _reportService = reportService;
+        private readonly IUserService _userService = userService;
+        private readonly IPostService _postService = postService;
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -58,7 +49,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Reasons()
         {
             var users = await _userService.GetAllUnconfirmedUsersAsync();
-            var usersVM = users.Select(AdminMapper.MapToViewModel).ToList();
+            var usersVM = users.Select(AdminMapper.MapToViewModel);
             var reasonsViewModel = AdminMapper.MapToViewModel(usersVM);
             return View(reasonsViewModel);
         }

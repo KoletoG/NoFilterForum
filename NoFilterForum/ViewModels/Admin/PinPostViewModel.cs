@@ -5,6 +5,6 @@ namespace Web.ViewModels.Admin
     public class PinPostViewModel
     {
         [Required]
-        public string PostId { get; set; }
+        public required string PostId { get; set; }
     }
 }

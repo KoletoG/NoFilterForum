@@ -5,6 +5,6 @@ namespace Web.ViewModels.Admin
     public class ConfirmUserViewModel
     {
         [Required]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
     }
 }

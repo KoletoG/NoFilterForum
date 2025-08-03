@@ -27,7 +27,7 @@ namespace Web.Mappers
             Id = dto.Id,
             Reason = dto.Reason
         };
-        public static ReasonsViewModel MapToViewModel(List<UserReasonViewModel> usersVM) => new()
+        public static ReasonsViewModel MapToViewModel(IEnumerable<UserReasonViewModel> usersVM) => new()
         {
             Users = usersVM
         };
