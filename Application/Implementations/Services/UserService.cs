@@ -43,7 +43,7 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
         }
         // Add paging
-        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
+        public async Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
         public async Task<bool> IsAdminOrVIPAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);

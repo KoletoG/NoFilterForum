@@ -77,7 +77,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index()
         {
             var usersDto = await _userService.GetAllUsersWithoutDefaultAsync();
-            var userViewModel = usersDto.Select(AdminMapper.MapToViewModel).ToList();
+            var userViewModel = usersDto.Select(AdminMapper.MapToViewModel);
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
             bool hasReports = await _reportService.AnyReportsAsync();
             var adminPanelVM = AdminMapper.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
