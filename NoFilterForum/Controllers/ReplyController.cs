@@ -91,7 +91,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikeReplyViewModel.Id, userId);
+            var likeDislikeRequest = PostMapper.MapToRequest(likeDislikeReplyViewModel.Id, userId);
             var result = await _replyService.LikeAsync(likeDislikeRequest);
      
             return result switch
@@ -116,7 +116,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikeReplyViewModel.Id, userId);
+            var likeDislikeRequest = PostMapper.MapToRequest(likeDislikeReplyViewModel.Id, userId);
             var result = await _replyService.DislikeAsync(likeDislikeRequest);
             return result switch
             {

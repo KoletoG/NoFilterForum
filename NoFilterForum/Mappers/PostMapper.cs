@@ -9,7 +9,7 @@ using Web.ViewModels.Post;
 
 namespace Web.Mappers
 {
-    public static class PostMappers
+    public static class PostMapper
     {
         public static CreatePostRequest MapToRequest(CreatePostViewModel vm, string userId) => new(vm.Title, vm.Body, vm.TitleOfSection, userId);
         public static PostIndexViewModel MapToViewModel(List<PostIndexItemViewModel> itemVMs, PageTotalPagesDTO pageTotalPages, string titleOfSection) => new()

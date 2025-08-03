@@ -4,7 +4,7 @@ using Web.ViewModels.Admin;
 
 namespace Web.Mappers
 {
-    public static class AdminMappers
+    public static class AdminMapper
     {
         public static UserItemsAdminViewModel MapToViewModel(UserForAdminPanelDto dto) => new()
         {

@@ -47,7 +47,7 @@ namespace Web.Controllers
                 return RedirectToAction(nameof(Index), new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
             createVM.TitleOfSection = HttpUtility.UrlDecode(createVM.TitleOfSection);
-            var createPostRequest = PostMappers.MapToRequest(createVM, userId);
+            var createPostRequest = PostMapper.MapToRequest(createVM, userId);
             var result = await _postService.CreatePostAsync(createPostRequest);
             return result switch
             {
@@ -71,7 +71,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikePostViewModel.Id, userId);
+            var likeDislikeRequest = PostMapper.MapToRequest(likeDislikePostViewModel.Id, userId);
             var result = await _postService.LikeAsync(likeDislikeRequest);
             return result switch
             {
@@ -95,7 +95,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var likeDislikeRequest = PostMappers.MapToRequest(likeDislikePostViewModel.Id, userId);
+            var likeDislikeRequest = PostMapper.MapToRequest(likeDislikePostViewModel.Id, userId);
             var result = await _postService.DislikeAsync(likeDislikeRequest);
             return result switch
             {
@@ -122,10 +122,10 @@ namespace Web.Controllers
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
             var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
-            var getIndexPostRequest = PostMappers.MapToRequest(page, titleOfSection);
+            var getIndexPostRequest = PostMapper.MapToRequest(page, titleOfSection);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
-            var postIndexItemsVMs = postDtoList.Select(PostMappers.MapToViewModel).ToList();
-            var postIndexViewModel = PostMappers.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection);
+            var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel).ToList();
+            var postIndexViewModel = PostMapper.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection);
             return View(postIndexViewModel);
         }
         [HttpPost]
@@ -142,7 +142,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var deletePostRequest = PostMappers.MapToRequest(deletePostViewModel, userId);
+            var deletePostRequest = PostMapper.MapToRequest(deletePostViewModel, userId);
             var result = await _postService.DeletePostByIdAsync(deletePostRequest);
             if (result != PostResult.Success)
             {

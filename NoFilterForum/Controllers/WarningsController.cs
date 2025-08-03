@@ -30,7 +30,7 @@ namespace Web.Controllers
                 return BadRequest("Id cannot be null");
             }
             var warningsDto = await _warningService.GetWarningsContentDtosByUserIdAsync(id);
-            var warningsVM = warningsDto.Select(WarningMappers.MapToViewModel).ToList();
+            var warningsVM = warningsDto.Select(WarningMapper.MapToViewModel).ToList();
             return View(warningsVM);
         }
         [HttpPost]
@@ -42,7 +42,7 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            var createWarningRequest = WarningMappers.MapToRequest(createWarningViewModel);
+            var createWarningRequest = WarningMapper.MapToRequest(createWarningViewModel);
             var result = await _warningService.AddWarningAsync(createWarningRequest);
             return result switch
             {

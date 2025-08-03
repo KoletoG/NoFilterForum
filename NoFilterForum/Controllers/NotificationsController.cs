@@ -49,8 +49,8 @@ namespace Web.Controllers
             }
             var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId);
             var warningsContentDtosList = await _warningService.GetWarningsContentDtosByUserIdAsync(userId);
-            var notificationsItemsViewModels = notificationsDtoList.Select(NotificationMappers.MapToViewModel).ToList();
-            var warningsItemViewModel = warningsContentDtosList.Select(WarningMappers.MapToViewModel).ToList();
+            var notificationsItemsViewModels = notificationsDtoList.Select(NotificationMapper.MapToViewModel).ToList();
+            var warningsItemViewModel = warningsContentDtosList.Select(WarningMapper.MapToViewModel).ToList();
             return View(new NotificationViewModel(warningsItemViewModel, notificationsItemsViewModels));
         }
     }

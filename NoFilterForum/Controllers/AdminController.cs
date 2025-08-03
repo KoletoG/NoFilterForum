@@ -58,8 +58,8 @@ namespace Web.Controllers
         public async Task<IActionResult> Reasons()
         {
             var users = await _userService.GetAllUnconfirmedUsersAsync();
-            var usersVM = users.Select(AdminMappers.MapToViewModel).ToList();
-            var reasonsViewModel = AdminMappers.MapToViewModel(usersVM);
+            var usersVM = users.Select(AdminMapper.MapToViewModel).ToList();
+            var reasonsViewModel = AdminMapper.MapToViewModel(usersVM);
             return View(reasonsViewModel);
         }
         [HttpPost]
@@ -86,10 +86,10 @@ namespace Web.Controllers
         public async Task<IActionResult> Index()
         {
             var usersDto = await _userService.GetAllUsersWithoutDefaultAsync();
-            var userViewModel = usersDto.Select(AdminMappers.MapToViewModel).ToList();
+            var userViewModel = usersDto.Select(AdminMapper.MapToViewModel).ToList();
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
             bool hasReports = await _reportService.AnyReportsAsync();
-            var adminPanelVM = AdminMappers.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
+            var adminPanelVM = AdminMapper.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
             return View(adminPanelVM);
         }
         [Authorize(Roles = "Admin")]

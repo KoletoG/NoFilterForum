@@ -3,7 +3,7 @@ using Web.ViewModels.Notifications;
 
 namespace Web.Mappers
 {
-    public static class NotificationMappers
+    public static class NotificationMapper
     {
         public static NotificationItemViewModel MapToViewModel(NotificationsDto dto) => new()
         {

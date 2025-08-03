@@ -5,7 +5,7 @@ using Web.ViewModels.Warning;
 
 namespace Web.Mappers
 {
-    public static class WarningMappers
+    public static class WarningMapper
     {
         public static WarningItemViewModel MapToViewModel(WarningsContentDto dto) => new()
         {
