@@ -15,6 +15,7 @@ using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
 using Ganss.Xss;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
@@ -53,9 +54,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> HasTimeoutAsync(string userId)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
             {
-                return !await _userService.IsAdminRoleByIdAsync(userId); // USE USERSERVICE METHOD FOR USERMANAGER
+                return !await _userService.IsAdminOrVIPAsync(userId);
             }
             return false;
         }// POST methods

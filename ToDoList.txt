@@ -1,5 +1,3 @@
-Make a separate Domain folder and create models with encapsulation
-Use paralellism
 Try fixing warnings wherever needed
 Change to init for models wherever suitable or private set or whatever haha
 In postService for example, make the code follow DRY
@@ -10,10 +8,8 @@ Might add Application proj
 Use () syntax
 Use nameof()
 YAGNI DRY KISS SOLID 
-Instance state changing should be encapsulated OOP 101
 required makes it required lol
 Move utility methods from Core
-TRY TO THINK OF A WAY TO HAVE MULTIPLE ACTIONS OR FUNCS IN UNITOFWORK METHOD - Impossible
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging

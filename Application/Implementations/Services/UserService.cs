@@ -43,6 +43,11 @@ namespace NoFilterForum.Infrastructure.Services
         }
         // Add paging
         public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
+        public async Task<bool> IsAdminOrVIPAsync(string userId)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            return await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) || await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
+        }
         public async Task ApplyRoleAsync(UserDataModel user)
         {
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))

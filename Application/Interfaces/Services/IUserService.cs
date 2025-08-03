@@ -12,6 +12,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public bool IsDefaultUserId(string username);
         public Task<bool> AnyNotConfirmedUsersAsync();
         public Task ApplyRoleAsync(UserDataModel user);
+        public Task<bool> IsAdminOrVIPAsync(string userId);
         public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id);
         public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest);
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
