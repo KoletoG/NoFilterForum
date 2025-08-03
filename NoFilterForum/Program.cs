@@ -117,8 +117,8 @@ namespace Web
             }
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("X-Frame-Options", "DENY");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.TryAdd("X-Frame-Options", "DENY");
+                context.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
                 await next();
             });
             app.UseHttpsRedirection();

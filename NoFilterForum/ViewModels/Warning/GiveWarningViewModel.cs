@@ -5,9 +5,9 @@ namespace Web.ViewModels.Warning
     public class CreateWarningViewModel
     {
         [Required]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
         [Required]
         [MinLength(10,ErrorMessage ="Text characters should be at least 10")]
-        public string Content { get; set; }
+        public required string Content { get; set; }
     }
 }

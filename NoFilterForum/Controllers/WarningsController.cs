@@ -12,13 +12,9 @@ using System.Runtime.InteropServices;
 
 namespace Web.Controllers
 {
-    public class WarningsController : Controller
+    public class WarningsController(IWarningService warningService) : Controller
     {
-        private readonly IWarningService _warningService;
-        public WarningsController(IWarningService warningService)
-        {
-            _warningService = warningService;
-        }
+        private readonly IWarningService _warningService = warningService;
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
@@ -48,7 +44,7 @@ namespace Web.Controllers
             {
                 PostResult.Success => RedirectToAction(nameof(ProfileController.Index), "Profile", new { userId = createWarningRequest.UserId }),
                 PostResult.UpdateFailed => Problem(),
-                PostResult.NotFound => NotFound(createWarningViewModel.UserId),
+                PostResult.NotFound => NotFound($"User with Id: {createWarningViewModel.UserId} was not found"),
                 _ => Problem()
             };
         }
@@ -57,7 +53,7 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Accept()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
