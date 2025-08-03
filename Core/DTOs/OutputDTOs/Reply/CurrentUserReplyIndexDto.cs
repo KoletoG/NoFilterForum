@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.OutputDTOs.Reply
 {
-    public record CurrentUserReplyIndexDto(List<string> LikesPostRepliesIds, List<string> DislikesPostRepliesIds);
+    public record CurrentUserReplyIndexDto(ICollection<string> LikesPostRepliesIds, ICollection<string> DislikesPostRepliesIds);
 }
