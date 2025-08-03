@@ -11,7 +11,7 @@ namespace Core.Implementations.Services
 {
     public class ReactionService : IReactionService
     {
-        public void ApplyDislikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike
+        public void ApplyDislikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {
             var wasLiked = user.LikesPostRepliesIds.Contains(requestId);
             var wasDisliked = user.DislikesPostRepliesIds.Contains(requestId);
@@ -31,7 +31,7 @@ namespace Core.Implementations.Services
                 user.DislikesPostRepliesIds.Add(requestId);
             }
         }
-        public void ApplyLikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike
+        public void ApplyLikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {
             var wasLiked = user.LikesPostRepliesIds.Contains(requestId);
             var wasDisliked = user.DislikesPostRepliesIds.Contains(requestId);

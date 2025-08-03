@@ -33,10 +33,13 @@ namespace Web.Controllers
                 ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
                 : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
         }
-        private void MarkTags(List<ReplyIndexItemViewModel> replyItemsVM, PostReplyIndexViewModel postReplyIndexViewModel)
+        private void MarkTags(IEnumerable<ReplyIndexItemViewModel> replyItemsVM, PostReplyIndexViewModel postReplyIndexViewModel)
         {
             string currentUsername = User.Identity!.Name!; // We have [Authorize] so this can't be null
-            replyItemsVM.ForEach(x => x.MarkTags(currentUsername));
+            foreach (var replyItemVM in replyItemsVM)
+            { 
+                replyItemVM.MarkTags(currentUsername);            
+            }
             postReplyIndexViewModel.MarkTags(currentUsername);
         }
         [HttpGet]
@@ -95,6 +98,7 @@ namespace Web.Controllers
             }
             var likeDislikeRequest = PostMappers.MapToRequest(likeDislikeReplyViewModel.Id, userId);
             var result = await _replyService.LikeAsync(likeDislikeRequest);
+     
             return result switch
             {
                 PostResult.NotFound => NotFound(),

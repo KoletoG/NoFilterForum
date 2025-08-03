@@ -10,7 +10,7 @@ namespace Core.Interfaces.Services
 {
     public interface IReactionService
     {
-        void ApplyDislikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike;
-        void ApplyLikeLogic<T>(UserDataModel user, T obj, string requestId) where T : ILikeDislike;
+        void ApplyLikeLogic(UserDataModel user, ILikeDislike obj, string requestId);
+        void ApplyDislikeLogic(UserDataModel user, ILikeDislike obj, string requestId);
     }
 }
