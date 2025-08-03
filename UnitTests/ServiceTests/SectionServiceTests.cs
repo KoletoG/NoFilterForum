@@ -112,7 +112,7 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
+            userServiceMock.Setup(x => x.IsAdminAsync(It.IsAny<string>())).ReturnsAsync(false);
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
@@ -131,7 +131,7 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            userServiceMock.Setup(x => x.IsAdminAsync(It.IsAny<string>())).ReturnsAsync(true);
             sectionFactoryMock.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>())).Returns(new SectionDataModel());
             unitOfWorkMock.Setup(x => x.Sections.CreateAsync(It.IsAny<SectionDataModel>())).ReturnsAsync((SectionDataModel?)null);
             var sectionService = new SectionService(unitOfWorkMock.Object,
@@ -152,7 +152,7 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            userServiceMock.Setup(x => x.IsAdminAsync(It.IsAny<string>())).ReturnsAsync(true);
             sectionFactoryMock.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>())).Returns(new SectionDataModel());
             unitOfWorkMock.Setup(x => x.RunPOSTOperationAsync<SectionDataModel>(It.IsAny<Func<SectionDataModel,Task>>(), It.IsAny<SectionDataModel>())).ThrowsAsync(new Exception());
             var sectionService = new SectionService(unitOfWorkMock.Object,

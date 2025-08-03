@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 using Application.Interfaces.Services;
 using Core.Constants;
@@ -47,6 +48,11 @@ namespace NoFilterForum.Infrastructure.Services
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             return await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) || await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
+        }
+        public async Task<bool> IsAdminAsync(string userId)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            return await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
         }
         public async Task ApplyRoleAsync(UserDataModel user)
         {
@@ -187,11 +193,6 @@ namespace NoFilterForum.Infrastructure.Services
                 _logger.LogError(ex, "Failed to ban user with Id: {UserId}", userId);
                 return PostResult.UpdateFailed;
             }
-        }
-        public async Task<bool> IsAdminRoleByIdAsync(string userId)
-        {
-            var userRole = await _unitOfWork.Users.GetUserRoleIdAsync(userId);
-            return userRole == UserRoles.Admin;
         }
         public async Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest)
         {

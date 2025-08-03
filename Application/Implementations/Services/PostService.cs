@@ -173,7 +173,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             bool shouldForbid = post.User.Id == deletePostRequest.UserId
                 ? false
-                : !(await _userService.IsAdminRoleByIdAsync(deletePostRequest.UserId));
+                : !await _userService.IsAdminAsync(deletePostRequest.UserId);
             if (shouldForbid) return PostResult.Forbid;
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
             var usersSet = repliesOfPost.Select(x => x.User).ToHashSet();

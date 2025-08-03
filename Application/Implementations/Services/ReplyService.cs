@@ -84,7 +84,7 @@ namespace NoFilterForum.Infrastructure.Services
             var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
             if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
             {
-                return !await _userService.IsAdminRoleByIdAsync(userId);
+                return !await _userService.IsAdminOrVIPAsync(userId);
             }
             return false;
         }
@@ -150,7 +150,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             bool shouldForbid = reply.User.Id == request.UserId
                 ? false
-                : !(await _userService.IsAdminRoleByIdAsync(request.UserId));
+                : !(await _userService.IsAdminAsync(request.UserId));
             if (shouldForbid) return PostResult.Forbid;
             if (reply.User != UserConstants.DefaultUser)
             {

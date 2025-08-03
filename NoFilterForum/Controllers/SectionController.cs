@@ -32,7 +32,7 @@ namespace Web.Controllers
             }
 
             var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
-            bool isAdmin = await _userService.IsAdminRoleByIdAsync(userId);
+            bool isAdmin = await _userService.IsAdminAsync(userId);
             var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
             var indexSectionViewModel = SectionMapper.MapToViewModel(sectionItemViewModelList, isAdmin);
             return View(indexSectionViewModel);
@@ -75,7 +75,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            if (!await _userService.IsAdminRoleByIdAsync(userId))
+            if (!await _userService.IsAdminAsync(userId))
             {
                 return Forbid();
             }

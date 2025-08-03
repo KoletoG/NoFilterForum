@@ -49,7 +49,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<int> GetPostsCountByIdAsync(string sectionId) => await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
         public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest)
         {
-            if (!await _userService.IsAdminRoleByIdAsync(createSectionRequest.UserId))
+            if (!await _userService.IsAdminAsync(createSectionRequest.UserId))
             {
                 return PostResult.Forbid;
             }

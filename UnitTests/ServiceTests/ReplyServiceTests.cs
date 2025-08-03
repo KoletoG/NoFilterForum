@@ -126,7 +126,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(true);
+            userServiceMock.Setup(x => x.IsAdminOrVIPAsync(It.IsAny<string>())).ReturnsAsync(true);
             unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
@@ -230,7 +230,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<IReactionService> reactionServiceMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            userServiceMock.Setup(x => x.IsAdminRoleByIdAsync(It.IsAny<string>())).ReturnsAsync(false);
+            userServiceMock.Setup(x => x.IsAdminAsync(It.IsAny<string>())).ReturnsAsync(false);
             unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
             {
                 User = new UserDataModel()

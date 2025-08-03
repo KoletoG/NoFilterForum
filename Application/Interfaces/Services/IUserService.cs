@@ -13,6 +13,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<bool> AnyNotConfirmedUsersAsync();
         public Task ApplyRoleAsync(UserDataModel user);
         public Task<bool> IsAdminOrVIPAsync(string userId);
+        public Task<bool> IsAdminAsync(string userId);
         public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id);
         public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest);
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
@@ -25,7 +26,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<UserDataModel?> GetUserByIdAsync(string id);
         public Task<bool> UsernameExistsAsync(string username);
         public Task<bool> EmailExistsAsync(string email);
-        public Task<bool> IsAdminRoleByIdAsync(string userId);
         public Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest);
     }
 }
