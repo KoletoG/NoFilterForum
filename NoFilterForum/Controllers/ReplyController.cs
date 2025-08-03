@@ -16,18 +16,13 @@ using Web.ViewModels.Reply;
 
 namespace Web.Controllers
 {
-    public class ReplyController : Controller
+    public class ReplyController(IReplyService replyService, IPostService postService, IUserService userService) : Controller
     {
-        private readonly IReplyService _replyService;
-        private readonly IPostService _postService;
-        private readonly IUserService _userService;
-        public ReplyController(IReplyService replyService, IPostService postService, IUserService userService)
-        {
-            _replyService = replyService;
-            _postService = postService;
-            _userService = userService;
-        }
-        private async Task<PageTotalPagesDTO> GetPageInfoAsync(string postId, string replyId, int page)
+        private readonly IReplyService _replyService = replyService;
+        private readonly IPostService _postService = postService;
+        private readonly IUserService _userService = userService;
+
+        private async Task<PageTotalPagesDTO> GetPageInfoAsync(string postId, string? replyId, int page)
         {
             return string.IsNullOrEmpty(replyId)
                 ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
@@ -44,7 +39,7 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string postId, string replyId = "", int page = 1)
+        public async Task<IActionResult> Index(string postId, string? replyId = null, int page = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -79,7 +74,7 @@ namespace Web.Controllers
                 postVM,
                 replyIndexVMList,
                 pageTotalPagesDto,
-                replyId);
+                replyId ?? string.Empty);
             return View(indexReplyVM);
         }
         [HttpPost]
