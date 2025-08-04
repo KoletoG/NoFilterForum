@@ -5,7 +5,7 @@ namespace Web.Areas
 {
     public class MarkTagsViewModel
     {
-        public string Content { get; set; }
+        public required string Content { get; set; }
         public void MarkTags(string currentUsername)
         {
             Content = string.Join(" ", Content.Split(' ')

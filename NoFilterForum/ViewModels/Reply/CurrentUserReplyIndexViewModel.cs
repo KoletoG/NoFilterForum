@@ -2,7 +2,7 @@
 {
     public class CurrentUserReplyIndexViewModel
     {
-        public ICollection<string> LikesPostRepliesIds { get; set; }
-        public ICollection<string> DislikesPostRepliesIds { get; set; }
+        public required ISet<string> LikesPostRepliesIds { get; set; }
+        public required ISet<string> DislikesPostRepliesIds { get; set; }
     }
 }
