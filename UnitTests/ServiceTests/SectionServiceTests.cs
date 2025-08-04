@@ -181,7 +181,7 @@ namespace UnitTests.ServiceTests
                 loggerMock.Object,
                 _cacheService.Object
                 );
-            var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id");
+            var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id",UserId: "ExampleID");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.NotFound, result);
         }
@@ -215,7 +215,7 @@ namespace UnitTests.ServiceTests
                 loggerMock.Object,
                 _cacheService.Object
                 );
-            var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id");
+            var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id", UserId: "ExampleID");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.Success, result);
         }
@@ -246,7 +246,7 @@ namespace UnitTests.ServiceTests
                 loggerMock.Object,
                 _cacheService.Object
                 );
-            var deleteSectionRequest = new DeleteSectionRequest("Example Id");
+            var deleteSectionRequest = new DeleteSectionRequest("Example Id", UserId: "ExampleID");
             var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
