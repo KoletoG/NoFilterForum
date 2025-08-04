@@ -10,15 +10,10 @@ using Web.ViewModels.Section;
 
 namespace Web.Controllers
 {
-    public class SectionController : Controller
+    public class SectionController(ISectionService sectionService, IUserService userService) : Controller
     {
-        private readonly ISectionService _sectionService;
-        private readonly IUserService _userService;
-        public SectionController(ISectionService sectionService, IUserService userService)
-        {
-            _sectionService = sectionService;
-            _userService = userService;
-        }
+        private readonly ISectionService _sectionService = sectionService;
+        private readonly IUserService _userService = userService;
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         [HttpGet]
         [Authorize]
