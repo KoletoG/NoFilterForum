@@ -13,8 +13,10 @@ namespace Core.Implementations.Services
     {
         public void ApplyDislikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {
-            var wasLiked = user.LikesPostRepliesIds.Contains(requestId);
-            var wasDisliked = user.DislikesPostRepliesIds.Contains(requestId);
+            var likesSet = user.LikesPostRepliesIds.ToHashSet();
+            var dislikedSet = user.DislikesPostRepliesIds.ToHashSet();
+            var wasLiked = likesSet.Contains(requestId);
+            var wasDisliked = dislikedSet.Contains(requestId);
             if (wasLiked)
             {
                 obj.DecrementLikes();
@@ -33,8 +35,10 @@ namespace Core.Implementations.Services
         }
         public void ApplyLikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {
-            var wasLiked = user.LikesPostRepliesIds.Contains(requestId);
-            var wasDisliked = user.DislikesPostRepliesIds.Contains(requestId);
+            var likesSet = user.LikesPostRepliesIds.ToHashSet();
+            var dislikedSet = user.DislikesPostRepliesIds.ToHashSet();
+            var wasLiked = likesSet.Contains(requestId);
+            var wasDisliked = dislikedSet.Contains(requestId);
             if (wasDisliked)
             {
                 obj.IncrementLikes();
