@@ -7,9 +7,9 @@ namespace Web.ViewModels.Notifications
 {
     public class NotificationViewModel
     {
-        public List<WarningItemViewModel> Warnings { get; set; }
-        public List<NotificationItemViewModel> Notifications { get; set; }
-        public NotificationViewModel(List<WarningItemViewModel> warnings,List<NotificationItemViewModel> notifications) 
+        public IList<WarningItemViewModel> Warnings { get; set; }
+        public IReadOnlyCollection<NotificationItemViewModel> Notifications { get; set; }
+        public NotificationViewModel(IList<WarningItemViewModel> warnings,IReadOnlyCollection<NotificationItemViewModel> notifications) 
         {
             Warnings = warnings;
             Notifications = notifications;

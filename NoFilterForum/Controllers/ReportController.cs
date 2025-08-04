@@ -17,9 +17,9 @@ namespace Web.Controllers
     {
         private readonly IReportService _reportService = reportService;
         private readonly IPostService _postService = postService;
-
+        
         [Authorize(Roles = "Admin")]
-        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Any)]
         [Route("Reports")]
         public async Task<IActionResult> Index()
         {
