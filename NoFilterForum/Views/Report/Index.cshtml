@@ -10,5 +10,5 @@
 	<h5>@report.UserToUsername</h5>
 	<h5>@report.UserFromUsername</h5>
 	<h3>@report.Content</h3>
-	<partial name="_DeleteReport" model="new DeleteReportViewModel(){Id=report.Id}"/>
+	<partial name="_DeleteReport" model="new DeleteReportViewModel(report.Id)"/>
 }

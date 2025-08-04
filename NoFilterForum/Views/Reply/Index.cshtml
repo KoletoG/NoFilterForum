@@ -54,7 +54,7 @@
 					}
 					else
 					{
-						<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=true,IdOfPostReply=Model.Post.Id,UserIdTo= Model.Post.UserId}" />
+						<partial name="_CreateReport" model="new CreateReportViewModel(true,Model.Post.Id,Model.Post.UserId)" />
 					}
 				</div>
 			</div>
@@ -120,7 +120,7 @@
 							}
 							else
 							{
-								<partial name="_CreateReport" model="new CreateReportViewModel(){IsPost=false,IdOfPostReply=reply.Id,UserIdTo= reply.UserId}" />
+								<partial name="_CreateReport" model="new CreateReportViewModel(false,reply.Id,reply.UserId)" />
 							}
 						</div>
 					}

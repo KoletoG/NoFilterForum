@@ -13,17 +13,12 @@ using Web.ViewModels.Report;
 
 namespace Web.Controllers
 {
-    public class ReportController : Controller
+    public class ReportController(IReportService reportService, IPostService postService) : Controller
     {
-        private readonly IReportService _reportService;
-        private readonly IPostService _postService;
-        public ReportController(IPostService postService, IReportService reportService)
-        {
-            _postService = postService;
-            _reportService = reportService;
-        }
+        private readonly IReportService _reportService = reportService;
+        private readonly IPostService _postService = postService;
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         [Route("Reports")]
         public async Task<IActionResult> Index()
@@ -33,12 +28,12 @@ namespace Web.Controllers
             var reportIndexVM = ReportMapper.MapToViewModel(reportVMs);
             return View(reportIndexVM);
         }
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeleteReportViewModel deleteReportViewModel)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
@@ -70,19 +65,16 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
+
             var createReportRequest = ReportMapper.MapToRequest(createReportViewModel, currentUserId);
             var result = await _reportService.CreateReportAsync(createReportRequest);
-            if (result == PostResult.Success)
+
+            if (result.Equals(PostResult.Success))
             {
-                if (createReportRequest.IsPost)
-                {
-                    return RedirectToAction(nameof(Index), "Reply", new { postId = createReportViewModel.IdOfPostReply});
-                }
-                else
-                {
-                    var postId1 = await _postService.GetPostIdByReplyId(createReportRequest.IdOfPostOrReply);
-                    return RedirectToAction(nameof(Index), "Reply", new { postId = postId1});
-                }
+                var postOrReplyId = createReportRequest.IsPost
+                    ? createReportViewModel.IdOfPostReply
+                    : await _postService.GetPostIdByReplyId(createReportRequest.IdOfPostOrReply);
+                return RedirectToAction(nameof(Index), "Reply", new { postId = postOrReplyId });
             }
             return result switch
             {

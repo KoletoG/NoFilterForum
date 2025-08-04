@@ -13,9 +13,12 @@ namespace Web.ViewModels.Report
         [Required]
         public string IdOfPostReply { get; set; }
         public bool IsPost { get; set; }
-        public CreateReportViewModel() 
+        public CreateReportViewModel(bool isPost, string idOfPostReply, string userIdTo) 
         {
-
+            UserIdTo = userIdTo;
+            IsPost = isPost;
+            IdOfPostReply = idOfPostReply;
+            Content = string.Empty;
         }
     }
 }

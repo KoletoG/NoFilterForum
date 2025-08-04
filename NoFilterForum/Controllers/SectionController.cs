@@ -14,7 +14,7 @@ namespace Web.Controllers
     {
         private readonly ISectionService _sectionService = sectionService;
         private readonly IUserService _userService = userService;
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Index()
