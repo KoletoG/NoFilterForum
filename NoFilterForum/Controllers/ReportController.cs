@@ -24,7 +24,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index()
         {
             var reportDtos = await _reportService.GetAllDtosAsync();
-            var reportVMs = reportDtos.Select(ReportMapper.MapToViewModel).ToList();
+            var reportVMs = reportDtos.Select(ReportMapper.MapToViewModel);
             var reportIndexVM = ReportMapper.MapToViewModel(reportVMs);
             return View(reportIndexVM);
         }

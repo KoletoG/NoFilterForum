@@ -18,7 +18,7 @@ namespace Web.Mappers
             UserFromUsername = dto.UserFromUsername,
             UserToUsername = dto.UserToUsername
         };
-        public static ReportsViewModel MapToViewModel(List<ReportItemViewModel> vms) => new()
+        public static ReportsViewModel MapToViewModel(IEnumerable<ReportItemViewModel> vms) => new()
         {
             Reports = vms
         };

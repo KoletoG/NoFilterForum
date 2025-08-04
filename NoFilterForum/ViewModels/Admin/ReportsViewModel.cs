@@ -6,6 +6,6 @@ namespace Web.ViewModels.Admin
 {
     public class ReportsViewModel
     {
-        public List<ReportItemViewModel> Reports { get; set; }
+        public required IEnumerable<ReportItemViewModel> Reports { get; set; }
     }
 }

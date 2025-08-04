@@ -10,15 +10,10 @@ using Web.ViewModels.Notifications;
 
 namespace Web.Controllers
 {
-    public class NotificationsController : Controller
+    public class NotificationsController(INotificationService notificationService, IWarningService warningService): Controller
     {
-        private readonly INotificationService _notificationService;
-        private readonly IWarningService _warningService;
-        public NotificationsController(INotificationService notificationService, IWarningService warningService) 
-        {
-            _notificationService = notificationService;
-            _warningService = warningService;
-        }
+        private readonly INotificationService _notificationService = notificationService;
+        private readonly IWarningService _warningService = warningService;
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]

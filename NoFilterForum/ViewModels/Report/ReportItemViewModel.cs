@@ -2,10 +2,10 @@
 {
     public class ReportItemViewModel
     {
-        public string IdOfPostReply { get; set; }
-        public string UserToUsername { get; set; }
-        public string UserFromUsername { get; set; }
-        public string Content { get; set; }
-        public string Id { get; set; }
+        public required string IdOfPostReply { get; set; }
+        public required string UserToUsername { get; set; }
+        public required string UserFromUsername { get; set; }
+        public required string Content { get; set; }
+        public required string Id { get; set; }
     }
 }
