@@ -75,17 +75,14 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            if (!await _userService.IsAdminAsync(userId))
-            {
-                return Forbid();
-            }
-            var deleteSectionRequest = SectionMapper.MapToRequest(deleteSectionViewModel);
+            var deleteSectionRequest = SectionMapper.MapToRequest(deleteSectionViewModel,userId);
             var result = await _sectionService.DeleteSectionAsync(deleteSectionRequest);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index)),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
+                PostResult.Forbid => Forbid(),
                 _ => Problem()
             };
         }

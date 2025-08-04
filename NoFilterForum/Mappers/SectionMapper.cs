@@ -23,6 +23,6 @@ namespace Web.Mappers
             IsAdmin = isAdmin
         };
         public static CreateSectionRequest MapToRequest(CreateSectionViewModel vm, string userId) => new(vm.Description, vm.Title, userId);
-        public static DeleteSectionRequest MapToRequest(DeleteSectionViewModel vm) => new(vm.SectionId);
+        public static DeleteSectionRequest MapToRequest(DeleteSectionViewModel vm, string userId) => new(vm.SectionId, userId);
     }
 }
