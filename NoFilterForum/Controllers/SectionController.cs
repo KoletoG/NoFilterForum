@@ -42,14 +42,14 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateSectionViewModel createSectionViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createSectionRequest = SectionMapper.MapToRequest(createSectionViewModel, userId);
             var result = await _sectionService.CreateSectionAsync(createSectionRequest);
