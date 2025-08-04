@@ -33,7 +33,7 @@ namespace Web.Controllers
 
             var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
             bool isAdmin = await _userService.IsAdminAsync(userId);
-            var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel).ToList();
+            var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel);
             var indexSectionViewModel = SectionMapper.MapToViewModel(sectionItemViewModelList, isAdmin);
             return View(indexSectionViewModel);
         }

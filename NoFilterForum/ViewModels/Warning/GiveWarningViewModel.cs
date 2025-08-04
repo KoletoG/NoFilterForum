@@ -8,6 +8,6 @@ namespace Web.ViewModels.Warning
         public required string UserId { get; set; }
         [Required]
         [MinLength(10,ErrorMessage ="Text characters should be at least 10")]
-        public required string Content { get; set; }
+        public string Content { get; set; }
     }
 }
