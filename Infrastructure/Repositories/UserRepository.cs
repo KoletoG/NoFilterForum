@@ -24,7 +24,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id)=> await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id);
         public async Task<UserDataModel?> GetByUsernameAsync(string username)=> await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
         public async Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames)=> await _context.Users.Where(x=>usernames.Contains(x.UserName)).ToListAsync();
-        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)=>await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto(x.LikesPostRepliesIds,x.DislikesPostRepliesIds)).FirstOrDefaultAsync();
+        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)=>await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto(x.LikesPostRepliesIds.ToHashSet(),x.DislikesPostRepliesIds.ToHashSet())).FirstOrDefaultAsync();
         public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id)=> await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto(x.Id,x.Warnings.Count,x.UserName,x.Email,x.Bio,x.Role,x.PostsCount,x.ImageUrl,x.DateCreated)).FirstOrDefaultAsync();
         public async Task<IReadOnlyCollection<UserDataModel>> GetAllAsync() => await _context.Users.ToListAsync();
         public async Task<IReadOnlyCollection<UserDataModel>> GetAllNoDefaultAsync()=> await _context.Users.AsNoTracking().Where(x => x.UserName != UserConstants.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();

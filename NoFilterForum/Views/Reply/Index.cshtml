@@ -95,6 +95,7 @@
 					</div>
 					@if (reply.Username != UserConstants.DefaultUser.UserName)
 					{
+						Console.WriteLine(Model.CurrentUser.LikesPostRepliesIds.GetType());
 						<div class="col-2 border-black border-start pt-2 text-center">
 							@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 							{

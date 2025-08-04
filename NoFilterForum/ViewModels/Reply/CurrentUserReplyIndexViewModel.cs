@@ -1,8 +1,10 @@
-﻿namespace Web.ViewModels.Reply
+﻿using System.Collections.Immutable;
+
+namespace Web.ViewModels.Reply
 {
     public class CurrentUserReplyIndexViewModel
     {
-        public required ISet<string> LikesPostRepliesIds { get; set; }
-        public required ISet<string> DislikesPostRepliesIds { get; set; }
+        public required HashSet<string> LikesPostRepliesIds { get; set; }
+        public required HashSet<string> DislikesPostRepliesIds { get; set; }
     }
 }
