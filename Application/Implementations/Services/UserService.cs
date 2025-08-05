@@ -47,6 +47,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> IsAdminOrVIPAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if(user is null)
+            {
+                return false;
+            }
             return await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) || await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
         }
         public async Task<bool> IsAdminAsync(string userId)

@@ -52,7 +52,6 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> HasTimeoutAsync(string userId)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
             {
                 return !await _userService.IsAdminOrVIPAsync(userId);
