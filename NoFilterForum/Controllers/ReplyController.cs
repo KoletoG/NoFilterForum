@@ -86,7 +86,7 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
@@ -111,7 +111,7 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();

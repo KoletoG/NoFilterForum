@@ -5,10 +5,10 @@ namespace Web.ViewModels.Reply
     public class CreateReplyViewModel
     {
         [Required]
-        public string PostId { get; set; }
+        public required string PostId { get; set; }
         [Required]
         [MinLength(2)]
         [Display(Name ="Reply: ")]
-        public string Content { get; set; }
+        public string? Content { get; set; }
     }
 }

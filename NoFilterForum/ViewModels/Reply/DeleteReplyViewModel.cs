@@ -5,8 +5,8 @@ namespace Web.ViewModels.Reply
     public class DeleteReplyViewModel
     {
         [Required]
-        public string ReplyId { get; set; }
+        public required string ReplyId { get; set; }
         [Required]
-        public string PostId { get; set; }
+        public required string PostId { get; set; }
     }
 }

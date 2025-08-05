@@ -1,7 +1,10 @@
-﻿namespace Web.ViewModels.Reply
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Web.ViewModels.Reply
 {
     public class LikeDislikeReplyViewModel
     {
-        public string Id { get; set; }
+        [Required]
+        public required string Id { get; set; }
     }
 }
