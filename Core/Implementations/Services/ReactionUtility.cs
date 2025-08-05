@@ -8,7 +8,7 @@ using NoFilterForum.Core.Models.DataModels;
 
 namespace Core.Implementations.Services
 {
-    public static class ReactionService
+    public static class ReactionUtility
     {
         public static void ApplyDislikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {

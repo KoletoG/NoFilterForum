@@ -99,7 +99,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            ReactionService.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
+            ReactionUtility.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Replies.Update, reply, _unitOfWork.Users.Update, user);
@@ -124,7 +124,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            ReactionService.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
+            ReactionUtility.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Replies.Update, reply);
