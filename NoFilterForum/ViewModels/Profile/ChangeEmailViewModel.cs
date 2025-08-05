@@ -8,5 +8,9 @@ namespace Web.ViewModels.Profile
         [Required]
         [Display(Name ="Email")]
         public string Email { get; set; }
+        public ChangeEmailViewModel()
+        {
+            Email = string.Empty;
+        }
     }
 }

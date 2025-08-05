@@ -19,17 +19,11 @@ using Web.ViewModels.Profile;
 
 namespace Web.Controllers
 {
-    public class ProfileController : Controller
+    public class ProfileController(IUserService userService, IReplyService replyService, IPostService postService) : Controller
     {
-        private readonly IUserService _userService;
-        private readonly IReplyService _replyService;
-        private readonly IPostService _postService;
-        public ProfileController(IUserService userService,IPostService postService, IReplyService replyService)
-        {
-            _postService = postService;
-            _userService = userService;
-            _replyService = replyService;
-        }
+        private readonly IUserService _userService = userService;
+        private readonly IReplyService _replyService = replyService;
+        private readonly IPostService _postService = postService;
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -38,7 +32,7 @@ namespace Web.Controllers
             var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
             if (emailExists)
             {
-                ModelState.AddModelError(nameof(changeEmailViewModel.Email), "Email already exists");
+                ModelState.AddModelError("emailExists", "Email already exists");
             }
             if (!ModelState.IsValid)
             {
@@ -67,7 +61,7 @@ namespace Web.Controllers
             var usernameExists = await _userService.UsernameExistsAsync(changeUsernameViewModel.Username);
             if (usernameExists)
             {
-                ModelState.AddModelError(nameof(changeUsernameViewModel.Username), "Username already exists");
+                ModelState.AddModelError("usernameExists", "Username already exists");
             }
             if (!ModelState.IsValid)
             {
@@ -136,7 +130,7 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
-        private PageTotalPagesDTO GetPageTotalPages(IReadOnlyCollection<ReplyItemDto> replyItems, IReadOnlyCollection<ProfilePostDto> profilePostItems, int page)
+        private static PageTotalPagesDTO GetPageTotalPages(IReadOnlyCollection<ReplyItemDto> replyItems, IReadOnlyCollection<ProfilePostDto> profilePostItems, int page)
         {
             var totalCount = replyItems.Count + profilePostItems.Count; 
             return PageUtility.GetPageTotalPagesDTO(page,totalCount);

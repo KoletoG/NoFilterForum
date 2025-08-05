@@ -7,5 +7,9 @@ namespace Web.ViewModels.Profile
         [Required]
         [MaxLength(170,ErrorMessage ="Bio cannot be longer than 170 characters")]
         public string Bio {  get; set; }
+        public ChangeBioViewModel()
+        {
+            Bio = string.Empty;
+        }
     }
 }

@@ -5,6 +5,6 @@ namespace Web.ViewModels.Profile
     public class UpdateImageViewModel
     {
         [Required]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

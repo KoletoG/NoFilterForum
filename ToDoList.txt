@@ -14,9 +14,8 @@ Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging
 Query / Handler / Commands - CQRS with MediatR
-Icollection for entity models
+MAKE FASTER PROFILE POST REPLY GETS
 // Done / Interesting
-CACHE ALL GET METHODS
 Fix mappers with the constants
         // Work on controllers tomorrow, follow DRY
         // Delete unused methods in repositories - YAGNI

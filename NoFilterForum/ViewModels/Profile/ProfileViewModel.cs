@@ -7,12 +7,12 @@ namespace Web.ViewModels.Profile
 {
     public class ProfileViewModel
     {
-        public ProfileUserViewModel Profile { get; set; }
+        public required ProfileUserViewModel Profile { get; set; }
         public bool IsSameUser { get; set; }
-        public List<ReplyItemViewModel> Replies { get; set; }
-        public List<PostItemViewModel> Posts { get; set; }
+        public required IReadOnlyCollection<ReplyItemViewModel> Replies { get; set; }
+        public required IReadOnlyCollection<PostItemViewModel> Posts { get; set; }
         public int Page {  get; set; }
         public int TotalPages { get; set; }
-        public Dictionary<string, DateTime> UserIdDate { get; set; }
+        public required IDictionary<string, DateTime> UserIdDate { get; set; }
     }
 }
