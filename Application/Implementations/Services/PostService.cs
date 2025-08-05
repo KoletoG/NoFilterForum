@@ -4,9 +4,9 @@ using System.Web;
 using Application.Interfaces.Services;
 using Core.Constants;
 using Core.Enums;
+using Core.Implementations.Services;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
-using Core.Interfaces.Services;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Post;
 using Core.Models.DTOs.InputDTOs.Profile;
@@ -33,13 +33,11 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<PostService> _logger;
         private readonly IPostFactory _postFactory;
-        private readonly IReactionService _reactionService;
         private readonly ICacheService _cacheService;
-        public PostService(IUnitOfWork unitOfWork,ICacheService cacheService, IReactionService reactionService, IUserService userService, ILogger<PostService> logger, IPostFactory postFactory)
+        public PostService(IUnitOfWork unitOfWork,ICacheService cacheService, IUserService userService, ILogger<PostService> logger, IPostFactory postFactory)
         {
             _unitOfWork = unitOfWork;
             _cacheService = cacheService;
-            _reactionService = reactionService;
             _logger = logger;
             _userService = userService;
             _postFactory = postFactory;
@@ -73,7 +71,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            _reactionService.ApplyLikeLogic(user, post, likeDislikeRequest.PostReplyId);
+            ReactionService.ApplyLikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post);
@@ -98,7 +96,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            _reactionService.ApplyDislikeLogic(user, post, likeDislikeRequest.PostReplyId);
+            ReactionService.ApplyDislikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post);

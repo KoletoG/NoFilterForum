@@ -2,7 +2,6 @@ using Application.Interfaces.Services;
 using Core.Implementations.Services;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
-using Core.Interfaces.Services;
 using Ganss.Xss;
 using Infrastructure.Factories;
 using Infrastructure.Repositories;
@@ -79,7 +78,6 @@ namespace Web
             builder.Services.AddScoped<IReportFactory, ReportFactory>();
             builder.Services.AddScoped<IReplyFactory, ReplyFactory>();
             builder.Services.AddScoped<IWarningFactory, WarningFactory>();
-            builder.Services.AddScoped<IReactionService, ReactionService>();
             builder.Services.AddSingleton<ICacheService, CacheService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {

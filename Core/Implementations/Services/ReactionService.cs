@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Interfaces.Business_Logic;
-using Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace Core.Implementations.Services
 {
-    public class ReactionService : IReactionService
+    public static class ReactionService
     {
-        public void ApplyDislikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
+        public static void ApplyDislikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {
             var likesSet = user.LikesPostRepliesIds.ToHashSet();
             var dislikedSet = user.DislikesPostRepliesIds.ToHashSet();
@@ -33,7 +32,7 @@ namespace Core.Implementations.Services
                 user.DislikesPostRepliesIds.Add(requestId);
             }
         }
-        public void ApplyLikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
+        public static void ApplyLikeLogic(UserDataModel user, ILikeDislike obj, string requestId)
         {
             var likesSet = user.LikesPostRepliesIds.ToHashSet();
             var dislikedSet = user.DislikesPostRepliesIds.ToHashSet();

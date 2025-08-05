@@ -2,10 +2,10 @@
 using Core.Constants;
 using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
+using Core.Implementations.Services;
 using Core.Interfaces.Business_Logic;
 using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
-using Core.Interfaces.Services;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
@@ -27,10 +27,8 @@ namespace NoFilterForum.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<ReplyService> _logger;
         private readonly IReplyFactory _replyFactory;
-        private readonly IReactionService _reactionService;
         private readonly ICacheService _cacheService;
         public ReplyService(IUnitOfWork unitOfWork,
-            IReactionService reactionService,
             IReplyFactory replyFactory,
             IUserService userService,
             ILogger<ReplyService> logger,
@@ -38,7 +36,6 @@ namespace NoFilterForum.Infrastructure.Services
         {
             _cacheService = cacheService;
             _unitOfWork = unitOfWork;
-            _reactionService = reactionService;
             _replyFactory = replyFactory;
             _logger = logger;
             _userService = userService;
@@ -102,7 +99,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            _reactionService.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
+            ReactionService.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Replies.Update, reply, _unitOfWork.Users.Update, user);
@@ -127,7 +124,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            _reactionService.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
+            ReactionService.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Replies.Update, reply);
