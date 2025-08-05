@@ -157,7 +157,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if (notifications.Count() > 0) _unitOfWork.Notifications.DeleteRange(notifications);
+                if (notifications.Any()) _unitOfWork.Notifications.DeleteRange(notifications);
                 await _userService.ApplyRoleAsync(reply.User); // CHANGE THAT
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);
@@ -204,7 +204,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if (notificationsList.Count > 0)
+                if (notificationsList.Any())
                 {
                     await _unitOfWork.Notifications.CreateRangeAsync(notificationsList);
                 }
