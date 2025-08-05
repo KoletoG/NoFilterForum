@@ -1,7 +1,10 @@
-﻿namespace Web.ViewModels.Post
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Web.ViewModels.Post
 {
     public class LikeDislikePostViewModel
     {
-        public string Id { get; set; }
+        [Required]
+        public required string Id { get; set; }
     }
 }

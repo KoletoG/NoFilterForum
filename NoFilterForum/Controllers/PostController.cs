@@ -19,15 +19,10 @@ using Core.DTOs.OutputDTOs.Reply;
 
 namespace Web.Controllers
 {
-    public class PostController : Controller
+    public class PostController(IPostService postService, ISectionService sectionService) : Controller
     {
-        private readonly IPostService _postService;
-        private readonly ISectionService _sectionService;
-        public PostController(IPostService postService, ISectionService sectionService)
-        {
-            _sectionService = sectionService;
-            _postService = postService;
-        }
+        private readonly IPostService _postService = postService;
+        private readonly ISectionService _sectionService = sectionService;
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -37,7 +32,7 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
@@ -124,7 +119,7 @@ namespace Web.Controllers
             var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
             var getIndexPostRequest = PostMapper.MapToRequest(page, titleOfSection);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
-            var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel).ToList();
+            var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel);
             var postIndexViewModel = PostMapper.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection);
             return View(postIndexViewModel);
         }

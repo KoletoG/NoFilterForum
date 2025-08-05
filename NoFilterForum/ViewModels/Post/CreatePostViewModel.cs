@@ -12,11 +12,11 @@ namespace Web.ViewModels.Post
         [Required]
         [MinLength(10)]
         [MaxLength(65)]
-        public string Title { get; set; }
+        public string? Title { get; set; }
         [Required]
         [MinLength(20)]
-        public string Body { get; set; }
+        public string? Body { get; set; }
         [Required]
-        public string TitleOfSection { get; set; }
+        public required string TitleOfSection { get; set; }
     }
 }
