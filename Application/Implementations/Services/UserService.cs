@@ -46,7 +46,7 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> IsAdminOrVIPAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if(user is null)
+            if (user is null)
             {
                 return false;
             }
@@ -58,7 +58,7 @@ namespace NoFilterForum.Infrastructure.Services
             return await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
         }
         public async Task ApplyRoleAsync(UserDataModel user)
-        { 
+        {
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
             {
                 var role = user.PostsCount switch
@@ -92,21 +92,24 @@ namespace NoFilterForum.Infrastructure.Services
         public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id; // Change to static method
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
-            if (user is null)
-            {
-                return PostResult.NotFound;
-            }
-            var normalizedUsername = _userManager.NormalizeName(changeUsernameRequest.Username);
-            if(await _unitOfWork.Users.ExistNormalizedUsername(normalizedUsername))
-            {
-                return PostResult.Forbid; // Change this
-            }
-            user.ChangeUsername(changeUsernameRequest.Username);
-            user.ChangeNormalizedUsername(normalizedUsername);
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                var user = await _unitOfWork.Users.GetByIdAsync(changeUsernameRequest.UserId);
+                if (user is null)
+                {
+                    return PostResult.NotFound;
+                }
+                var normalizedUsername = _userManager.NormalizeName(changeUsernameRequest.Username);
+                if (await _unitOfWork.Users.ExistNormalizedUsername(normalizedUsername))
+                {
+                    return PostResult.Forbid; // Change this
+                }
+                user.ChangeUsername(changeUsernameRequest.Username);
+                user.ChangeNormalizedUsername(normalizedUsername);
+                _unitOfWork.Users.Update(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
@@ -123,15 +126,19 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> EmailExistsAsync(string email) => await _unitOfWork.Users.EmailExistsAsync(email);
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);
-            if (user is null)
-            {
-                return PostResult.NotFound;
-            }
-            user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                var user = await _unitOfWork.Users.GetByIdAsync(changeEmailRequest.UserId);
+                if (user is null)
+                {
+                    return PostResult.NotFound;
+                }
+                user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
+                _unitOfWork.Users.Update(user);
+                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return PostResult.Success;
@@ -139,7 +146,7 @@ namespace NoFilterForum.Infrastructure.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "Email wasn't updated for user with Id: {UserId}", user.Id);
+                _logger.LogError(ex, "Email wasn't updated for user with Id: {UserId}", changeEmailRequest.UserId);
                 return PostResult.UpdateFailed;
             }
         }
@@ -193,7 +200,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.RunPOSTOperationAsync(
                     _unitOfWork.Posts.UpdateRange, posts,
                     _unitOfWork.Replies.UpdateRange, replies,
-                    _unitOfWork.Users.Delete,user
+                    _unitOfWork.Users.Delete, user
                     );
                 return PostResult.Success;
             }
