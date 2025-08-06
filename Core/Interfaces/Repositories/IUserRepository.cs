@@ -19,6 +19,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames);
         public void UpdateRange(IEnumerable<UserDataModel> users);
         public Task<bool> ExistNormalizedUsername(string normalizedUsername);
+        public Task<bool> ExistNormalizedEmailAsync(string normalizedEmail);
         public Task CreateAsync(UserDataModel user);
         public Task<bool> ExistsByNotConfirmedAsync();
         public void Update(UserDataModel user);

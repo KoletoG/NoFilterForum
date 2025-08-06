@@ -39,6 +39,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync(x=>x.NormalizedUserName == normalizedUsername);
         }
+        public async Task<bool> ExistNormalizedEmailAsync(string normalizedEmail)
+        {
+            return await _context.Users.AnyAsync(x => x.NormalizedEmail == normalizedEmail);
+        }
         public async Task CreateAsync(UserDataModel user) => await _context.Users.AddAsync(user);
         public void Update(UserDataModel user) => _context.Users.Update(user);
         public void UpdateRange(IEnumerable<UserDataModel> users)=>_context.Users.UpdateRange(users);

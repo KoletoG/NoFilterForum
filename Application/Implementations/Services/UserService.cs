@@ -134,9 +134,15 @@ namespace NoFilterForum.Infrastructure.Services
                 {
                     return PostResult.NotFound;
                 }
+                var normalizedEmail = _userManager.NormalizeEmail(changeEmailRequest.Email);
+                if(await _unitOfWork.Users.EmailExistsAsync(normalizedEmail))
+                {
+                    return PostResult.Forbid; // Change this
+                }
                 user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
+                user.ChangeNormalizedEmail(normalizedEmail);
                 _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitAsync(); // ADD TOKENS FOR EMAIL CHANGE
                 await _unitOfWork.CommitTransactionAsync();
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
