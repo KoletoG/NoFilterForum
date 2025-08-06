@@ -19,7 +19,7 @@ using NuGet.Packaging;
 
 namespace Application.Implementations.Services
 {
-    public class SectionService(ICacheService cacheService, IUnitOfWork unitOfWork, IUserService userService, ILogger<SectionService> logger, ISectionFactory sectionFactory) : ISectionService
+    public class SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, ILogger<SectionService> logger,ICacheService cacheService) : ISectionService
     {
         private readonly ICacheService _cacheService = cacheService;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;

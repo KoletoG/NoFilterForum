@@ -98,10 +98,16 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var normalizedUsername = _userManager.NormalizeName(changeUsernameRequest.Username);
+            if(await _unitOfWork.Users.ExistNormalizedUsername(normalizedUsername))
+            {
+                return PostResult.Forbid; // Change this
+            }
             user.ChangeUsername(changeUsernameRequest.Username);
+            user.ChangeNormalizedUsername(normalizedUsername);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return PostResult.Success;

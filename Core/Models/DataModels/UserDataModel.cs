@@ -31,6 +31,7 @@ namespace NoFilterForum.Core.Models.DataModels
         [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; private set; }
         public void Confirm() => IsConfirmed = true;
+        public void ChangeNormalizedUsername(string normalizedUsername) => NormalizedUserName = normalizedUsername; 
         public void ChangeImageUrl(string imageUrl) => ImageUrl = imageUrl;
         public void IncrementPostCount()
         {

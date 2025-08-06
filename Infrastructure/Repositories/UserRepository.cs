@@ -35,6 +35,10 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Select(x => new UserForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role))
                 .ToListAsync();
         }
+        public async Task<bool> ExistNormalizedUsername(string normalizedUsername)
+        {
+            return await _context.Users.AnyAsync(x=>x.NormalizedUserName == normalizedUsername);
+        }
         public async Task CreateAsync(UserDataModel user) => await _context.Users.AddAsync(user);
         public void Update(UserDataModel user) => _context.Users.Update(user);
         public void UpdateRange(IEnumerable<UserDataModel> users)=>_context.Users.UpdateRange(users);
