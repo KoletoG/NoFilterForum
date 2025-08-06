@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Implementations.Services;
 using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Factories;
@@ -19,7 +20,6 @@ using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Repositories;
-using NoFilterForum.Infrastructure.Services;
 
 namespace UnitTests.ServiceTests
 {

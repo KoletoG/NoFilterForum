@@ -15,28 +15,21 @@ using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
+using NuGet.Packaging;
 
-namespace NoFilterForum.Infrastructure.Services
+namespace Application.Implementations.Services
 {
-    public class SectionService : ISectionService
+    public class SectionService(ICacheService cacheService, IUnitOfWork unitOfWork, IUserService userService, ILogger<SectionService> logger, ISectionFactory sectionFactory) : ISectionService
     {
-        private readonly ICacheService _cacheService;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserService _userService;
-        private readonly ILogger<SectionService> _logger;
-        private readonly ISectionFactory _sectionFactory;
-        public SectionService(IUnitOfWork unitOfWork, IUserService userService, ISectionFactory sectionFactory, ILogger<SectionService> logger, ICacheService cacheService)
-        {
-            _logger = logger;
-            _sectionFactory = sectionFactory;
-            _userService = userService;
-            _unitOfWork = unitOfWork;
-            _cacheService = cacheService;
-        }
+        private readonly ICacheService _cacheService = cacheService;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IUserService _userService = userService;
+        private readonly ILogger<SectionService> _logger = logger;
+        private readonly ISectionFactory _sectionFactory = sectionFactory;
         public async Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync()
         {
-            var sections = await _cacheService.TryGetValue<IReadOnlyCollection<SectionItemDto>>("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync);
-            return sections ?? new List<SectionItemDto>();
+            var sections = await _cacheService.TryGetValue("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync);
+            return sections ?? [];
         }
         public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
         {
@@ -56,7 +49,7 @@ namespace NoFilterForum.Infrastructure.Services
             var section = _sectionFactory.Create(createSectionRequest.Title, createSectionRequest.Description);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<SectionDataModel>(_unitOfWork.Sections.CreateAsync, section);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Sections.CreateAsync, section);
                 return PostResult.Success;
             }
             catch (Exception ex)
@@ -66,7 +59,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private (HashSet<UserDataModel> users, List<ReplyDataModel> replies) ProcessPosts(List<PostDataModel> posts)
+        private static (HashSet<UserDataModel> users, List<ReplyDataModel> replies) ProcessPosts(IReadOnlyCollection<PostDataModel> posts)
         {
             var users = new HashSet<UserDataModel>();
             var replies = posts.SelectMany(x => x.Replies).ToList();
@@ -80,7 +73,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return (users, replies);
         }
-        private void DecrementAndCollect(HashSet<UserDataModel> users, UserDataModel user)
+        private static void DecrementAndCollect(HashSet<UserDataModel> users, UserDataModel user)
         {
             if (user != UserConstants.DefaultUser)
             {
@@ -102,23 +95,24 @@ namespace NoFilterForum.Infrastructure.Services
             var posts = section.Posts;
             (var usersSet,var replies) = ProcessPosts(posts);
             var notifications = new List<NotificationDataModel>();
+           // var tasks = replies.Select(async x => notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)));
+           // await Task.WhenAll(tasks); // throws error db
             foreach(var reply in replies)
             {
                 notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
             }
-            var users = usersSet.ToList();
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                foreach (var user in users)
-                {
-                    await _userService.ApplyRoleAsync(user); // do something here
-                }
-                _unitOfWork.Users.UpdateRange(users);
+                _unitOfWork.Users.UpdateRange(usersSet);
                 _unitOfWork.Posts.DeleteRange(posts);
                 _unitOfWork.Replies.DeleteRange(replies);
                 _unitOfWork.Sections.Delete(section);
                 _unitOfWork.Notifications.DeleteRange(notifications);
+                foreach (var user in usersSet)
+                {
+                    await _userService.ApplyRoleAsync(user); // do something here
+                }
                 await _unitOfWork.CommitAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return PostResult.Success;
