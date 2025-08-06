@@ -20,12 +20,12 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.WarningDataModels.Where(x => x.User.Id == userId).ToListAsync();
         }
-        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.WarningDataModels.AsNoTracking()
                 .Where(x => x.User.Id == userId && !x.IsAccepted)
                 .Select(x => new WarningsContentDto(x.Content))
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
         public async Task CreateAsync(WarningDataModel warning)
         {

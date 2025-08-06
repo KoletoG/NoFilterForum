@@ -28,7 +28,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel changeEmailViewModel)
+        public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel changeEmailViewModel, CancellationToken cancellationToken)
         {
             var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
             if (emailExists)

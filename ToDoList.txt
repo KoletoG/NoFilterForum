@@ -14,6 +14,9 @@ Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging
 Query / Handler / Commands - CQRS with MediatR
+
+ADD CANCELLATION TOKENS
+
 MAKE FASTER PROFILE POST REPLY GETS
 // Done / Interesting
 Fix mappers with the constants

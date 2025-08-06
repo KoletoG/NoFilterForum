@@ -31,7 +31,7 @@ namespace NoFilterForum.Infrastructure.Services
             _cacheService = cacheService;
         }
         // GET methods
-        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync, userId) ?? new List<WarningsContentDto>();
+        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync, userId, cancellationToken) ?? [];
         // POST methods
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
         {

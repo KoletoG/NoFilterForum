@@ -18,14 +18,14 @@ namespace Web.Controllers
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, CancellationToken cancellationToken)
         {
             id = HttpUtility.UrlDecode(id);
             if (string.IsNullOrEmpty(id))
             {
                 return BadRequest("Id cannot be null");
             }
-            var warningsDto = await _warningService.GetWarningsContentDtosByUserIdAsync(id);
+            var warningsDto = await _warningService.GetWarningsContentDtosByUserIdAsync(id, cancellationToken);
             var warningsVM = warningsDto.Select(WarningMapper.MapToViewModel).ToList();
             return View(warningsVM);
         }
