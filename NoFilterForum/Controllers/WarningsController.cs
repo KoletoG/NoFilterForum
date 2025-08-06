@@ -51,14 +51,14 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Accept()
+        public async Task<IActionResult> Accept(CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
             }
-            var result = await _warningService.AcceptWarningsAsync(userId);
+            var result = await _warningService.AcceptWarningsAsync(userId, cancellationToken);
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),

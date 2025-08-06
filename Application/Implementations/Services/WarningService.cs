@@ -66,9 +66,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-       public async Task<PostResult> AcceptWarningsAsync(string userId)
+       public async Task<PostResult> AcceptWarningsAsync(string userId, CancellationToken token)
         {
-            var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId);
+            var warnings = await _unitOfWork.Warnings.GetAllByUserIdAsync(userId, token);
             if (warnings is null)
             {
                 return PostResult.Success;
@@ -79,8 +79,14 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<IReadOnlyCollection<WarningDataModel>>(_unitOfWork.Warnings.UpdateRange, warnings);
+                await _unitOfWork.RunPOSTOperationAsync<IReadOnlyCollection<WarningDataModel>>(_unitOfWork.Warnings.UpdateRange, warnings, token);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Operation was cancelled");
+                return PostResult.UpdateFailed;
             }
             catch(DbException ex)
             {

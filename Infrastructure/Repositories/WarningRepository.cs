@@ -16,9 +16,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<IReadOnlyCollection<WarningDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<WarningDataModel>> GetAllByUserIdAsync(string userId, CancellationToken token)
         {
-            return await _context.WarningDataModels.Where(x => x.User.Id == userId).ToListAsync();
+            return await _context.WarningDataModels.Where(x => x.User.Id == userId).ToListAsync(token);
         }
         public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
