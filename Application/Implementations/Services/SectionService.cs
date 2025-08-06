@@ -94,13 +94,8 @@ namespace Application.Implementations.Services
             }
             var posts = section.Posts;
             (var usersSet,var replies) = ProcessPosts(posts);
-            var notifications = new List<NotificationDataModel>();
-           // var tasks = replies.Select(async x => notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(x.Id)));
-           // await Task.WhenAll(tasks); // throws error db
-            foreach(var reply in replies)
-            {
-                notifications.AddRange(await _unitOfWork.Notifications.GetAllByReplyIdAsync(reply.Id));
-            }
+            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdsAsync(replies.Select(x=>x.Id));
+
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
