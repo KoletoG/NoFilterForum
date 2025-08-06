@@ -21,7 +21,7 @@ namespace NoFilterForum.Infrastructure.Repositories
             _context = context;
         }
         public async Task<UserDataModel?> GetByIdAsync(string id)=> await _context.Users.FindAsync(id);
-        public async Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id)=> await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id, CancellationToken cancellationToken)=> await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
         public async Task<UserDataModel?> GetByUsernameAsync(string username)=> await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
         public async Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames)=> await _context.Users.Where(x=>usernames.Contains(x.UserName)).ToListAsync();
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id)=>await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto(x.LikesPostRepliesIds.ToHashSet(),x.DislikesPostRepliesIds.ToHashSet())).FirstOrDefaultAsync();

@@ -43,6 +43,7 @@ namespace Infrastructure.Repositories
         public IWarningRepository Warnings { get; }
 
         public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
+        public async Task CommitAsync(CancellationToken token) => await _context.SaveChangesAsync(token);
         public async Task BeginTransactionAsync() => _transaction = await _context.Database.BeginTransactionAsync();
         public async Task RunPOSTOperationAsync<T>(Func<T, Task> func, T obj) where T : class
         {
@@ -58,6 +59,13 @@ namespace Infrastructure.Repositories
             func.Invoke(obj);
             await CommitAsync();
             await CommitTransactionAsync();
+        }
+        public async Task RunPOSTOperationAsync<T>(Action<T> func, T obj, CancellationToken token) where T : class
+        {
+            await BeginTransactionAsync();
+            func.Invoke(obj);
+            await CommitAsync(token);
+            await CommitTransactionAsync(token);
         }
         public async Task RunPOSTOperationAsync<T1,T2>(Action<T1> func, T1 obj, Action<T2> func2, T2 obj2) where T1 : class where T2 : class
         {
@@ -84,6 +92,7 @@ namespace Infrastructure.Repositories
             await CommitTransactionAsync();
         }
         public async Task CommitTransactionAsync() => await _transaction.CommitAsync();
+        public async Task CommitTransactionAsync(CancellationToken token) => await _transaction.CommitAsync(token);
         public async Task RollbackTransactionAsync() => await _transaction.RollbackAsync();
     }
 }

@@ -33,9 +33,9 @@ namespace NoFilterForum.Infrastructure.Services
         // GET methods
         public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentDtosByUserIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<WarningsContentDto>>($"listWarningContentsById_{userId}", _unitOfWork.Warnings.GetWarningsContentAsDtoByUserIdAsync, userId, cancellationToken) ?? [];
         // POST methods
-        public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest)
+        public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest, CancellationToken cancellationToken)
         {
-            var user = await _unitOfWork.Users.GetUserWithWarningsByIdAsync(createWarningRequest.UserId);
+            var user = await _unitOfWork.Users.GetUserWithWarningsByIdAsync(createWarningRequest.UserId, cancellationToken);
             if (user is null)
             {
                 return PostResult.NotFound;
@@ -44,8 +44,14 @@ namespace NoFilterForum.Infrastructure.Services
             user.Warnings.Add(warning);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user,cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Operation was cancelled");
+                return PostResult.UpdateFailed;
             }
             catch (DbException ex)
             {

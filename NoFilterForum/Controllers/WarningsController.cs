@@ -32,14 +32,14 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateWarningViewModel createWarningViewModel)
+        public async Task<IActionResult> Create(CreateWarningViewModel createWarningViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createWarningRequest = WarningMapper.MapToRequest(createWarningViewModel);
-            var result = await _warningService.AddWarningAsync(createWarningRequest);
+            var result = await _warningService.AddWarningAsync(createWarningRequest, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(ProfileController.Index), "Profile", new { userId = createWarningRequest.UserId }),
