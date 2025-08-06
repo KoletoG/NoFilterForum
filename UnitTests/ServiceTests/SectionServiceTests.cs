@@ -16,7 +16,6 @@ using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
 using NoFilterForum.Infrastructure.Repositories;

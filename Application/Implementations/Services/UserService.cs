@@ -18,7 +18,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Repositories;
-using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace NoFilterForum.Infrastructure.Services
@@ -59,7 +58,7 @@ namespace NoFilterForum.Infrastructure.Services
             return await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
         }
         public async Task ApplyRoleAsync(UserDataModel user)
-        {
+        { 
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
             {
                 var role = user.PostsCount switch
@@ -98,6 +97,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
+            var normalizedUsername = _userManager.NormalizeName(changeUsernameRequest.Username);
             user.ChangeUsername(changeUsernameRequest.Username);
             try
             {

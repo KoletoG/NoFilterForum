@@ -5,7 +5,7 @@ using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using NoFilterForum.Core.Models.DataModels;
 
-namespace NoFilterForum.Core.Interfaces.Services
+namespace Application.Interfaces.Services
 {
     public interface IUserService
     {

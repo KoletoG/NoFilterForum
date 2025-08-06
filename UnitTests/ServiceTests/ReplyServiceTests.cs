@@ -14,7 +14,6 @@ using Core.Utility;
 using Ganss.Xss;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Services;
 using Web.ViewModels.Reply;

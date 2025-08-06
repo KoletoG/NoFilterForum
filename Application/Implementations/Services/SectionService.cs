@@ -95,7 +95,6 @@ namespace Application.Implementations.Services
             var posts = section.Posts;
             (var usersSet,var replies) = ProcessPosts(posts);
             var notifications = await _unitOfWork.Notifications.GetAllByReplyIdsAsync(replies.Select(x=>x.Id));
-
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
