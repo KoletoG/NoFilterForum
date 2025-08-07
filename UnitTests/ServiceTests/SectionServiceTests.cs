@@ -92,14 +92,14 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            unitOfWorkMock.Setup(x => x.Sections.GetAllItemsDtoAsync()).ReturnsAsync(new List<SectionItemDto>());
+            unitOfWorkMock.Setup(x => x.Sections.GetAllItemsDtoAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<SectionItemDto>());
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
                 loggerMock.Object,
                 _cacheService.Object
                 );
-            var result = await sectionService.GetAllSectionItemDtosAsync();
+            var result = await sectionService.GetAllSectionItemDtosAsync(CancellationToken.None);
             Assert.IsType<List<SectionItemDto>>(result);
             Assert.NotNull(result);
         }
@@ -119,7 +119,7 @@ namespace UnitTests.ServiceTests
                 _cacheService.Object
                 );
             var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
-            var result = await sectionService.CreateSectionAsync(createSectionRequest);
+            var result = await sectionService.CreateSectionAsync(createSectionRequest, CancellationToken.None);
             Assert.Equal(PostResult.Forbid, result);
         }
         [Fact]
@@ -132,7 +132,7 @@ namespace UnitTests.ServiceTests
             var sectionFactoryMock = new Mock<ISectionFactory>();
             userServiceMock.Setup(x => x.IsAdminAsync(It.IsAny<string>())).ReturnsAsync(true);
             sectionFactoryMock.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>())).Returns(new SectionDataModel());
-            unitOfWorkMock.Setup(x => x.Sections.CreateAsync(It.IsAny<SectionDataModel>())).ReturnsAsync((SectionDataModel?)null);
+            unitOfWorkMock.Setup(x => x.Sections.CreateAsync(It.IsAny<SectionDataModel>(), It.IsAny<CancellationToken>()));
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
@@ -140,7 +140,7 @@ namespace UnitTests.ServiceTests
                 _cacheService.Object
                 ); 
             var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
-            var result = await sectionService.CreateSectionAsync(createSectionRequest);
+            var result = await sectionService.CreateSectionAsync(createSectionRequest, CancellationToken.None);
             Assert.Equal(PostResult.Success, result);
         }
         [Fact]
@@ -161,7 +161,7 @@ namespace UnitTests.ServiceTests
                 _cacheService.Object
                 );
             var createSectionRequest = new CreateSectionRequest("Test description", "Test title", "UserId EXAMPLE");
-            var result = await sectionService.CreateSectionAsync(createSectionRequest);
+            var result = await sectionService.CreateSectionAsync(createSectionRequest, CancellationToken.None);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
 
@@ -173,7 +173,7 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            unitOfWorkMock.Setup(x => x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>())).ReturnsAsync((SectionDataModel?)null);
+            unitOfWorkMock.Setup(x => x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync((SectionDataModel?)null);
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
@@ -181,7 +181,7 @@ namespace UnitTests.ServiceTests
                 _cacheService.Object
                 );
             var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id",UserId: "ExampleID");
-            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
+            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest, CancellationToken.None);
             Assert.Equal(PostResult.NotFound, result);
         }
         [Fact]
@@ -199,7 +199,7 @@ namespace UnitTests.ServiceTests
             unitOfWorkMock.Setup(x => x.Sections.Delete(It.IsAny<SectionDataModel>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x =>
-            x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))
+            x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(
                 new SectionDataModel()
                 {
@@ -215,7 +215,7 @@ namespace UnitTests.ServiceTests
                 _cacheService.Object
                 );
             var deleteSectionRequest = new DeleteSectionRequest(SectionId: "Example Id", UserId: "ExampleID");
-            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
+            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest, CancellationToken.None);
             Assert.Equal(PostResult.Success, result);
         }
         [Fact]
@@ -230,7 +230,7 @@ namespace UnitTests.ServiceTests
             unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
             unitOfWorkMock.Setup(x =>
-            x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>()))
+            x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(
                 new SectionDataModel()
                 {
@@ -246,7 +246,7 @@ namespace UnitTests.ServiceTests
                 _cacheService.Object
                 );
             var deleteSectionRequest = new DeleteSectionRequest("Example Id", UserId: "ExampleID");
-            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest);
+            var result = await sectionService.DeleteSectionAsync(deleteSectionRequest, CancellationToken.None);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
     }

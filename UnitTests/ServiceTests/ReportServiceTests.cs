@@ -51,9 +51,9 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
-            iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync()).ReturnsAsync(true);
+            iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(true);
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
-            var result = await reportService.AnyReportsAsync();
+            var result = await reportService.AnyReportsAsync(CancellationToken.None);
             Assert.True(result);
         }
         [Fact]
@@ -62,9 +62,9 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var reportFactoryMock = new Mock<IReportFactory>();
             var iLoggerMock = new Mock<ILogger<ReportService>>();
-            iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync()).ReturnsAsync(false);
+            iUnitOfWorkMock.Setup(x => x.Reports.ExistsReportsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(false);
             var reportService = new ReportService(iUnitOfWorkMock.Object, reportFactoryMock.Object, iLoggerMock.Object, _cacheService.Object);
-            var result = await reportService.AnyReportsAsync();
+            var result = await reportService.AnyReportsAsync(CancellationToken.None);
             Assert.False(result);
         }
         [Theory]

@@ -24,9 +24,9 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
-            iUnitOfWorkMock.Setup(x => x.Notifications.GetNotificationsAsDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationsDto>());
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetNotificationsAsDtoByUserIdAsync(It.IsAny<string>(),It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationsDto>());
             var notificationService = new NotificationService(iUnitOfWorkMock.Object,iLoggerMock.Object,_cacheService.Object);
-            var result = await notificationService.GetNotificationsDtosByUserIdAsync(userId);
+            var result = await notificationService.GetNotificationsDtosByUserIdAsync(userId, CancellationToken.None);
             Assert.NotNull(result);
             Assert.IsType<List<NotificationsDto>>(result);
         }
@@ -36,9 +36,9 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
-            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>() {new NotificationDataModel() });
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>() {new NotificationDataModel() });
             var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object, _cacheService.Object);
-            var result = await notificationService.DeleteByUserIdAsync(userId);
+            var result = await notificationService.DeleteByUserIdAsync(userId, CancellationToken.None);
             Assert.Equal(PostResult.Success, result);
         }
         [Fact]
@@ -47,9 +47,9 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
-            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>());
             var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object, _cacheService.Object);
-            var result = await notificationService.DeleteByUserIdAsync(userId);
+            var result = await notificationService.DeleteByUserIdAsync(userId, CancellationToken.None);
             Assert.Equal(PostResult.Success, result);
         }
         [Fact]
@@ -58,10 +58,10 @@ namespace UnitTests.ServiceTests
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();
             var iLoggerMock = new Mock<ILogger<NotificationService>>();
             var userId = "TestUserId";
-            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>() { new NotificationDataModel()} );
+            iUnitOfWorkMock.Setup(x => x.Notifications.GetAllByUserIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>() { new NotificationDataModel()} );
             iUnitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
             var notificationService = new NotificationService(iUnitOfWorkMock.Object, iLoggerMock.Object, _cacheService.Object);
-            var result = await notificationService.DeleteByUserIdAsync(userId);
+            var result = await notificationService.DeleteByUserIdAsync(userId, CancellationToken.None);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
     }
