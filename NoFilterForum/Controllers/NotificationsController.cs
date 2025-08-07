@@ -17,14 +17,14 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete() // Might change to read with IsMarked property in NotificatonsDataModel
+        public async Task<IActionResult> Delete(CancellationToken cancellationToken) // Might change to read with IsMarked property in NotificatonsDataModel
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
             }
-            var result = await _notificationService.DeleteByUserIdAsync(userId);
+            var result = await _notificationService.DeleteByUserIdAsync(userId, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index)),
@@ -42,7 +42,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId);
+            var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId, cancellationToken);
             var warningsContentDtosList = await _warningService.GetWarningsContentDtosByUserIdAsync(userId, cancellationToken);
             var notificationsItemsViewModels = notificationsDtoList.Select(NotificationMapper.MapToViewModel).ToList();
             var warningsItemViewModel = warningsContentDtosList.Select(WarningMapper.MapToViewModel).ToList();

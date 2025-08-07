@@ -15,9 +15,9 @@ namespace NoFilterForum.Infrastructure.Repositories
             _context = context;
         }
        
-        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserFromIdAsync(string userId)
         {
@@ -39,12 +39,12 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.Id)).ToListAsync();
         }
-        public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.NotificationDataModels.AsNoTracking()
                 .Where(x => x.UserTo.Id == userId)
                 .Select(x => new NotificationsDto(x.Reply.Id,x.Reply.Post.Id,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
         public void DeleteRange(IEnumerable<NotificationDataModel> notifications)
         {

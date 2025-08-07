@@ -22,19 +22,25 @@ namespace NoFilterForum.Infrastructure.Services
             _cacheService = cacheService;
         }
         // GET methods
-        public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId) ?? new List<NotificationsDto>();
+        public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId, cancellationToken) ?? [];
         // POST methods
-        public async Task<PostResult> DeleteByUserIdAsync(string userId)
+        public async Task<PostResult> DeleteByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var notifications = await _unitOfWork.Notifications.GetAllByUserIdAsync(userId);
+            var notifications = await _unitOfWork.Notifications.GetAllByUserIdAsync(userId, cancellationToken);
             if (!notifications.Any())
             {
                 return PostResult.Success;
             }
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Notifications.DeleteRange, notifications);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Notifications.DeleteRange, notifications, cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Deleting notifications of user with Id: {UserId} was canceled",userId);
+                return PostResult.UpdateFailed;
             }
             catch (DbException ex)
             {
