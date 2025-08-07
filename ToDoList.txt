@@ -26,7 +26,7 @@ Fix mappers with the constants
         // Change PostsConstants
         // Viewmodels might need some methods
         // Use cache service
-
+        ADD CONFLICT()
         IENUMERABLE / ICOLLECTION MAKE POST USER SERVICES...
 
         // SEARCH BAR

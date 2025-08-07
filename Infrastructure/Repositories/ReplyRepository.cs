@@ -45,9 +45,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<string?> GetPostIdById(string id)
+        public async Task<string?> GetPostIdByIdAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.Post.Id).FirstOrDefaultAsync();
+            return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.Post.Id).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId)
         {
@@ -98,9 +98,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.ReplyDataModels.Remove(reply);
         }
-        public async Task<bool> ExistByIdAsync(string id)
+        public async Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.AnyAsync(x => x.Id == id);
+            return await _context.ReplyDataModels.AnyAsync(x => x.Id == id, cancellationToken);
         }
         public void DeleteRange(IReadOnlyCollection<ReplyDataModel> replies)
         {

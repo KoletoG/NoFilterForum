@@ -52,6 +52,13 @@ namespace Infrastructure.Repositories
             await CommitAsync();
             await CommitTransactionAsync();
         }
+        public async Task RunPOSTOperationAsync<T>(Func<T,CancellationToken, Task> func, T obj, CancellationToken cancellationToken) where T : class
+        {
+            await BeginTransactionAsync();
+            await func.Invoke(obj, cancellationToken);
+            await CommitAsync();
+            await CommitTransactionAsync();
+        }
         // If not used outside, make transaction methods private
         public async Task RunPOSTOperationAsync<T>(Action<T> func, T obj) where T : class
         {
@@ -64,6 +71,13 @@ namespace Infrastructure.Repositories
         {
             await BeginTransactionAsync();
             func.Invoke(obj);
+            await CommitAsync(token);
+            await CommitTransactionAsync(token);
+        }
+        public async Task RunPOSTOperationAsync<T>(Action<T, CancellationToken> func, T obj, CancellationToken token) where T : class
+        {
+            await BeginTransactionAsync();
+            func.Invoke(obj,token);
             await CommitAsync(token);
             await CommitTransactionAsync(token);
         }

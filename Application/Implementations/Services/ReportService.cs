@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
 using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Factories;
@@ -27,10 +28,10 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _cacheService = cacheService;
         }
-        public async Task<IReadOnlyCollection<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<IReadOnlyCollection<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? new List<ReportDataModel>();
-        public async Task<IReadOnlyCollection<ReportItemDto>> GetAllDtosAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync) ?? new List<ReportItemDto>();
+        public async Task<IReadOnlyCollection<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<IReadOnlyCollection<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? [];
+        public async Task<IReadOnlyCollection<ReportItemDto>> GetAllDtosAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync,cancellationToken) ?? [];
         public async Task<bool> AnyReportsAsync() => await _unitOfWork.Reports.ExistsReportsAsync();
-        public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest)
+        public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest, CancellationToken cancellationToken)
         {
             var report = await _unitOfWork.Reports.GetByIdAsync(deleteReportRequest.ReportId);
             if (report is null)
@@ -39,8 +40,20 @@ namespace NoFilterForum.Infrastructure.Services
             }
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.Delete, report);
+                await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.Delete, report,cancellationToken);
                 return PostResult.Success;
+            }
+            catch(DBConcurrencyException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "A problem with database has occured when deleting report with Id: {ReportId}",deleteReportRequest.ReportId);
+                return PostResult.UpdateFailed;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Operation was canceled");
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -49,7 +62,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest)
+        public async Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest, CancellationToken cancellationToken)
         {
             var userSentTo = await _unitOfWork.Users.GetByIdAsync(createReportRequest.UserToId);
             if(userSentTo is null)
@@ -62,8 +75,8 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var exists = createReportRequest.IsPost 
-                ? await _unitOfWork.Posts.ExistByIdAsync(createReportRequest.IdOfPostOrReply)
-                : await _unitOfWork.Replies.ExistByIdAsync(createReportRequest.IdOfPostOrReply);
+                ? await _unitOfWork.Posts.ExistByIdAsync(createReportRequest.IdOfPostOrReply, cancellationToken)
+                : await _unitOfWork.Replies.ExistByIdAsync(createReportRequest.IdOfPostOrReply, cancellationToken);
             if (!exists)
             {
                 return PostResult.NotFound;
@@ -71,8 +84,20 @@ namespace NoFilterForum.Infrastructure.Services
             var report = _reportFactory.CreateReport(createReportRequest.Content, userSentFrom, userSentTo, createReportRequest.IdOfPostOrReply,createReportRequest.IsPost);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.CreateAsync,report);
+                await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.CreateAsync, report, cancellationToken);
                 return PostResult.Success;
+            }
+            catch (DBConcurrencyException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "A problem with database has occured when creating a report");
+                return PostResult.UpdateFailed;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Operation was canceled");
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex) 
             {

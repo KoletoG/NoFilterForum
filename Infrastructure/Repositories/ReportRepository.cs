@@ -19,11 +19,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReportDataModels.FindAsync(id);
         }
-        public async Task<IReadOnlyCollection<ReportItemDto>> GetReportDtosAsync()
+        public async Task<IReadOnlyCollection<ReportItemDto>> GetReportDtosAsync(CancellationToken cancellationToken)
         {
             return await _context.ReportDataModels.AsNoTracking()
-                .Select(x => new ReportItemDto(x.IdOfPostReply,x.UserTo.UserName,x.UserFrom.UserName,x.Content,x.Id))
-                .ToListAsync();
+                .Select(x => new ReportItemDto(x.IdOfPostReply,x.UserTo.UserName!,x.UserFrom.UserName!,x.Content,x.Id))
+                .ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReportDataModel>> GetAllAsync()
         {
@@ -32,10 +32,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Include(x => x.UserFrom)
                 .ToListAsync();
         }
-        public async Task<ReportDataModel> CreateAsync(ReportDataModel report)
+        public async Task CreateAsync(ReportDataModel report, CancellationToken cancellationToken)
         {
-            await _context.ReportDataModels.AddAsync(report);
-            return report;
+            await _context.ReportDataModels.AddAsync(report,cancellationToken);
         }
         public void Update(ReportDataModel report)
         {

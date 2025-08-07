@@ -17,7 +17,7 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<string?> GetSectionTitleByPostIdAsync(string postId);
         public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id);
-        public Task<string?> GetPostIdByReplyId(string replyId);
+        public Task<string?> GetPostIdByReplyId(string replyId, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoAsync(string userId);
         public Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest);
         public Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle);

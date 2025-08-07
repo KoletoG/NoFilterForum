@@ -22,6 +22,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public void Delete(PostDataModel post);
         public void DeleteRange(IEnumerable<PostDataModel> posts);
         public Task<DateTime> GetLastPostDateByUsernameAsync(string userId);
-        public Task<bool> ExistByIdAsync(string id);
+        public Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken);
     }
 }

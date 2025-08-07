@@ -9,7 +9,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     {
         public Task<ReplyDataModel?> GetByIdAsync(string id);
         public Task<ReplyDataModel?> GetWithUserByIdAsync(string id);
-        public Task<string?> GetPostIdById(string id);
+        public Task<string?> GetPostIdByIdAsync(string id, CancellationToken cancellationToken);
         public Task<IList<string>> GetIdsByPostIdAsync(string postId);
         public Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest);
         public Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId);
@@ -26,6 +26,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public void Delete(ReplyDataModel reply);
         public Task<int> GetCountByPostIdAsync(string postId);
         public void DeleteRange(IReadOnlyCollection<ReplyDataModel> replies);
-        public Task<bool> ExistByIdAsync(string id);
+        public Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken);
     }
 }
