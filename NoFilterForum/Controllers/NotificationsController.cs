@@ -35,7 +35,7 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -43,7 +43,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var notificationsDtoList = await _notificationService.GetNotificationsDtosByUserIdAsync(userId);
-            var warningsContentDtosList = await _warningService.GetWarningsContentDtosByUserIdAsync(userId);
+            var warningsContentDtosList = await _warningService.GetWarningsContentDtosByUserIdAsync(userId, cancellationToken);
             var notificationsItemsViewModels = notificationsDtoList.Select(NotificationMapper.MapToViewModel).ToList();
             var warningsItemViewModel = warningsContentDtosList.Select(WarningMapper.MapToViewModel).ToList();
             return View(new NotificationViewModel(warningsItemViewModel, notificationsItemsViewModels));

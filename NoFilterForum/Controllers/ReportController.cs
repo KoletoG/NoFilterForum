@@ -8,6 +8,7 @@ using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using NoFilterForum.Core.Interfaces.Services;
 using Web.Mappers;
+using Web.Static_variables;
 using Web.ViewModels.Admin;
 using Web.ViewModels.Report;
 
@@ -74,7 +75,7 @@ namespace Web.Controllers
                 var postOrReplyId = createReportRequest.IsPost
                     ? createReportViewModel.IdOfPostReply
                     : await _postService.GetPostIdByReplyId(createReportRequest.IdOfPostOrReply, cancellationToken);
-                return RedirectToAction(nameof(Index), "Reply", new { postId = postOrReplyId });
+                return RedirectToAction(nameof(Index), ControllerNames.ReplyControllerName, new { postId = postOrReplyId });
             }
             return result switch
             {

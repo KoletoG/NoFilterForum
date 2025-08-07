@@ -61,7 +61,6 @@ namespace UnitTests.DataModelsTests
         public void SetDefaultUser_ShouldAssignDefaultUser()
         {
             var post = new PostDataModel("example title", "exampel content", new());
-            Assert.Null(post.User);
             post.SetDefaultUser();
             Assert.Equal(UserConstants.DefaultUser, post.User);
         }

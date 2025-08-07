@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Web.Mappers;
 using Web.ViewModels.Warning;
 using System.Runtime.InteropServices;
+using Web.Static_variables;
 
 namespace Web.Controllers
 {
@@ -42,7 +43,7 @@ namespace Web.Controllers
             var result = await _warningService.AddWarningAsync(createWarningRequest, cancellationToken);
             return result switch
             {
-                PostResult.Success => RedirectToAction(nameof(ProfileController.Index), "Profile", new { userId = createWarningRequest.UserId }),
+                PostResult.Success => RedirectToAction(nameof(ProfileController.Index), ControllerNames.ProfileControllerName, new { userId = createWarningRequest.UserId }),
                 PostResult.UpdateFailed => Problem(),
                 PostResult.NotFound => NotFound($"User with Id: {createWarningViewModel.UserId} was not found"),
                 _ => Problem()
@@ -62,7 +63,7 @@ namespace Web.Controllers
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),
-                PostResult.Success => RedirectToAction(nameof(NotificationsController.Index), "Notifications"),
+                PostResult.Success => RedirectToAction(nameof(NotificationsController.Index), ControllerNames.NotificationsControllerName),
                 _ => Problem()
             };
         }
