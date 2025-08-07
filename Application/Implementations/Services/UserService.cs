@@ -103,7 +103,7 @@ namespace NoFilterForum.Infrastructure.Services
                 var normalizedUsername = _userManager.NormalizeName(changeUsernameRequest.Username);
                 if (await _unitOfWork.Users.ExistNormalizedUsername(normalizedUsername))
                 {
-                    return PostResult.Forbid; // Change this
+                    return PostResult.Conflict;
                 }
                 user.ChangeUsername(changeUsernameRequest.Username);
                 user.ChangeNormalizedUsername(normalizedUsername);
@@ -137,7 +137,7 @@ namespace NoFilterForum.Infrastructure.Services
                 var normalizedEmail = _userManager.NormalizeEmail(changeEmailRequest.Email);
                 if(await _unitOfWork.Users.EmailExistsAsync(normalizedEmail))
                 {
-                    return PostResult.Forbid; // Change this
+                    return PostResult.Conflict;
                 }
                 user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
                 user.ChangeNormalizedEmail(normalizedEmail);

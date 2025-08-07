@@ -59,7 +59,7 @@ namespace Web.Controllers
             }
             if (currentUserId.Equals(createReportViewModel.UserIdTo))
             {
-                ModelState.AddModelError("sameUser", "Reports cannot be made to yourself");
+                return ValidationProblem("Reports cannot be made to yourself");
             }
             if (!ModelState.IsValid)
             {

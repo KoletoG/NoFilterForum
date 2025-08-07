@@ -48,9 +48,10 @@ namespace Web.Controllers
             var result = await _userService.ChangeEmailByIdAsync(changeEmailRequest);
             return result switch
             {
-                PostResult.Success => RedirectToAction(nameof(Index), new {userId}),
+                PostResult.Success => RedirectToAction(nameof(Index), new { userId }),
                 PostResult.NotFound => NotFound($"User with Id: {userId} was not found."),
                 PostResult.UpdateFailed => Problem(),
+                PostResult.Conflict => Conflict($"The provided email: {changeEmailViewModel.Email} has already been registered"),
                 _ => Problem()
             };
         }
@@ -80,6 +81,7 @@ namespace Web.Controllers
                 PostResult.Success => RedirectToAction(nameof(Index), new { userId }),
                 PostResult.NotFound => NotFound($"User with Id: {userId} was not found"),
                 PostResult.UpdateFailed => Problem(),
+                PostResult.Conflict => Conflict($"The provided username: {changeUsernameViewModel.Username} has already been used"),
                 _ => Problem()
             };
         }

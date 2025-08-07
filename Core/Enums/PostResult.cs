@@ -11,6 +11,8 @@ namespace Core.Enums
         Success,
         NotFound,
         UpdateFailed,
-        Forbid
+        Forbid,
+        ValidationProblem,
+        Conflict
     }
 }
