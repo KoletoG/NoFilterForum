@@ -50,7 +50,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<bool> UsernameExistsAsync(string username) => await _context.Users.AnyAsync(x=>x.UserName == username);
         public async Task<bool> EmailExistsAsync(string email) => await _context.Users.AnyAsync(x => x.Email == email);
         public async Task<bool> ExistsByNotConfirmedAsync() => await _context.Users.AnyAsync(x => !x.IsConfirmed);
-        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync()=> await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto(x.Email,x.UserName,x.Reason,x.Id)).ToListAsync();
+        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync(CancellationToken cancellationToken)=> await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto(x.Email,x.UserName,x.Reason,x.Id)).ToListAsync(cancellationToken);
         public void Delete(UserDataModel user) => _context.Users.Remove(user);
         public async Task<bool> ExistsByUsernameAsync(string username)=> await _context.Users.AnyAsync(x=>x.UserName == username);
     }

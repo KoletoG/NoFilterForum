@@ -11,7 +11,7 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface IPostService
     {
-        public Task<PostResult> PinPostAsync(string postId);
+        public Task<PostResult> PinPostAsync(string postId, CancellationToken cancellationToken);
         public Task<bool> HasTimeoutAsync(string userId);
         public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);

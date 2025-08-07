@@ -19,7 +19,7 @@ namespace Application.Interfaces.Services
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
         public Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync();
-        public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync();
+        public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken);
         public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest);
         public Task<PostResult> ConfirmUserAsync(string userId);
         public Task<PostResult> BanUserByIdAsync(string userId);

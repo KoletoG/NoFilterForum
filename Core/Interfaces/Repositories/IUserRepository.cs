@@ -28,6 +28,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<bool> UsernameExistsAsync(string username);
         public Task<bool> EmailExistsAsync(string email);
         public Task<bool> ExistsByUsernameAsync(string username);
-        public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync();
+        public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync(CancellationToken cancellationToken);
     }
 }

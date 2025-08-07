@@ -29,13 +29,13 @@ namespace Web.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PinPost(PinPostViewModel pinPostViewModel)
+        public async Task<IActionResult> PinPost(PinPostViewModel pinPostViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid) 
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            var result = await _postService.PinPostAsync(pinPostViewModel.PostId);
+            var result = await _postService.PinPostAsync(pinPostViewModel.PostId, cancellationToken);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
@@ -47,9 +47,9 @@ namespace Web.Controllers
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("Reasons")]
-        public async Task<IActionResult> Reasons()
+        public async Task<IActionResult> Reasons(CancellationToken cancellationToken)
         {
-            var users = await _userService.GetAllUnconfirmedUsersAsync();
+            var users = await _userService.GetAllUnconfirmedUsersAsync(cancellationToken);
             var usersVM = users.Select(AdminMapper.MapToViewModel);
             var reasonsViewModel = AdminMapper.MapToViewModel(usersVM);
             return View(reasonsViewModel);

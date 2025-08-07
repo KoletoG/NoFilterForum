@@ -108,7 +108,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> PinPostAsync(string postId)
+        public async Task<PostResult> PinPostAsync(string postId, CancellationToken cancellationToken)
         {
             var post = await _unitOfWork.Posts.GetByIdAsync(postId);
             if (post is null)
@@ -118,8 +118,14 @@ namespace NoFilterForum.Infrastructure.Services
             post.TogglePin();
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<PostDataModel>(_unitOfWork.Posts.Update, post);
+                await _unitOfWork.RunPOSTOperationAsync<PostDataModel>(_unitOfWork.Posts.Update, post, cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Pinning post with Id: {PostId} was canceled", postId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

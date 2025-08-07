@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 using Application.Interfaces.Services;
@@ -157,7 +158,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         public async Task<bool> AnyNotConfirmedUsersAsync() => await _unitOfWork.Users.ExistsByNotConfirmedAsync();
-        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync() => await _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync();
+        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UsersReasonsDto>>("listUnconfirmedUserDtos", _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync, cancellationToken) ?? [];
         public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
         public async Task<PostResult> ConfirmUserAsync(string userId)
         {
