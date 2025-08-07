@@ -8,10 +8,10 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface ISectionService
     {
-        public Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync();
+        public Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync(CancellationToken cancellationToken);
         public Task<bool> ExistsSectionByTitleAsync(string sectionTitle);
         public Task<int> GetPostsCountByIdAsync(string sectionId);
-        public Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest);
-        public Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest);
+        public Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest, CancellationToken cancellationToken);
+        public Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest, CancellationToken cancellationToken);
     }
 }

@@ -56,6 +56,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<bool> IsAdminAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user is null)
+            {
+                return false;
+            }
             return await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
         }
         public async Task ApplyRoleAsync(UserDataModel user)

@@ -26,9 +26,9 @@ namespace Application.Implementations.Services
         private readonly IUserService _userService = userService;
         private readonly ILogger<SectionService> _logger = logger;
         private readonly ISectionFactory _sectionFactory = sectionFactory;
-        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync()
+        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllSectionItemDtosAsync(CancellationToken cancellationToken)
         {
-            var sections = await _cacheService.TryGetValue("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync);
+            var sections = await _cacheService.TryGetValue("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync, cancellationToken);
             return sections ?? [];
         }
         public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
@@ -40,7 +40,7 @@ namespace Application.Implementations.Services
             return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle);
         }
         public async Task<int> GetPostsCountByIdAsync(string sectionId) => await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
-        public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest)
+        public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest, CancellationToken cancellationToken)
         {
             if (!await _userService.IsAdminAsync(createSectionRequest.UserId))
             {
@@ -49,8 +49,14 @@ namespace Application.Implementations.Services
             var section = _sectionFactory.Create(createSectionRequest.Title, createSectionRequest.Description);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Sections.CreateAsync, section);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Sections.CreateAsync, section, cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Creation of section with title: {SectionTitle} was cancelled", createSectionRequest.Title);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -81,20 +87,20 @@ namespace Application.Implementations.Services
                 users.Add(user);
             }
         }
-        public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest)
+        public async Task<PostResult> DeleteSectionAsync(DeleteSectionRequest deleteSectionRequest, CancellationToken cancellationToken)
         {
             if(!await _userService.IsAdminAsync(deleteSectionRequest.UserId))
             {
                 return PostResult.Forbid;
             }
-            var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(deleteSectionRequest.SectionId);
+            var section = await _unitOfWork.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(deleteSectionRequest.SectionId, cancellationToken);
             if (section is null)
             {
                 return PostResult.NotFound;
             }
             var posts = section.Posts;
             (var usersSet,var replies) = ProcessPosts(posts);
-            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdsAsync(replies.Select(x=>x.Id));
+            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdsAsync(replies.Select(x=>x.Id), cancellationToken);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -107,9 +113,15 @@ namespace Application.Implementations.Services
                 {
                     await _userService.ApplyRoleAsync(user); // do something here
                 }
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Deleting Section with Id: {SectionId} was cancelled", deleteSectionRequest.SectionId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

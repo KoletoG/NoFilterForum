@@ -23,9 +23,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.NotificationDataModels.Where(x => x.UserFrom.Id == userId).ToListAsync();
         }
-        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdsAsync(IEnumerable<string> repliesIds)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdsAsync(IEnumerable<string> repliesIds, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => repliesIds.Contains(x.Reply.Id)).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => repliesIds.Contains(x.Reply.Id)).ToListAsync(cancellationToken);
         }
         public async Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications)
         {

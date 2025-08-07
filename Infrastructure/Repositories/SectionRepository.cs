@@ -21,19 +21,19 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.Where(x => x.Id == id).Select(x => x.Posts).CountAsync();
         }
-        public async Task<SectionDataModel?> GetByIdWithPostsAndRepliesAndUsersAsync(string id)
+        public async Task<SectionDataModel?> GetByIdWithPostsAndRepliesAndUsersAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x => x.User).Include(x => x.Posts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x => x.User).Include(x => x.Posts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
         public async Task<SectionDataModel?> GetWithPostsByTitleAsync(string title)
         {
             return await _context.SectionDataModels.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Title == title);
         }
-        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync()
+        public async Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync(CancellationToken cancellationToken)
         {
             return await _context.SectionDataModels.AsNoTracking()
                     .Select(x => new SectionItemDto(x.Title, x.Description, x.Id, x.Posts.Count))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest)
         {
@@ -51,10 +51,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.AnyAsync(x => x.Title == sectionTitle);
         }
-        public async Task<SectionDataModel> CreateAsync(SectionDataModel section)
+        public async Task CreateAsync(SectionDataModel section, CancellationToken cancellationToken)
         {
-            await _context.SectionDataModels.AddAsync(section);
-            return section;
+            await _context.SectionDataModels.AddAsync(section,cancellationToken);
         }
         public void Update(SectionDataModel section)
         {

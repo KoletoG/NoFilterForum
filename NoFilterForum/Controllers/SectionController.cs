@@ -18,7 +18,7 @@ namespace Web.Controllers
         [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any)]
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             // Add errors check 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -27,7 +27,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
 
-            var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync();
+            var sectionItemDtos = await _sectionService.GetAllSectionItemDtosAsync(cancellationToken);
             bool isAdmin = await _userService.IsAdminAsync(userId);
             var sectionItemViewModelList = sectionItemDtos.Select(SectionMapper.MapToViewModel);
             var indexSectionViewModel = SectionMapper.MapToViewModel(sectionItemViewModelList, isAdmin);
@@ -36,7 +36,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateSectionViewModel createSectionViewModel)
+        public async Task<IActionResult> Create(CreateSectionViewModel createSectionViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -48,7 +48,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var createSectionRequest = SectionMapper.MapToRequest(createSectionViewModel, userId);
-            var result = await _sectionService.CreateSectionAsync(createSectionRequest);
+            var result = await _sectionService.CreateSectionAsync(createSectionRequest, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index)),
@@ -60,7 +60,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(DeleteSectionViewModel deleteSectionViewModel)
+        public async Task<IActionResult> Delete(DeleteSectionViewModel deleteSectionViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var deleteSectionRequest = SectionMapper.MapToRequest(deleteSectionViewModel,userId);
-            var result = await _sectionService.DeleteSectionAsync(deleteSectionRequest);
+            var result = await _sectionService.DeleteSectionAsync(deleteSectionRequest, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index)),
