@@ -43,7 +43,7 @@ namespace NoFilterForum.Infrastructure.Services
             _logger = logger;
         }
         // Add paging
-        public async Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync() => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync) ?? new List<UserForAdminPanelDto>();
+        public async Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
         public async Task<bool> IsAdminOrVIPAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -157,10 +157,10 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> AnyNotConfirmedUsersAsync() => await _unitOfWork.Users.ExistsByNotConfirmedAsync();
+        public async Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsByNotConfirmedAsync(cancellationToken);
         public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UsersReasonsDto>>("listUnconfirmedUserDtos", _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync, cancellationToken) ?? [];
         public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
-        public async Task<PostResult> ConfirmUserAsync(string userId)
+        public async Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user is null)
@@ -175,25 +175,31 @@ namespace NoFilterForum.Infrastructure.Services
             user.Confirm();
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user);
+                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user, cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Confirming user with Id: {UserId} was cancelled", userId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _logger.LogError(ex, "User with {UserId} was not confirmed.", userId);
+                _logger.LogError(ex, "User with {UserId} was not confirmed", userId);
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> BanUserByIdAsync(string userId)
+        public async Task<PostResult> BanUserByIdAsync(string userId, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user is null)
             {
                 return PostResult.NotFound;
             }
-            var posts = await _unitOfWork.Posts.GetAllByUserIdAsync(userId);
-            var replies = await _unitOfWork.Replies.GetAllByUserIdAsync(userId);
+            var posts = await _unitOfWork.Posts.GetAllByUserIdAsync(userId, cancellationToken);
+            var replies = await _unitOfWork.Replies.GetAllByUserIdAsync(userId, cancellationToken);
             foreach (var post in posts)
             {
                 post.SetDefaultUser();
@@ -207,9 +213,16 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.RunPOSTOperationAsync(
                     _unitOfWork.Posts.UpdateRange, posts,
                     _unitOfWork.Replies.UpdateRange, replies,
-                    _unitOfWork.Users.Delete, user
+                    _unitOfWork.Users.Delete, user,
+                    cancellationToken
                     );
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Banning user with Id: {UserId} was cancelled", userId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

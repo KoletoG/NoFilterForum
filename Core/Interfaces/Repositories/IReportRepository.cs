@@ -12,6 +12,6 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public void Update(ReportDataModel report);
         public void Delete(ReportDataModel report);
         public Task<IReadOnlyCollection<ReportItemDto>> GetReportDtosAsync(CancellationToken cancellationToken);
-        public Task<bool> ExistsReportsAsync();
+        public Task<bool> ExistsReportsAsync(CancellationToken cancellationToken);
     }
 }

@@ -9,7 +9,7 @@ namespace NoFilterForum.Core.Interfaces.Services
     public interface IReportService
     {
         public Task<IReadOnlyCollection<ReportDataModel>> GetAllReportsAsync();
-        public Task<bool> AnyReportsAsync();
+        public Task<bool> AnyReportsAsync(CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<ReportItemDto>> GetAllDtosAsync(CancellationToken cancellationToken);
         public Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest, CancellationToken cancellationToken); 
         public Task<PostResult> CreateReportAsync(CreateReportRequest createReportRequest, CancellationToken cancellationToken);

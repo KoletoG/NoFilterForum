@@ -14,14 +14,14 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id);
         public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id);
         public Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id, CancellationToken cancellationToken);
-        public Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync();
+        public Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync(CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<UserDataModel>> GetAllAsync();
         public Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames);
         public void UpdateRange(IEnumerable<UserDataModel> users);
         public Task<bool> ExistNormalizedUsername(string normalizedUsername);
         public Task<bool> ExistNormalizedEmailAsync(string normalizedEmail);
         public Task CreateAsync(UserDataModel user);
-        public Task<bool> ExistsByNotConfirmedAsync();
+        public Task<bool> ExistsByNotConfirmedAsync(CancellationToken cancellationToken);
         public void Update(UserDataModel user);
         public void Delete(UserDataModel user);
         public Task<IReadOnlyCollection<UserDataModel>> GetAllNoDefaultAsync();

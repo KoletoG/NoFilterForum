@@ -47,9 +47,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated))
                 .ToListAsync();
         }
-        public async Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId)
+        public async Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync() ?? new List<PostDataModel>();
+            return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<PostDataModel>> GetAllAsync()
         {

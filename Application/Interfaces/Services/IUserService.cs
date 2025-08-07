@@ -10,7 +10,7 @@ namespace Application.Interfaces.Services
     public interface IUserService
     {
         public bool IsDefaultUserId(string username);
-        public Task<bool> AnyNotConfirmedUsersAsync();
+        public Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken);
         public Task ApplyRoleAsync(UserDataModel user);
         public Task<bool> IsAdminOrVIPAsync(string userId);
         public Task<bool> IsAdminAsync(string userId);
@@ -18,11 +18,11 @@ namespace Application.Interfaces.Services
         public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest);
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
-        public Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync();
+        public Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken);
         public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest);
-        public Task<PostResult> ConfirmUserAsync(string userId);
-        public Task<PostResult> BanUserByIdAsync(string userId);
+        public Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken);
+        public Task<PostResult> BanUserByIdAsync(string userId, CancellationToken cancellationToken);
         public Task<UserDataModel?> GetUserByIdAsync(string id);
         public Task<bool> UsernameExistsAsync(string username);
         public Task<bool> EmailExistsAsync(string email);

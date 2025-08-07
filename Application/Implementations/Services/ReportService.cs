@@ -30,7 +30,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<IReadOnlyCollection<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<IReadOnlyCollection<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? [];
         public async Task<IReadOnlyCollection<ReportItemDto>> GetAllDtosAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync,cancellationToken) ?? [];
-        public async Task<bool> AnyReportsAsync() => await _unitOfWork.Reports.ExistsReportsAsync();
+        public async Task<bool> AnyReportsAsync(CancellationToken cancellationToken) => await _unitOfWork.Reports.ExistsReportsAsync(cancellationToken);
         public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest, CancellationToken cancellationToken)
         {
             var report = await _unitOfWork.Reports.GetByIdAsync(deleteReportRequest.ReportId);

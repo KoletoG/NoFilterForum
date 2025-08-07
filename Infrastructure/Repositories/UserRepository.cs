@@ -28,12 +28,12 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id)=> await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto(x.Id,x.Warnings.Count,x.UserName,x.Email,x.Bio,x.Role,x.PostsCount,x.ImageUrl,x.DateCreated)).FirstOrDefaultAsync();
         public async Task<IReadOnlyCollection<UserDataModel>> GetAllAsync() => await _context.Users.ToListAsync();
         public async Task<IReadOnlyCollection<UserDataModel>> GetAllNoDefaultAsync()=> await _context.Users.AsNoTracking().Where(x => x.UserName != UserConstants.DefaultUser.UserName).Include(u => u.Warnings).ToListAsync();
-        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync()
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync(CancellationToken cancellationToken)
         {
             return await _context.Users.AsNoTracking()
                 .Where(x => x.UserName != UserConstants.DefaultUser.UserName)
                 .Select(x => new UserForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role))
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
         public async Task<bool> ExistNormalizedUsername(string normalizedUsername)
         {
@@ -49,7 +49,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<UserRoles> GetUserRoleIdAsync(string userId)=> await _context.Users.Where(x=>x.Id==userId).Select(x=>x.Role).FirstOrDefaultAsync();
         public async Task<bool> UsernameExistsAsync(string username) => await _context.Users.AnyAsync(x=>x.UserName == username);
         public async Task<bool> EmailExistsAsync(string email) => await _context.Users.AnyAsync(x => x.Email == email);
-        public async Task<bool> ExistsByNotConfirmedAsync() => await _context.Users.AnyAsync(x => !x.IsConfirmed);
+        public async Task<bool> ExistsByNotConfirmedAsync(CancellationToken cancellationToken) => await _context.Users.AnyAsync(x => !x.IsConfirmed, cancellationToken);
         public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUserDtosAsync(CancellationToken cancellationToken)=> await _context.Users.AsNoTracking().Where(x => !x.IsConfirmed).Select(x=>new UsersReasonsDto(x.Email,x.UserName,x.Reason,x.Id)).ToListAsync(cancellationToken);
         public void Delete(UserDataModel user) => _context.Users.Remove(user);
         public async Task<bool> ExistsByUsernameAsync(string username)=> await _context.Users.AnyAsync(x=>x.UserName == username);

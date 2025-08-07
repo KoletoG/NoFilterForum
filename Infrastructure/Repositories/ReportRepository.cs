@@ -44,9 +44,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.ReportDataModels.Remove(report);
         }
-        public async Task<bool> ExistsReportsAsync()
+        public async Task<bool> ExistsReportsAsync(CancellationToken cancellationToken)
         {
-            return await _context.ReportDataModels.AnyAsync();
+            return await _context.ReportDataModels.AnyAsync(cancellationToken);
         }
     }
 }

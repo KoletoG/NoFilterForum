@@ -57,13 +57,13 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmUser(ConfirmUserViewModel confirmUserViewModel)
+        public async Task<IActionResult> ConfirmUser(ConfirmUserViewModel confirmUserViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            var result = await _userService.ConfirmUserAsync(confirmUserViewModel.UserId);
+            var result = await _userService.ConfirmUserAsync(confirmUserViewModel.UserId, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Reasons)),
@@ -75,25 +75,25 @@ namespace Web.Controllers
         [Authorize(Roles ="Admin")]
         [HttpGet]
         [Route("Adminpanel")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync();
+            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync(cancellationToken);
             var userViewModel = usersDto.Select(AdminMapper.MapToViewModel);
-            bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync();
-            bool hasReports = await _reportService.AnyReportsAsync();
+            bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync(cancellationToken);
+            bool hasReports = await _reportService.AnyReportsAsync(cancellationToken);
             var adminPanelVM = AdminMapper.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
             return View(adminPanelVM);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> BanUser(BanUserViewModel banUserViewModel)
+        public async Task<IActionResult> BanUser(BanUserViewModel banUserViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
-            var result = await _userService.BanUserByIdAsync(banUserViewModel.Id);
+            var result = await _userService.BanUserByIdAsync(banUserViewModel.Id, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index)),
