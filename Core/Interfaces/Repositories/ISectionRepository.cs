@@ -16,8 +16,8 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<int> GetPostsCountByIdAsync(string id);
         public Task<bool> ExistsSectionByTitleAsync(string sectionTitle);
         public Task<int> GetPostsCountByTitleAsync(string title);
-        public Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest);
-        public Task<bool> ExistsByTitleAsync(string title);
+        public Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest, CancellationToken cancellationToken);
+        public Task<bool> ExistsByTitleAsync(string title, CancellationToken cancellationToken);
         public Task<SectionDataModel?> GetByIdWithPostsAndRepliesAndUsersAsync(string id, CancellationToken cancellationToken);
     }
 }

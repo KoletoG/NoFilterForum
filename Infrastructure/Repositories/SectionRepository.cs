@@ -35,7 +35,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .Select(x => new SectionItemDto(x.Title, x.Description, x.Id, x.Posts.Count))
                     .ToListAsync(cancellationToken);
         }
-        public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest)
+        public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemsWithPagingByTitleAsync(GetIndexPostRequest getIndexPostRequest, CancellationToken cancellationToken)
         {
             return await _context.SectionDataModels.AsNoTracking()
                     .Where(x => x.Title == getIndexPostRequest.TitleOfSection)
@@ -45,7 +45,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .Skip((getIndexPostRequest.Page - 1) * getIndexPostRequest.PostsCount)
                     .Take(getIndexPostRequest.PostsCount)
                     .Select(x => new PostItemDto(x.Id, x.User.UserName, x.User.Role, x.Title, x.IsPinned, x.DateCreated, x.User.ImageUrl, x.Likes))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
         }
         public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
         {
@@ -67,9 +67,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.Where(x => x.Title == title).SelectMany(x => x.Posts).CountAsync();
         }
-        public async Task<bool> ExistsByTitleAsync(string title)
+        public async Task<bool> ExistsByTitleAsync(string title, CancellationToken cancellationToken)
         {
-            return await _context.SectionDataModels.AnyAsync(x => x.Title == title);
+            return await _context.SectionDataModels.AnyAsync(x => x.Title == title,cancellationToken);
         }
     }
 }

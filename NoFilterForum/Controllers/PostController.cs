@@ -109,16 +109,16 @@ namespace Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string titleOfSection, int page = 1)
+        public async Task<IActionResult> Index(string titleOfSection, CancellationToken cancellationToken, int page = 1)
         {
             titleOfSection = HttpUtility.UrlDecode(titleOfSection);
-            if (!await _sectionService.ExistsSectionByTitleAsync(titleOfSection))
+            if (!await _sectionService.ExistsSectionByTitleAsync(titleOfSection, cancellationToken))
             {
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
             var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
             var getIndexPostRequest = PostMapper.MapToRequest(page, titleOfSection);
-            var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest);
+            var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest, cancellationToken);
             var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel);
             var postIndexViewModel = PostMapper.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection);
             return View(postIndexViewModel);

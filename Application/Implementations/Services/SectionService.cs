@@ -31,13 +31,13 @@ namespace Application.Implementations.Services
             var sections = await _cacheService.TryGetValue("listSectionItemDto", _unitOfWork.Sections.GetAllItemsDtoAsync, cancellationToken);
             return sections ?? [];
         }
-        public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
+        public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(sectionTitle))
             {
                 return false;
             }
-            return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle);
+            return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle, cancellationToken);
         }
         public async Task<int> GetPostsCountByIdAsync(string sectionId) => await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
         public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest, CancellationToken cancellationToken)

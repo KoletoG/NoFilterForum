@@ -54,14 +54,14 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            unitOfWorkMock.Setup(x => x.Sections.ExistsByTitleAsync(It.IsAny<string>())).ReturnsAsync(true);
+            unitOfWorkMock.Setup(x => x.Sections.ExistsByTitleAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
                 loggerMock.Object,
                 _cacheService.Object
                 );
-            var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle);
+            var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle, CancellationToken.None);
             Assert.True(result);
         }
         [Fact]
@@ -73,14 +73,14 @@ namespace UnitTests.ServiceTests
             var userServiceMock = new Mock<IUserService>();
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
-            unitOfWorkMock.Setup(x => x.Sections.ExistsByTitleAsync(It.IsAny<string>())).ReturnsAsync(false);
+            unitOfWorkMock.Setup(x => x.Sections.ExistsByTitleAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
             var sectionService = new SectionService(unitOfWorkMock.Object,
                 userServiceMock.Object,
                 sectionFactoryMock.Object,
                 loggerMock.Object,
                 _cacheService.Object
                 );
-            var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle);
+            var result = await sectionService.ExistsSectionByTitleAsync(sectionTitle, CancellationToken.None);
             Assert.False(result);
         }
 
