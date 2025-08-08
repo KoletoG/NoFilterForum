@@ -49,9 +49,9 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<string?> GetPostIdByReplyId(string replyId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdByIdAsync,replyId, cancellationToken);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId, cancellationToken);
         public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<ProfilePostDto>>($"profilePostDtoById_{userId}",_unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync,userId,cancellationToken) ?? [];
-        public async Task<bool> HasTimeoutAsync(string userId)
+        public async Task<bool> HasTimeoutAsync(string userId, CancellationToken cancellationToken)
         {
-            var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId);
+            var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId, cancellationToken);
             if (dateOfLastPost.AddSeconds(5) >= DateTime.UtcNow)
             {
                 return !await _userService.IsAdminOrVIPAsync(userId);
@@ -134,14 +134,14 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost)
+        public async Task<PostResult> CreatePostAsync(CreatePostRequest createPost, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(createPost.UserId);
             if (user is null)
             {
                 return PostResult.NotFound;
             }
-            var section = await _unitOfWork.Sections.GetWithPostsByTitleAsync(createPost.TitleOfSection);
+            var section = await _unitOfWork.Sections.GetWithPostsByTitleAsync(createPost.TitleOfSection, cancellationToken);
             if (section is null)
             {
                 return PostResult.NotFound;
@@ -153,12 +153,18 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
                 _unitOfWork.Sections.Update(section);
-                await _unitOfWork.Posts.CreateAsync(post);
+                await _unitOfWork.Posts.CreateAsync(post, cancellationToken);
                 await _userService.ApplyRoleAsync(user); // CHANGE MAYBE
                 _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Creating post was cancelled");
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

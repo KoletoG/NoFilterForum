@@ -55,10 +55,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.ToListAsync();
         }
-        public async Task<PostDataModel> CreateAsync(PostDataModel post)
+        public async Task CreateAsync(PostDataModel post, CancellationToken cancellationToken)
         {
-            await _context.PostDataModels.AddAsync(post);
-            return post;
+            await _context.PostDataModels.AddAsync(post, cancellationToken);
         }
         public async Task<int> GetCountByPostIdAsync(string id)
         {
@@ -80,9 +79,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.PostDataModels.RemoveRange(posts);
         }
-        public async Task<DateTime> GetLastPostDateByUsernameAsync(string userId)
+        public async Task<DateTime> GetLastPostDateByUsernameAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.AsNoTracking().Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
+            return await _context.PostDataModels.AsNoTracking().Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken)
         {

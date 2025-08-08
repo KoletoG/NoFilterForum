@@ -14,14 +14,14 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<PostDataModel>> GetAllAsync();
-        public Task<PostDataModel> CreateAsync(PostDataModel post);
+        public Task CreateAsync(PostDataModel post, CancellationToken cancellationToken);
         public Task<int> GetCountByPostIdAsync(string id);
         public void Update(PostDataModel post);
         public void UpdateRange(IEnumerable<PostDataModel> posts);
         public Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string username, CancellationToken cancellationToken);
         public void Delete(PostDataModel post);
         public void DeleteRange(IEnumerable<PostDataModel> posts);
-        public Task<DateTime> GetLastPostDateByUsernameAsync(string userId);
+        public Task<DateTime> GetLastPostDateByUsernameAsync(string userId, CancellationToken cancellationToken);
         public Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken);
     }
 }

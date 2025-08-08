@@ -25,9 +25,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x => x.User).Include(x => x.Posts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
-        public async Task<SectionDataModel?> GetWithPostsByTitleAsync(string title)
+        public async Task<SectionDataModel?> GetWithPostsByTitleAsync(string title, CancellationToken cancellationToken)
         {
-            return await _context.SectionDataModels.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Title == title);
+            return await _context.SectionDataModels.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Title == title, cancellationToken);
         }
         public async Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync(CancellationToken cancellationToken)
         {

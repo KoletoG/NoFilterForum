@@ -8,7 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface ISectionRepository
     {
-        public Task<SectionDataModel?> GetWithPostsByTitleAsync(string title);
+        public Task<SectionDataModel?> GetWithPostsByTitleAsync(string title, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<SectionItemDto>> GetAllItemsDtoAsync(CancellationToken cancellationToken);
         public Task CreateAsync(SectionDataModel section, CancellationToken cancellationToken);
         public void Update(SectionDataModel section);

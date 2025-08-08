@@ -26,7 +26,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreatePostViewModel createVM)
+        public async Task<IActionResult> Create(CreatePostViewModel createVM, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -37,13 +37,13 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            if (await _postService.HasTimeoutAsync(userId))
+            if (await _postService.HasTimeoutAsync(userId, cancellationToken))
             {
                 return RedirectToAction(nameof(Index), new { title = createVM.TitleOfSection, errorTime = true }); // Need to change errorTime
             }
             createVM.TitleOfSection = HttpUtility.UrlDecode(createVM.TitleOfSection);
             var createPostRequest = PostMapper.MapToRequest(createVM, userId);
-            var result = await _postService.CreatePostAsync(createPostRequest);
+            var result = await _postService.CreatePostAsync(createPostRequest, cancellationToken);
             return result switch
             {
                 PostResult.NotFound => NotFound(),

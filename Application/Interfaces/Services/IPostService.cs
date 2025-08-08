@@ -12,7 +12,7 @@ namespace NoFilterForum.Core.Interfaces.Services
     public interface IPostService
     {
         public Task<PostResult> PinPostAsync(string postId, CancellationToken cancellationToken);
-        public Task<bool> HasTimeoutAsync(string userId);
+        public Task<bool> HasTimeoutAsync(string userId, CancellationToken cancellationToken);
         public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);
         public Task<string?> GetSectionTitleByPostIdAsync(string postId);
@@ -22,6 +22,6 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest);
         public Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle);
         public Task<IReadOnlyCollection<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest);
-        public Task<PostResult> CreatePostAsync(CreatePostRequest createPostRequest);
+        public Task<PostResult> CreatePostAsync(CreatePostRequest createPostRequest, CancellationToken cancellationToken);
     }
 }
