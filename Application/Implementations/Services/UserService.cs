@@ -83,7 +83,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
-        public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest)
+        public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
         {
             // CHECK ON THIS TOMORROW
             var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
@@ -91,7 +91,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return new(GetResult.NotFound, default, null);
             }
-            var profileUserDto = await _cacheService.TryGetValue<ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id);
+            var profileUserDto = await _cacheService.TryGetValue<string,ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id, cancellationToken);
             return new(GetResult.Success, getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
         }
         public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id; // Change to static method
@@ -119,6 +119,12 @@ namespace NoFilterForum.Infrastructure.Services
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Updating username for user with Id: {UserId} was cancelled", changeUsernameRequest.UserId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -241,7 +247,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest)
+        public async Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(changeBioRequest.UserId);
             if (user is null)
@@ -257,8 +263,14 @@ namespace NoFilterForum.Infrastructure.Services
             user.ChangeBio(sanitizedFormattedBio);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Changing user's bio with Id: {UserId} was cancelled", changeBioRequest.UserId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -277,7 +289,7 @@ namespace NoFilterForum.Infrastructure.Services
             return string.Concat(NanoidDotNet.Nanoid.Generate(), "_", imageFileName);
         }
         private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
-        public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest)
+        public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken)
         {
             var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);
             if (currentUser is null)
@@ -295,8 +307,8 @@ namespace NoFilterForum.Infrastructure.Services
                     await updateImageRequest.Image.CopyToAsync(stream);
                 } // THINK OF ANOTHER WAY
                 _unitOfWork.Users.Update(currentUser);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 if (currentUserImageUrl != Path.Combine("images", "defaultimage.gif")) // Avoid hardcoding
                 {
                     var pathToDelete = Path.Combine(_webHostEnvironment.WebRootPath, currentUserImageUrl);

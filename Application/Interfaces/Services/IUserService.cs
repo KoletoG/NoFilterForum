@@ -15,9 +15,9 @@ namespace Application.Interfaces.Services
         public Task<bool> IsAdminOrVIPAsync(string userId);
         public Task<bool> IsAdminAsync(string userId);
         public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
-        public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest);
-        public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
-        public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
+        public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken);
+        public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest, CancellationToken cancellationToken);
+        public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken);
         public Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken);
         public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken);

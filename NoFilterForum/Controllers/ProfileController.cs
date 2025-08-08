@@ -89,7 +89,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> ChangeBio(ChangeBioViewModel changeBioViewModel)
+        public async Task<IActionResult> ChangeBio(ChangeBioViewModel changeBioViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var changeUserRequest = ProfileMapper.MapToRequest(changeBioViewModel,currentUserId);
-            var result = await _userService.ChangeBioAsync(changeUserRequest);
+            var result = await _userService.ChangeBioAsync(changeUserRequest, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index), new {userId= currentUserId }),
@@ -113,7 +113,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> UpdateImage(UpdateImageViewModel changeImageViewModel)
+        public async Task<IActionResult> UpdateImage(UpdateImageViewModel changeImageViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -125,7 +125,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var changeImageRequest = ProfileMapper.MapToRequest(changeImageViewModel, userId);
-            var result = await _userService.UpdateImageAsync(changeImageRequest);
+            var result = await _userService.UpdateImageAsync(changeImageRequest, cancellationToken);
             return result switch
             {
                 PostResult.Success => NoContent(),
@@ -141,20 +141,20 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string userId, int page=1)
+        public async Task<IActionResult> Index(string userId,CancellationToken cancellationToken, int page=1)
         {
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest($"Id cannot be null or empty");
             }
-            if (_userService.IsDefaultUserId(userId))
+            if (_userService.IsDefaultUserId(userId)) // Make static helper
             {
                 return Forbid();
             }
 
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, currentUserId);
-            var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest);
+            var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest, cancellationToken);
             if (resultUser.GetResult != GetResult.Success)
             {
                 return resultUser.GetResult switch
@@ -165,8 +165,8 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId);
-            var postDtoList = await _postService.GetListProfilePostDtoAsync(userId);
+            var replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId, cancellationToken);
+            var postDtoList = await _postService.GetListProfilePostDtoAsync(userId,cancellationToken);
 
             var pageTotalPagesDto = GetPageTotalPages(replyDtoList, postDtoList, page);
 

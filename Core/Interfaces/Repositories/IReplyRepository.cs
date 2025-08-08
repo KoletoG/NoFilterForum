@@ -12,7 +12,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<string?> GetPostIdByIdAsync(string id, CancellationToken cancellationToken);
         public Task<IList<string>> GetIdsByPostIdAsync(string postId);
         public Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken);
-        public Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId);
+        public Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<UserDataModel?> GetUserByReplyIdAsync(string replyId);
         public Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId);
         public Task<IReadOnlyCollection<ReplyDataModel>> GetAllByPostIdAsync(string postId);
