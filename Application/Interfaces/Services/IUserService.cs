@@ -20,12 +20,12 @@ namespace Application.Interfaces.Services
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
         public Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken);
-        public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest);
+        public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken);
         public Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken);
         public Task<PostResult> BanUserByIdAsync(string userId, CancellationToken cancellationToken);
         public Task<UserDataModel?> GetUserByIdAsync(string id);
-        public Task<bool> UsernameExistsAsync(string username);
-        public Task<bool> EmailExistsAsync(string email);
-        public Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest);
+        public Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken);
+        public Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken);
+        public Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest, CancellationToken cancellationToken);
     }
 }

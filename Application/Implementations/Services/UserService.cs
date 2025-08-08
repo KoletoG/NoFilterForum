@@ -95,7 +95,7 @@ namespace NoFilterForum.Infrastructure.Services
             return new(GetResult.Success, getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
         }
         public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id; // Change to static method
-        public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest)
+        public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
             try
@@ -106,7 +106,7 @@ namespace NoFilterForum.Infrastructure.Services
                     return PostResult.NotFound;
                 }
                 var normalizedUsername = _userManager.NormalizeName(changeUsernameRequest.Username);
-                if (await _unitOfWork.Users.ExistNormalizedUsername(normalizedUsername))
+                if (await _unitOfWork.Users.ExistNormalizedUsername(normalizedUsername, cancellationToken))
                 {
                     return PostResult.Conflict;
                 }
@@ -127,9 +127,9 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> UsernameExistsAsync(string username) => await _unitOfWork.Users.UsernameExistsAsync(username);
-        public async Task<bool> EmailExistsAsync(string email) => await _unitOfWork.Users.EmailExistsAsync(email);
-        public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest)
+        public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) => await _unitOfWork.Users.UsernameExistsAsync(username, cancellationToken);
+        public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken) => await _unitOfWork.Users.EmailExistsAsync(email, cancellationToken);
+        public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
             try
@@ -140,19 +140,25 @@ namespace NoFilterForum.Infrastructure.Services
                     return PostResult.NotFound;
                 }
                 var normalizedEmail = _userManager.NormalizeEmail(changeEmailRequest.Email);
-                if(await _unitOfWork.Users.EmailExistsAsync(normalizedEmail))
+                if(await _unitOfWork.Users.ExistNormalizedEmailAsync(normalizedEmail, cancellationToken))
                 {
                     return PostResult.Conflict;
                 }
                 user.ChangeEmail(changeEmailRequest.Email); // Needs Change email token
                 user.ChangeNormalizedEmail(normalizedEmail);
                 _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync(); // ADD TOKENS FOR EMAIL CHANGE
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken); // ADD TOKENS FOR EMAIL CHANGE
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Updating email for user with Id: {UserId} was cancelled", changeEmailRequest.UserId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

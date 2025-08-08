@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTOs.InputDTOs.Profile
 {
-    public record GetProfileDtoRequest(string? UserId, string? CurrentUserId);
+    public record GetProfileDtoRequest(string UserId, string CurrentUserId);
 }

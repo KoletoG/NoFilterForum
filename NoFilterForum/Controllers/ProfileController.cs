@@ -30,7 +30,8 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel changeEmailViewModel, CancellationToken cancellationToken)
         {
-            var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email);
+            // EmailExists check happens in service too / CHANGE THAT
+            var emailExists = await _userService.EmailExistsAsync(changeEmailViewModel.Email, cancellationToken);
             if (emailExists)
             {
                 ModelState.AddModelError("emailExists", "Email already exists");
@@ -45,7 +46,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var changeEmailRequest = ProfileMapper.MapToRequest(changeEmailViewModel, userId);
-            var result = await _userService.ChangeEmailByIdAsync(changeEmailRequest);
+            var result = await _userService.ChangeEmailByIdAsync(changeEmailRequest, cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index), new { userId }),
@@ -58,9 +59,9 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> ChangeUsername(ChangeUsernameViewModel changeUsernameViewModel)
+        public async Task<IActionResult> ChangeUsername(ChangeUsernameViewModel changeUsernameViewModel, CancellationToken cancellationToken)
         {
-            var usernameExists = await _userService.UsernameExistsAsync(changeUsernameViewModel.Username);
+            var usernameExists = await _userService.UsernameExistsAsync(changeUsernameViewModel.Username, cancellationToken);
             if (usernameExists)
             {
                 ModelState.AddModelError("usernameExists", "Username already exists");
@@ -75,7 +76,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var changeUsernameRequest = ProfileMapper.MapToRequest(changeUsernameViewModel, userId);
-            var result = await _userService.ChangeUsernameByIdAsync(changeUsernameRequest);
+            var result = await _userService.ChangeUsernameByIdAsync(changeUsernameRequest,cancellationToken);
             return result switch
             {
                 PostResult.Success => RedirectToAction(nameof(Index), new { userId }),
