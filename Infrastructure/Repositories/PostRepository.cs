@@ -36,9 +36,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Include(x => x.User)
                 .FirstOrDefaultAsync();
         }
-        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id)
+        public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.AsNoTracking().Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync();
+            return await _context.PostDataModels.AsNoTracking().Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId)
         {

@@ -24,7 +24,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync();
         }
-        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest)
+        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken)
         {
             return await _context.ReplyDataModels.AsNoTracking()
                 .Where(x => x.Post.Id == getListReplyIndexItemRequest.PostId)
@@ -32,7 +32,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated))
                 .Skip((getListReplyIndexItemRequest.Page-1)*getListReplyIndexItemRequest.PostsCount)
                 .Take(getListReplyIndexItemRequest.PostsCount)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId)
         {

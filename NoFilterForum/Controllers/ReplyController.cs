@@ -40,7 +40,7 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string postId, string? replyId = null, int page = 1)
+        public async Task<IActionResult> Index(string postId,CancellationToken cancellationToken, string? replyId = null, int page = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -48,13 +48,13 @@ namespace Web.Controllers
                 return Unauthorized();
             }
 
-            var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId);
+            var currentUserDto = await _userService.GetCurrentUserReplyIndexDtoByIdAsync(userId, cancellationToken);
             if (currentUserDto is null)
             {
                 return Unauthorized();
             }
 
-            var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId);
+            var post = await _postService.GetPostReplyIndexDtoByIdAsync(postId, cancellationToken);
             if (post is null)
             {
                 return BadRequest();
@@ -63,7 +63,7 @@ namespace Web.Controllers
             var pageTotalPagesDto = await GetPageInfoAsync(postId, replyId, page);
 
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
-            var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
+            var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest, cancellationToken);
 
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);

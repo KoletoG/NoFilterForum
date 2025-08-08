@@ -41,7 +41,7 @@ namespace NoFilterForum.Infrastructure.Services
             _userService = userService;
         }
         // GET methods
-        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, IReadOnlyCollection<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest) ?? new List<ReplyIndexItemDto>();
+        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, IReadOnlyCollection<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest, cancellationToken) ?? [];
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
             int totalPages = await GetTotalPagesByPostIdAsync(postId);

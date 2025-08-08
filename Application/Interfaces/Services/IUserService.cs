@@ -14,7 +14,7 @@ namespace Application.Interfaces.Services
         public Task ApplyRoleAsync(UserDataModel user);
         public Task<bool> IsAdminOrVIPAsync(string userId);
         public Task<bool> IsAdminAsync(string userId);
-        public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id);
+        public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
         public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest);
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest);
