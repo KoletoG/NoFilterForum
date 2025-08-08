@@ -13,8 +13,8 @@ namespace NoFilterForum.Core.Interfaces.Services
     {
         public Task<PostResult> PinPostAsync(string postId, CancellationToken cancellationToken);
         public Task<bool> HasTimeoutAsync(string userId, CancellationToken cancellationToken);
-        public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest);
-        public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest);
+        public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken);
+        public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken);
         public Task<string?> GetSectionTitleByPostIdAsync(string postId,CancellationToken cancellationToken);
         public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
         public Task<string?> GetPostIdByReplyId(string replyId, CancellationToken cancellationToken);

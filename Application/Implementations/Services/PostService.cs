@@ -58,7 +58,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }// POST methods
-        public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
+        public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
             if (user is null)
@@ -73,8 +73,14 @@ namespace NoFilterForum.Infrastructure.Services
             ReactionUtility.ApplyLikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post,cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Liking post with Id: {PostId} was cancelled", likeDislikeRequest.PostReplyId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -83,7 +89,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest)
+        public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
             if (user is null)
@@ -98,8 +104,14 @@ namespace NoFilterForum.Infrastructure.Services
             ReactionUtility.ApplyDislikeLogic(user, post, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Posts.Update, post, cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Disliking post with Id: {PostId} was cancelled", likeDislikeRequest.PostReplyId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

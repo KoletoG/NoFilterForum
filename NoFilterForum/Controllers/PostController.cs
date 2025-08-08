@@ -55,7 +55,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Like(LikeDislikePostViewModel likeDislikePostViewModel)
+        public async Task<IActionResult> Like(LikeDislikePostViewModel likeDislikePostViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var likeDislikeRequest = PostMapper.MapToRequest(likeDislikePostViewModel.Id, userId);
-            var result = await _postService.LikeAsync(likeDislikeRequest);
+            var result = await _postService.LikeAsync(likeDislikeRequest, cancellationToken);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
@@ -79,7 +79,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Dislike(LikeDislikePostViewModel likeDislikePostViewModel)
+        public async Task<IActionResult> Dislike(LikeDislikePostViewModel likeDislikePostViewModel,CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var likeDislikeRequest = PostMapper.MapToRequest(likeDislikePostViewModel.Id, userId);
-            var result = await _postService.DislikeAsync(likeDislikeRequest);
+            var result = await _postService.DislikeAsync(likeDislikeRequest,cancellationToken);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
