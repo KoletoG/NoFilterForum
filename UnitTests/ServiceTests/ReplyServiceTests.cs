@@ -31,7 +31,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.Replies.GetCountByPostIdAsync(It.IsAny<string>())).ReturnsAsync(5);
-            unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<GetListReplyIndexItemRequest>())).ReturnsAsync(new List<ReplyIndexItemDto>());
+            unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<GetListReplyIndexItemRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<ReplyIndexItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
@@ -40,7 +40,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest(Page: 1,PostId: "ExampleId",PostsCount: PostConstants.PostsPerSection);
-            var result = await replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest);
+            var result = await replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest, CancellationToken.None);
             Assert.NotNull(result);
             Assert.IsType<List<ReplyIndexItemDto>>(result);
         }
@@ -53,7 +53,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>())).ReturnsAsync(new List<ReplyItemDto>());
+            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>(),It.IsAny<CancellationToken>())).ReturnsAsync(new List<ReplyItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
@@ -62,7 +62,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var userId = "ExampleUserId";
-            var result = await replyService.GetListReplyItemDtoAsync(userId);
+            var result = await replyService.GetListReplyItemDtoAsync(userId, CancellationToken.None);
             Assert.IsType<List<ReplyItemDto>>(result);
             Assert.NotNull(result);
         }
@@ -75,7 +75,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.MinValue);
+            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(DateTime.MinValue);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
@@ -84,7 +84,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var userId = "Example user Id";
-            var result = await replyService.HasTimeoutByUserIdAsync(userId);
+            var result = await replyService.HasTimeoutByUserIdAsync(userId, CancellationToken.None);
             Assert.False(result);
         }
         [Fact]
@@ -95,7 +95,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
+            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
@@ -104,7 +104,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var userId = "Example user Id";
-            var result = await replyService.HasTimeoutByUserIdAsync(userId);
+            var result = await replyService.HasTimeoutByUserIdAsync(userId, CancellationToken.None);
             Assert.True(result);
         }
         [Fact]
@@ -116,7 +116,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
             userServiceMock.Setup(x => x.IsAdminOrVIPAsync(It.IsAny<string>())).ReturnsAsync(true);
-            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>())).ReturnsAsync(DateTime.UtcNow);
+            unitOfWorkMock.Setup(x => x.Replies.GetLastReplyDateTimeByUserIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(DateTime.UtcNow);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
@@ -125,7 +125,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var userId = "Example user Id";
-            var result = await replyService.HasTimeoutByUserIdAsync(userId);
+            var result = await replyService.HasTimeoutByUserIdAsync(userId, CancellationToken.None);
             Assert.False(result);
         }
         [Fact]
@@ -136,7 +136,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync((ReplyDataModel?)null);
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync((ReplyDataModel?)null);
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,
@@ -145,7 +145,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
-            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
             Assert.Equal(PostResult.NotFound, result);
         }
         [Fact]
@@ -157,8 +157,8 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x=>x.Users.Update(It.IsAny<UserDataModel>())).Verifiable();
-            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
-            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel() {
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ReplyDataModel() {
                 User = new UserDataModel() 
                 {
                     Id= "UserIdExample"
@@ -172,7 +172,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
-            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
             Assert.Equal(PostResult.Success, result);
         }
         [Fact]
@@ -184,8 +184,8 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
             unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
-            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
-            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ReplyDataModel()
             {
                 User = new UserDataModel()
                 {
@@ -200,7 +200,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
-            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
             Assert.Equal(PostResult.UpdateFailed, result);
         }
         [Fact]
@@ -212,7 +212,7 @@ namespace UnitTests.ServiceTests
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
             userServiceMock.Setup(x => x.IsAdminAsync(It.IsAny<string>())).ReturnsAsync(false);
-            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>())).ReturnsAsync(new ReplyDataModel()
+            unitOfWorkMock.Setup(x => x.Replies.GetWithUserByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ReplyDataModel()
             {
                 User = new UserDataModel()
                 {
@@ -227,7 +227,7 @@ namespace UnitTests.ServiceTests
                 cacheServiceMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
-            var result = await replyService.DeleteReplyAsync(deleteReplyRequest);
+            var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
             Assert.Equal(PostResult.Forbid, result);
         }
     }

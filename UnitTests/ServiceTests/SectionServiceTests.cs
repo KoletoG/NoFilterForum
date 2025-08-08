@@ -197,7 +197,7 @@ namespace UnitTests.ServiceTests
             unitOfWorkMock.Setup(x => x.Posts.DeleteRange(It.IsAny<List<PostDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Replies.DeleteRange(It.IsAny<List<ReplyDataModel>>())).Verifiable();
             unitOfWorkMock.Setup(x => x.Sections.Delete(It.IsAny<SectionDataModel>())).Verifiable();
-            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x =>
             x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(
@@ -227,7 +227,7 @@ namespace UnitTests.ServiceTests
             var loggerMock = new Mock<ILogger<SectionService>>();
             var sectionFactoryMock = new Mock<ISectionFactory>();
             var applicationDbContextMock = new Mock<ApplicationDbContext>(); 
-            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>())).ReturnsAsync(new List<NotificationDataModel>());
+            unitOfWorkMock.Setup(x => x.Notifications.GetAllByReplyIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<NotificationDataModel>());
             unitOfWorkMock.Setup(x => x.BeginTransactionAsync()).ThrowsAsync(new Exception());
             unitOfWorkMock.Setup(x =>
             x.Sections.GetByIdWithPostsAndRepliesAndUsersAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
