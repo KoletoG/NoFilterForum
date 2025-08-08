@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models.DTOs.InputDTOs
+namespace Core.DTOs.InputDTOs.Reply
 {
-    public record CreateReplyRequest(string? UserId, string? Content, string? PostId);
+    public record CreateReplyRequest(string UserId, string Content, string PostId);
 }

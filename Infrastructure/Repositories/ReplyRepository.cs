@@ -41,9 +41,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title))
                 .ToListAsync();
         }
-        public async Task<ReplyDataModel?> GetWithUserByIdAsync(string id)
+        public async Task<ReplyDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.ReplyDataModels.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
         }
         public async Task<string?> GetPostIdByIdAsync(string id, CancellationToken cancellationToken)
         {
@@ -73,10 +73,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.ToListAsync();
         }
-        public async Task<ReplyDataModel> CreateAsync(ReplyDataModel reply)
+        public async Task CreateAsync(ReplyDataModel reply, CancellationToken cancellationToken)
         {
-            await _context.ReplyDataModels.AddAsync(reply);
-            return reply;
+            await _context.ReplyDataModels.AddAsync(reply,cancellationToken);
         }
         public async Task<int> GetCountByPostIdAsync(string postId)
         {
@@ -86,9 +85,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.ReplyDataModels.Update(reply);
         }
-        public async Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId)
+        public async Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
+            return await _context.ReplyDataModels.Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync(cancellationToken);
         }
         public void UpdateRange(IReadOnlyCollection<ReplyDataModel> replies)
         {

@@ -81,7 +81,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
+        public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikeReplyViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var likeDislikeRequest = PostMapper.MapToRequest(likeDislikeReplyViewModel.Id, userId);
-            var result = await _replyService.LikeAsync(likeDislikeRequest);
+            var result = await _replyService.LikeAsync(likeDislikeRequest, cancellationToken);
      
             return result switch
             {
@@ -106,7 +106,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Dislike(LikeDislikeReplyViewModel likeDislikeReplyViewModel)
+        public async Task<IActionResult> Dislike(LikeDislikeReplyViewModel likeDislikeReplyViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -118,7 +118,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var likeDislikeRequest = PostMapper.MapToRequest(likeDislikeReplyViewModel.Id, userId);
-            var result = await _replyService.DislikeAsync(likeDislikeRequest);
+            var result = await _replyService.DislikeAsync(likeDislikeRequest, cancellationToken);
             return result switch
             {
                 PostResult.NotFound => NotFound(),
@@ -130,7 +130,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Delete(DeleteReplyViewModel deleteReplyViewModel)
+        public async Task<IActionResult> Delete(DeleteReplyViewModel deleteReplyViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -142,7 +142,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var deleteReplyRequest = ReplyMapper.MapToRequest(deleteReplyViewModel, userId);
-            var result = await _replyService.DeleteReplyAsync(deleteReplyRequest);
+            var result = await _replyService.DeleteReplyAsync(deleteReplyRequest, cancellationToken);
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),
@@ -155,7 +155,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create(CreateReplyViewModel createReplyViewModel)
+        public async Task<IActionResult> Create(CreateReplyViewModel createReplyViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -166,13 +166,13 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            if (await _replyService.HasTimeoutByUserIdAsync(userId))
+            if (await _replyService.HasTimeoutByUserIdAsync(userId, cancellationToken))
             {
                 ModelState.AddModelError("timeError", "Replies can be made every 5 seconds");
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
             }
             var createReplyRequest = ReplyMapper.MapToRequest(createReplyViewModel, userId);
-            var result = await _replyService.CreateReplyAsync(createReplyRequest);
+            var result = await _replyService.CreateReplyAsync(createReplyRequest, cancellationToken);
             return result switch
             {
                 PostResult.UpdateFailed => Problem(),

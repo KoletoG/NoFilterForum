@@ -6,10 +6,10 @@ namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface INotificationRepository
     {
-        public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId); 
+        public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId, CancellationToken cancellationToken); 
         public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds);
         public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserFromIdAsync(string userId);
-        public Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications); 
+        public Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications,CancellationToken cancellationToken); 
         public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdsAsync(IEnumerable<string> repliesIds, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken);
         public void DeleteRange(IEnumerable<NotificationDataModel> notifications);

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Services;
 using Core.Constants;
+using Core.DTOs.InputDTOs.Reply;
 using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
 using Core.Implementations.Services;
@@ -19,7 +20,7 @@ using NoFilterForum.Core.Interfaces.Repositories;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
 
-namespace NoFilterForum.Infrastructure.Services
+namespace Application.Implementations.Services
 {
     public class ReplyService : IReplyService
     {
@@ -41,7 +42,7 @@ namespace NoFilterForum.Infrastructure.Services
             _userService = userService;
         }
         // GET methods
-        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken) => await _cacheService.TryGetValue<GetListReplyIndexItemRequest, IReadOnlyCollection<ReplyIndexItemDto>>($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest, cancellationToken) ?? [];
+        public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest, cancellationToken) ?? [];
         public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
         {
             int totalPages = await GetTotalPagesByPostIdAsync(postId);
@@ -76,18 +77,18 @@ namespace NoFilterForum.Infrastructure.Services
             page = PageUtility.ValidatePageNumber(page, totalPages);
             return new(page, totalPages);
         }
-        public async Task<bool> HasTimeoutByUserIdAsync(string userId)
+        public async Task<bool> HasTimeoutByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId);
+            var lastDateTime = await _unitOfWork.Replies.GetLastReplyDateTimeByUserIdAsync(userId, cancellationToken);
             if (lastDateTime.AddSeconds(5) >= DateTime.UtcNow)
             {
                 return !await _userService.IsAdminOrVIPAsync(userId);
             }
             return false;
         }
-        public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoAsync(string userId) => await _cacheService.TryGetValue<IReadOnlyCollection<ReplyItemDto>>($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId) ?? new List<ReplyItemDto>();
+        public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoAsync(string userId) => await _cacheService.TryGetValue($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId) ?? [];
         // POST methods
-        public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest)
+        public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
             if (user is null)
@@ -102,8 +103,14 @@ namespace NoFilterForum.Infrastructure.Services
             ReactionUtility.ApplyLikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Replies.Update, reply, _unitOfWork.Users.Update, user);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Replies.Update, reply, _unitOfWork.Users.Update, user, cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Liking of reply with Id: {ReplyId} was cancelled", likeDislikeRequest.PostReplyId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -112,7 +119,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest)
+        public async Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);
             if (user is null)
@@ -127,8 +134,14 @@ namespace NoFilterForum.Infrastructure.Services
             ReactionUtility.ApplyDislikeLogic(user, reply, likeDislikeRequest.PostReplyId);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Replies.Update, reply);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, _unitOfWork.Replies.Update, reply, cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Disliking of reply with Id: {ReplyId} was cancelled", likeDislikeRequest.PostReplyId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -138,22 +151,20 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         
-        public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request)
+        public async Task<PostResult> DeleteReplyAsync(DeleteReplyRequest request, CancellationToken cancellationToken)
         {
-            var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId);
+            var reply = await _unitOfWork.Replies.GetWithUserByIdAsync(request.ReplyId, cancellationToken);
             if (reply is null)
             {
                 return PostResult.NotFound;
             }
-            bool shouldForbid = reply.User.Id == request.UserId
-                ? false
-                : !(await _userService.IsAdminAsync(request.UserId));
+            bool shouldForbid = reply.User.Id != request.UserId && !await _userService.IsAdminAsync(request.UserId);
             if (shouldForbid) return PostResult.Forbid;
             if (reply.User != UserConstants.DefaultUser)
             {
                 reply.User.DecrementPostCount();
             }
-            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(request.ReplyId);
+            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(request.ReplyId, cancellationToken);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -161,9 +172,15 @@ namespace NoFilterForum.Infrastructure.Services
                 await _userService.ApplyRoleAsync(reply.User); // CHANGE THAT
                 _unitOfWork.Users.Update(reply.User);
                 _unitOfWork.Replies.Delete(reply);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Deleting reply with Id: {ReplyId} was cancelled", request.ReplyId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
@@ -172,26 +189,26 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private async Task<List<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user)
+        private async Task<List<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user, CancellationToken cancellationToken)
         {
             var notificationsList = new List<NotificationDataModel>();
             string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
             taggedUsernames = taggedUsernames.Where(x => x != defaultUsername).ToArray();
-            var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernames);
+            var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernames, cancellationToken);
             foreach (var taggedUser in listOfTaggedUsers)
             {
                 notificationsList.Add(new(reply, user, taggedUser));
             }
             return notificationsList;
         }
-        public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest)
+        public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(createReplyRequest.UserId);
             if (user is null)
             {
                 return PostResult.NotFound;
             }
-            var post = await _unitOfWork.Posts.GetWithRepliesByIdAsync(createReplyRequest.PostId);
+            var post = await _unitOfWork.Posts.GetWithRepliesByIdAsync(createReplyRequest.PostId, cancellationToken);
             if (post is null)
             {
                 return PostResult.NotFound;
@@ -199,22 +216,28 @@ namespace NoFilterForum.Infrastructure.Services
             var reply = _replyFactory.Create(createReplyRequest.Content, user, post);
             string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
             user.IncrementPostCount();
-            var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(taggedUsernames, reply, user);
+            var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(taggedUsernames, reply, user, cancellationToken);
             post.Replies.Add(reply);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
                 if (notificationsList.Any())
                 {
-                    await _unitOfWork.Notifications.CreateRangeAsync(notificationsList);
+                    await _unitOfWork.Notifications.CreateRangeAsync(notificationsList,cancellationToken);
                 }
-                await _unitOfWork.Replies.CreateAsync(reply);
+                await _unitOfWork.Replies.CreateAsync(reply, cancellationToken);
                 _unitOfWork.Posts.Update(post);
                 await _userService.ApplyRoleAsync(user); // CHANGE THAT
                 _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Creating reply from user with Id: {UserId} was cancelled", createReplyRequest.UserId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

@@ -24,11 +24,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.Where(x => x.Id == postId).Select(x => x.Section.Title).FirstOrDefaultAsync();
         }
-        public async Task<PostDataModel?> GetWithRepliesByIdAsync(string id)
+        public async Task<PostDataModel?> GetWithRepliesByIdAsync(string id, CancellationToken cancellationToken)
         {
             return await _context.PostDataModels.Where(x => x.Id == id)
                 .Include(x => x.Replies)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostDataModel?> GetWithUserByIdAsync(string id)
         {

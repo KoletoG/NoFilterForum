@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Implementations.Services;
 using Application.Interfaces.Services;
 using Core.Constants;
 using Core.Enums;
@@ -15,7 +16,6 @@ using Ganss.Xss;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NoFilterForum.Core.Models.DataModels;
-using NoFilterForum.Infrastructure.Services;
 using Web.ViewModels.Reply;
 
 namespace UnitTests.ServiceTests

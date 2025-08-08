@@ -8,7 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     public interface IReplyRepository
     {
         public Task<ReplyDataModel?> GetByIdAsync(string id);
-        public Task<ReplyDataModel?> GetWithUserByIdAsync(string id);
+        public Task<ReplyDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken);
         public Task<string?> GetPostIdByIdAsync(string id, CancellationToken cancellationToken);
         public Task<IList<string>> GetIdsByPostIdAsync(string postId);
         public Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken);
@@ -17,9 +17,9 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId);
         public Task<IReadOnlyCollection<ReplyDataModel>> GetAllByPostIdAsync(string postId);
         public Task<IReadOnlyCollection<ReplyDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken);
-        public Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId);
+        public Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<ReplyDataModel>> GetAllAsync();
-        public Task<ReplyDataModel> CreateAsync(ReplyDataModel reply);
+        public Task CreateAsync(ReplyDataModel reply, CancellationToken cancellationToken);
         public void Update(ReplyDataModel reply);
         public Task<string?> GetUserIdByReplyIdAsync(string replyId);
         public void UpdateRange(IReadOnlyCollection<ReplyDataModel> replies);

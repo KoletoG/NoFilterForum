@@ -27,13 +27,13 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.NotificationDataModels.Where(x => repliesIds.Contains(x.Reply.Id)).ToListAsync(cancellationToken);
         }
-        public async Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications)
+        public async Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications,CancellationToken cancellationToken)
         {
-            await _context.NotificationDataModels.AddRangeAsync(notifications);
+            await _context.NotificationDataModels.AddRangeAsync(notifications,cancellationToken);
         }
-        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId)
+        public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => x.Reply.Id == replyId).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => x.Reply.Id == replyId).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds)
         {

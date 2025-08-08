@@ -8,7 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     public interface IPostRepository
     {
         public Task<PostDataModel?> GetByIdAsync(string id);
-        public Task<PostDataModel?> GetWithRepliesByIdAsync(string id);
+        public Task<PostDataModel?> GetWithRepliesByIdAsync(string id, CancellationToken cancellationToken);
         public Task<PostDataModel?> GetWithUserByIdAsync(string id);
         public Task<string?> GetSectionTitleByIdAsync(string postId);
         public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
