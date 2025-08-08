@@ -9,8 +9,8 @@ namespace NoFilterForum.Core.Interfaces.Repositories
     {
         public Task<PostDataModel?> GetByIdAsync(string id);
         public Task<PostDataModel?> GetWithRepliesByIdAsync(string id, CancellationToken cancellationToken);
-        public Task<PostDataModel?> GetWithUserByIdAsync(string id);
-        public Task<string?> GetSectionTitleByIdAsync(string postId);
+        public Task<PostDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken);
+        public Task<string?> GetSectionTitleByIdAsync(string postId,CancellationToken cancellationToken);
         public Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<PostDataModel>> GetAllAsync();

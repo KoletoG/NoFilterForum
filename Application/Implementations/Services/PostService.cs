@@ -45,7 +45,7 @@ namespace NoFilterForum.Infrastructure.Services
         // GET methods
         public async Task<int> GetPostsCountBySectionTitleAsync(string sectionTitle) => await _cacheService.TryGetValue($"postsCountByTitle_{sectionTitle}", _unitOfWork.Sections.GetPostsCountByTitleAsync, sectionTitle);
         public async Task<IReadOnlyCollection<PostItemDto>> GetPostItemDtosByTitleAndPageAsync(GetIndexPostRequest getIndexPostRequest, CancellationToken cancellationToken) => await _cacheService.TryGetValue<GetIndexPostRequest, IReadOnlyCollection<PostItemDto>>($"postIndexItemsByTitle_{getIndexPostRequest.TitleOfSection}_ByPage_{getIndexPostRequest.Page}", _unitOfWork.Sections.GetPostItemsWithPagingByTitleAsync, getIndexPostRequest, cancellationToken) ?? [];  
-        public async Task<string?> GetSectionTitleByPostIdAsync(string postId) => await _cacheService.TryGetValue($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId);
+        public async Task<string?> GetSectionTitleByPostIdAsync(string postId, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"titleById_{postId}", _unitOfWork.Posts.GetSectionTitleByIdAsync,postId,cancellationToken);
         public async Task<string?> GetPostIdByReplyId(string replyId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdByIdAsync,replyId, cancellationToken);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId, cancellationToken);
         public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<ProfilePostDto>>($"profilePostDtoById_{userId}",_unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync,userId,cancellationToken) ?? [];
@@ -173,20 +173,18 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest)
+        public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest, CancellationToken cancellationToken)
         {
-            var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId);
+            var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId, cancellationToken);
             if (post is null)
             {
                 return PostResult.NotFound;
             }
-            bool shouldForbid = post.User.Id == deletePostRequest.UserId
-                ? false
-                : !await _userService.IsAdminAsync(deletePostRequest.UserId);
+            bool shouldForbid = post.User.Id != deletePostRequest.UserId && !await _userService.IsAdminAsync(deletePostRequest.UserId);
             if (shouldForbid) return PostResult.Forbid;
-            var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId);
+            var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId, cancellationToken);
             var usersSet = repliesOfPost.Select(x => x.User).ToHashSet();
-            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x => x.Id).ToHashSet());
+            var notifications = await _unitOfWork.Notifications.GetAllByReplyIdAsync(repliesOfPost.Select(x => x.Id).ToHashSet(),cancellationToken);
             foreach (var reply in repliesOfPost)
             {
                 reply.User.DecrementPostCount();
@@ -201,9 +199,15 @@ namespace NoFilterForum.Infrastructure.Services
                 await _userService.ApplyRoleAsync(post.User); // HERE TOO
                 _unitOfWork.Users.UpdateRange(usersSet.ToList());
                 _unitOfWork.Posts.Delete(post);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Deleting post with Id: {PostId} was cancelled", deletePostRequest.PostId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {

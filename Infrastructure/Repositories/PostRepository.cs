@@ -20,9 +20,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.FindAsync(id);
         }
-        public async Task<string?> GetSectionTitleByIdAsync(string postId)
+        public async Task<string?> GetSectionTitleByIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.Where(x => x.Id == postId).Select(x => x.Section.Title).FirstOrDefaultAsync();
+            return await _context.PostDataModels.Where(x => x.Id == postId).Select(x => x.Section.Title).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostDataModel?> GetWithRepliesByIdAsync(string id, CancellationToken cancellationToken)
         {
@@ -30,11 +30,11 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Include(x => x.Replies)
                 .FirstOrDefaultAsync(cancellationToken);
         }
-        public async Task<PostDataModel?> GetWithUserByIdAsync(string id)
+        public async Task<PostDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken)
         {
             return await _context.PostDataModels.Where(x => x.Id == id)
                 .Include(x => x.User)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken)
         {

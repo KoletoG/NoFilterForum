@@ -49,9 +49,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.Post.Id).FirstOrDefaultAsync(cancellationToken);
         }
-        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId)
+        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.Post.Id==postId).ToListAsync();
+            return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.Post.Id==postId).ToListAsync(cancellationToken);
         }
         public async Task<UserDataModel?> GetUserByReplyIdAsync(string replyId)
         {

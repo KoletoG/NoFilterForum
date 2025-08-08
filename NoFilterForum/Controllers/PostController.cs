@@ -126,7 +126,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(DeletePostViewModel deletePostViewModel)
+        public async Task<IActionResult> Delete(DeletePostViewModel deletePostViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -138,7 +138,7 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var deletePostRequest = PostMapper.MapToRequest(deletePostViewModel, userId);
-            var result = await _postService.DeletePostByIdAsync(deletePostRequest);
+            var result = await _postService.DeletePostByIdAsync(deletePostRequest, cancellationToken);
             if (result != PostResult.Success)
             {
                 return result switch
@@ -149,7 +149,7 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId);
+            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId,cancellationToken);
             return RedirectToAction(nameof(Index), new { titleOfSection = sectionTitle });
         }
     }
