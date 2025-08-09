@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Business_Logic;
 using Microsoft.AspNetCore.Identity;
@@ -59,8 +60,8 @@ namespace NoFilterForum.Core.Models.DataModels
             DateCreated = DateTime.UtcNow;
             LikesPostRepliesIds = new List<string>();
             DislikesPostRepliesIds = new List<string>();
-            Bio = "";
-            ImageUrl = @"images\defaultimage.gif";
+            Bio = string.Empty;
+            ImageUrl = string.Empty;
         }
         public UserDataModel(string id)
         {

@@ -53,16 +53,16 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UsersReasonsDto>>("listUnconfirmedUserDtos", _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync, cancellationToken) ?? [];
         public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
-        private string GetImageFileUrl(string imageFileName)
+        private string GetCustomImageName(string imageFileName)
         {
             var invalidChars = Path.GetInvalidFileNameChars();
             imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName))
                                 .Replace(' ', '_')
                                 .ToLower();
-            imageFileName = new string(imageFileName.Where(c => !invalidChars.Contains(c)).ToArray());
-            return string.Concat(NanoidDotNet.Nanoid.Generate(), "_", imageFileName);
+            imageFileName = new string([..imageFileName.Where(c => !invalidChars.Contains(c))]);
+            return string.Concat(NanoidDotNet.Nanoid.Generate(size:12), "_", imageFileName);
         }
-        private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
+        private string GetImageUrl(string imageName) => Path.Combine(_webHostEnvironment.WebRootPath,"images", imageName);
         
         // POST Methods
         public async Task<bool> IsAdminOrVIPAsync(string userId)
@@ -294,23 +294,23 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var fileUrl = GetImageFileUrl(updateImageRequest.Image.FileName);
+            var imageName = GetCustomImageName(updateImageRequest.Image.FileName);
+            var newImageUrl = GetImageUrl(imageName);
             var currentUserImageUrl = currentUser.ImageUrl;
-            currentUser.ChangeImageUrl(GetImageUrl(fileUrl));
+            currentUser.ChangeImageUrl(newImageUrl);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath, "images", fileUrl), FileMode.Create))
+                using (var stream = new FileStream(newImageUrl, FileMode.Create))
                 {
-                    await updateImageRequest.Image.CopyToAsync(stream);
+                    await updateImageRequest.Image.CopyToAsync(stream,cancellationToken);
                 } // THINK OF ANOTHER WAY
                 _unitOfWork.Users.Update(currentUser);
                 await _unitOfWork.CommitAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                if (currentUserImageUrl != Path.Combine("images", "defaultimage.gif")) // Avoid hardcoding
+                if (currentUserImageUrl != ImageUtility.GetDefautImageUrl(_webHostEnvironment))
                 {
-                    var pathToDelete = Path.Combine(_webHostEnvironment.WebRootPath, currentUserImageUrl);
-                    System.IO.File.Delete(pathToDelete);
+                    System.IO.File.Delete(currentUserImageUrl);
                 }
                 return PostResult.Success;
             }

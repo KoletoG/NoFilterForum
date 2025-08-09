@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Abstracts\**" />
     <Compile Remove="Views\Home\**" />
+    <Content Remove="Abstracts\**" />
     <Content Remove="Views\Home\**" />
+    <EmbeddedResource Remove="Abstracts\**" />
     <EmbeddedResource Remove="Views\Home\**" />
+    <None Remove="Abstracts\**" />
     <None Remove="Views\Home\**" />
   </ItemGroup>
 
@@ -27,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstracts\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Constants;
 using Core.Enums;
+using Core.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -34,13 +35,15 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _memoryCache;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         public RegisterModel(
             UserManager<UserDataModel> userManager,
             IUserStore<UserDataModel> userStore,
             SignInManager<UserDataModel> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,6 +52,7 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _memoryCache = memoryCache;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -134,8 +138,9 @@ namespace NoFilterForum.Areas.Identity.Pages.Account
                 var user = new UserDataModel(Input.Username, Input.Email);
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.ChangeImageUrl(ImageUtility.GetDefautImageUrl(_webHostEnvironment));
                 if (UserConstants.adminNames.Contains(Input.Username))
-                {
+                { // CHANGE THAT
                     user.ChangeRole(UserRoles.Admin);
                     user.Confirm();
                     user.SetReason("Adminnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");

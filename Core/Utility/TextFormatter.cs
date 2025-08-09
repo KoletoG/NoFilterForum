@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.StaticAssets;
 
 namespace Core.Utility
 {
