@@ -22,18 +22,6 @@ namespace UnitTests.ServiceTests
     {
         private readonly Mock<ICacheService> _cacheService = new Mock<ICacheService>();
         [Fact]
-        public async Task GetAllReportsAsync_ShouldReturnEmptyListOfReports_WhenCalled()
-        {
-            var iUnitOfWorkMock = new Mock<IUnitOfWork>();
-            var reportFactoryMock = new Mock<IReportFactory>();
-            var iLoggerMock = new Mock<ILogger<ReportService>>();
-            iUnitOfWorkMock.Setup(x => x.Reports.GetAllAsync()).ReturnsAsync(new List<ReportDataModel>());
-            var reportService = new ReportService(iUnitOfWorkMock.Object,reportFactoryMock.Object,iLoggerMock.Object, _cacheService.Object);
-            var result = await reportService.GetAllReportsAsync();
-            Assert.IsType<List<ReportDataModel>>(result);
-            Assert.NotNull(result);
-        }
-        [Fact]
         public async Task GetAllDtosAsync_ShouldReturnEmptyListOfReportDtos_WhenCalled()
         {
             var iUnitOfWorkMock = new Mock<IUnitOfWork>();

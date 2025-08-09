@@ -35,11 +35,5 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context.WarningDataModels.UpdateRange(warnings);
         }
-        public async Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId)
-        {
-            return await _context.WarningDataModels.Where(x => x.User.Id == userId)
-                .Select(u => new WarningsContentDto(u.Content))
-                .ToListAsync();
-        }
     }
 }

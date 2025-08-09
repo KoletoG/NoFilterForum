@@ -10,6 +10,5 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task CreateAsync(WarningDataModel warning);
         public Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken);
         public void UpdateRange(IEnumerable<WarningDataModel> warnings);
-        public Task<IReadOnlyCollection<WarningsContentDto>> GetWarningsContentByUserIdAsync(string userId);
     }
 }

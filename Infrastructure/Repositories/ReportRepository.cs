@@ -25,20 +25,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Select(x => new ReportItemDto(x.IdOfPostReply,x.UserTo.UserName!,x.UserFrom.UserName!,x.Content,x.Id))
                 .ToListAsync(cancellationToken);
         }
-        public async Task<IReadOnlyCollection<ReportDataModel>> GetAllAsync()
-        {
-            return await _context.ReportDataModels.AsNoTracking()
-                .Include(x => x.UserTo)
-                .Include(x => x.UserFrom)
-                .ToListAsync();
-        }
         public async Task CreateAsync(ReportDataModel report, CancellationToken cancellationToken)
         {
             await _context.ReportDataModels.AddAsync(report,cancellationToken);
-        }
-        public void Update(ReportDataModel report)
-        {
-            _context.ReportDataModels.Update(report);
         }
         public void Delete(ReportDataModel report)
         {

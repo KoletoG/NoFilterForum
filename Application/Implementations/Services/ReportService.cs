@@ -28,7 +28,6 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _cacheService = cacheService;
         }
-        public async Task<IReadOnlyCollection<ReportDataModel>> GetAllReportsAsync() =>await _cacheService.TryGetValue<IReadOnlyCollection<ReportDataModel>>("listReports",_unitOfWork.Reports.GetAllAsync) ?? [];
         public async Task<IReadOnlyCollection<ReportItemDto>> GetAllDtosAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<ReportItemDto>>("listReportItems", _unitOfWork.Reports.GetReportDtosAsync,cancellationToken) ?? [];
         public async Task<bool> AnyReportsAsync(CancellationToken cancellationToken) => await _unitOfWork.Reports.ExistsReportsAsync(cancellationToken);
         public async Task<PostResult> DeleteReportByIdAsync(DeleteReportRequest deleteReportRequest, CancellationToken cancellationToken)

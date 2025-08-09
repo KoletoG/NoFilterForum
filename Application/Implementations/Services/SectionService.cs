@@ -39,7 +39,6 @@ namespace Application.Implementations.Services
             }
             return await _unitOfWork.Sections.ExistsByTitleAsync(sectionTitle, cancellationToken);
         }
-        public async Task<int> GetPostsCountByIdAsync(string sectionId) => await _unitOfWork.Sections.GetPostsCountByIdAsync(sectionId);
         public async Task<PostResult> CreateSectionAsync(CreateSectionRequest createSectionRequest, CancellationToken cancellationToken)
         {
             if (!await _userService.IsAdminAsync(createSectionRequest.UserId))

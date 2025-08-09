@@ -143,7 +143,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         public async Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistByIdAsync(userId, cancellationToken);
-        public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) => await _unitOfWork.Users.UsernameExistsAsync(username, cancellationToken);
+        public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsUsernameAsync(username, cancellationToken);
         public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken) => await _unitOfWork.Users.EmailExistsAsync(email, cancellationToken);
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest, CancellationToken cancellationToken)
         {

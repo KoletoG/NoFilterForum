@@ -17,10 +17,6 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<int> GetPostsCountByIdAsync(string id)
-        {
-            return await _context.SectionDataModels.Where(x => x.Id == id).Select(x => x.Posts).CountAsync();
-        }
         public async Task<SectionDataModel?> GetByIdWithPostsAndRepliesAndUsersAsync(string id, CancellationToken cancellationToken)
         {
             return await _context.SectionDataModels.Include(x => x.Posts).ThenInclude(x => x.Replies).ThenInclude(x => x.User).Include(x => x.Posts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -46,10 +42,6 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .Take(getIndexPostRequest.PostsCount)
                     .Select(x => new PostItemDto(x.Id, x.User.UserName, x.User.Role, x.Title, x.IsPinned, x.DateCreated, x.User.ImageUrl, x.Likes))
                     .ToListAsync(cancellationToken);
-        }
-        public async Task<bool> ExistsSectionByTitleAsync(string sectionTitle)
-        {
-            return await _context.SectionDataModels.AnyAsync(x => x.Title == sectionTitle);
         }
         public async Task CreateAsync(SectionDataModel section, CancellationToken cancellationToken)
         {
