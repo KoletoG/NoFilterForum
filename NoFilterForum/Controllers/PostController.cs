@@ -137,6 +137,7 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
+            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId, cancellationToken);
             var deletePostRequest = PostMapper.MapToRequest(deletePostViewModel, userId);
             var result = await _postService.DeletePostByIdAsync(deletePostRequest, cancellationToken);
             if (result != PostResult.Success)
@@ -149,8 +150,7 @@ namespace Web.Controllers
                     _ => Problem()
                 };
             }
-            var sectionTitle = await _postService.GetSectionTitleByPostIdAsync(deletePostViewModel.PostId,cancellationToken);
-            return RedirectToAction(nameof(Index), new { titleOfSection = sectionTitle });
+            return RedirectToAction(nameof(Index), new { titleOfSection = HttpUtility.UrlEncode(sectionTitle) });
         }
     }
 }
