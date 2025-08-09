@@ -9,7 +9,6 @@ namespace Application.Interfaces.Services
 {
     public interface IUserService
     {
-        public bool IsDefaultUserId(string username);
         public Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken);
         public Task ApplyRoleAsync(UserDataModel user);
         public Task<bool> IsAdminOrVIPAsync(string userId);

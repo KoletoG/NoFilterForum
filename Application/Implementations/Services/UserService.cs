@@ -94,7 +94,6 @@ namespace NoFilterForum.Infrastructure.Services
             var profileUserDto = await _cacheService.TryGetValue<string,ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id, cancellationToken);
             return new(GetResult.Success, getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
         }
-        public bool IsDefaultUserId(string id) => id == UserConstants.DefaultUser.Id; // Change to static method
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -113,8 +112,8 @@ namespace NoFilterForum.Infrastructure.Services
                 user.ChangeUsername(changeUsernameRequest.Username);
                 user.ChangeNormalizedUsername(normalizedUsername);
                 _unitOfWork.Users.Update(user);
-                await _unitOfWork.CommitAsync();
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitAsync(cancellationToken);
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
