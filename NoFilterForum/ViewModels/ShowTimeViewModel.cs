@@ -2,7 +2,7 @@
 {
     public class ShowTimeViewModel
     {
-        public string DisplayTimeAgo { get; private set; }
+        public string? DisplayTimeAgo { get; private set; }
 
         public ShowTimeViewModel(DateTime timeOfObject)
         {

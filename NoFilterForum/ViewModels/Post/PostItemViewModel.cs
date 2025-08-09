@@ -2,8 +2,8 @@
 {
     public class PostItemViewModel
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
+        public required string Id { get; set; }
+        public required string Title { get; set; }
         public DateTime Created { get; set; }
     }
 }

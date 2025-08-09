@@ -2,10 +2,10 @@
 {
     public class ReplyItemViewModel
     {
-        public string Id { get; set; }
-        public string PostId { get; set; }
-        public string Content { get; set; }
+        public required string Id { get; set; }
+        public required string PostId { get; set; }
+        public required string Content { get; set; }
         public DateTime Created { get; set; }
-        public string PostTitle { get; set; }
+        public required string PostTitle { get; set; }
     }
 }

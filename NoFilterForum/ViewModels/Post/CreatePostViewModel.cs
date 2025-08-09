@@ -15,6 +15,7 @@ namespace Web.ViewModels.Post
         public string? Title { get; set; }
         [Required]
         [MinLength(20)]
+        [MaxLength(50000)]
         public string? Body { get; set; }
         [Required]
         public required string TitleOfSection { get; set; }

@@ -4,31 +4,17 @@ In postService for example, make the code follow DRY
 KISS principle need to follow
 SOLID wherever i can
 A lot of the request models could be simplified
-Might add Application proj
-Use () syntax
-Use nameof()
-YAGNI DRY KISS SOLID 
-required makes it required lol
 Move utility methods from Core
 Array.Empty / Enumerable.Empty when returning empty lists / arrays
 //
 Logger.IsEnabled() to not allocate memory when debug logging
 Query / Handler / Commands - CQRS with MediatR
 
-ADD CANCELLATION TOKENS
-
 MAKE FASTER PROFILE POST REPLY GETS
 // Done / Interesting
 Fix mappers with the constants
-        // Work on controllers tomorrow, follow DRY
-        // Delete unused methods in repositories - YAGNI
-        // Group common logic into methods in controllers so they don't fill unnecessary space
-        // Change PostsConstants
-        // Viewmodels might need some methods
-        // Use cache service
-        ADD CONFLICT()
-        IENUMERABLE / ICOLLECTION MAKE POST USER SERVICES...
 
+        // Change PostsConstants
         // SEARCH BAR
         // Paging wherever needed such as user service get method
         // REACT

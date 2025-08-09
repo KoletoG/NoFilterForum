@@ -8,7 +8,7 @@ namespace Web.ViewModels.Post
         [DefaultValue(1)]
         public int Page { get; set; }
         [Required]
-        public string TitleOfSection { get; set; }
+        public required string TitleOfSection { get; set; }
         public string? Errors { get; set; }
     }
 }
