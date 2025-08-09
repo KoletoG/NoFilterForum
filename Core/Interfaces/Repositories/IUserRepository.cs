@@ -8,6 +8,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface IUserRepository
     {
+        public Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken);
         public Task<UserDataModel?> GetByIdAsync(string id);
         public Task<UserRoles> GetUserRoleIdAsync(string userId);
         public Task<UserDataModel?> GetByUsernameAsync(string username);

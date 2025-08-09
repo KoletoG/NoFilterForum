@@ -7,5 +7,5 @@ using Core.Enums;
 
 namespace Core.Models.DTOs.OutputDTOs.Profile
 {
-    public record ProfileDto(GetResult GetResult, bool IsSameUser, ProfileUserDto? UserDto);
+    public record ProfileDto(bool IsSameUser, ProfileUserDto? UserDto);
 }

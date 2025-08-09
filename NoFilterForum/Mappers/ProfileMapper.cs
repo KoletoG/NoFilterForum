@@ -4,6 +4,7 @@ using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Mono.TextTemplating;
+using NoFilterForum.Core.Models.DataModels;
 using Web.ViewModels.Post;
 using Web.ViewModels.Profile;
 using Web.ViewModels.Reply;

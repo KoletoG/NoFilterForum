@@ -42,8 +42,29 @@ namespace NoFilterForum.Infrastructure.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
+        // GET Methods
         // Add paging
         public async Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
+        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
+        public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
+        {
+            var profileUserDto = await _cacheService.TryGetValue<string, ProfileUserDto?>($"profileUserDtoById_{getProfileDtoRequest.UserId}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, getProfileDtoRequest.UserId, cancellationToken);
+            return new(getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
+        }
+        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UsersReasonsDto>>("listUnconfirmedUserDtos", _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync, cancellationToken) ?? [];
+        public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
+        private string GetImageFileUrl(string imageFileName)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName))
+                                .Replace(' ', '_')
+                                .ToLower();
+            imageFileName = new string(imageFileName.Where(c => !invalidChars.Contains(c)).ToArray());
+            return string.Concat(NanoidDotNet.Nanoid.Generate(), "_", imageFileName);
+        }
+        private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
+        
+        // POST Methods
         public async Task<bool> IsAdminOrVIPAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -82,18 +103,7 @@ namespace NoFilterForum.Infrastructure.Services
                 user.ChangeRole(role);
             }
         }
-        public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
-        public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
-        {
-            // CHECK ON THIS TOMORROW
-            var user = await _unitOfWork.Users.GetByIdAsync(getProfileDtoRequest.UserId);
-            if (user is null)
-            {
-                return new(GetResult.NotFound, default, null);
-            }
-            var profileUserDto = await _cacheService.TryGetValue<string,ProfileUserDto?>($"profileUserDtoById_{user.Id}", _unitOfWork.Users.GetProfileUserDtoByIdAsync, user.Id, cancellationToken);
-            return new(GetResult.Success, getProfileDtoRequest.UserId == getProfileDtoRequest.CurrentUserId, profileUserDto);
-        }
+        
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -132,6 +142,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistByIdAsync(userId, cancellationToken);
         public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) => await _unitOfWork.Users.UsernameExistsAsync(username, cancellationToken);
         public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken) => await _unitOfWork.Users.EmailExistsAsync(email, cancellationToken);
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest, CancellationToken cancellationToken)
@@ -173,9 +184,7 @@ namespace NoFilterForum.Infrastructure.Services
             }
         }
         public async Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsByNotConfirmedAsync(cancellationToken);
-        public async Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UsersReasonsDto>>("listUnconfirmedUserDtos", _unitOfWork.Users.GetAllUnconfirmedUserDtosAsync, cancellationToken) ?? [];
-        public async Task<UserDataModel?> GetUserByIdAsync(string id) => await _unitOfWork.Users.GetByIdAsync(id);
-        public async Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken)
+         public async Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user is null)
@@ -278,17 +287,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private string GetImageFileUrl(string imageFileName)
-        {
-            var invalidChars = Path.GetInvalidFileNameChars();
-            imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName))
-                                .Replace(' ', '_')
-                                .ToLower();
-            imageFileName = new string(imageFileName.Where(c => !invalidChars.Contains(c)).ToArray());
-            return string.Concat(NanoidDotNet.Nanoid.Generate(), "_", imageFileName);
-        }
-        private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
-        public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken)
+       public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken)
         {
             var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);
             if (currentUser is null)

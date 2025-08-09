@@ -20,6 +20,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
+        public async Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken) => await _context.Users.AnyAsync(u => u.Id == id, cancellationToken);
         public async Task<UserDataModel?> GetByIdAsync(string id)=> await _context.Users.FindAsync(id);
         public async Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id, CancellationToken cancellationToken)=> await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
         public async Task<UserDataModel?> GetByUsernameAsync(string username)=> await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);

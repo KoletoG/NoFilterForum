@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Admin;
 using Core.Models.DTOs.OutputDTOs.Profile;
@@ -9,6 +10,7 @@ namespace Application.Interfaces.Services
 {
     public interface IUserService
     {
+        public Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken);
         public Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken);
         public Task ApplyRoleAsync(UserDataModel user);
         public Task<bool> IsAdminOrVIPAsync(string userId);

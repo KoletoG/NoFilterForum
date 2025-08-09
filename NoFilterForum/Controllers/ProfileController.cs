@@ -152,18 +152,10 @@ namespace Web.Controllers
                 return Forbid();
             }
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            if (!await _userService.ExistUserByIdAsync(userId,cancellationToken)) return NotFound($"User with Id: {userId} was not found");
+            
             var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, currentUserId);
             var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest, cancellationToken);
-            if (resultUser.GetResult != GetResult.Success)
-            {
-                return resultUser.GetResult switch
-                {
-                    GetResult.NotFound => NotFound(),
-                    GetResult.Problem => Problem(),
-                    GetResult.Forbid => Forbid(),
-                    _ => Problem()
-                };
-            }
             var replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId, cancellationToken);
             var postDtoList = await _postService.GetListProfilePostDtoAsync(userId,cancellationToken);
 
