@@ -300,6 +300,7 @@ namespace NoFilterForum.Infrastructure.Services
             currentUser.ChangeImageUrl(newImageUrl);
             try
             {
+                Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, "images"));
                 await _unitOfWork.BeginTransactionAsync();
                 using (var stream = new FileStream(newImageUrl, FileMode.Create))
                 {
@@ -313,6 +314,12 @@ namespace NoFilterForum.Infrastructure.Services
                     System.IO.File.Delete(currentUserImageUrl);
                 }
                 return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Changing of image of user with Id: {UserId} was cancelled", updateImageRequest.UserId);
+                return PostResult.UpdateFailed;
             }
             catch (Exception ex)
             {
