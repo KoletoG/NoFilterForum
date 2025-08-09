@@ -23,11 +23,11 @@ namespace Web.Controllers
         private readonly IPostService _postService = postService;
         private readonly IUserService _userService = userService;
 
-        private async Task<PageTotalPagesDTO> GetPageInfoAsync(string postId, string? replyId, int page)
+        private async Task<PageTotalPagesDTO> GetPageInfoAsync(string postId, string? replyId, int page, CancellationToken cancellationToken)
         {
             return string.IsNullOrEmpty(replyId)
-                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page)
-                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId);
+                ? await _replyService.GetPageAndTotalPagesDTOByPostIdAsync(postId, page, cancellationToken)
+                : await _replyService.GetPageTotalPagesDTOByReplyIdAndPostIdAsync(replyId, postId, cancellationToken);
         }
         private void MarkTags(IEnumerable<ReplyIndexItemViewModel> replyItemsVM, PostReplyIndexViewModel postReplyIndexViewModel)
         {
@@ -60,7 +60,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            var pageTotalPagesDto = await GetPageInfoAsync(postId, replyId, page);
+            var pageTotalPagesDto = await GetPageInfoAsync(postId, replyId, page, cancellationToken);
 
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
             var listReplyIndexDto = await _replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest, cancellationToken);

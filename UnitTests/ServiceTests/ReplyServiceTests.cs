@@ -30,7 +30,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetCountByPostIdAsync(It.IsAny<string>())).ReturnsAsync(5);
+            unitOfWorkMock.Setup(x => x.Replies.GetCountByPostIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(5);
             unitOfWorkMock.Setup(x => x.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync(It.IsAny<GetListReplyIndexItemRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<ReplyIndexItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,

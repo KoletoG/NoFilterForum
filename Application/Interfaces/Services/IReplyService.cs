@@ -14,8 +14,8 @@ namespace NoFilterForum.Core.Interfaces.Services
         public Task<bool> HasTimeoutByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken);
         public Task<PostResult> DislikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken);
-        public Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId);
-        public Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page);
+        public Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId, CancellationToken cancellationToken);
+        public Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoAsync(string userId, CancellationToken cancellationToken);
         public Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest, CancellationToken cancellationToken);

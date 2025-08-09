@@ -20,9 +20,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.FindAsync(id);
         }
-        public async Task<IList<string>> GetIdsByPostIdAsync(string postId)
+        public async Task<IList<string>> GetIdsByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync();
+            return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken)
         {
@@ -53,33 +53,17 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.Post.Id==postId).ToListAsync(cancellationToken);
         }
-        public async Task<UserDataModel?> GetUserByReplyIdAsync(string replyId)
-        {
-            return await _context.ReplyDataModels.Where(x => x.Id == replyId).Select(x => x.User).FirstOrDefaultAsync();
-        }
-        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllByPostIdAsync(string postId)
-        {
-            return await _context.ReplyDataModels.Where(x => x.Post.Id == postId).ToListAsync();
-        }
         public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.ReplyDataModels.Where(x => x.User.Id == userId).ToListAsync(cancellationToken);
-        }
-        public async Task<string?> GetUserIdByReplyIdAsync(string replyId)
-        {
-            return await _context.ReplyDataModels.Where(x=>x.Id==replyId).Select(x=>x.User.Id).FirstOrDefaultAsync();
-        }
-        public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllAsync()
-        {
-            return await _context.ReplyDataModels.ToListAsync();
         }
         public async Task CreateAsync(ReplyDataModel reply, CancellationToken cancellationToken)
         {
             await _context.ReplyDataModels.AddAsync(reply,cancellationToken);
         }
-        public async Task<int> GetCountByPostIdAsync(string postId)
+        public async Task<int> GetCountByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x=>x.Post.Id==postId).CountAsync();
+            return await _context.ReplyDataModels.Where(x=>x.Post.Id==postId).CountAsync(cancellationToken);
         }
         public void Update(ReplyDataModel reply)
         {

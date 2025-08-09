@@ -43,13 +43,13 @@ namespace Application.Implementations.Services
         }
         // GET methods
         public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest, cancellationToken) ?? [];
-        public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId)
+        public async Task<PageTotalPagesDTO> GetPageTotalPagesDTOByReplyIdAndPostIdAsync(string replyId, string postId, CancellationToken cancellationToken)
         {
-            int totalPages = await GetTotalPagesByPostIdAsync(postId);
+            int totalPages = await GetTotalPagesByPostIdAsync(postId, cancellationToken);
             if (totalPages == 1) return new(1, 1);
 
             int page = 1;
-            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId);
+            var replyIds = await _unitOfWork.Replies.GetIdsByPostIdAsync(postId, cancellationToken);
             for (int i = 0; i < replyIds.Count; i++)
             {
                 if (replyIds[i] == replyId)
@@ -63,16 +63,16 @@ namespace Application.Implementations.Services
             }
             return new(page, totalPages);
         }
-        private async Task<int> GetTotalPagesByPostIdAsync(string postId)
+        private async Task<int> GetTotalPagesByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId);
+            var repliesCount = await _unitOfWork.Replies.GetCountByPostIdAsync(postId,cancellationToken);
             if (repliesCount == 0) return 1;
             int totalPages = PageUtility.GetTotalPagesCount(repliesCount, PostConstants.PostsPerSection);
             return totalPages;
         }
-        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page)
+        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOByPostIdAsync(string postId, int page, CancellationToken cancellationToken)
         {
-            int totalPages = await GetTotalPagesByPostIdAsync(postId);
+            int totalPages = await GetTotalPagesByPostIdAsync(postId, cancellationToken);
             if (totalPages == 1) return new(1, 1);
             page = PageUtility.ValidatePageNumber(page, totalPages);
             return new(page, totalPages);
