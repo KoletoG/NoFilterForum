@@ -147,11 +147,10 @@ namespace Web.Controllers
             {
                 return BadRequest($"Id cannot be null or empty");
             }
-            if (_userService.IsDefaultUserId(userId)) // Make static helper
+            if (DefaultUserHelper.IsDefaultUserId(userId))
             {
                 return Forbid();
             }
-
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
             var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, currentUserId);
             var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest, cancellationToken);
