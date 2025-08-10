@@ -44,7 +44,7 @@ namespace Web.Mappers
             PostReplyIndexViewModel postVM,
             List<ReplyIndexItemViewModel> repliesVM,
             PageTotalPagesDTO pageTotalPagesDTO,
-            string replyId)
+            string replyId, bool isAdmin)
         => new()
         {
             Page = pageTotalPagesDTO.Page,
@@ -52,7 +52,8 @@ namespace Web.Mappers
             ReplyId = replyId,
             CurrentUser = userVM,
             Post = postVM,
-            Replies = repliesVM
+            Replies = repliesVM,
+            IsAdmin = isAdmin
         };
     }
 }

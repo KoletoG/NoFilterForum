@@ -48,7 +48,7 @@
 						<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
 					}
-					@if (Model.Post.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
+					@if (Model.Post.Username == this.User!.Identity!.Name! || Model.IsAdmin)
 					{
 						<partial name="_DeletePost" model="new DeletePostViewModel(){PostId=Model.Post.Id}" />
 					}
@@ -116,7 +116,7 @@
 								<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
 							}
-							@if (reply.Username == this.User.Identity.Name || UserConstants.adminNames.Contains(this.User.Identity.Name))
+							@if (reply.Username == this.User!.Identity!.Name! || Model.IsAdmin)
 							{
 								<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
 							}

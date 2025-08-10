@@ -67,7 +67,7 @@ namespace Web.Controllers
 
             var replyIndexVMList = listReplyIndexDto.Select(ReplyMapper.MapToViewModel).ToList();
             var postVM = ReplyMapper.MapToViewModel(post);
-
+            bool isAdmin = await _userService.IsAdminAsync(userId);
             MarkTags(replyIndexVMList, postVM);
 
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
@@ -75,7 +75,8 @@ namespace Web.Controllers
                 postVM,
                 replyIndexVMList,
                 pageTotalPagesDto,
-                replyId ?? string.Empty);
+                replyId ?? string.Empty,
+                isAdmin);
             return View(indexReplyVM);
         }
         [HttpPost]

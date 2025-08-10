@@ -5,6 +5,7 @@
         public required string ReplyId { get;set; }
         public int Page {  get; set; }
         public int TotalPages { get; set; }
+        public bool IsAdmin { get; set; }
         public required IList<ReplyIndexItemViewModel> Replies { get; set; }
         public required PostReplyIndexViewModel Post {  get; set; }
         public required CurrentUserReplyIndexViewModel CurrentUser { get; set; }
