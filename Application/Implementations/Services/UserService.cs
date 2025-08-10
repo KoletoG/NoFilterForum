@@ -62,7 +62,6 @@ namespace NoFilterForum.Infrastructure.Services
             imageFileName = new string([..imageFileName.Where(c => !invalidChars.Contains(c))]);
             return string.Concat(NanoidDotNet.Nanoid.Generate(size:12), "_", imageFileName);
         }
-        private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
         
         // POST Methods
         public async Task<bool> IsAdminOrVIPAsync(string userId)
