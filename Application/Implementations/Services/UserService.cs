@@ -295,22 +295,22 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var imageName = GetCustomImageName(updateImageRequest.Image.FileName);
-            var newImageUrl = GetImageUrl(imageName);
             var currentUserImageUrl = currentUser.ImageUrl;
+            var newImageUrl = ImageUtility.GetRelativeUrl(imageName);
             currentUser.ChangeImageUrl(newImageUrl);
             try
             { 
                 await _unitOfWork.BeginTransactionAsync();
-                using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath,newImageUrl), FileMode.Create))
+                using (var stream = new FileStream(ImageUtility.GetAbsoluteUrl(_webHostEnvironment,newImageUrl), FileMode.Create))
                 {
                     await updateImageRequest.Image.CopyToAsync(stream,cancellationToken);
-                } // THINK OF ANOTHER WAY
+                }
                 _unitOfWork.Users.Update(currentUser);
                 await _unitOfWork.CommitAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 if (currentUserImageUrl != ImageUtility.GetDefautImageUrl(_webHostEnvironment))
                 {
-                    System.IO.File.Delete(Path.Combine(_webHostEnvironment.WebRootPath,currentUserImageUrl));
+                    System.IO.File.Delete(ImageUtility.GetAbsoluteUrl(_webHostEnvironment,currentUserImageUrl));
                 }
                 return PostResult.Success;
             }

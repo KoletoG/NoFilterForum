@@ -14,5 +14,13 @@ namespace Core.Utility
         {
             return Path.Combine(env.WebRootPath, "images", "defaultimage.gif");
         }
+        public static string GetAbsoluteUrl(IWebHostEnvironment env, string url)
+        {
+            return Path.Combine(env.WebRootPath, url);
+        }
+        public static string GetRelativeUrl(string url)
+        {
+            return Path.Combine("images", url);
+        }
     }
 }
