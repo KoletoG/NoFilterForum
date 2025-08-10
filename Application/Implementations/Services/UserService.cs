@@ -62,7 +62,7 @@ namespace NoFilterForum.Infrastructure.Services
             imageFileName = new string([..imageFileName.Where(c => !invalidChars.Contains(c))]);
             return string.Concat(NanoidDotNet.Nanoid.Generate(size:12), "_", imageFileName);
         }
-        private string GetImageUrl(string imageName) => Path.Combine(_webHostEnvironment.WebRootPath,"images", imageName);
+        private string GetImageUrl(string imageName) => Path.Combine("images", imageName);
         
         // POST Methods
         public async Task<bool> IsAdminOrVIPAsync(string userId)
@@ -299,10 +299,9 @@ namespace NoFilterForum.Infrastructure.Services
             var currentUserImageUrl = currentUser.ImageUrl;
             currentUser.ChangeImageUrl(newImageUrl);
             try
-            {
-                Directory.CreateDirectory(Path.Combine(_webHostEnvironment.WebRootPath, "images"));
+            { 
                 await _unitOfWork.BeginTransactionAsync();
-                using (var stream = new FileStream(newImageUrl, FileMode.Create))
+                using (var stream = new FileStream(Path.Combine(_webHostEnvironment.WebRootPath,newImageUrl), FileMode.Create))
                 {
                     await updateImageRequest.Image.CopyToAsync(stream,cancellationToken);
                 } // THINK OF ANOTHER WAY
@@ -311,7 +310,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 if (currentUserImageUrl != ImageUtility.GetDefautImageUrl(_webHostEnvironment))
                 {
-                    System.IO.File.Delete(currentUserImageUrl);
+                    System.IO.File.Delete(Path.Combine(_webHostEnvironment.WebRootPath,currentUserImageUrl));
                 }
                 return PostResult.Success;
             }
