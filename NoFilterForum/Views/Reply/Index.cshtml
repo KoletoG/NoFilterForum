@@ -72,8 +72,10 @@
 			<div class="row mt-3 mb-3 border-top border-bottom">
 				<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 			</div>
-			@foreach (var reply in Model.Replies)
+			int count = Model.Replies.Count;
+			@for (int i = 0; i < count; i++)
 			{
+				var reply = Model.Replies[i];
 				<div class="row border-top border-dark border-1 bg-secondary-subtle border-bottom">
 					<div class="col-2 align-content-center border-end border-1 border-black text-center">
 						<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true,reply.ImageUrl)" />
@@ -90,12 +92,11 @@
 							<h6 class="text-break">@Html.Raw(reply.Content)</h6>
 
 						}
-
+						<h6 class="text-center fst-italic">#@(i+1)</h6>
 						<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
 					</div>
 					@if (reply.Username != UserConstants.DefaultUser.UserName)
 					{
-						Console.WriteLine(Model.CurrentUser.LikesPostRepliesIds.GetType());
 						<div class="col-2 border-black border-start pt-2 text-center">
 							@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 							{
