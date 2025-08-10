@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Core.Models.DataModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Core.Models.DataModels;
 
@@ -17,6 +18,8 @@ namespace NoFilterForum.Infrastructure.Data
             builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts);
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedUserName).IsUnique();
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedEmail).IsUnique();
+            builder.Entity<ChatDataModel>().HasMany(x => x.MessagesUser1).WithOne();
+            builder.Entity<ChatDataModel>().HasMany(x => x.MessagesUser2).WithOne();
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }
@@ -24,5 +27,7 @@ namespace NoFilterForum.Infrastructure.Data
         public DbSet<ReportDataModel> ReportDataModels { get; set; }
         public DbSet<WarningDataModel> WarningDataModels { get; set; }
         public DbSet<NotificationDataModel> NotificationDataModels { get; set; }
+        public DbSet<ChatDataModel> ChatDataModels { get; set; }
+        public DbSet<MessageDataModel> MessageDataModels { get; set; }
     }
 }
