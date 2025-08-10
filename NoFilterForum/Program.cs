@@ -80,6 +80,8 @@ namespace Web
             builder.Services.AddScoped<IReplyFactory, ReplyFactory>();
             builder.Services.AddScoped<IWarningFactory, WarningFactory>();
             builder.Services.AddSingleton<ICacheService, CacheService>();
+            builder.Services.AddScoped<IChatRepository, ChatRepository>();
+            builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
