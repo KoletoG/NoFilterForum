@@ -17,6 +17,7 @@ namespace Core.Interfaces.Repositories
         INotificationRepository Notifications { get; }
         IReportRepository Reports { get; }
         IWarningRepository Warnings { get; }
+        IChatRepository Chats { get; }
         Task<int> CommitAsync();
         public Task CommitAsync(CancellationToken token);
         public Task CommitTransactionAsync(CancellationToken token);
