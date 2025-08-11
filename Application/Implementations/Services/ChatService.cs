@@ -79,7 +79,7 @@ namespace Application.Implementations.Services
                     x.User1.UserName!,
                     x.User2.UserName!,
                     x.User1.Id,
-                    x.Messages)
+                    x.Messages.OrderByDescending(x=>x.DateTime).Take(100).ToList())
                 ).FirstOrDefaultAsync(cancellationToken);
                 if (chat is null)
                 {
