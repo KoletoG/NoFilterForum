@@ -4,9 +4,14 @@
 	<script src="~/js/JSChat.js" asp-append-version="true"></script>
 </head>
 <body>
-	@foreach(var chat in Model)
+	@foreach (var chat in Model)
 	{
-		 <h2>@chat.Username</h2>
+		<h2>@chat.Username</h2>
+		var lastMessage = chat.GetDateOfLastMessage();
+		@if (lastMessage is not null)
+		{
+			<h4>@lastMessage.Message @lastMessage.DateTime</h4>
+		}
 	}
 </body>
 

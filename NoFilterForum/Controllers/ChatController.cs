@@ -23,7 +23,7 @@ namespace Web.Controllers
             }
             var listChatIndexDtos = await _chatService.GetIndexChatDTOsAsync(userId,cancellationToken);
             var chatIndexViewModels = listChatIndexDtos.Select(ChatMapper.MapToViewModel).ToList();
-            return View(listChatIndexDtos);
+            return View(chatIndexViewModels);
         }
         [HttpPost]
         [Authorize]
