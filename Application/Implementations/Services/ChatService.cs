@@ -69,5 +69,22 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<DetailsChatDTO?> GetChat(string id, string userId, CancellationToken cancellationToken)
+        {
+            var chat = await _unitOfWork.Chats.GetAll()
+                .Where(x => x.Id == id)
+                .Select(x => new DetailsChatDTO(
+                x.User1.UserName!,
+                x.User2.UserName!,
+                x.User1.Id,
+                x.MessagesUser1,
+                x.MessagesUser2)
+            ).FirstOrDefaultAsync(cancellationToken);
+            if(chat is null)
+            {
+                return null;
+            }
+            return chat;
+        }
     }
 }
