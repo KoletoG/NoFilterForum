@@ -5,10 +5,10 @@ namespace Web.ViewModels.Chat
 {
     public class ChatIndexViewModel
     {
-        public string ChatId { get; set; }
-        public string Username { get; set; }
-        public IReadOnlyCollection<MessageDataModel> MessagesUser1 { get; set; }
-        public IReadOnlyCollection<MessageDataModel> MessagesUser2 { get; set; }
+        public required string ChatId { get; set; }
+        public required string Username { get; set; }
+        public required IReadOnlyCollection<MessageDataModel> MessagesUser1 { get; set; }
+        public required IReadOnlyCollection<MessageDataModel> MessagesUser2 { get; set; }
         public MessageDataModel? GetDateOfLastMessage()
         {
             if (!MessagesUser1.Any() && !MessagesUser2.Any()) return null;

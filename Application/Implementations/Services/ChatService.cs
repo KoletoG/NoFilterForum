@@ -39,6 +39,7 @@ namespace Application.Implementations.Services
             {
                 return PostResult.NotFound;
             }
+            // Below line checks if user1 and user2 are the same and also checks if they already have a chat together
             if(await _unitOfWork.Chats.GetAll().AnyAsync(x => (x.User1 == user1 || x.User1 == user2) && (x.User2 == user1 || x.User2 == user2)))
             {
                 return PostResult.Conflict;
