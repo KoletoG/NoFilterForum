@@ -12,8 +12,8 @@ namespace Core.Models.DataModels
     {
         [Key]
         public string Id {  get;private set; }
-        public IEnumerable<MessageDataModel> MessagesUser1 { get; private set; }
-        public IEnumerable<MessageDataModel> MessagesUser2 { get; private set; }
+        public List<MessageDataModel> MessagesUser1 { get; private set; }
+        public List<MessageDataModel> MessagesUser2 { get; private set; }
         public UserDataModel User1 { get; private set; }
         public UserDataModel User2 {  get; private set; }
         public ChatDataModel()
