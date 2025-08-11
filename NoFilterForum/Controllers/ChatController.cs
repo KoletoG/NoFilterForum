@@ -4,6 +4,7 @@ using Application.Interfaces.Services;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Mappers;
 using Web.ViewModels.Chat;
 
 namespace Web.Controllers
@@ -21,7 +22,8 @@ namespace Web.Controllers
                 return Unauthorized();
             }
             var listChatIndexDtos = await _chatService.GetIndexChatDTOsAsync(userId,cancellationToken);
-            return View();
+            var chatIndexViewModels = listChatIndexDtos.Select(ChatMapper.MapToViewModel).ToList();
+            return View(listChatIndexDtos);
         }
         [HttpPost]
         [Authorize]

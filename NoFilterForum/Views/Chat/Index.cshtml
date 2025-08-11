@@ -1,10 +1,15 @@
-﻿
-<header>
+﻿@using Web.ViewModels.Chat
+@model IReadOnlyCollection<ChatIndexViewModel>
+<head>
 	<script src="~/js/JSChat.js" asp-append-version="true"></script>
-</header>
+</head>
+<body>
+	@foreach(var chat in Model)
+	{
+		 <h2>@chat.Username</h2>
+	}
+</body>
 
-
-
-@section Scripts{
+@section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }
