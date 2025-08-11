@@ -25,7 +25,7 @@ namespace Application.Implementations.Services
         }
         public async Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Chats.GetAll().Where(x=>x.User1.Id==userId).Select(x => new IndexChatDTO(x.Id, x.User2.UserName!, x.MessagesUser1, x.MessagesUser2)).ToListAsync(cancellationToken);
+            return await _unitOfWork.Chats.GetAll().Where(x=>x.User1.Id==userId).Select(x => new IndexChatDTO(x.Id, x.User2.UserName!, x.Messages)).ToListAsync(cancellationToken);
         }
         public async Task<PostResult> CreateChat(string userId1, string userId2, CancellationToken cancellationToken)
         {
@@ -71,20 +71,31 @@ namespace Application.Implementations.Services
         }
         public async Task<DetailsChatDTO?> GetChat(string id, string userId, CancellationToken cancellationToken)
         {
-            var chat = await _unitOfWork.Chats.GetAll()
-                .Where(x => x.Id == id)
-                .Select(x => new DetailsChatDTO(
-                x.User1.UserName!,
-                x.User2.UserName!,
-                x.User1.Id,
-                x.MessagesUser1,
-                x.MessagesUser2)
-            ).FirstOrDefaultAsync(cancellationToken);
-            if(chat is null)
+            try
             {
+                var chat = await _unitOfWork.Chats.GetAll()
+                    .Where(x => x.Id == id)
+                    .Select(x => new DetailsChatDTO(
+                    x.User1.UserName!,
+                    x.User2.UserName!,
+                    x.User1.Id,
+                    x.Messages)
+                ).FirstOrDefaultAsync(cancellationToken);
+                if (chat is null)
+                {
+                    return null;
+                }
+                return chat;
+            }
+            catch (OperationCanceledException ex)
+            {
+                _logger.LogError(ex,"Getting chat information by user with Id: {UserId} was cancelled", userId);
                 return null;
             }
-            return chat;
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

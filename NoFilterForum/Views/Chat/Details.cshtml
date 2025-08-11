@@ -1,0 +1,17 @@
+﻿@using Web.ViewModels.Chat
+@model DetailsChatViewModel
+
+
+<body class="bg-body-secondary">
+	<div class="container bg-white shadow p-3">
+		@foreach(var message in Model.Messages)
+		{
+			<h5>@message.Message</h5>
+		}
+	</div>
+</body>
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

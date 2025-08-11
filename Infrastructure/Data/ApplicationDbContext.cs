@@ -18,8 +18,7 @@ namespace NoFilterForum.Infrastructure.Data
             builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts);
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedUserName).IsUnique();
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedEmail).IsUnique();
-            builder.Entity<ChatDataModel>().HasMany(x => x.MessagesUser1).WithOne();
-            builder.Entity<ChatDataModel>().HasMany(x => x.MessagesUser2).WithOne();
+            builder.Entity<ChatDataModel>().HasMany(x => x.Messages).WithOne();
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }

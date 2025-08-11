@@ -7,5 +7,5 @@ using Core.Models.DataModels;
 
 namespace Core.DTOs.OutputDTOs.Chat
 {
-    public record DetailsChatDTO(string Username1, string Username2, string UserId1, IReadOnlyCollection<MessageDataModel> MessagesUser1, IReadOnlyCollection<MessageDataModel> MessagesUser2);
+    public record DetailsChatDTO(string Username1, string Username2, string UserId1, IReadOnlyCollection<MessageDataModel> Messages);
 }

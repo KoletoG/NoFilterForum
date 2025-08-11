@@ -13,12 +13,14 @@ namespace Core.Models.DataModels
         public string Id { get;private set; }
         public DateTime DateTime { get; private set; }
         public string Message { get; private set; }
+        public string UserId { get; private set; }
         public MessageDataModel() { }
-        public MessageDataModel(string message)
+        public MessageDataModel(string message, string userId)
         {
             DateTime = DateTime.UtcNow;
             Message = message;
             Id = Guid.NewGuid().ToString();
+            UserId = userId;
         }
     }
 }

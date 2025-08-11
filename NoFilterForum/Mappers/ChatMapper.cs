@@ -1,4 +1,6 @@
 ﻿using Core.DTOs.OutputDTOs.Chat;
+using Core.Models.DataModels;
+using NuGet.Packaging;
 using Web.ViewModels.Chat;
 
 namespace Web.Mappers
@@ -8,14 +10,12 @@ namespace Web.Mappers
         public static ChatIndexViewModel MapToViewModel(IndexChatDTO dto) => new()
         {
             ChatId = dto.ChatId,
-            MessagesUser1 = dto.MessagesUser1,
-            MessagesUser2 = dto.MessagesUser2,
+            Messages = dto.Messages,
             Username = dto.Username
         };
         public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto) => new()
         {
-            MessagesUser1 = dto.MessagesUser1,
-            MessagesUser2 = dto.MessagesUser2,
+            Messages = dto.Messages,
             Username1 = dto.Username1,
             Username2 = dto.Username2
         };

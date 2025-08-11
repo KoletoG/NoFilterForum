@@ -12,8 +12,7 @@ namespace Core.Models.DataModels
     {
         [Key]
         public string Id {  get;private set; }
-        public List<MessageDataModel> MessagesUser1 { get; private set; }
-        public List<MessageDataModel> MessagesUser2 { get; private set; }
+        public List<MessageDataModel> Messages { get; private set; }
         public UserDataModel User1 { get; private set; }
         public UserDataModel User2 {  get; private set; }
         public ChatDataModel()
@@ -24,8 +23,7 @@ namespace Core.Models.DataModels
             Id = Guid.NewGuid().ToString();
             User1 = user1;
             User2 = user2;
-            MessagesUser1 = new List<MessageDataModel>();
-            MessagesUser2 = new List<MessageDataModel>();
+            Messages = new List<MessageDataModel>();
         }
     }
 }
