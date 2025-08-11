@@ -10,5 +10,6 @@ namespace Core.Interfaces.Repositories
     public interface IChatRepository
     {
         public IQueryable<ChatDataModel> GetAll();
+        public Task Create(ChatDataModel chatDataModel, CancellationToken cancellationToken);
     }
 }

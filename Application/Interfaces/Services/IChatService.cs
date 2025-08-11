@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.DTOs.OutputDTOs.Chat;
+using Core.Enums;
 
 namespace Application.Interfaces.Services
 {
     public interface IChatService
     {
         public Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId, CancellationToken cancellationToken);
+        public Task<PostResult> CreateChat(string userId1, string userId2, CancellationToken cancellationToken);
     }
 }

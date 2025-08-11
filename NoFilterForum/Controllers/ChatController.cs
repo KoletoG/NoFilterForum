@@ -1,25 +1,46 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Application.Interfaces.Services;
+using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.ViewModels.Chat;
 
 namespace Web.Controllers
 {
-    public class ChatController(IUserService userService) : Controller
+    public class ChatController(IChatService chatService) : Controller
     {
-        private readonly IUserService _userService = userService;
-
+        private readonly IChatService _chatService = chatService;
         [Authorize]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
                 return Unauthorized();
             }
-
+            var listChatIndexDtos = await _chatService.GetIndexChatDTOsAsync(userId,cancellationToken);
             return View();
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateChatViewModel createChatViewModel, CancellationToken cancellationToken)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null)
+            {
+                return Unauthorized();
+            }
+            var result = await _chatService.CreateChat(userId, createChatViewModel.UserId, cancellationToken);
+            return result switch
+            {
+                PostResult.Success => RedirectToAction("Index"),
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
         }
     }
 }
