@@ -10,11 +10,6 @@
 <body class="bg-body-secondary">
 	<div class="container border-2 border p-3 shadow border-black bg-white">
 		@{
-			<form asp-action="Create" asp-controller="Chat" method="post">
-				@Html.AntiForgeryToken()
-				<input hidden name="UserId" value="@Model.Profile.Id" />
-				<button type="submit">Start chat</button>
-			</form>
 			<div class="row border-bottom border-2 border-black">
 				<div class="col-10 border-end border-1 border-dark-subtle mb-2">
 					<h4>Bio:</h4> <h3 class="fw-bold">@Html.Raw(Model.Profile.Bio)</h3>
@@ -71,6 +66,11 @@
 			}
 			else
 			{
+				<form asp-action="Create" asp-controller="Chat" method="post">
+					@Html.AntiForgeryToken()
+					<input hidden name="UserId" value="@Model.Profile.Id" />
+					<button type="submit">Start chat</button>
+				</form>
 				<h3>@Model.Profile.UserName's bio: @Html.Raw(Model.Profile.Bio)</h3>
 			}
 			if (UserConstants.adminNames.Contains(this.User.Identity.Name))
