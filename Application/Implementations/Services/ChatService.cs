@@ -39,6 +39,10 @@ namespace Application.Implementations.Services
             {
                 return PostResult.NotFound;
             }
+            if(await _unitOfWork.Chats.GetAll().AnyAsync(x => (x.User1 == user1 || x.User1 == user2) && (x.User2 == user1 || x.User2 == user2)))
+            {
+                return PostResult.Conflict;
+            }
             var chat = new ChatDataModel(user1, user2);
             try
             {

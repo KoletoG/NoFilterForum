@@ -41,6 +41,7 @@ namespace Web.Controllers
                 PostResult.Success => RedirectToAction("Index"),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
+                PostResult.Conflict => Conflict(),
                 _ => Problem()
             };
         }
