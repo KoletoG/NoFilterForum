@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Interfaces.Repositories;
+using Core.Models.DataModels;
 using NoFilterForum.Infrastructure.Data;
 
 namespace Infrastructure.Repositories
@@ -15,7 +16,7 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public IQueryable GetAll()
+        public IQueryable<ChatDataModel> GetAll()
         {
             return _context.ChatDataModels;
         }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Services;
+﻿using System.Security.Claims;
+using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,11 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null)
+            {
+                return Unauthorized();
+            }
 
             return View();
         }
