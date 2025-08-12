@@ -13,7 +13,7 @@
 		<form id="messageForm">
 			@Html.AntiForgeryToken()
 			<input type="text" id="message" name="Message" />
-			<input type="hidden" name="ChatId" value="CHATID HERE"/>
+			<input type="hidden" name="ChatId" value="@Model.ChatId"/>
 			<button type="submit">Send message</button>
 		</form>
 	</div>
