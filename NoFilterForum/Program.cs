@@ -82,6 +82,8 @@ namespace Web
             builder.Services.AddSingleton<ICacheService, CacheService>();
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+            builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
