@@ -84,6 +84,7 @@ namespace Web
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IMessageRepository, MessageRepository>();
             builder.Services.AddScoped<IMessageService, MessageService>();
+            builder.Services.AddScoped<IMessageFactory, MessageFactory>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;

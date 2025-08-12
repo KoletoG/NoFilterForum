@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Application.Interfaces.Services;
 using Core.DTOs.InputDTOs.Message;
 using Core.Enums;
+using Core.Interfaces.Factories;
 using Core.Interfaces.Repositories;
 using Core.Models.DataModels;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Implementations.Services
 {
-    public class MessageService(IUnitOfWork unitOfWork, ILogger<MessageService> logger) : IMessageService
+    public class MessageService(IUnitOfWork unitOfWork, ILogger<MessageService> logger, IMessageFactory messageFactory) : IMessageService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ILogger<MessageService> _logger = logger;
+        private readonly IMessageFactory _messageFactory = messageFactory;
         public async Task<PostResult> CreateMessageAsync(CreateMessageRequest createMessageRequest, CancellationToken cancellationToken)
         {
             var chat = await _unitOfWork.Chats.GetAll()
@@ -33,10 +35,10 @@ namespace Application.Implementations.Services
             {
                 return PostResult.Forbid;
             }
-            var messageDataModel = new MessageDataModel(createMessageRequest.Message, createMessageRequest.UserId);
+            var message = _messageFactory.Create(createMessageRequest.Message, createMessageRequest.UserId);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.CreateAsync, messageDataModel, cancellationToken);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.CreateAsync, message, cancellationToken);
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)
