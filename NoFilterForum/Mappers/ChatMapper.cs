@@ -17,7 +17,8 @@ namespace Web.Mappers
         {
             Messages = dto.Messages,
             Username1 = dto.Username1,
-            Username2 = dto.Username2
+            Username2 = dto.Username2,
+            ChatId = dto.ChatId
         };
     }
 }

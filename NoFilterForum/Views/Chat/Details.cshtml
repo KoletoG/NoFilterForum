@@ -10,14 +10,24 @@
 		}
 	</div>
 	<div class="row">
-		<form asp-action="">
-
+		<form id="messageForm">
+			@Html.AntiForgeryToken()
+			<input type="text" id="message" name="Message" />
+			<input type="hidden" name="ChatId" value="CHATID HERE"/>
+			<button type="submit">Send message</button>
 		</form>
-		<input type="text" id="message" />
-		<button type="submit">Send message</button>
 	</div>
 </body>
-
+<script>
+	document.getElementById('messageForm').addEventListener('submit',function (event){
+		event.preventDefault();
+		let formData = new FormData(this);
+		fetch('/Message/Create',{
+			method: 'POST',
+			body: formData
+		});
+	});
+</script>
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
