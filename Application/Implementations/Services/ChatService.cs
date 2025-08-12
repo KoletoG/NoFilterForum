@@ -47,7 +47,7 @@ namespace Application.Implementations.Services
             var chat = new ChatDataModel(user1, user2);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Chats.Create, chat, cancellationToken);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Chats.CreateAsync, chat, cancellationToken);
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)

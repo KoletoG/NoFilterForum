@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Interfaces.Repositories;
 using Core.Models.DataModels;
+using Microsoft.EntityFrameworkCore;
 using NoFilterForum.Infrastructure.Data;
 
 namespace Infrastructure.Repositories
@@ -20,7 +21,7 @@ namespace Infrastructure.Repositories
         {
             return _context.ChatDataModels;
         }
-        public async Task Create(ChatDataModel chatDataModel,CancellationToken cancellationToken)
+        public async Task CreateAsync(ChatDataModel chatDataModel,CancellationToken cancellationToken)
         {
             await _context.ChatDataModels.AddAsync(chatDataModel,cancellationToken);
         }

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -15,6 +16,8 @@ namespace Web.Controllers
         }
         public IActionResult Create(CreateMessageViewModel createMessageViewModel)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId is null) return Unauthorized();
             return Forbid();
         }
     }
