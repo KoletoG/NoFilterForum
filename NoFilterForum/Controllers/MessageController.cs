@@ -23,9 +23,9 @@ namespace Web.Controllers
             if(userId is null) return Unauthorized();
             var request = MessageMapper.MapToRequest(createMessageViewModel, userId);
             var result = await _messageService.CreateMessageAsync(request, cancellationToken);
-            return result switch
+            return result.Result switch
             {
-                PostResult.Success => NoContent(),
+                PostResult.Success => Ok(result.Message),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),
