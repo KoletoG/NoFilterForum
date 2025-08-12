@@ -23,6 +23,7 @@ namespace Core.Interfaces.Repositories
         public Task CommitAsync(CancellationToken token);
         public Task CommitTransactionAsync(CancellationToken token);
         Task RunPOSTOperationAsync<T>(Func<T, Task> func, T obj) where T : class;
+        public Task RunPOSTOperationAsync<T1, T2>(Func<T1,CancellationToken, Task> func, T1 obj, Action<T2> func2, T2 obj2,CancellationToken cancellationToken) where T1 : class where T2 : class;
         public Task RunPOSTOperationAsync<T>(Func<T, CancellationToken, Task> func, T obj, CancellationToken cancellationToken) where T : class;
         public Task RunPOSTOperationAsync<T1, T2>(Action<T1> func, T1 obj, Action<T2> func2, T2 obj2, CancellationToken token) where T1 : class where T2 : class;
         Task RunPOSTOperationAsync<T>(Action<T> func, T obj) where T : class;

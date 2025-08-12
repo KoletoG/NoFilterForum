@@ -25,5 +25,9 @@ namespace Infrastructure.Repositories
         {
             await _context.ChatDataModels.AddAsync(chatDataModel,cancellationToken);
         }
+        public void Update(ChatDataModel chatDataModel)
+        {
+            _context.ChatDataModels.Update(chatDataModel);
+        }
     }
 }

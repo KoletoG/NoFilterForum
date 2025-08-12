@@ -4,7 +4,7 @@
 
 <body class="bg-body-secondary">
 	<div class="container bg-white shadow p-3">
-		@foreach(var message in Model.Messages)
+		@foreach (var message in Model.Messages)
 		{
 			<h5>@message.Message</h5>
 		}
@@ -13,13 +13,12 @@
 		<form id="messageForm">
 			@Html.AntiForgeryToken()
 			<input type="text" id="message" name="Message" />
-			<input type="hidden" name="ChatId" value="@Model.ChatId"/>
+			<input type="hidden" name="ChatId" value="@Model.ChatId" />
 			<button type="submit">Send message</button>
 		</form>
 	</div>
 </body>
 <script>
-	var messageText="";
 	document.getElementById('messageForm').addEventListener('submit',function (event){
 		event.preventDefault();
 		let formData = new FormData(this);
@@ -31,8 +30,11 @@
 		{
 			throw new Error("Error has occcured");
 		}
+		return response.text();
 		}).then(data=>{
-			messageText=data.text();
+	var label = document.createElement('label');
+	label.textContent=data;
+	document.appendChild(label);
 		});
 	});
 </script>

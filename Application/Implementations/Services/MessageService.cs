@@ -26,6 +26,7 @@ namespace Application.Implementations.Services
             var chat = await _unitOfWork.Chats.GetAll()
                 .Include(x => x.User1)
                 .Include(x => x.User2)
+                .Include(x=>x.Messages)
                 .FirstOrDefaultAsync(x => x.Id == createMessageRequest.ChatId,cancellationToken);
             if(chat is null)
             {
@@ -37,9 +38,10 @@ namespace Application.Implementations.Services
                 return new(PostResult.Forbid,null);
             }
             var message = _messageFactory.Create(createMessageRequest.Message, createMessageRequest.UserId);
+            chat.Messages.Add(message);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.CreateAsync, message, cancellationToken);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.CreateAsync, message,_unitOfWork.Chats.Update,chat, cancellationToken);
                 return new(PostResult.Success,message.Message);
             }
             catch(OperationCanceledException ex)
