@@ -93,10 +93,6 @@ namespace Application.Implementations.Services
                 _logger.LogError(ex,"Getting chat information by user with Id: {UserId} was cancelled", userId);
                 return null;
             }
-            catch (Exception)
-            {
-                throw;
-            }
         }
     }
 }
