@@ -5,7 +5,13 @@
 	<div class="container bg-white shadow p-3">
 		@foreach (var message in Model.Messages)
 		{
-			<h5>@message.Message</h5>
+			<div class="row mb-3">
+				<div class="col-7">
+				</div>
+				<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
+					<h6>@message.Message</h6>
+				</div>
+			</div>
 		}
 	</div>
 	<div class="row">
@@ -20,5 +26,5 @@
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
-	<script src="~/js/JSMessage.js" asp-append-version="true"></script>
+	<script src="~/js/JSMessage.js" asp-append-version="true" defer></script>
 }
