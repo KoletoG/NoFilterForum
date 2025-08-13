@@ -54,7 +54,7 @@ namespace Web.Controllers
             var chatDTO = await _chatService.GetChat(id,userId,cancellationToken);
             if (chatDTO is null) return BadRequest();
             if (chatDTO.UserId1 != userId && chatDTO.UserId2 !=userId) return Forbid();
-            var chatVM = ChatMapper.MapToViewModel(chatDTO);
+            var chatVM = ChatMapper.MapToViewModel(chatDTO,userId);
             return View(chatVM);
         }
     }

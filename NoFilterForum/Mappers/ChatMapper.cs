@@ -13,13 +13,13 @@ namespace Web.Mappers
             Messages = dto.Messages,
             Username = dto.Username
         };
-        public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto) => new()
+        public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto,string userId) => new()
         {
             Messages = dto.Messages.ToList(),
             Username1 = dto.Username1,
             Username2 = dto.Username2,
             ChatId = dto.ChatId,
-            UserId = dto.UserId1
+            UserId = userId
         };
     }
 }
