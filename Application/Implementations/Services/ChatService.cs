@@ -23,9 +23,9 @@ namespace Application.Implementations.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-        public async Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId,string username, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Chats.GetAll().Where(x=>x.User1.Id==userId || x.User2.Id==userId).Select(x => new IndexChatDTO(x.Id, x.User2.UserName!, x.Messages)).ToListAsync(cancellationToken);
+            return await _unitOfWork.Chats.GetAll().Where(x=>x.User1.Id==userId || x.User2.Id==userId).Select(x => new IndexChatDTO(x.Id, x.User1.UserName! == username ? x.User2.UserName! : x.User1.UserName!, x.Messages)).ToListAsync(cancellationToken);
         }
         public async Task<PostResult> CreateChat(string userId1, string userId2, CancellationToken cancellationToken)
         {

@@ -21,7 +21,8 @@ namespace Web.Controllers
             {
                 return Unauthorized();
             }
-            var listChatIndexDtos = await _chatService.GetIndexChatDTOsAsync(userId,cancellationToken);
+            var username = User.Identity!.Name!;
+            var listChatIndexDtos = await _chatService.GetIndexChatDTOsAsync(userId, username,cancellationToken);
             var chatIndexViewModels = listChatIndexDtos.Select(ChatMapper.MapToViewModel).ToList();
             return View(chatIndexViewModels);
         }
