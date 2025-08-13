@@ -3,23 +3,26 @@
 
 <body class="bg-body-secondary">
 	<div class="container bg-white shadow p-3" id="mainContainer">
-		@foreach (var message in Model.Messages)
+		@{
+			var messagesCount = Model.Messages.Count;
+		}
+		@for (int i = 0; i < messagesCount; i++)
 		{
-			if (message.UserId == Model.UserId)
+			if (Model.Messages[i].UserId == Model.UserId)
 			{
-				<div class="row mb-3">
+				<div class="row mb-3" id="row_{@i}">
 					<div class="col-7">
 					</div>
 					<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
-						<h6>@message.Message</h6>
+						<h6>@Model.Messages[i].Message</h6>
 					</div>
 				</div>
 			}
 			else
 			{
-				<div class="row mb-3">
+				<div class="row mb-3" id="row_{@i}">
 					<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
-						<h6>@message.Message</h6>
+						<h6>@Model.Messages[i].Message</h6>
 					</div>
 					<div class="col-7">
 					</div>
@@ -40,4 +43,7 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 	<script src="~/js/JSMessage.js" asp-append-version="true" defer></script>
+	<script>
+		document.getElementById('row_{@(Model.Messages.Count-1)}').scrollIntoView({behavior:"instant"});
+	</script>
 }
