@@ -1,7 +1,6 @@
 ﻿@using Web.ViewModels.Chat
 @model DetailsChatViewModel
 
-
 <body class="bg-body-secondary">
 	<div class="container bg-white shadow p-3">
 		@foreach (var message in Model.Messages)
@@ -10,7 +9,7 @@
 		}
 	</div>
 	<div class="row">
-		<form id="messageForm">
+		<form id="messageForm" onsubmit="submitMessage(this)">
 			@Html.AntiForgeryToken()
 			<input type="text" id="message" name="Message" />
 			<input type="hidden" name="ChatId" value="@Model.ChatId" />
@@ -18,27 +17,8 @@
 		</form>
 	</div>
 </body>
-<script>
-	document.getElementById('messageForm').addEventListener('submit',function (event){
-		event.preventDefault();
-		let formData = new FormData(this);
-		fetch('/Message/Create',{
-			method: 'POST',
-			body: formData
-		}).then(response=>{
-		if(!response.ok)
-		{
-			throw new Error("Error has occcured");
-		}
-		return response.text();
-		}).then(data=>{
-	var label = document.createElement('label');
-	label.textContent=data;
-	document.appendChild(label);
-		});
-	});
-</script>
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
+	<script src="~/js/JSMessage.js" asp-append-version="true"></script>
 }
