@@ -5,13 +5,26 @@
 	<div class="container bg-white shadow p-3">
 		@foreach (var message in Model.Messages)
 		{
-			<div class="row mb-3">
-				<div class="col-7">
+			if (message.UserId == Model.UserId)
+			{
+				<div class="row mb-3">
+					<div class="col-7">
+					</div>
+					<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
+						<h6>@message.Message</h6>
+					</div>
 				</div>
-				<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
-					<h6>@message.Message</h6>
+			}
+			else
+			{
+				<div class="row mb-3">
+					<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
+						<h6>@message.Message</h6>
+					</div>
+					<div class="col-7">
+					</div>
 				</div>
-			</div>
+			}
 		}
 	</div>
 	<div class="row">

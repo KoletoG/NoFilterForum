@@ -9,14 +9,15 @@
 		{
 			<div class="row mt-2">
 
-				<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" class="text-center fw-bold">@chat.Username</a>
+				<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" class="text-center fw-bold fs-5">@chat.Username</a>
 			</div>
 			var lastMessage = chat.GetDateAndTextOfLastMessage();
 			<div class="row border-bottom border-2">
 
 				@if (lastMessage is not null)
 				{
-					<h5 class="text-center fst-italic text-black-50">@lastMessage.Message @lastMessage.DateTime.ToShortTimeString()</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate">@lastMessage.Message</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate">@lastMessage.DateTime.ToShortTimeString()</h5>
 				}
 				else
 				{

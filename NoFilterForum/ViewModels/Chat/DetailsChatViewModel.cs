@@ -8,5 +8,6 @@ namespace Web.ViewModels.Chat
         public required string Username1 { get; set; }
         public required string Username2 { get; set; }
         public required string ChatId {  get; set; }
+        public required string UserId { get; set; }
     }
 }
