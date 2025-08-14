@@ -33,7 +33,7 @@
 	<div class="row">
 		<form id="messageForm" onsubmit="submitMessage('@Model.User2Id')">
 			@Html.AntiForgeryToken()
-			<input type="text" id="message" name="Message" />
+			<input type="text" id="messageInput" name="Message" />
 			<input type="hidden" name="ChatId" value="@Model.ChatId" />
 			<button type="submit">Send message</button>
 		</form>

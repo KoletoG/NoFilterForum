@@ -47,5 +47,6 @@ async function submitMessage(userId)
 	divRow.appendChild(divCol1);
 	divRow.appendChild(divCol2);
 	mainContainer.appendChild(divRow);
+	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageText);
 }
