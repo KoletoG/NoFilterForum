@@ -5,7 +5,7 @@ connection.on("ReceiveMessage",(message) => {
 	var divCol1 = document.createElement('div');
 	divCol1.classList.add('col-6');
 	var divCol2 = document.createElement('div');
-	divCol2.classList.add('col-6','border','border-2', 'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
+	divCol2.classList.add('col-6','border','border-2','border-primary-subtle', 'bg-primary-subtle', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
 	h6message.innerText=message;
 	divCol2.appendChild(h6message);
