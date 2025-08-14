@@ -1,10 +1,21 @@
-﻿var form = document.getElementById('messageForm');
+﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+connection.on("ReceiveMessage",(userId,message) => {
+	alert(userId + " : " + message);
+});
+connection.start();
+function sendMessage() {
+        connection.invoke("SendMessage", "User1", "Hello SignalR")
+                  .catch(err => console.error(err));
+    }
+var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
 });
 var mainContainer = document.getElementById('mainContainer');
 async function submitMessage()
 {
+	sendMessage();
+
 	let messageText;
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Create',{

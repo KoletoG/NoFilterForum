@@ -11,7 +11,7 @@ namespace Infrastructure.SignalRHubs
     {
         public async Task SendMessage(string userId, string message)
         {
-            await Clients.All.SendAsync("Receive message", userId, message);
+            await Clients.All.SendAsync("ReceiveMessage", userId, message);
         }
     }
 }

@@ -41,12 +41,10 @@
 </body>
 
 @section Scripts {
+	<script src="~/js/signalr.min.js" asp-append-version="true"></script>
 	<partial name="_ValidationScriptsPartial" />
 	<script src="~/js/JSMessage.js" asp-append-version="true" defer></script>
 	<script>
-		document.getElementById('row_{@(Model.Messages.Count-1)}').scrollIntoView({behavior:"instant"});
+		document.getElementById('row_{@(Model.Messages.Count - 1)}').scrollIntoView({behavior:"instant"});
 	</script>
-	@{
-		<script src="~/js/signalr.min.js" asp-append-version="true"></script>
-	}
 }
