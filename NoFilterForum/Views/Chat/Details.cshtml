@@ -2,12 +2,12 @@
 @model DetailsChatViewModel
 
 <body class="bg-body-secondary">
-	<div class="container bg-white shadow p-3" id="mainContainer">
+	<div class="container bg-white shadow p-3 rounded-1" id="mainContainer">
 		@{
 			var messagesCount = Model.Messages.Count;
 		}
 		@for (int i = 0; i < messagesCount; i++)
-		{
+		{ // Make it focus on last message, also change text input box
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
 				<div class="row mb-3" id="row_{@i}">
@@ -30,12 +30,19 @@
 			}
 		}
 	</div>
-	<div class="row">
+	<div class="container mt-2">
 		<form id="messageForm" onsubmit="submitMessage('@Model.User2Id')">
 			@Html.AntiForgeryToken()
-			<input type="text" id="messageInput" name="Message" />
+			<div class="row">
+
+				<div class="col-11">
+					<input type="text" class="input-group-text text-start container" id="messageInput" name="Message" />
+				</div>
+				<div class="col-1">
+					<button type="submit" class="btn btn-light">Send</button>
+				</div>
+			</div>
 			<input type="hidden" name="ChatId" value="@Model.ChatId" />
-			<button type="submit">Send message</button>
 		</form>
 	</div>
 </body>
