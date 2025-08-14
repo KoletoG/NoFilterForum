@@ -46,4 +46,7 @@
 	<script>
 		document.getElementById('row_{@(Model.Messages.Count-1)}').scrollIntoView({behavior:"instant"});
 	</script>
+	@{
+		<script src="~/js/signalr.min.js" asp-append-version="true"></script>
+	}
 }

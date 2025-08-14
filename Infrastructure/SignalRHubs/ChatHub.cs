@@ -9,5 +9,9 @@ namespace Infrastructure.SignalRHubs
 {
     public class ChatHub : Hub
     {
+        public async Task SendMessage(string userId, string message)
+        {
+            await Clients.All.SendAsync("Receive message", userId, message);
+        }
     }
 }
