@@ -1,6 +1,17 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 connection.on("ReceiveMessage",(message) => {
-	alert(message);
+	var divRow =document.createElement('div');
+	divRow.classList.add('row','mb-3');
+	var divCol1 = document.createElement('div');
+	divCol1.classList.add('col-7');
+	var divCol2 = document.createElement('div');
+	divCol2.classList.add('col-5','border','border-2', 'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
+	var h6message=document.createElement('h6');
+	h6message.innerText=message;
+	divCol2.appendChild(h6message);
+	divRow.appendChild(divCol2);
+	divRow.appendChild(divCol1);
+	mainContainer.appendChild(divRow);
 });
 connection.start();
 function sendMessage(userId,message) {
@@ -11,6 +22,7 @@ var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
 });
+
 var mainContainer = document.getElementById('mainContainer');
 async function submitMessage(userId)
 {

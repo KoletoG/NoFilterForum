@@ -11,9 +11,9 @@
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
 				<div class="row mb-3" id="row_{@i}">
-					<div class="col-7">
+					<div class="col-6">
 					</div>
-					<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
+					<div class="col-6 border border-2 bg-body-secondary fst-italic text-break rounded-2">
 						<h6>@Model.Messages[i].Message</h6>
 					</div>
 				</div>
@@ -21,10 +21,10 @@
 			else
 			{
 				<div class="row mb-3" id="row_{@i}">
-					<div class="col-5 border border-2 bg-body-secondary fst-italic text-break rounded-2">
+					<div class="col-6 border border-2 bg-body-secondary fst-italic text-break rounded-2">
 						<h6>@Model.Messages[i].Message</h6>
 					</div>
-					<div class="col-7">
+					<div class="col-6">
 					</div>
 				</div>
 			}
