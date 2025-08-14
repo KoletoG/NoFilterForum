@@ -1,10 +1,10 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-connection.on("ReceiveMessage",(userId,message) => {
-	alert(userId + " : " + message);
+connection.on("ReceiveMessage",(message) => {
+	alert(message);
 });
 connection.start();
-function sendMessage() {
-        connection.invoke("SendMessage", "User1", "Hello SignalR")
+function sendMessage(userId,message) {
+        connection.invoke("SendMessage", userId,message)
                   .catch(err => console.error(err));
     }
 var form = document.getElementById('messageForm');
@@ -12,11 +12,8 @@ form.addEventListener('submit',(event)=>{
 	event.preventDefault();
 });
 var mainContainer = document.getElementById('mainContainer');
-async function submitMessage()
+async function submitMessage(userId)
 {
-	sendMessage();
-
-	let messageText;
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Create',{
 		method: 'POST',
@@ -25,7 +22,7 @@ async function submitMessage()
 	if(!response.ok){
 		throw new Error("Error has occured");
 	}
-	messageText = await response.text();
+	let messageText = await response.text();
 	var divRow =document.createElement('div');
 	divRow.classList.add('row','mb-3');
 	var divCol1 = document.createElement('div');
@@ -38,4 +35,5 @@ async function submitMessage()
 	divRow.appendChild(divCol1);
 	divRow.appendChild(divCol2);
 	mainContainer.appendChild(divRow);
+	sendMessage(userId,messageText);
 }

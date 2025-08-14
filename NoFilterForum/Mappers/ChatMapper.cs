@@ -19,7 +19,8 @@ namespace Web.Mappers
             Username1 = dto.Username1,
             Username2 = dto.Username2,
             ChatId = dto.ChatId,
-            UserId = userId
+            UserId = userId,
+            User2Id = userId == dto.UserId1 ? dto.UserId2 : dto.UserId1
         };
     }
 }
