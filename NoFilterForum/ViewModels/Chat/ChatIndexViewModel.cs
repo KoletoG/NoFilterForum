@@ -1,4 +1,5 @@
-﻿using Core.Models.DataModels;
+﻿using Core.Enums;
+using Core.Models.DataModels;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace Web.ViewModels.Chat

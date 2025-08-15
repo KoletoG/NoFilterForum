@@ -9,7 +9,7 @@
 		{
 			<div class="row mt-2">
 
-				<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" class="text-center fw-bold fs-5">@chat.Username</a>
+				<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" style="text-decoration:none" class="text-center fw-bold fs-5">@chat.Username</a>
 			</div>
 			var lastMessage = chat.GetDateAndTextOfLastMessage();
 			<div class="row border-bottom border-2">
