@@ -8,10 +8,12 @@ namespace Web.ViewModels.Chat
     {
         public required string ChatId { get; set; }
         public required string Username { get; set; }
-        public string? ColorClass { get;private set; }
-        public ChatIndexViewModel(UserRoles role)
+        public string? ColorClass { get;private set; } // cannot be null but constructor doesn't understand for some reason
+        public MessageDataModel? LastMessage { get; private set; }
+        public ChatIndexViewModel(UserRoles role, IReadOnlyCollection<MessageDataModel> messages)
         {
             SetColorOfName(role);
+            SetLastMessage(messages);
         }
         private void SetColorOfName(UserRoles role)
         {
@@ -25,14 +27,14 @@ namespace Web.ViewModels.Chat
                 default: ColorClass = "text-black";break;
             }
         }
-        public required IReadOnlyCollection<MessageDataModel> Messages { get; set; }
-        public MessageDataModel? GetDateAndTextOfLastMessage()
+        private void SetLastMessage(IReadOnlyCollection<MessageDataModel> messages)
         {
-            if (!Messages.Any()) return null;
-
-            var message = Messages.OrderByDescending(x => x.DateTime).FirstOrDefault();
-
-            return message;
+            if (!messages.Any())
+            {
+                LastMessage = null;
+                return;
+            }
+            LastMessage = messages.OrderByDescending(x => x.DateTime).FirstOrDefault();
         }
     }
 }

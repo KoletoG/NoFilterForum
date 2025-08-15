@@ -11,13 +11,12 @@
 
 				<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" style="text-decoration:none" class="text-center fw-bold fs-5 @chat.ColorClass">@chat.Username</a>
 			</div>
-			var lastMessage = chat.GetDateAndTextOfLastMessage();
 			<div class="row border-bottom border-2">
 
-				@if (lastMessage is not null)
+				@if (chat.LastMessage is not null)
 				{
-					<h5 class="text-center fst-italic text-black-50 text-truncate">@lastMessage.Message</h5>
-					<h5 class="text-center fst-italic text-black-50 text-truncate">@lastMessage.DateTime.ToShortTimeString()</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate">@chat.LastMessage.Message</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate">@chat.LastMessage.DateTime.ToShortTimeString()</h5>
 				}
 				else
 				{

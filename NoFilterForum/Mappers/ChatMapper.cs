@@ -7,10 +7,9 @@ namespace Web.Mappers
 {
     public static class ChatMapper
     {
-        public static ChatIndexViewModel MapToViewModel(IndexChatDTO dto) => new(dto.Role)
+        public static ChatIndexViewModel MapToViewModel(IndexChatDTO dto) => new(dto.Role,dto.Messages)
         {
             ChatId = dto.ChatId,
-            Messages = dto.Messages,
             Username = dto.Username
         };
         public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto,string userId) => new()
