@@ -8,6 +8,8 @@ namespace Web.ViewModels.Chat
     {
         public required string ChatId { get; set; }
         public required string Username { get; set; }
+        public required UserRoles Role { private get;init; }
+        public string? ColorOfName { get;private set; }
         public required IReadOnlyCollection<MessageDataModel> Messages { get; set; }
         public MessageDataModel? GetDateAndTextOfLastMessage()
         {

@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 using Application.Interfaces.Services;
 using Core.Constants;
+using Core.DTOs.OutputDTOs.Chat;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Profile;
@@ -44,7 +45,7 @@ namespace NoFilterForum.Infrastructure.Services
         }
         // GET Methods
         // Add paging
-        public async Task<IEnumerable<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
+         public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
         {
