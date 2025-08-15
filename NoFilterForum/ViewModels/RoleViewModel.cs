@@ -10,7 +10,7 @@ namespace Web.ViewModels
         public bool ShouldRoute {  get; set; }
         public string Username { get; set; }
         public string ImageUrl { get; set; }
-        public string? RoleColor { get; private set; }
+        public string RoleColor { get; private set; }
         public RoleViewModel(UserRoles role, string userId,string username, bool shouldRoute, string imageUrl)
         {
             UserId = userId;
