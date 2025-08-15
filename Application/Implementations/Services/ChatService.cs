@@ -23,6 +23,10 @@ namespace Application.Implementations.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
+        public async Task<bool> ExistChatByUserIdsAsync(string userId1, string userId2,CancellationToken cancellationToken)
+        {
+            return await _unitOfWork.Chats.GetAll().AnyAsync(x => ((x.User1.Id == userId1 && x.User2.Id==userId2) || (x.User1.Id==userId2 && x.User2.Id==userId1)),cancellationToken);
+        }
         public async Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId,string username, CancellationToken cancellationToken)
         {
             return await _unitOfWork.Chats.GetAll().Where(x=>x.User1.Id==userId || x.User2.Id==userId).Select(x => new IndexChatDTO(x.Id, x.User1.UserName! == username ? x.User2.UserName! : x.User1.UserName!, x.Messages,userId == x.User1.Id ? x.User2.Role : x.User1.Role)).ToListAsync(cancellationToken);
