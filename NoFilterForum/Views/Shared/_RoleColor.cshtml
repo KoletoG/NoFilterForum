@@ -3,61 +3,13 @@
 @model RoleViewModel
 @if (Model.ShouldRoute)
 {
-	if (Model.Role == UserRoles.Admin)
-	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-danger">
-			<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
-			@Model.Username
-		</a>
-	}
-	else if (Model.Role == UserRoles.VIP)
-	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-warning">
-			<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
-			@Model.Username
-		</a>
-	}
-	else if (Model.Role == UserRoles.Regular)
-	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-success"><img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />@Model.Username</a>
-	}
-	else if (Model.Role == UserRoles.Dinosaur)
-	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-primary"><img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />@Model.Username</a>
-	}
-	else
-	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 text-black">
-			<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
-			@Model.Username
-		</a>
-	}
+	<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 @Model.RoleColor">
+		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="125" height="125" />
+		@Model.Username
+	</a>
 }
 else
 {
-	if (Model.Role == UserRoles.Admin)
-	{
-		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
-		<h6 class="text-danger text-break fw-bold">@Model.Username</h6>
-	}
-	else if (Model.Role == UserRoles.VIP)
-	{
-		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
-		<h6 class="text-warning text-break fw-bold">@Model.Username</h6>
-	}
-	else if (Model.Role == UserRoles.Regular)
-	{
-		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
-		<h6 class="text-success text-break fw-bold">@Model.Username</h6>
-	}
-	else if (Model.Role == UserRoles.Dinosaur)
-	{
-		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
-		<h6 class="text-primary text-break fw-bold">@Model.Username</h6>
-	}
-	else
-	{
-		<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
-		<h6 class="text-dark text-break fw-bold">@Model.Username</h6>
-	}
+	<img src="@Model.ImageUrl" class="rounded-1 border-black border border-1" width="100" height="100" />
+	<h6 class="@Model.RoleColor text-break fw-bold">@Model.Username</h6>
 }
