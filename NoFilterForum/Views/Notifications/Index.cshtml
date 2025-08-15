@@ -4,20 +4,16 @@
 
 @model NotificationViewModel
 @{
-	int warningsCount = Model.Warnings.Count;
-	@if (warningsCount > 1)
+	bool anyWarnings = Model.Warnings.Any();
+	@if (anyWarnings)
 	{
-		<h3 style="color:red; font-weight:bold">You have been given couple warnings with the messages:</h3>
+		<h3 style="color:red; font-weight:bold">You have been given warnings with the following messages:</h3>
 	}
-	else if (warningsCount == 1)
-	{
-		<h3 style="color:red; font-weight:bold">You have been given a warning with the message:</h3>
-	}
-	@for (int i = 0; i < warningsCount; i++)
+	@for (int i = 0; i < Model.Warnings.Count; i++)
 	{
 		<h4 style="color:red">Warning @(i + 1): <br /> @Model.Warnings[i].Content</h4>
 	}
-	@if (warningsCount > 0)
+	@if (anyWarnings)
 	{
 		<form asp-action="Accept" asp-controller="Warnings" method="post">
 			@Html.AntiForgeryToken()
@@ -35,7 +31,7 @@
 	{
 		<form asp-action="Delete" asp-controller="Notifications" method="post">
 			@Html.AntiForgeryToken()
-			<button type="submit">Mark as read</button>
+			<button type="submit">Delete notifications</button>
 		</form>
 	}
 
