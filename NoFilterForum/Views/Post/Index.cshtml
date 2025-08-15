@@ -31,25 +31,9 @@
 					</a>
 				</div>
 				<div class="col-1 border-start border-end border-secondary text-center align-self-center fs-5" style="font-family:'Book Antiqua'">
-					@if (post.PostLikes < 0)
-					{
-						<div class="text-black">
+						<div class="@post.ColorOfLikeDislike">
 							@post.PostLikes
 						</div>
-					}
-					else if (post.PostLikes > 0)
-					{
-
-						<div class="text-black">
-							@post.PostLikes
-						</div>
-					}
-					else
-					{
-						<div class="text-secondary">
-							@post.PostLikes
-						</div>
-					}
 				</div>
 				<div class="col-2 mt-4 ms-5 text-center rounded-2 border-dark-subtle">
 					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />

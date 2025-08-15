@@ -19,7 +19,7 @@ namespace Web.Mappers
             TotalPages = pageTotalPages.TotalPages,
             TitleOfSection = HttpUtility.UrlEncode(titleOfSection)
         };
-        public static PostIndexItemViewModel MapToViewModel(PostItemDto dto) => new()
+        public static PostIndexItemViewModel MapToViewModel(PostItemDto dto) => new(dto.PostLikes)
         {
             DateCreated = dto.DateCreated,
             Id= dto.Id,
@@ -27,8 +27,7 @@ namespace Web.Mappers
             Title = dto.Title,
             Role= dto.Role,
             Username= dto.Username,
-            UserImageUrl = dto.ImageUrl,
-            PostLikes = dto.PostLikes
+            UserImageUrl = dto.ImageUrl
         };
         public static GetIndexPostRequest MapToRequest(int page, string titleOfSection) => new(titleOfSection, page,PostConstants.PostsPerSection);
         public static DeletePostRequest MapToRequest(DeletePostViewModel vm, string userId) => new(vm.PostId, userId);

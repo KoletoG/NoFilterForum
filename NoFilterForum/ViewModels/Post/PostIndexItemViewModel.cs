@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Core.Constants;
+using Core.Enums;
 
 namespace Web.ViewModels.Post
 {
@@ -11,6 +12,16 @@ namespace Web.ViewModels.Post
         public bool IsPinned { get; set; }
         public DateTime DateCreated { get; set; }
         public required string UserImageUrl { get; set; }
-        public short PostLikes { get; set; }
+        public short PostLikes { get; init; }
+        public string ColorOfLikeDislike { get; private set; }
+        public PostIndexItemViewModel(short postLikes)
+        {
+            PostLikes = postLikes;
+            ColorOfLikeDislike = SetColorOfLikeDislike(PostLikes);
+        }
+        private string SetColorOfLikeDislike(short postLikes)
+        {
+            return postLikes == 0 ? ColorConstants.TextNoLikeDislike : ColorConstants.TextNoLikeDislike;
+        }
     }
 }
