@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Core.Constants;
+using Core.Enums;
 using Core.Models.DataModels;
 using NoFilterForum.Core.Models.DataModels;
 
@@ -19,12 +20,12 @@ namespace Web.ViewModels.Chat
         {
             switch (role)
             {
-                case UserRoles.Newbie: ColorClass = "text-black";break;
-                case UserRoles.Regular: ColorClass = "text-success";break;
-                case UserRoles.Dinosaur: ColorClass = "text-primary";break;
-                case UserRoles.VIP: ColorClass = "text-warning";break;
-                case UserRoles.Admin: ColorClass = "text-danger";break;
-                default: ColorClass = "text-black";break;
+                case UserRoles.Newbie: ColorClass = ColorConstants.TextNewbie;break;
+                case UserRoles.Regular: ColorClass = ColorConstants.TextRegular; break;
+                case UserRoles.Dinosaur: ColorClass = ColorConstants.TextDinosaur; break;
+                case UserRoles.VIP: ColorClass = ColorConstants.TextVIP; break;
+                case UserRoles.Admin: ColorClass = ColorConstants.TextAdmin; break;
+                default: ColorClass = ColorConstants.TextDefault; break;
             }
         }
         private void SetLastMessage(IReadOnlyCollection<MessageDataModel> messages)
