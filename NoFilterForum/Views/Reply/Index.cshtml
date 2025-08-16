@@ -97,6 +97,7 @@
 					</div>
 					@if (reply.Username != UserConstants.DefaultUser.UserName)
 					{
+						// refactor these likes dislikes type shi
 						<div class="col-2 border-black border-start pt-2 text-center">
 							@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 							{
@@ -133,17 +134,14 @@
 				</div>
 			}
 			<br />
-			@if (Model.Replies.Count > 0)
+			@if (Model.Replies.Any())
 			{
 				<div class="row border-top border-bottom mt-3 mb-3">
-
 					<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 				</div>
 			}
 
-			string controllerName = "Reply";
-			string actionName = "Index";
-				<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,Model.Post.Id)" />
+				<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.ReplyControllerName,Model.IndexName,string.Empty,Model.Post.Id)" />
 		}
 
 
