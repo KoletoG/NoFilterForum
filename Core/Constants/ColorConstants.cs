@@ -9,7 +9,7 @@ namespace Core.Constants
     public static class ColorConstants
     {
         public static readonly string TextNewbie = "text-black";
-        public static readonly string TextAdmin = "text-red";
+        public static readonly string TextAdmin = "text-danger";
         public static readonly string TextVIP = "text-warning";
         public static readonly string TextDinosaur = "text-primary";
         public static readonly string TextRegular = "text-success";
