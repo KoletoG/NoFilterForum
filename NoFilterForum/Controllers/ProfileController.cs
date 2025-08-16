@@ -163,20 +163,8 @@ namespace Web.Controllers
 
             var pageTotalPagesDto = GetPageTotalPages(replyDtoDict, postDtoDict, page);
 
-            var replyViewModelDict = replyDtoDict.ToDictionary(x => x.Key, x => new ReplyItemViewModel()
-            {
-                Content = x.Value.Content,
-                Created = x.Value.Created,
-                Id = x.Key,
-                PostId = x.Value.PostId,
-                PostTitle = x.Value.PostTitle
-            }); 
-            var postViewModelDict = postDtoDict.ToDictionary(x => x.Key, x => new PostItemViewModel()
-            {
-                Created = x.Value.Created,
-                Id = x.Key,
-                Title = x.Value.Title
-            });
+            var replyViewModelDict = replyDtoDict.ToDictionary(x => x.Key,x=>ReplyMapper.MapToViewModel(x.Value)); 
+            var postViewModelDict = postDtoDict.ToDictionary(x => x.Key,x=>PostMapper.MapToViewModel(x.Value));
             var dictionary = DateHelper.OrderDates(postViewModelDict, replyViewModelDict, page, PostConstants.PostsPerSection);
             var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto!); // cannot be null as we checked it earlier
             var profileViewModel = ProfileMapper.MapToViewModel(postViewModelDict,

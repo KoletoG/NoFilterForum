@@ -9,6 +9,14 @@ namespace Web.Mappers
 {
     public static class ReplyMapper
     {
+        public static ReplyItemViewModel MapToViewModel(ReplyItemDto dto) => new()
+        {
+            Content = dto.Content,
+            Created = dto.Created,
+            Id = dto.Id,
+            PostId = dto.PostId,
+            PostTitle = dto.PostTitle
+        };
         public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm, string userId) => new(vm.ReplyId, userId);
         public static CreateReplyRequest MapToRequest(CreateReplyViewModel vm, string userId) => new(userId, vm.Content, vm.PostId);
         public static GetListReplyIndexItemRequest MapToRequest(int page, string postId) => new(page, postId,PostConstants.PostsPerSection);

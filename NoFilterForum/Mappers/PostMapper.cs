@@ -5,12 +5,19 @@ using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Post;
 using Core.Models.DTOs.InputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Post;
+using Core.Models.DTOs.OutputDTOs.Profile;
 using Web.ViewModels.Post;
 
 namespace Web.Mappers
 {
     public static class PostMapper
     {
+        public static PostItemViewModel MapToViewModel(ProfilePostDto dto) => new()
+        {
+            Id = dto.Id,
+            Created = dto.Created,
+            Title = dto.Title
+        };
         public static CreatePostRequest MapToRequest(CreatePostViewModel vm, string userId) => new(vm.Title, vm.Body, vm.TitleOfSection, userId);
         public static PostIndexViewModel MapToViewModel(IEnumerable<PostIndexItemViewModel> itemVMs, PageTotalPagesDTO pageTotalPages, string titleOfSection, bool isAdmin) => new()
         {
