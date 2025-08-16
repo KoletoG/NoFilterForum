@@ -16,13 +16,15 @@ using Web.Mappers;
 using Web.ViewModels.Post;
 using System.Runtime.CompilerServices;
 using Core.DTOs.OutputDTOs.Reply;
+using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers
 {
-    public class PostController(IPostService postService, ISectionService sectionService) : Controller
+    public class PostController(IPostService postService, ISectionService sectionService, UserManager<UserDataModel> userManager) : Controller
     {
         private readonly IPostService _postService = postService;
         private readonly ISectionService _sectionService = sectionService;
+        private readonly UserManager<UserDataModel> _userManager = userManager;
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -116,11 +118,19 @@ namespace Web.Controllers
             {
                 return NotFound($"Section with title: {titleOfSection} doesn't exist");
             }
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return Unauthorized();
+            }
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
             var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
             var getIndexPostRequest = PostMapper.MapToRequest(page, titleOfSection);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest, cancellationToken);
             var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel);
-            var postIndexViewModel = PostMapper.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection);
+            
+            var postIndexViewModel = PostMapper.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection,isAdmin);
             return View(postIndexViewModel);
         }
         [HttpPost]

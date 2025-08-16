@@ -1,6 +1,7 @@
 ﻿@using System.Web
 @using Core.Constants
 @using Core.Enums
+@using Microsoft.AspNetCore.Identity
 @using NoFilterForum.Core.Models.DataModels
 @using NoFilterForum.Core.Models.ViewModels
 @using Web.ViewModels
@@ -17,34 +18,35 @@
 </style>
 <body class="bg-body-secondary">
 	@{
-	<div class="container bg-white shadow p-3">
-		<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
+		<div class="container bg-white shadow p-3">
+			<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
 
-		@foreach (var post in Model.Posts)
-		{
-			<div class="row g-0 mt-3 border-bottom border-top">
-				<div class="col-8 me-2 ms-4 align-self-center">
-					<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
-						<div class="underlinehover col fs-4 fw-bold" style="font-family:'Book Antiqua'">
-							@post.Title
-						</div>
-					</a>
-				</div>
-				<div class="col-1 border-start border-end border-secondary text-center align-self-center fs-5" style="font-family:'Book Antiqua'">
+			@foreach (var post in Model.Posts)
+			{
+				<div class="row g-0 mt-3 border-bottom border-top">
+					<div class="col-8 me-2 ms-4 align-self-center">
+						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
+							<div class="underlinehover col fs-4 fw-bold" style="font-family:'Book Antiqua'">
+								@post.Title
+							</div>
+						</a>
+					</div>
+					<div class="col-1 border-start border-end border-secondary text-center align-self-center fs-5" style="font-family:'Book Antiqua'">
 						<div class="@post.ColorOfLikeDislike">
 							@post.PostLikes
 						</div>
-				</div>
-				<div class="col-2 mt-4 ms-5 text-center rounded-2 border-dark-subtle">
-					<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
-				</div>
+					</div>
+					<div class="col-2 mt-4 ms-5 text-center rounded-2 border-dark-subtle">
+						<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
+					</div>
 					<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
-			</div>
+				</div>
 
-			@if (UserConstants.adminNames.Contains(this.User.Identity.Name))
-			{
-				<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)" />
-			}
+				// check admin
+				if (Model.IsAdmin)
+				{
+					<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)" />
+				}
 		<br />
 		}
 	</div>
