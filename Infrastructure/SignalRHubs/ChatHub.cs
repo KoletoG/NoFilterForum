@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Infrastructure.SignalRHubs
@@ -14,6 +15,7 @@ namespace Infrastructure.SignalRHubs
     {
         private readonly IChatService _chatService = chatService;
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task SendMessage(string userId, string message)
         {
             if (await _chatService.ExistChatByUserIdsAsync(userId, Context.User!.FindFirstValue(ClaimTypes.NameIdentifier)!, CancellationToken.None))
