@@ -9,8 +9,8 @@ namespace Web.ViewModels.Profile
     {
         public required ProfileUserViewModel Profile { get; set; }
         public bool IsSameUser { get; set; }
-        public required IReadOnlyCollection<ReplyItemViewModel> Replies { get; set; }
-        public required IReadOnlyCollection<PostItemViewModel> Posts { get; set; }
+        public required IDictionary<string,ReplyItemViewModel> Replies { get; set; }
+        public required IDictionary<string, PostItemViewModel> Posts { get; set; }
         public int Page {  get; set; }
         public int TotalPages { get; set; }
         public required IDictionary<string, DateTime> UserIdDate { get; set; }

@@ -3,6 +3,7 @@
 @using Core.Enums
 @using NoFilterForum.Core.Models.DataModels
 @using Web.ViewModels
+@using Web.ViewModels.Post
 @using Web.ViewModels.Profile
 @using Web.ViewModels.Warning
 
@@ -87,110 +88,47 @@
 				}
 				@foreach (var key in Model.UserIdDate.Keys)
 				{
-					foreach (var post in Model.Posts)
+					var classBodyColor = count % 2 == 0 ? "bg-body-secondary" : string.Empty;
+					if (Model.Posts.TryGetValue(key, out var post))
 					{
-						if (post.Id == key)
-						{
-							if (count % 2 == 0)
-							{
-
-								<div class="border-bottom bg-body-secondary p-1">
-									<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id">
-										<div class="row">
-											<h5 class="text-center fw-bold fs-4">@post.Title</h5>
-										</div>
-									</a>
-									<div class="row">
-										<div class="text-center">
-
-											@post.Created.ToShortDateString()
-										</div>
-									</div>
+						<div class="border-bottom @classBodyColor p-1">
+							<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id">
+								<div class="row">
+									<h5 class="text-center fw-bold fs-4">@post.Title</h5>
 								</div>
-								count++;
-								break;
-							}
-							else
-							{
-
-								<div class="border-bottom p-1">
-									<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id">
-
-										<div class="row">
-											<h5 class="text-center fw-bold fs-4">@post.Title</h5>
-										</div>
-									</a>
-									<div class="row">
-										<div class="text-center">
-
-											@post.Created.ToShortDateString()
-										</div>
-									</div>
+							</a>
+							<div class="row">
+								<div class="text-center">
+									@post.Created.ToShortDateString()
 								</div>
-								count++;
-								break;
-							}
-						}
+							</div>
+						</div>
+						count++;
+						continue;
 					}
-					foreach (var reply in Model.Replies)
+					if (Model.Replies.TryGetValue(key, out var reply))
 					{
-						if (reply.Id == key)
-						{
-							if (count % 2 == 0)
-							{
+						<div class="border-bottom @classBodyColor p-1">
+							<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId">
+								<div class="row">
+									<div class="col-6">
+										<h5 class="fst-italic">@reply.Content</h5>
 
-								<div class="border-bottom p-1 bg-body-secondary">
-									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
-
-										<div class="row">
-											<div class="col-6">
-												<h5 class="fst-italic">@reply.Content</h5>
-
-											</div>
-											<div class="col-6">
-												<h5 class="text-end fw-bold">@reply.PostTitle</h5>
-											</div>
-										</div>
-									</a>
-									<div class="row">
-										<div class="col-2">
-
-											@reply.Created.ToShortDateString()
-										</div>
 									</div>
-
-								</div>
-								count++;
-								break;
-							}
-							else
-							{
-
-								<div class="border-bottom p-1 bg-white">
-									<a asp-action="Index" class="text-black link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
-
-										<div class="row">
-											<div class="col-6">
-												<h5 class="fst-italic">@reply.Content</h5>
-
-											</div>
-											<div class="col-6">
-												<h5 class="text-end fw-bold">@reply.PostTitle</h5>
-											</div>
-										</div>
-									</a>
-									<div class="row">
-										<div class="col-2">
-
-											@reply.Created.ToShortDateString()
-										</div>
+									<div class="col-6">
+										<h5 class="text-end fw-bold">@reply.PostTitle</h5>
 									</div>
-
 								</div>
-								count++;
-								break;
-							}
-						}
+							</a>
+							<div class="row">
+								<div class="col-2">
+
+									@reply.Created.ToShortDateString()
+								</div>
+							</div>
+						</div>
+						count++;
+						continue;
 					}
 				}
 			</div>

@@ -16,21 +16,14 @@ namespace Web.Mappers
         public static ChangeBioRequest MapToRequest(ChangeBioViewModel vm, string userId) => new(vm.Bio, userId);
         public static UpdateImageRequest MapToRequest(UpdateImageViewModel vm, string userId) => new(userId, vm.Image);
         public static GetProfileDtoRequest MapToRequest(string userId, string currentUserId) => new(userId, currentUserId);
-        public static ReplyItemViewModel MapToViewModel(ReplyItemDto dto) => new()
-        {
-            Content = dto.Content,
-            Id = dto.Id,
-            PostId = dto.PostId,
-            Created = dto.Created,
-            PostTitle = dto.PostTitle
-        };
+
         public static PostItemViewModel MapToViewModel(ProfilePostDto dto) => new()
         {
             Id = dto.Id,
             Title = dto.Title,
             Created = dto.Created
         };
-        public static ProfileViewModel MapToViewModel(List<PostItemViewModel> posts, List<ReplyItemViewModel> replies, bool isSameUser, ProfileUserViewModel profileUserDto, Dictionary<string, DateTime> UserIdDate, PageTotalPagesDTO pageTotalPages) => new()
+        public static ProfileViewModel MapToViewModel(IDictionary<string,PostItemViewModel> posts, IDictionary<string,ReplyItemViewModel> replies, bool isSameUser, ProfileUserViewModel profileUserDto, Dictionary<string, DateTime> UserIdDate, PageTotalPagesDTO pageTotalPages) => new()
         {
             IsSameUser = isSameUser,
             Posts = posts,

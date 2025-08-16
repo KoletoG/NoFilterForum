@@ -86,7 +86,7 @@ namespace Application.Implementations.Services
             }
             return false;
         }
-        public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId, cancellationToken) ?? [];
+        public async Task<IDictionary<string, ReplyItemDto>> GetListReplyItemDtoAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"listReplyItemDtoById_{userId}", _unitOfWork.Replies.GetListReplyItemDtoByUserIdAsync, userId, cancellationToken);
         // POST methods
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken)
         {

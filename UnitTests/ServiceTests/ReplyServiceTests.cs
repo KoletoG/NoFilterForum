@@ -53,7 +53,7 @@ namespace UnitTests.ServiceTests
             Mock<ILogger<ReplyService>> loggerMock = new();
             Mock<IReplyFactory> replyFactoryMock = new();
             Mock<ICacheService> cacheServiceMock = new();
-            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>(),It.IsAny<CancellationToken>())).ReturnsAsync(new List<ReplyItemDto>());
+            unitOfWorkMock.Setup(x => x.Replies.GetListReplyItemDtoByUserIdAsync(It.IsAny<string>(),It.IsAny<CancellationToken>())).ReturnsAsync(new Dictionary<string,ReplyItemDto>());
             var replyService = new ReplyService(
                 unitOfWorkMock.Object,
                 replyFactoryMock.Object,

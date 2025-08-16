@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 using NoFilterForum.Core.Interfaces.Services;
 using Web.Helpers;
 using Web.Mappers;
+using Web.ViewModels.Post;
 using Web.ViewModels.Profile;
+using Web.ViewModels.Reply;
 
 namespace Web.Controllers
 {
@@ -134,7 +136,7 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
-        private static PageTotalPagesDTO GetPageTotalPages(IReadOnlyCollection<ReplyItemDto> replyItems, IReadOnlyCollection<ProfilePostDto> profilePostItems, int page)
+        private static PageTotalPagesDTO GetPageTotalPages(IDictionary<string, ReplyItemDto> replyItems, IDictionary<string, ProfilePostDto> profilePostItems, int page)
         {
             var totalCount = replyItems.Count + profilePostItems.Count; 
             return PageUtility.GetPageTotalPagesDTO(page,totalCount);
@@ -156,17 +158,29 @@ namespace Web.Controllers
             
             var getProfileDtoRequest = ProfileMapper.MapToRequest(userId, currentUserId);
             var resultUser = await _userService.GetProfileDtoByUserIdAsync(getProfileDtoRequest, cancellationToken);
-            var replyDtoList = await _replyService.GetListReplyItemDtoAsync(userId, cancellationToken);
-            var postDtoList = await _postService.GetListProfilePostDtoAsync(userId,cancellationToken);
+            var replyDtoDict = await _replyService.GetListReplyItemDtoAsync(userId, cancellationToken);
+            var postDtoDict = await _postService.GetListProfilePostDtoAsync(userId,cancellationToken);
 
-            var pageTotalPagesDto = GetPageTotalPages(replyDtoList, postDtoList, page);
+            var pageTotalPagesDto = GetPageTotalPages(replyDtoDict, postDtoDict, page);
 
-            var replyViewModelList = replyDtoList.Select(ProfileMapper.MapToViewModel).ToList();
-            var postViewModelList = postDtoList.Select(ProfileMapper.MapToViewModel).ToList();
-            var dictionary = DateHelper.OrderDates(postDtoList, replyViewModelList,page, PostConstants.PostsPerSection);
+            var replyViewModelDict = replyDtoDict.ToDictionary(x => x.Key, x => new ReplyItemViewModel()
+            {
+                Content = x.Value.Content,
+                Created = x.Value.Created,
+                Id = x.Key,
+                PostId = x.Value.PostId,
+                PostTitle = x.Value.PostTitle
+            }); 
+            var postViewModelDict = postDtoDict.ToDictionary(x => x.Key, x => new PostItemViewModel()
+            {
+                Created = x.Value.Created,
+                Id = x.Key,
+                Title = x.Value.Title
+            });
+            var dictionary = DateHelper.OrderDates(postViewModelDict, replyViewModelDict, page, PostConstants.PostsPerSection);
             var profileUserViewModel = ProfileMapper.MapToViewModel(resultUser.UserDto!); // cannot be null as we checked it earlier
-            var profileViewModel = ProfileMapper.MapToViewModel(postViewModelList,
-                replyViewModelList,
+            var profileViewModel = ProfileMapper.MapToViewModel(postViewModelDict,
+                replyViewModelDict,
                 resultUser.IsSameUser,
                 profileUserViewModel, 
                 dictionary, 

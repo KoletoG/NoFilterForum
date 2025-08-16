@@ -16,7 +16,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task CreateAsync(PostDataModel post, CancellationToken cancellationToken);
         public void Update(PostDataModel post);
         public void UpdateRange(IEnumerable<PostDataModel> posts);
-        public Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string username, CancellationToken cancellationToken);
+        public Task<IDictionary<string, ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string username, CancellationToken cancellationToken);
         public void Delete(PostDataModel post);
         public void DeleteRange(IEnumerable<PostDataModel> posts);
         public Task<DateTime> GetLastPostDateByUsernameAsync(string userId, CancellationToken cancellationToken);

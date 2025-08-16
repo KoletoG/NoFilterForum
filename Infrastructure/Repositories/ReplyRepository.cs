@@ -34,12 +34,12 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Take(getListReplyIndexItemRequest.PostsCount)
                 .ToListAsync(cancellationToken);
         }
-        public async Task<IReadOnlyCollection<ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<IDictionary<string,ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.ReplyDataModels.AsNoTracking()
                 .Where(x=>x.User.Id == userId)
                 .Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title))
-                .ToListAsync(cancellationToken);
+                .ToDictionaryAsync(x=>x.Id,cancellationToken);
         }
         public async Task<ReplyDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken)
         {

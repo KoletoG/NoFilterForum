@@ -40,12 +40,12 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.PostDataModels.AsNoTracking().Where(x => x.Id == id).Select(x => new PostReplyIndexDto(x.Id, x.User.Id, x.User.UserName, x.Likes, x.DateCreated, x.Title, x.Content, x.User.Role, x.User.ImageUrl)).FirstOrDefaultAsync(cancellationToken);
         }
-        public async Task<IReadOnlyCollection<ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<IDictionary<string,ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.PostDataModels.AsNoTracking()
                 .Where(x => x.User.Id == userId)
                 .Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated))
-                .ToListAsync(cancellationToken);
+                .ToDictionaryAsync(x=>x.Id,cancellationToken);
         }
         public async Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
