@@ -1,5 +1,7 @@
 ﻿using Core.Enums;
 using Core.Models.DTOs.OutputDTOs;
+using Web.Controllers;
+using Web.Static_variables;
 using Web.ViewModels.Post;
 using Web.ViewModels.Reply;
 
@@ -11,8 +13,10 @@ namespace Web.ViewModels.Profile
         public bool IsSameUser { get; set; }
         public required IDictionary<string,ReplyItemViewModel> Replies { get; set; }
         public required IDictionary<string, PostItemViewModel> Posts { get; set; }
-        public int Page {  get; set; }
+        public int Page { get; set; }
         public int TotalPages { get; set; }
         public required IDictionary<string, DateTime> UserIdDate { get; set; }
+        public readonly string ProfileController = ControllerNames.ProfileControllerName;
+        public readonly string IndexAction = nameof(Controllers.ProfileController.Index)[..^5];
     }
 }

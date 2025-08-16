@@ -2,6 +2,8 @@
 @using Core.Constants
 @using Core.Enums
 @using NoFilterForum.Core.Models.DataModels
+@using Web.Controllers
+@using Web.Static_variables
 @using Web.ViewModels
 @using Web.ViewModels.Post
 @using Web.ViewModels.Profile
@@ -103,11 +105,9 @@
 								</div>
 							</div>
 						</div>
-						count++;
 						Model.Posts.Remove(key);
-						continue;
 					}
-					if (Model.Replies.TryGetValue(key, out var reply))
+					else if (Model.Replies.TryGetValue(key, out var reply))
 					{
 						<div class="border-bottom @classBodyColor p-1">
 							<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
@@ -122,23 +122,19 @@
 							</a>
 							<div class="row">
 								<div class="col-6 border-end border-1 border-black text-center">
-
 									@reply.Created.ToShortDateString()
 								</div>
 							</div>
 						</div>
-						count++;
 						Model.Replies.Remove(key);
-						continue;
 					}
+					count++;
 				}
 			</div>
 			int previousPage = Model.Page - 1;
 			int nextPage = Model.Page + 1;
 			string encodedUsername = HttpUtility.UrlEncode(Model.Profile.UserName);
-			string controllerName = "Profile";
-			string actionName = "Index";
-			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,string.Empty,string.Empty,string.Empty,Model.Profile.Id)" />
+			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.ProfileController,Model.IndexAction,string.Empty,string.Empty,string.Empty,Model.Profile.Id)" />
 		}
 
 		@section Scripts {
