@@ -1,19 +1,6 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 connection.on("ReceiveMessage",(message) => {
-	var divRow =document.createElement('div');
-	divRow.classList.add('row','mb-3');
-	var divCol1 = document.createElement('div');
-	divCol1.classList.add('col-6','fst-italic','fw-lighter', 'text-start');
-	var divCol2 = document.createElement('div');
-	var date = new Date();
-	divCol1.innerText = showTime(date);
-	divCol2.classList.add('col-6','border','border-2','border-primary-subtle', 'bg-primary-subtle', 'fst-italic', 'text-break','rounded-2');
-	var h6message=document.createElement('h6');
-	h6message.innerText=message;
-	divCol2.appendChild(h6message);
-	divRow.appendChild(divCol2);
-	divRow.appendChild(divCol1);
-	mainContainer.appendChild(divRow);
+	showMessages(true,message);
 	scrollToMessage(divCol1);
 });
 connection.start();
@@ -37,24 +24,28 @@ async function submitMessage(userId)
 	if(!response.ok){
 		throw new Error("Error has occured");
 	}
-	var date = new Date();
 	let messageText = await response.text();
-	var divRow =document.createElement('div');
-	divRow.classList.add('row','mb-3');
-	var divCol1 = document.createElement('div');
-	divCol1.classList.add('col-6','fst-italic','fw-lighter', 'text-end');
-	divCol1.innerText = showTime(date);
-	var divCol2 = document.createElement('div');
-	divCol2.classList.add('col-6','border','border-2', 'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
-	var h6message=document.createElement('h6');
-	h6message.innerText=messageText;
-	divCol2.appendChild(h6message);
-	divRow.appendChild(divCol1);
-	divRow.appendChild(divCol2);
-	mainContainer.appendChild(divRow);
+	showMessages(false,messageText);
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageText);
-	scrollToMessage(divCol2);
+}
+function showMessages(isFromSignalR,messageText)
+{
+	var date = new Date();	
+	var divRow =document.createElement('div');
+	divRow.classList.add('row','mb-3');
+	var divColSecondary = document.createElement('div');
+	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end');
+	divColSecondary.innerText = showTime(date);
+	var divColMain = document.createElement('div');
+	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
+	var h6message=document.createElement('h6');
+	h6message.innerText=messageText;
+	divColMain.appendChild(h6message);
+	divRow.appendChild(isFromSignalR ? divColMain : divColSecondary);
+	divRow.appendChild(isFromSignalR ? divColSecondary : divColMain);
+	mainContainer.appendChild(divRow);
+	scrollToMessage(divColMain);
 }
 function showTime(date){
 	
