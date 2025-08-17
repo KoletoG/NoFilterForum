@@ -10,5 +10,7 @@ namespace Core.Interfaces.Repositories
     public interface IMessageRepository
     {
         public Task CreateAsync(MessageDataModel messageDataModel, CancellationToken cancellationToken);
+        public void Delete(MessageDataModel messageDataModel);
+        public Task<MessageDataModel?> GetByIdAsync(string id);
     }
 }

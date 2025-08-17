@@ -57,5 +57,28 @@ namespace Application.Implementations.Services
                 return new(PostResult.UpdateFailed, null);
             }
         }
+        public async Task<PostResult> DeleteAsync(string messageId, string userId)
+        {
+            var message = await _unitOfWork.Message.GetByIdAsync(messageId);
+            if(message is null)
+            {
+                return PostResult.NotFound;
+            }
+            if(message.UserId != userId)
+            {
+                return PostResult.Forbid;
+            }
+            try
+            {
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.Delete, message);
+                return PostResult.Success;
+            }
+            catch (DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "There was an error with the database when trying to delete message with Id: {MessageId}", message.Id);
+                return PostResult.UpdateFailed;
+            }
+        }
     }
 }

@@ -20,5 +20,13 @@ namespace Infrastructure.Repositories
         {
             await _context.MessageDataModels.AddAsync(messageDataModel, cancellationToken);
         }
+        public async Task<MessageDataModel?> GetByIdAsync(string id)
+        {
+            return await _context.MessageDataModels.FindAsync(id);
+        }
+        public void Delete(MessageDataModel messageDataModel)
+        {
+            _context.MessageDataModels.Remove(messageDataModel);
+        }
     }
 }

@@ -32,5 +32,23 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Delete(DeleteMessageViewModel deleteMessageViewModel,CancellationToken cancellationToken)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId is null) return Unauthorized();
+
+            var result = await _messageService.DeleteAsync(deleteMessageViewModel.Id, userId);
+            return result switch
+            {
+                PostResult.Success => NoContent(),
+                PostResult.Forbid => Forbid(),
+                PostResult.NotFound => NotFound(),
+                PostResult.UpdateFailed => Problem(),
+                _ => Problem()
+            };
+        }
     }
 }
