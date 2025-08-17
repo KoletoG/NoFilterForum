@@ -12,15 +12,16 @@ namespace Web.ViewModels.Chat
         public required string User2Id { get; set; }
         public string CalculateTime(DateTime time)
         {
-            var timeNow = DateTime.UtcNow;
-            var timeDiff = timeNow - time;
+            var localTime = time.ToLocalTime();
+            var timeNow = DateTime.Now;
+            var timeDiff = timeNow - localTime;
             if (timeDiff.TotalHours >= 24)
             {
-                return $"{time.Day}/{time.Month}/{time.Year}";
+                return $"{localTime.Day}/{localTime.Month}/{localTime.Year}";
             }
             else
             {
-                return $"{time.Hour:0}:{time.Minute:00}";
+                return $"{localTime.Hour:0}:{localTime.Minute:00}";
             }
         }
     }
