@@ -6,9 +6,7 @@ connection.on("ReceiveMessage",(message) => {
 	divCol1.classList.add('col-6','fst-italic','fw-lighter', 'text-start');
 	var divCol2 = document.createElement('div');
 	var date = new Date();
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	divCol1.innerText = hours + ':' + minutes; 
+	divCol1.innerText = showTime(date);
 	divCol2.classList.add('col-6','border','border-2','border-primary-subtle', 'bg-primary-subtle', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
 	h6message.innerText=message;
@@ -16,6 +14,7 @@ connection.on("ReceiveMessage",(message) => {
 	divRow.appendChild(divCol2);
 	divRow.appendChild(divCol1);
 	mainContainer.appendChild(divRow);
+	scrollToMessage(divCol1);
 });
 connection.start();
 function sendMessage(userId,message) {
@@ -39,14 +38,12 @@ async function submitMessage(userId)
 		throw new Error("Error has occured");
 	}
 	var date = new Date();
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
 	let messageText = await response.text();
 	var divRow =document.createElement('div');
 	divRow.classList.add('row','mb-3');
 	var divCol1 = document.createElement('div');
 	divCol1.classList.add('col-6','fst-italic','fw-lighter', 'text-end');
-	divCol1.innerText = hours + ':' + minutes; 
+	divCol1.innerText = showTime(date);
 	var divCol2 = document.createElement('div');
 	divCol2.classList.add('col-6','border','border-2', 'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
@@ -57,4 +54,20 @@ async function submitMessage(userId)
 	mainContainer.appendChild(divRow);
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageText);
+	scrollToMessage(divCol2);
+}
+function showTime(date){
+	
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	if(minutes<10){
+		return hours + ":0" + minutes;
+	}
+	else{
+		return hours + ":" + minutes;
+	}
+}
+function scrollToMessage(message)
+{
+	message.scrollIntoView({behavior:"instant"});
 }

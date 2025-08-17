@@ -20,7 +20,7 @@ namespace Web.ViewModels.Chat
             }
             else
             {
-                return $"{time.Hour}:{time.Minute}";
+                return $"{time.Hour:0}:{time.Minute:00}";
             }
         }
     }
