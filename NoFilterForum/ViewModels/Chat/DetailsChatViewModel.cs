@@ -10,5 +10,18 @@ namespace Web.ViewModels.Chat
         public required string ChatId {  get; set; }
         public required string UserId { get; set; }
         public required string User2Id { get; set; }
+        public string CalculateTime(DateTime time)
+        {
+            var timeNow = DateTime.UtcNow;
+            var timeDiff = timeNow - time;
+            if (timeDiff.TotalHours >= 24)
+            {
+                return $"{time.Day}/{time.Month}/{time.Year}";
+            }
+            else
+            {
+                return $"{time.Hour}:{time.Minute}";
+            }
+        }
     }
 }
