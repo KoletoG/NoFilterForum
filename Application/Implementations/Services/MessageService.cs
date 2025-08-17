@@ -30,31 +30,31 @@ namespace Application.Implementations.Services
                 .FirstOrDefaultAsync(x => x.Id == createMessageRequest.ChatId,cancellationToken);
             if(chat is null)
             {
-                return new(PostResult.NotFound,null);
+                return new(PostResult.NotFound,null, null);
             }
             // If the person is not from this chat, forbid
             if (chat.User1.Id != createMessageRequest.UserId && chat.User2.Id != createMessageRequest.UserId)
             {
-                return new(PostResult.Forbid,null);
+                return new(PostResult.Forbid,null,null);
             }
             var message = _messageFactory.Create(createMessageRequest.Message, createMessageRequest.UserId);
             chat.Messages.Add(message);
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.CreateAsync, message,_unitOfWork.Chats.Update,chat, cancellationToken);
-                return new(PostResult.Success,message.Message);
+                return new(PostResult.Success,message.Message,message.Id);
             }
             catch(OperationCanceledException ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Creation of message by user with Id: {UserId} was cancelled", createMessageRequest.UserId);
-                return new(PostResult.UpdateFailed, null);
+                return new(PostResult.UpdateFailed, null, null);
             }
             catch(DbException ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "There was a problem with the database saving new message by user with Id: {UserId}", createMessageRequest.UserId);
-                return new(PostResult.UpdateFailed, null);
+                return new(PostResult.UpdateFailed, null, null);
             }
         }
         public async Task<PostResult> DeleteAsync(string messageId, string userId)

@@ -1,18 +1,29 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-connection.on("ReceiveMessage",(message) => {
-	showMessages(true,message);
-	scrollToMessage(divCol1);
-});
-connection.start();
-function sendMessage(userId,message) {
-        connection.invoke("SendMessage", userId,message)
-                  .catch(err => console.error(err));
-    }
+
 var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
 });
 
+connection.on("ReceiveMessage",(message,messageId) => {
+	showMessages(true,message,messageId);
+	scrollToMessage(divCol1);
+});
+connection.on("RemoveMessage",(messageId)=>{
+
+});
+connection.start();
+function sendMessage(userId,message,messageId) 
+{
+    connection.invoke("SendMessage", userId,message,messageId)
+        .catch(err => console.error(err));
+}
+
+
+function removeMessage(userId,messageId)
+{
+	connection.invoke("DeleteMessage",userId,messageId);
+}
 var mainContainer = document.getElementById('mainContainer');
 async function submitMessage(userId)
 {
@@ -24,12 +35,25 @@ async function submitMessage(userId)
 	if(!response.ok){
 		throw new Error("Error has occured");
 	}
-	let messageText = await response.text();
-	showMessages(false,messageText);
+	let messageInfo = await response.json();
+	showMessages(false,messageInfo.message,messageInfo.messageId);
 	document.getElementById('messageInput').value="";
-	sendMessage(userId,messageText);
+	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
-function showMessages(isFromSignalR,messageText)
+async function deleteMessage(messageId)
+{
+	let formData = new FormData(form);
+	let response = await fetch('/Message/Delete',{
+		method: 'POST',
+		body: formData
+		});
+	if(!response.ok){
+		throw new Error("Error has occured");
+	};
+	document.getElementById('messageInput').value="";
+}
+
+function showMessages(isFromSignalR,messageText,messageId)
 {
 	var date = new Date();	
 	var divRow =document.createElement('div');
@@ -38,6 +62,7 @@ function showMessages(isFromSignalR,messageText)
 	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end');
 	divColSecondary.innerText = showTime(date);
 	var divColMain = document.createElement('div');
+	divColMain.id=messageId;
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
 	h6message.innerText=messageText;

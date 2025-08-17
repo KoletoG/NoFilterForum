@@ -25,7 +25,7 @@ namespace Web.Controllers
             var result = await _messageService.CreateMessageAsync(request, cancellationToken);
             return result.Result switch
             {
-                PostResult.Success => Ok(result.Message),
+                PostResult.Success => Ok(new { result.Message, result.MessageId }),
                 PostResult.Forbid => Forbid(),
                 PostResult.NotFound => NotFound(),
                 PostResult.UpdateFailed => Problem(),

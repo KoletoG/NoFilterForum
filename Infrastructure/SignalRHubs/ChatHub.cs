@@ -16,12 +16,18 @@ namespace Infrastructure.SignalRHubs
         private readonly IChatService _chatService = chatService;
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task SendMessage(string userId, string message)
+        public async Task SendMessage(string userId, string message,string messageId)
         {
             if (await _chatService.ExistChatByUserIdsAsync(userId, Context.User!.FindFirstValue(ClaimTypes.NameIdentifier)!, CancellationToken.None))
             {
-                await Clients.User(userId).SendAsync("ReceiveMessage", message);
+                await Clients.User(userId).SendAsync("ReceiveMessage", message,messageId);
             }
+        }
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task DeleteMessage(string userId, string messageId)
+        {
+            await Clients.User(userId).SendAsync("RemoveMessage", messageId);
         }
     }
 }

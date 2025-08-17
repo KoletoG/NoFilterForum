@@ -7,5 +7,5 @@ using Core.Enums;
 
 namespace Core.DTOs.OutputDTOs.Message
 {
-    public record CreateMessageDTO(PostResult Result, string? Message);
+    public record CreateMessageDTO(PostResult Result, string? Message, string? MessageId);
 }
