@@ -10,7 +10,7 @@ connection.on("ReceiveMessage",(message,messageId) => {
 	scrollToMessage(divCol1);
 });
 connection.on("RemoveMessage",(messageId)=>{
-
+	replaceMessage(messageId);
 });
 connection.start();
 function sendMessage(userId,message,messageId) 
@@ -18,7 +18,6 @@ function sendMessage(userId,message,messageId)
     connection.invoke("SendMessage", userId,message,messageId)
         .catch(err => console.error(err));
 }
-
 
 function removeMessage(userId,messageId)
 {
@@ -40,7 +39,7 @@ async function submitMessage(userId)
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
-async function deleteMessage(messageId)
+async function deleteMessage(userId, messageId)
 {
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Delete',{
@@ -50,9 +49,13 @@ async function deleteMessage(messageId)
 	if(!response.ok){
 		throw new Error("Error has occured");
 	};
-	document.getElementById('messageInput').value="";
+	removeMessage(userId,messageId);
+	replaceMessage(messageId);
 }
-
+function replaceMessage(messageId)
+{
+	document.getElementById(`message_${messageId}`).innerText="deleted";
+}
 function showMessages(isFromSignalR,messageText,messageId)
 {
 	var date = new Date();	

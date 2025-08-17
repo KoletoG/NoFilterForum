@@ -13,6 +13,9 @@
 				<div class="row mb-3" id="row_{@i}">
 					<div class="col-6 fst-italic fw-lighter text-end">
 						@Model.CalculateTime(Model.Messages[i].DateTime)
+						<form onsubmit="submitMessage('@Model.UserId')">
+
+						</form>
 					</div>
 					<div class="col-6 border border-2 bg-body-secondary fst-italic text-break rounded-2" id="message_{@Model.Messages[i].Id}">
 						<h6>@Model.Messages[i].Message</h6>
