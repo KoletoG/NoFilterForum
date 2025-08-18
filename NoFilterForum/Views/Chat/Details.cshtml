@@ -13,12 +13,13 @@
 				<div class="row mb-3" id="row_{@i}">
 					<div class="col-6 fst-italic fw-lighter text-end" >
 						@Model.CalculateTime(Model.Messages[i].DateTime)
-						<form onsubmit="submitMessage('@Model.UserId')">
-							
+						<form onsubmit="deleteMessage('@Model.UserId','@Model.Messages[i].Id',this); return false;" id="formDelete">
+							<input type="hidden" value="@Model.Messages[i].Id" name="MessageId"/>
+							<button type="submit" class="btn btn-sm btn-danger">Delete</button>
 						</form>
 					</div>
 					<div class="col-6 border border-2 bg-body-secondary fst-italic text-break rounded-2" id="message_{@Model.Messages[i].Id}">
-						<h6 id="message_@Model.Messages[i].Id}">@Model.Messages[i].Message</h6>
+						<h6 id="message_@Model.Messages[i].Id">@Model.Messages[i].Message</h6>
 					</div>
 				</div>
 			}

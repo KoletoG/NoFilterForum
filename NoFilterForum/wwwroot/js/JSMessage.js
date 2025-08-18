@@ -39,9 +39,9 @@ async function submitMessage(userId)
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
-async function deleteMessage(userId, messageId,formDelete)
+async function deleteMessage(userId, messageId,form)
 {
-	let formData = new FormData(formDelete);
+	let formData = new FormData(form);
 	let response = await fetch('/Message/Delete',{
 		method: 'POST',
 		body: formData
@@ -54,7 +54,8 @@ async function deleteMessage(userId, messageId,formDelete)
 }
 function replaceMessage(messageId)
 {
-	document.getElementById(`message_${messageId}`).innerText="deleted";
+	var message = document.getElementById(`message_${messageId}`);
+	message.innerHTML="deleted";
 }
 function showMessages(isFromSignalR,messageText,messageId,userId)
 {
@@ -83,8 +84,9 @@ function createForm(container, messageId, userId) {
     const form = document.createElement("form");
 	form.addEventListener('submit',(e)=>{
 		e.preventDefault();
-		deleteMessage(userId,messageId,form);
+		deleteMessage(userId,messageId);
 	})
+	form.id=`form_${messageId}`;
 	const inputMessageId = document.createElement("input");
 	inputMessageId.type="hidden";
 	inputMessageId.name="MessageId";
@@ -92,7 +94,7 @@ function createForm(container, messageId, userId) {
 	form.appendChild(inputMessageId);
     const button = document.createElement("button");
     button.type = "submit";
-    button.textContent = "Delete Message";
+    button.textContent = "Delete";
     button.classList.add("btn", "btn-danger", "btn-sm");
     form.appendChild(button);
     container.appendChild(form);
