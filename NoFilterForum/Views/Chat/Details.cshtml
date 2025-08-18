@@ -7,13 +7,13 @@
 			var messagesCount = Model.Messages.Count;
 		}
 		@for (int i = 0; i < messagesCount; i++)
-		{ // Make it focus on last message, also change text input box
+		{
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
 				<div class="row mb-3" id="row_{@i}">
 					<div class="col-6 fst-italic fw-lighter text-end" >
 						@Model.CalculateTime(Model.Messages[i].DateTime)
-						<form onsubmit="deleteMessage('@Model.UserId','@Model.Messages[i].Id',this); return false;" id="formDelete">
+						<form onsubmit="deleteMessage('@Model.User2Id','@Model.Messages[i].Id',this); return false;" id="formDelete">
 							<input type="hidden" value="@Model.Messages[i].Id" name="MessageId"/>
 							<button type="submit" class="btn btn-sm btn-danger">Delete</button>
 						</form>
@@ -27,7 +27,7 @@
 			{
 				<div class="row mb-3" id="row_{@i}">
 					<div  class="col-6 border border-2 bg-primary-subtle border-primary-subtle fst-italic text-break rounded-2">
-						<h6 id="message_{@Model.Messages[i].Id}">@Model.Messages[i].Message</h6>
+						<h6 id="message_@Model.Messages[i].Id">@Model.Messages[i].Message</h6>
 					</div>
 					<div class="col-6 fst-italic fw-lighter text-start">
 						@Model.CalculateTime(Model.Messages[i].DateTime)

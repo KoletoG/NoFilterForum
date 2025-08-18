@@ -35,11 +35,11 @@ async function submitMessage(userId)
 		throw new Error("Error has occured");
 	}
 	let messageInfo = await response.json();
-	showMessages(false,messageInfo.message,messageInfo.messageId,userId);
+	showMessages(false,messageInfo.message,messageInfo.messageId,userId,null);
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
-async function deleteMessage(userId, messageId,form)
+async function deleteMessage(user2Id, messageId,form)
 {
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Delete',{
@@ -49,15 +49,15 @@ async function deleteMessage(userId, messageId,form)
 	if(!response.ok){
 		throw new Error("Error has occured");
 	};
-	removeMessage(userId,messageId);
+	removeMessage(user2Id,messageId);
 	replaceMessage(messageId);
 }
 function replaceMessage(messageId)
 {
 	var message = document.getElementById(`message_${messageId}`);
-	message.innerHTML="Deleted, only you can see this message";
+	message.innerHTML="Deleted message";
 }
-function showMessages(isFromSignalR,messageText,messageId,userId)
+function showMessages(isFromSignalR,messageText,messageId,userId,user2Id)
 {
 	var date = new Date();	
 	var divRow =document.createElement('div');
@@ -67,7 +67,7 @@ function showMessages(isFromSignalR,messageText,messageId,userId)
 	divColSecondary.innerText = showTime(date);
 	if(!isFromSignalR)
 	{
-		createForm(divColSecondary,messageId,userId);
+		createForm(divColSecondary,messageId,userId,user2Id);
 	}
 	var divColMain = document.createElement('div');
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
@@ -80,11 +80,11 @@ function showMessages(isFromSignalR,messageText,messageId,userId)
 	mainContainer.appendChild(divRow);
 	scrollToMessage(divColMain);
 }
-function createForm(container, messageId, userId) {
+function createForm(container, messageId,user2Id) {
     const form = document.createElement("form");
 	form.addEventListener('submit',(e)=>{
 		e.preventDefault();
-		deleteMessage(userId,messageId);
+		deleteMessage(user2Id,messageId);
 	})
 	form.id=`form_${messageId}`;
 	const inputMessageId = document.createElement("input");
