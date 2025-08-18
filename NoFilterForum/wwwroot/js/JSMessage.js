@@ -65,10 +65,10 @@ function showMessages(isFromSignalR,messageText,messageId)
 	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end');
 	divColSecondary.innerText = showTime(date);
 	var divColMain = document.createElement('div');
-	divColMain.id=messageId;
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
 	h6message.innerText=messageText;
+	h6message.id=`message_${messageId}`;
 	divColMain.appendChild(h6message);
 	divRow.appendChild(isFromSignalR ? divColMain : divColSecondary);
 	divRow.appendChild(isFromSignalR ? divColSecondary : divColMain);
