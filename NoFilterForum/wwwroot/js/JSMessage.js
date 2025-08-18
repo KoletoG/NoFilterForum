@@ -55,7 +55,7 @@ async function deleteMessage(userId, messageId,form)
 function replaceMessage(messageId)
 {
 	var message = document.getElementById(`message_${messageId}`);
-	message.innerHTML="deleted";
+	message.innerHTML="Deleted, only you can see this message";
 }
 function showMessages(isFromSignalR,messageText,messageId,userId)
 {
