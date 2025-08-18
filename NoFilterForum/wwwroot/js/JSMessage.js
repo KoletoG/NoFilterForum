@@ -49,6 +49,8 @@ async function deleteMessage(user2Id, messageId,form)
 	if(!response.ok){
 		throw new Error("Error has occured");
 	};
+	var btnDelete = document.getElementById(`btn_${messageId}`);
+	form.removeChild(btnDelete);
 	removeMessage(user2Id,messageId);
 	replaceMessage(messageId);
 }
@@ -95,6 +97,7 @@ function createForm(container, messageId,user2Id) {
     const button = document.createElement("button");
     button.type = "submit";
     button.textContent = "Delete";
+	button.id = `btn_${messageId}`
     button.classList.add("btn", "btn-danger", "btn-sm");
     form.appendChild(button);
     container.appendChild(form);
