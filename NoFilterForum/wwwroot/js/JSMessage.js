@@ -65,7 +65,7 @@ function showMessages(isFromSignalR,messageText,messageId,user2Id)
 	var divRow =document.createElement('div');
 	divRow.classList.add('row','mb-3');
 	var divColSecondary = document.createElement('div');
-	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end');
+	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end', 'd-flex' ,isFromSignalR ? 'justify-content-start' : 'justify-content-end' ,'align-items-center' ,'gap-2');
 	divColSecondary.innerText = showTime(date);
 	if(!isFromSignalR)
 	{
@@ -96,9 +96,8 @@ function createForm(container, messageId,user2Id) {
 	form.appendChild(inputMessageId);
     const button = document.createElement("button");
     button.type = "submit";
-    button.textContent = "Delete";
 	button.id = `btn_${messageId}`
-    button.classList.add("btn", "btn-danger", "btn-sm");
+    button.classList.add("delBtn");
     form.appendChild(button);
     container.appendChild(form);
 }
