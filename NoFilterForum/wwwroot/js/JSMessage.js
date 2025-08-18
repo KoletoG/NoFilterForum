@@ -24,7 +24,7 @@ function removeMessage(userId,messageId)
 	connection.invoke("DeleteMessage",userId,messageId);
 }
 var mainContainer = document.getElementById('mainContainer');
-async function submitMessage(userId)
+async function submitMessage(userId,userMe)
 {
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Create',{
@@ -35,7 +35,7 @@ async function submitMessage(userId)
 		throw new Error("Error has occured");
 	}
 	let messageInfo = await response.json();
-	showMessages(false,messageInfo.message,messageInfo.messageId,userId,null);
+	showMessages(false,messageInfo.message,messageInfo.messageId,userId);
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
@@ -57,7 +57,7 @@ function replaceMessage(messageId)
 	var message = document.getElementById(`message_${messageId}`);
 	message.innerHTML="Deleted message";
 }
-function showMessages(isFromSignalR,messageText,messageId,userId,user2Id)
+function showMessages(isFromSignalR,messageText,messageId,user2Id)
 {
 	var date = new Date();	
 	var divRow =document.createElement('div');
@@ -67,7 +67,7 @@ function showMessages(isFromSignalR,messageText,messageId,userId,user2Id)
 	divColSecondary.innerText = showTime(date);
 	if(!isFromSignalR)
 	{
-		createForm(divColSecondary,messageId,userId,user2Id);
+		createForm(divColSecondary,messageId,user2Id);
 	}
 	var divColMain = document.createElement('div');
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
@@ -84,7 +84,7 @@ function createForm(container, messageId,user2Id) {
     const form = document.createElement("form");
 	form.addEventListener('submit',(e)=>{
 		e.preventDefault();
-		deleteMessage(user2Id,messageId);
+		deleteMessage(user2Id,messageId,form);
 	})
 	form.id=`form_${messageId}`;
 	const inputMessageId = document.createElement("input");
