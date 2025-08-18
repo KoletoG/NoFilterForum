@@ -5,6 +5,6 @@ namespace Web.ViewModels.Message
     public class DeleteMessageViewModel
     {
         [Required]
-        public string Id { get; set; }
+        public string MessageId { get; set; }
     }
 }

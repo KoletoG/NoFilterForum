@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Interfaces.Services;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Web.Mappers;
@@ -33,14 +34,12 @@ namespace Web.Controllers
             };
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> Delete(DeleteMessageViewModel deleteMessageViewModel,CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if(userId is null) return Unauthorized();
-
-            var result = await _messageService.DeleteAsync(deleteMessageViewModel.Id, userId);
+            var result = await _messageService.DeleteAsync(deleteMessageViewModel.MessageId, userId);
             return result switch
             {
                 PostResult.Success => NoContent(),

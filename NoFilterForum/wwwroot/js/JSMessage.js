@@ -39,9 +39,9 @@ async function submitMessage(userId)
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
-async function deleteMessage(userId, messageId)
+async function deleteMessage(userId, messageId,formDelete)
 {
-	let formData = new FormData(form);
+	let formData = new FormData(formDelete);
 	let response = await fetch('/Message/Delete',{
 		method: 'POST',
 		body: formData
@@ -81,10 +81,15 @@ function showMessages(isFromSignalR,messageText,messageId,userId)
 }
 function createForm(container, messageId, userId) {
     const form = document.createElement("form");
-	form.addEventListener('onsubmit',(e)=>{
+	form.addEventListener('submit',(e)=>{
 		e.preventDefault();
-		deleteMessage(userId,messageId);
+		deleteMessage(userId,messageId,form);
 	})
+	const inputMessageId = document.createElement("input");
+	inputMessageId.type="hidden";
+	inputMessageId.name="MessageId";
+	inputMessageId.value=messageId;
+	form.appendChild(inputMessageId);
     const button = document.createElement("button");
     button.type = "submit";
     button.textContent = "Delete Message";
