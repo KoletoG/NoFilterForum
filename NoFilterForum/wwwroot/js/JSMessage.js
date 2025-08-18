@@ -6,7 +6,7 @@ form.addEventListener('submit',(event)=>{
 });
 
 connection.on("ReceiveMessage",(message,messageId) => {
-	showMessages(true,message,messageId);
+	showMessages(true,message,messageId,null);
 	scrollToMessage(divCol1);
 });
 connection.on("RemoveMessage",(messageId)=>{
@@ -35,7 +35,7 @@ async function submitMessage(userId)
 		throw new Error("Error has occured");
 	}
 	let messageInfo = await response.json();
-	showMessages(false,messageInfo.message,messageInfo.messageId);
+	showMessages(false,messageInfo.message,messageInfo.messageId,userId);
 	document.getElementById('messageInput').value="";
 	sendMessage(userId,messageInfo.message,messageInfo.messageId);
 }
@@ -56,7 +56,7 @@ function replaceMessage(messageId)
 {
 	document.getElementById(`message_${messageId}`).innerText="deleted";
 }
-function showMessages(isFromSignalR,messageText,messageId)
+function showMessages(isFromSignalR,messageText,messageId,userId)
 {
 	var date = new Date();	
 	var divRow =document.createElement('div');
@@ -64,6 +64,10 @@ function showMessages(isFromSignalR,messageText,messageId)
 	var divColSecondary = document.createElement('div');
 	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end');
 	divColSecondary.innerText = showTime(date);
+	if(!isFromSignalR)
+	{
+		createForm(divColSecondary,messageId,userId);
+	}
 	var divColMain = document.createElement('div');
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
@@ -74,6 +78,19 @@ function showMessages(isFromSignalR,messageText,messageId)
 	divRow.appendChild(isFromSignalR ? divColSecondary : divColMain);
 	mainContainer.appendChild(divRow);
 	scrollToMessage(divColMain);
+}
+function createForm(container, messageId, userId) {
+    const form = document.createElement("form");
+	form.addEventListener('onsubmit',(e)=>{
+		e.preventDefault();
+		deleteMessage(userId,messageId);
+	})
+    const button = document.createElement("button");
+    button.type = "submit";
+    button.textContent = "Delete Message";
+    button.classList.add("btn", "btn-danger", "btn-sm");
+    form.appendChild(button);
+    container.appendChild(form);
 }
 function showTime(date){
 	
