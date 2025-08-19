@@ -13,18 +13,18 @@ connection.on("RemoveMessage",(messageId)=>{
 	replaceMessage(messageId);
 });
 connection.start();
-function sendMessage(userId,message,messageId) 
+function sendMessage(userRecipientId,message,messageId) 
 {
-    connection.invoke("SendMessage", userId,message,messageId)
+    connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
 }
 
-function removeMessage(userId,messageId)
+function removeMessage(userRecipientId,messageId)
 {
-	connection.invoke("DeleteMessage",userId,messageId);
+	connection.invoke("DeleteMessage",userRecipientId,messageId);
 }
 var mainContainer = document.getElementById('mainContainer');
-async function submitMessage(userId,userMe)
+async function submitMessage(userRecipientId)
 {
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Create',{
@@ -35,11 +35,11 @@ async function submitMessage(userId,userMe)
 		throw new Error("Error has occured");
 	}
 	let messageInfo = await response.json();
-	showMessages(false,messageInfo.message,messageInfo.messageId,userId);
+	showMessages(false,messageInfo.message,messageInfo.messageId,userRecipientId);
 	document.getElementById('messageInput').value="";
-	sendMessage(userId,messageInfo.message,messageInfo.messageId);
+	sendMessage(userRecipientId,messageInfo.message,messageInfo.messageId);
 }
-async function deleteMessage(user2Id, messageId,form)
+async function deleteMessage(userRecipientId, messageId,form)
 {
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Delete',{
@@ -51,7 +51,7 @@ async function deleteMessage(user2Id, messageId,form)
 	};
 	var btnDelete = document.getElementById(`btn_${messageId}`);
 	form.removeChild(btnDelete);
-	removeMessage(user2Id,messageId);
+	removeMessage(userRecipientId,messageId);
 	replaceMessage(messageId);
 }
 function replaceMessage(messageId)
@@ -59,7 +59,7 @@ function replaceMessage(messageId)
 	var message = document.getElementById(`message_${messageId}`);
 	message.innerHTML="Deleted message";
 }
-function showMessages(isFromSignalR,messageText,messageId,user2Id)
+function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 {
 	var date = new Date();	
 	var divRow =document.createElement('div');
@@ -69,7 +69,7 @@ function showMessages(isFromSignalR,messageText,messageId,user2Id)
 	divColSecondary.innerText = showTime(date);
 	if(!isFromSignalR)
 	{
-		createForm(divColSecondary,messageId,user2Id);
+		createForm(divColSecondary,messageId,userRecipientId);
 	}
 	var divColMain = document.createElement('div');
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
@@ -82,12 +82,13 @@ function showMessages(isFromSignalR,messageText,messageId,user2Id)
 	mainContainer.appendChild(divRow);
 	scrollToMessage(divColMain);
 }
-function createForm(container, messageId,user2Id) {
+function createForm(container, messageId,userRecipientId) {
     const form = document.createElement("form");
-	form.addEventListener('submit',(e)=>{
+	form.addEventListener('submit',(e)=>
+	{
 		e.preventDefault();
-		deleteMessage(user2Id,messageId,form);
-	})
+		deleteMessage(userRecipientId,messageId,form);
+	});
 	form.id=`form_${messageId}`;
 	const inputMessageId = document.createElement("input");
 	inputMessageId.type="hidden";
