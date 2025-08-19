@@ -1,4 +1,5 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+const deletedMessageText = "Deleted message";
 
 var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
@@ -57,7 +58,7 @@ async function deleteMessage(userRecipientId, messageId,form)
 function replaceMessage(messageId)
 {
 	var message = document.getElementById(`message_${messageId}`);
-	message.innerHTML="Deleted message";
+	message.innerHTML=deletedMessageText;
 }
 function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 {

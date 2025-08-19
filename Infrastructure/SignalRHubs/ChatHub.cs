@@ -29,5 +29,11 @@ namespace Infrastructure.SignalRHubs
         {
             await Clients.User(userId).SendAsync("RemoveMessage", messageId);
         }
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task MarkMessageAsSeen(string userId, string messageId)
+        {
+            await Clients.User(userId).SendAsync("HasSeenMessage", messageId);
+        }
     }
 }
