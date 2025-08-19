@@ -33,7 +33,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.Id)).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.Reply.Id)).ToListAsync();
         }
         public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {

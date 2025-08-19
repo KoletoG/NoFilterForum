@@ -206,8 +206,8 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if (repliesOfPost.Any()) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 if (notifications.Any()) _unitOfWork.Notifications.DeleteRange(notifications);
+                if (repliesOfPost.Any()) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 await _userService.ApplyRoleAsync(post.User); // HERE TOO
                 _unitOfWork.Users.UpdateRange(usersSet.ToList());
                 _unitOfWork.Posts.Delete(post);
