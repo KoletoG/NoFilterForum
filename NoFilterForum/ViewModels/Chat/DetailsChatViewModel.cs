@@ -24,5 +24,9 @@ namespace Web.ViewModels.Chat
                 return $"{localTime.Hour:0}:{localTime.Minute:00}";
             }
         }
+        public string? TakeLastMessageIdOfOtherUser()
+        {
+            return Messages.Where(x => x.UserId == User2Id).OrderByDescending(x=>x.DateTime).Select(x => x.Id).FirstOrDefault();
+        }
     }
 }

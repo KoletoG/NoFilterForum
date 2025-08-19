@@ -13,15 +13,25 @@ connection.on("ReceiveMessage",(message,messageId) => {
 connection.on("RemoveMessage",(messageId)=>{
 	replaceMessage(messageId);
 });
-connection.on("HasSeenMessage",(messageId)=>{
-
-});
-connection.start();
+connection.start()
+    .then(() => {
+        console.log("SignalR Connected.");
+        let userRecId = document.getElementById('userRecId').value;
+        let lastMessageId = document.getElementById('lastMessageId').value;
+        connection.invoke("MarkMessageAsSeen", userRecId, lastMessageId);
+    });
 function sendMessage(userRecipientId,message,messageId) 
 {
     connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
 }
+
+connection.on("HasSeenMessage",(lastMessageId)=>{
+let col = document.getElementById(`colOfLastMessage_${lastMessageId}`)
+let seenMessage = document.createElement('h6');
+seenMessage.innerText="Seen";
+col.appendChild(seenMessage);
+});
 
 function removeMessage(userRecipientId,messageId)
 {

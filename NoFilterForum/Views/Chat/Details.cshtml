@@ -6,20 +6,19 @@
 		@{
 			var messagesCount = Model.Messages.Count;
 		}
+		<input type="hidden" value="@Model.User2Id" id="userRecId"/>
+		<input type="hidden" value="@Model.TakeLastMessageIdOfOtherUser()" id="lastMessageId" />
 		@for (int i = 0; i < messagesCount; i++)
 		{
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
 				<div class="row mb-3" id="row_{@i}">
-					<div class="col-6 fst-italic fw-lighter text-end d-flex justify-content-end align-items-center gap-2">
+					<div id="colOfLastMessage_@Model.Messages[i].Id" class="col-6 fst-italic fw-lighter text-end d-flex justify-content-end align-items-center gap-2">
 						@Model.CalculateTime(Model.Messages[i].DateTime)
-
 						<form onsubmit="deleteMessage('@Model.User2Id','@Model.Messages[i].Id',this); return false;" id="formDelete">
 							<input type="hidden" value="@Model.Messages[i].Id" name="MessageId" />
 							<button type="submit" id="btn_@Model.Messages[i].Id" class="delBtn"></button>
 						</form>
-
-
 					</div>
 					<div class="col-6 border border-2 bg-body-secondary fst-italic text-break rounded-2" id="message_{@Model.Messages[i].Id}">
 						<h6 id="message_@Model.Messages[i].Id">@Model.Messages[i].Message</h6>
@@ -61,6 +60,7 @@
 	<partial name="_ValidationScriptsPartial" />
 	<link rel="stylesheet" href="~/css/btnsCSS.css" asp-append-version="true" />
 	<script src="~/js/JSMessage.js" asp-append-version="true" defer></script>
+	<script src="~/js/JSLastSeenScript.js" asp-append-version="true" defer></script>
 	<script>
 		document.getElementById('row_{@(Model.Messages.Count - 1)}').scrollIntoView({behavior:"instant"});
 	</script>

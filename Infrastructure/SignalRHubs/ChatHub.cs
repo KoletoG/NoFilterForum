@@ -31,9 +31,9 @@ namespace Infrastructure.SignalRHubs
         }
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task MarkMessageAsSeen(string userId, string messageId)
+        public async Task MarkMessageAsSeen(string userRecId,string lastMessageId)
         {
-            await Clients.User(userId).SendAsync("HasSeenMessage", messageId);
+            await Clients.User(userRecId).SendAsync("HasSeenMessage", lastMessageId);
         }
     }
 }
