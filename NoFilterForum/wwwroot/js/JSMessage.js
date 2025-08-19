@@ -81,6 +81,7 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 	var divColSecondary = document.createElement('div');
 	divColSecondary.classList.add('col-6','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end', 'd-flex' ,isFromSignalR ? 'justify-content-start' : 'justify-content-end' ,'align-items-center' ,'gap-2');
 	divColSecondary.innerText = showTime(date);
+	divColSecondary.id=`colOfLastMessage_${messageId}`;
 	if(!isFromSignalR)
 	{
 		createForm(divColSecondary,messageId,userRecipientId);
