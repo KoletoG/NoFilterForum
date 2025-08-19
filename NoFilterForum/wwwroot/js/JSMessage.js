@@ -13,6 +13,9 @@ connection.on("ReceiveMessage",(message,messageId) => {
 connection.on("RemoveMessage",(messageId)=>{
 	replaceMessage(messageId);
 });
+connection.on("HasSeenMessage",(messageId)=>{
+
+});
 connection.start();
 function sendMessage(userRecipientId,message,messageId) 
 {

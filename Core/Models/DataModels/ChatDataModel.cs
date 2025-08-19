@@ -15,6 +15,8 @@ namespace Core.Models.DataModels
         public List<MessageDataModel> Messages { get; private set; }
         public UserDataModel User1 { get; private set; }
         public UserDataModel User2 {  get; private set; }
+        public MessageDataModel LastSeenByUser1 { get; private set; }
+        public MessageDataModel LastSeenByUser2 { get; private set; }
         public ChatDataModel()
         {
         }
