@@ -6,12 +6,14 @@
 		@{
 			var messagesCount = Model.Messages.Count;
 		}
-		<input type="hidden" value="@Model.User2Id" id="userRecId"/>
+		<input type="hidden" value="@Model.User2Id" id="userRecId" />
+		<input type="hidden" value="@Model.ChatId" id="chatId" />
 		<input type="hidden" value="@Model.TakeLastMessageIdOfOtherUser()" id="lastMessageId" />
 		@for (int i = 0; i < messagesCount; i++)
 		{
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
+				// FIX SEEN
 				<div class="row mb-3" id="row_{@i}">
 					<div id="colOfLastMessage_@Model.Messages[i].Id" class="col-6 fst-italic fw-lighter text-end d-flex justify-content-end align-items-center gap-2">
 						@Model.CalculateTime(Model.Messages[i].DateTime)

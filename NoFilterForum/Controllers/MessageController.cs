@@ -2,12 +2,14 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Application.Interfaces.Services;
+using Core.DTOs.InputDTOs.Chat;
 using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Web.Mappers;
+using Web.ViewModels.Chat;
 using Web.ViewModels.Message;
 
 namespace Web.Controllers
@@ -32,6 +34,12 @@ namespace Web.Controllers
                 PostResult.UpdateFailed => Problem(),
                 _ => Problem()
             };
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateLastMessage(UpdateLastMessageViewModel viewModel)
+        {
+            return NoContent();
         }
         [HttpPost]
         [Authorize]
