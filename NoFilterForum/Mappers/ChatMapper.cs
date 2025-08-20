@@ -1,4 +1,5 @@
-﻿using Core.DTOs.OutputDTOs.Chat;
+﻿using Core.DTOs.InputDTOs.Chat;
+using Core.DTOs.OutputDTOs.Chat;
 using Core.Models.DataModels;
 using NuGet.Packaging;
 using Web.ViewModels.Chat;
@@ -21,5 +22,6 @@ namespace Web.Mappers
             UserId = userId,
             User2Id = userId == dto.UserId1 ? dto.UserId2 : dto.UserId1
         };
+        public static UpdateLastMessageRequest MapToRequest(UpdateLastMessageViewModel vm, string userId) => new(userId, vm.ChatId, vm.MessageId);
     }
 }

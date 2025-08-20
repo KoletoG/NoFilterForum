@@ -18,6 +18,17 @@ connection.start()
         console.log("SignalR Connected.");
         let userRecId = document.getElementById('userRecId').value;
         let lastMessageId = document.getElementById('lastMessageId').value;
+		let chatId = document.getElementById('chatId').value;
+	    fetch("/Chat/UpdateLastMessage",{
+			method : 'POST',
+		headers:{
+		'Content-Type' : 'application/json',
+		},
+		body : JSON.stringify({
+        MessageId: lastMessageId,
+        ChatId: chatId
+    		})
+		});
         connection.invoke("MarkMessageAsSeen", userRecId, lastMessageId);
     });
 function sendMessage(userRecipientId,message,messageId) 

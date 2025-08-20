@@ -37,15 +37,6 @@ namespace Web.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UpdateLastMessage(UpdateLastMessageViewModel viewModel, CancellationToken cancellationToken)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId is null) return Unauthorized();
-
-            return NoContent();
-        }
-        [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Delete(DeleteMessageViewModel deleteMessageViewModel,CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
