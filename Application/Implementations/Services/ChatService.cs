@@ -76,7 +76,7 @@ namespace Application.Implementations.Services
         }
         public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
         {
-            var chat = await _unitOfWork.Chats.GetAll().Include(x=>x.User1.Id).Include(x=>x.User2.Id).Where(x => x.Id == request.ChatId).FirstOrDefaultAsync(cancellationToken);
+            var chat = await _unitOfWork.Chats.GetAll().Include(x=>x.User1).Include(x=>x.User2).Where(x => x.Id == request.ChatId).FirstOrDefaultAsync(cancellationToken);
             if (chat is null) return PostResult.NotFound;
             if (chat.User1.Id != request.UserId && chat.User2.Id != request.UserId) return PostResult.Forbid;
             var message = await _unitOfWork.Message.GetByIdAsync(request.MessageId);
