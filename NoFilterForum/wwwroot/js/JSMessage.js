@@ -21,15 +21,10 @@ connection.start()
 		let chatId = document.getElementById('chatId').value;
 	    fetch("/Chat/UpdateLastMessage",{
 			method : 'POST',
-		headers:{
-		'Content-Type' : 'application/json',
-		},
-		body : JSON.stringify({
-        MessageId: lastMessageId,
-        ChatId: chatId
-    		})
+		headers:{'Content-Type' : 'application/json'},
+		body : JSON.stringify({ MessageId: lastMessageId, ChatId: chatId })
 		});
-        connection.invoke("MarkMessageAsSeen", userRecId, lastMessageId);
+        connection.invoke("MarkMessageAsSeen", userRecId, lastMessageId,chatId);
     });
 function sendMessage(userRecipientId,message,messageId) 
 {
@@ -37,9 +32,14 @@ function sendMessage(userRecipientId,message,messageId)
         .catch(err => console.error(err));
 }
 
-connection.on("HasSeenMessage",(lastMessageId)=>{
-let col = document.getElementById(`colOfLastMessage_${lastMessageId}`)
+connection.on("HasSeenMessage",(seenMessageId, lastSeenMessageId)=>{
+let lastSeenMes = document.getElementById(`h6OfSeenMessage_${lastSeenMessageId}`);
+if(lastSeenMes != null){
+lastSeenMes.innerText = "";
+}
+let col = document.getElementById(`colOfLastMessage_${seenMessageId}`)
 let seenMessage = document.createElement('h6');
+seenMessage.id = `h6OfSeenMessage_${seenMessageId}`;
 seenMessage.innerText="Seen";
 col.appendChild(seenMessage);
 });
