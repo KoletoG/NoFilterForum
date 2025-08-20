@@ -77,7 +77,11 @@ namespace Application.Implementations.Services
         public async Task<string?> GetIdOfLastMessageAsync(string userId, string chatId)
         {
             // Add validation
-            return await _unitOfWork.Chats.GetAll().Where(x => x.Id == chatId).Select(x => x.User1.Id == userId ? x.LastSeenByUser2 : x.LastSeenByUser1).Select(x => x.Id).FirstOrDefaultAsync();
+            return await _unitOfWork.Chats.GetAll()
+                .Where(x => x.Id == chatId)
+                .Select(x => x.User1.Id == userId ? x.LastMessageSeenByUser2 : x.LastMessageSeenByUser1) // 
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
         }
         public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
         {

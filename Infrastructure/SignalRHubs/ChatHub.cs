@@ -34,7 +34,6 @@ namespace Infrastructure.SignalRHubs
         public async Task MarkMessageAsSeen(string userRecId,string lastMessageId, string chatId)
         {
             var lastSeenMessageId = await _chatService.GetIdOfLastMessageAsync(userRecId,chatId);
-            
             await Clients.User(userRecId).SendAsync("HasSeenMessage", lastMessageId,lastSeenMessageId,chatId);
         }
     }
