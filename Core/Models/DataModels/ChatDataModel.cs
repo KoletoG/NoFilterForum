@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using NoFilterForum.Core.Models.DataModels;
 
 namespace Core.Models.DataModels
@@ -20,8 +15,8 @@ namespace Core.Models.DataModels
         public ChatDataModel()
         {
         }
-        public void ChangeLastSeenByUser2(MessageDataModel messageDataModel)=> LastMessageSeenByUser2 = messageDataModel;
-        public void ChangeLastSeenByUser1(MessageDataModel messageDataModel) => LastMessageSeenByUser1 = messageDataModel;
+        public void ChangeLastMessageSeenByUser2(MessageDataModel messageDataModel)=> LastMessageSeenByUser2 = messageDataModel;
+        public void ChangeLastMessageSeenByUser1(MessageDataModel messageDataModel) => LastMessageSeenByUser1 = messageDataModel;
         public ChatDataModel(UserDataModel user1, UserDataModel user2)
         {
             Id = Guid.NewGuid().ToString();
