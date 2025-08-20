@@ -123,7 +123,7 @@ namespace Application.Implementations.Services
                     x.User2.UserName!,
                     x.User1.Id,
                     x.User2.Id,
-                    x.Messages.OrderBy(x=>x.DateTime).Take(100).ToList(),
+                    x.Messages.OrderByDescending(x=>x.DateTime).Take(100).ToList(),
                     x.Id)
                 ).FirstOrDefaultAsync(cancellationToken);
                 if (chat is null)

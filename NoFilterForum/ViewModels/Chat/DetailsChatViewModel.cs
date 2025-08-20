@@ -4,12 +4,16 @@ namespace Web.ViewModels.Chat
 {
     public class DetailsChatViewModel
     {
-        public required IList<MessageDataModel> Messages { get; set; }
+        public IList<MessageDataModel> Messages { get; init; }
         public required string Username1 { get; set; }
         public required string Username2 { get; set; }
         public required string ChatId {  get; set; }
         public required string UserId { get; set; }
         public required string User2Id { get; set; }
+        public DetailsChatViewModel(IReadOnlyCollection<MessageDataModel> messages)
+        {
+            Messages = messages.OrderBy(x=>x.DateTime).ToList();
+        }
         public string CalculateTime(DateTime time)
         {
             var localTime = time.ToLocalTime();

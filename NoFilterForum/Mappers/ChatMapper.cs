@@ -13,9 +13,8 @@ namespace Web.Mappers
             ChatId = dto.ChatId,
             Username = dto.Username
         };
-        public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto,string userId) => new()
+        public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto,string userId) => new(dto.Messages)
         {
-            Messages = dto.Messages.ToList(),
             Username1 = dto.Username1,
             Username2 = dto.Username2,
             ChatId = dto.ChatId,
