@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Core.DTOs.InputDTOs.Chat
 {
-    public record UpdateLastMessageRequest();
+    public record UpdateLastMessageRequest(string UserId, string ChatId, string MessageId);
 }

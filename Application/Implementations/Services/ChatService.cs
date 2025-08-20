@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces.Services;
+using Core.DTOs.InputDTOs.Chat;
 using Core.DTOs.OutputDTOs.Chat;
 using Core.Enums;
 using Core.Interfaces.Repositories;
@@ -70,6 +71,39 @@ namespace Application.Implementations.Services
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "An error has occured creating new chat by user with Id: {UserId}", userId1);
+                return PostResult.UpdateFailed;
+            }
+        }
+        public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
+        {
+            var chat = await _unitOfWork.Chats.GetAll().Include(x=>x.User1.Id).Include(x=>x.User2.Id).Where(x => x.Id == request.ChatId).FirstOrDefaultAsync(cancellationToken);
+            if (chat is null) return PostResult.NotFound;
+            if (chat.User1.Id != request.UserId && chat.User2.Id != request.UserId) return PostResult.Forbid;
+            var message = await _unitOfWork.Message.GetByIdAsync(request.MessageId);
+            if(message is null) return PostResult.NotFound;
+            if (chat.User1.Id == request.UserId)
+            {
+                chat.ChangeLastSeenByUser1(message);
+            }
+            else
+            {
+                chat.ChangeLastSeenByUser2(message);
+            }
+            try
+            {
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Chats.Update, chat,cancellationToken);
+                return PostResult.Success;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Updating last message of chat with Id: {ChatId} was cancelled", request.ChatId);
+                return PostResult.UpdateFailed;
+            }
+            catch (DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "There was a problem with the database updating last message of chat with Id: {ChatId}", request.ChatId);
                 return PostResult.UpdateFailed;
             }
         }

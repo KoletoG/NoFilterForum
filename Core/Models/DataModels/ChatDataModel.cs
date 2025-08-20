@@ -20,6 +20,8 @@ namespace Core.Models.DataModels
         public ChatDataModel()
         {
         }
+        public void ChangeLastSeenByUser2(MessageDataModel messageDataModel)=> LastSeenByUser2 = messageDataModel;
+        public void ChangeLastSeenByUser1(MessageDataModel messageDataModel) => LastSeenByUser1 = messageDataModel;
         public ChatDataModel(UserDataModel user1, UserDataModel user2)
         {
             Id = Guid.NewGuid().ToString();
