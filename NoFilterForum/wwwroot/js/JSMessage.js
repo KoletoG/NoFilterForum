@@ -1,6 +1,7 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 const deletedMessageText = "Deleted message";
-
+let latestSeenMessageId="";
+let latestAddedMessageId="";
 var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
@@ -8,10 +9,24 @@ form.addEventListener('submit',(event)=>{
 
 connection.on("ReceiveMessage",(message,messageId) => {
 	showMessages(true,message,messageId,null);
+	let userRecId = document.getElementById('userRecId').value;
+	connection.invoke("FeedbackOfSeen",userRecId);
 	scrollToMessage(divCol1);
 });
 connection.on("RemoveMessage",(messageId)=>{
 	replaceMessage(messageId);
+});
+connection.on("WasSeen",()=>{
+if(latestSeenMessageId!="")
+{
+	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).innerText="";
+}
+let col = document.getElementById(`colOfLastMessage_${latestAddedMessageId}`)
+let seenMessage = document.createElement('h6');
+seenMessage.id = `h6OfSeenMessage_${latestAddedMessageId}`;
+seenMessage.innerText="Seen";
+col.appendChild(seenMessage);
+latestSeenMessageId = latestAddedMessageId;
 });
 connection.start()
     .then(() => {
@@ -19,14 +34,17 @@ connection.start()
         let userRecId = document.getElementById('userRecId').value;
         let lastMessageId = document.getElementById('lastMessageId').value;
 		let chatId = document.getElementById('chatId').value;
+		/*
         connection.invoke("MarkMessageAsSeen", userRecId, lastMessageId,chatId);
+		*/
     });
 function sendMessage(userRecipientId,message,messageId) 
 {
+	latestAddedMessageId = messageId;
     connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
 }
-
+/*
 connection.on("HasSeenMessage",(seenMessageId, lastSeenMessageId,chatId)=>{
 	    fetch("/Chat/UpdateLastMessage",{
 			method : 'POST',
@@ -43,7 +61,7 @@ seenMessage.id = `h6OfSeenMessage_${seenMessageId}`;
 seenMessage.innerText="Seen";
 col.appendChild(seenMessage);
 });
-
+*/
 function removeMessage(userRecipientId,messageId)
 {
 	connection.invoke("DeleteMessage",userRecipientId,messageId);
