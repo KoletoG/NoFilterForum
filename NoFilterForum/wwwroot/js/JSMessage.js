@@ -1,7 +1,7 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 const deletedMessageText = "Deleted message";
 let latestSeenMessageId="";
-let latestAddedMessageId="";
+let latestAddedMessageId=document.getElementById('lastMessageCurrentId').value;
 var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
@@ -19,47 +19,42 @@ connection.on("RemoveMessage",(messageId)=>{
 connection.on("WasSeen",()=>{
 if(latestSeenMessageId!="")
 {
-	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).innerText="";
+	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove();
 }
-let userRecId = document.getElementById('userRecId').value;
-let col = document.getElementById(`colOfLastMessage_${latestAddedMessageId}`)
-let seenMessage = document.createElement('h6');
-seenMessage.id = `h6OfSeenMessage_${latestAddedMessageId}`;
-seenMessage.innerText="Seen";
-col.appendChild(seenMessage);
+addSeenMessage(latestAddedMessageId);
 latestSeenMessageId = latestAddedMessageId;
 let chatId = document.getElementById('chatId').value;
+let userRecId = document.getElementById('userRecId').value;
 fetch('/Chat/UpdateLastMessage',{
 	method: 'POST',
 	headers:{'Content-Type':'application/json'},
 	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userRecId})
 	});
 });
-document.addEventListener('DOMContentLoaded',(e)=>{
-let chatId = document.getElementById('chatId').value;
-let userSenderId = document.getElementById('userSendId').value;
-fetch(`/Chat/GetLastMessage?chatId=${chatId}`)
-  .then(response => response.text())
-  .then(data => {
-    latestSeenMessageId = data;
-	if(latestSeenMessageId != ""){
-	let col = document.getElementById(`colOfLastMessage_${latestSeenMessageId}`)
+function addSeenMessage(messageId)
+{
+	let col = document.getElementById(`colOfLastMessage_${messageId}`)
 	let seenMessage = document.createElement('h6');
-	seenMessage.id = `h6OfSeenMessage_${latestSeenMessageId}`;
+	seenMessage.id = `h6OfSeenMessage_${messageId}`;
 	seenMessage.innerText="Seen";
 	col.appendChild(seenMessage);
-	fetch('/Chat/UpdateLastMessage',{
-	method: 'POST',
-	headers:{'Content-Type':'application/json'},
-	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userSenderId})
+}
+document.addEventListener('DOMContentLoaded',(e)=>{
+latestAddedMessageId=document.getElementById('lastMessageCurrentId').value;
+let chatId = document.getElementById('chatId').value;
+fetch(`/Chat/GetLastMessage?chatId=${chatId}`) // When going to the chat, set "seen" to what message has been last seen
+  .then(response => response.text())
+  .then(data => {
+	latestSeenMessageId = data; // Last message seen by the other user
+	if(latestSeenMessageId != "")
+		{
+			addSeenMessage(latestSeenMessageId); // Set the seen message in current user chat
+		}
 	});
-	}
-  });
 
 connection.start().then(()=>{
-	
 let userRecId = document.getElementById('userRecId').value;
-connection.invoke("FeedbackOfSeen",userRecId);
+connection.invoke("FeedbackOfSeen",userRecId); // Send the other user's a response that we have seen his last message
 });
 });
 function sendMessage(userRecipientId,message,messageId) 

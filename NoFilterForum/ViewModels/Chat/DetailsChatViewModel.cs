@@ -32,5 +32,9 @@ namespace Web.ViewModels.Chat
         {
             return Messages.Where(x => x.UserId == User2Id).OrderByDescending(x=>x.DateTime).Select(x => x.Id).FirstOrDefault();
         }
+        public string? TakeLastMessageIdOfCurrentUser()
+        {
+            return Messages.Where(x => x.UserId == UserId).OrderByDescending(x => x.DateTime).Select(x => x.Id).FirstOrDefault();
+        }
     }
 }
