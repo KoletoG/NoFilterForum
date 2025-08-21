@@ -85,13 +85,13 @@ namespace Application.Implementations.Services
             if (chat.User1.Id != request.UserId && chat.User2.Id != request.UserId) return PostResult.Forbid;
             var message = await _unitOfWork.Message.GetByIdAsync(request.MessageId);
             if (message is null) return PostResult.NotFound;
-            if (chat.User1.Id == request.UserId) // Here userId is the recipient
+            if (chat.User1.Id == request.UserId)
             {
-                chat.ChangeLastMessageSeenByUser2(message);
+                chat.ChangeLastMessageSeenByUser1(message);
             }
             else
             {
-                chat.ChangeLastMessageSeenByUser1(message);
+                chat.ChangeLastMessageSeenByUser2(message);
             }
             try
             {

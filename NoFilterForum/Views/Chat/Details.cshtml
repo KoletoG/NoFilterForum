@@ -6,6 +6,7 @@
 		@{
 			var messagesCount = Model.Messages.Count;
 		}
+		<input type="hidden" value="@Model.UserId" id="userSendId" />
 		<input type="hidden" value="@Model.User2Id" id="userRecId" />
 		<input type="hidden" value="@Model.ChatId" id="chatId" />
 		<input type="hidden" value="@Model.TakeLastMessageIdOfOtherUser()" id="lastMessageId" />
@@ -33,7 +34,7 @@
 					<div class="col-6 border border-2 bg-primary-subtle border-primary-subtle fst-italic text-break rounded-2">
 						<h6 id="message_@Model.Messages[i].Id">@Model.Messages[i].Message</h6>
 					</div>
-					<div class="col-6 fst-italic fw-lighter text-start">
+					<div class="col-6 fst-italic fw-lighter text-start" id="colOfLastMessage_@Model.Messages[i].Id">
 						@Model.CalculateTime(Model.Messages[i].DateTime)
 					</div>
 				</div>

@@ -38,9 +38,7 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateLastMessage([FromBody] UpdateLastMessageViewModel viewModel, CancellationToken cancellationToken)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId is null) return Unauthorized();
-            var request = ChatMapper.MapToRequest(viewModel, userId);
+            var request = ChatMapper.MapToRequest(viewModel, viewModel.UserId);
             var result = await _chatService.UpdateLastMessageAsync(request, cancellationToken);
             return result switch
             {

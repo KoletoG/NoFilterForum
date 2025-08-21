@@ -21,6 +21,7 @@ if(latestSeenMessageId!="")
 {
 	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).innerText="";
 }
+let userRecId = document.getElementById('userRecId').value;
 let col = document.getElementById(`colOfLastMessage_${latestAddedMessageId}`)
 let seenMessage = document.createElement('h6');
 seenMessage.id = `h6OfSeenMessage_${latestAddedMessageId}`;
@@ -31,11 +32,12 @@ let chatId = document.getElementById('chatId').value;
 fetch('/Chat/UpdateLastMessage',{
 	method: 'POST',
 	headers:{'Content-Type':'application/json'},
-	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId})
+	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userRecId})
 	});
 });
 document.addEventListener('DOMContentLoaded',(e)=>{
 let chatId = document.getElementById('chatId').value;
+let userSenderId = document.getElementById('userSendId').value;
 fetch(`/Chat/GetLastMessage?chatId=${chatId}`)
   .then(response => response.text())
   .then(data => {
@@ -46,11 +48,20 @@ fetch(`/Chat/GetLastMessage?chatId=${chatId}`)
 	seenMessage.id = `h6OfSeenMessage_${latestSeenMessageId}`;
 	seenMessage.innerText="Seen";
 	col.appendChild(seenMessage);
-
+	fetch('/Chat/UpdateLastMessage',{
+	method: 'POST',
+	headers:{'Content-Type':'application/json'},
+	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userSenderId})
+	});
 	}
   });
+
+connection.start().then(()=>{
+	
+let userRecId = document.getElementById('userRecId').value;
+connection.invoke("FeedbackOfSeen",userRecId);
 });
-connection.start();
+});
 function sendMessage(userRecipientId,message,messageId) 
 {
 	latestAddedMessageId = messageId;
