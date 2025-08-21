@@ -74,6 +74,43 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId) 
+        {
+            return await _unitOfWork.Chats.GetAll().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser1.Id : x.LastMessageSeenByUser2.Id).FirstOrDefaultAsync();
+        }
+        public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
+        {
+            var chat = await _unitOfWork.Chats.GetAll().Include(x => x.User1).Include(x => x.User2).Where(x => x.Id == request.ChatId).FirstOrDefaultAsync(cancellationToken);
+            if (chat is null) return PostResult.NotFound;
+            if (chat.User1.Id != request.UserId && chat.User2.Id != request.UserId) return PostResult.Forbid;
+            var message = await _unitOfWork.Message.GetByIdAsync(request.MessageId);
+            if (message is null) return PostResult.NotFound;
+            if (chat.User1.Id == request.UserId) // Here userId is the recipient
+            {
+                chat.ChangeLastMessageSeenByUser2(message);
+            }
+            else
+            {
+                chat.ChangeLastMessageSeenByUser1(message);
+            }
+            try
+            {
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Chats.Update, chat, cancellationToken);
+                return PostResult.Success;
+            }
+            catch (OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Updating last message of chat with Id: {ChatId} was cancelled", request.ChatId);
+                return PostResult.UpdateFailed;
+            }
+            catch (DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "There was a problem with the database updating last message of chat with Id: {ChatId}", request.ChatId);
+                return PostResult.UpdateFailed;
+            }
+        }
         public async Task<DetailsChatDTO?> GetChat(string id, string userId, CancellationToken cancellationToken)
         {
             try
