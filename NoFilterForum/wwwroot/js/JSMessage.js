@@ -34,9 +34,6 @@ connection.start()
         let userRecId = document.getElementById('userRecId').value;
         let lastMessageId = document.getElementById('lastMessageId').value;
 		let chatId = document.getElementById('chatId').value;
-		/*
-        connection.invoke("MarkMessageAsSeen", userRecId, lastMessageId,chatId);
-		*/
     });
 function sendMessage(userRecipientId,message,messageId) 
 {
@@ -44,24 +41,6 @@ function sendMessage(userRecipientId,message,messageId)
     connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
 }
-/*
-connection.on("HasSeenMessage",(seenMessageId, lastSeenMessageId,chatId)=>{
-	    fetch("/Chat/UpdateLastMessage",{
-			method : 'POST',
-		headers:{'Content-Type' : 'application/json'},
-		body : JSON.stringify({ MessageId: seenMessageId, ChatId: chatId })
-		});
-let lastSeenMes = document.getElementById(`h6OfSeenMessage_${lastSeenMessageId}`);
-if(lastSeenMes != null){
-lastSeenMes.innerText = "";
-}
-let col = document.getElementById(`colOfLastMessage_${seenMessageId}`)
-let seenMessage = document.createElement('h6');
-seenMessage.id = `h6OfSeenMessage_${seenMessageId}`;
-seenMessage.innerText="Seen";
-col.appendChild(seenMessage);
-});
-*/
 function removeMessage(userRecipientId,messageId)
 {
 	connection.invoke("DeleteMessage",userRecipientId,messageId);

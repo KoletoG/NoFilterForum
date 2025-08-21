@@ -28,23 +28,6 @@ namespace Web.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UpdateLastMessage([FromBody] UpdateLastMessageViewModel viewModel, CancellationToken cancellationToken)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId is null) return Unauthorized();
-            var request = ChatMapper.MapToRequest(viewModel, userId);
-            var result = await _chatService.UpdateLastMessageAsync(request,cancellationToken);
-            return result switch
-            {
-                PostResult.Success => NoContent(),
-                PostResult.NotFound => NotFound(),
-                PostResult.Forbid => Forbid(),
-                PostResult.UpdateFailed => Problem(),
-                _ => Problem()
-            };
-        }
-        [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateChatViewModel createChatViewModel, CancellationToken cancellationToken)
         {
