@@ -1,7 +1,7 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 const deletedMessageText = "Deleted message";
 let latestSeenMessageId="";
-let latestAddedMessageId=document.getElementById('lastMessageCurrentId').value;
+let latestAddedMessageId="";
 var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
@@ -19,9 +19,9 @@ connection.on("RemoveMessage",(messageId)=>{
 connection.on("WasSeen",()=>{
 if(latestSeenMessageId!="")
 {
-	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove();
+	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove(); // delete previously "Seen" message
 }
-addSeenMessage(latestAddedMessageId);
+addSeenMessage(latestAddedMessageId); // Add the new "seen" message in our current chat
 latestSeenMessageId = latestAddedMessageId;
 let chatId = document.getElementById('chatId').value;
 let userRecId = document.getElementById('userRecId').value;
@@ -29,7 +29,7 @@ fetch('/Chat/UpdateLastMessage',{
 	method: 'POST',
 	headers:{'Content-Type':'application/json'},
 	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userRecId})
-	});
+	}); // update the last seen message by the other user which in this case is latestAddedMessageId or latestSeenMessageId
 });
 function addSeenMessage(messageId)
 {
@@ -59,7 +59,7 @@ connection.invoke("FeedbackOfSeen",userRecId); // Send the other user's a respon
 });
 function sendMessage(userRecipientId,message,messageId) 
 {
-	latestAddedMessageId = messageId;
+	latestAddedMessageId = messageId; // Set the last added message from ourselves
     connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
 }
