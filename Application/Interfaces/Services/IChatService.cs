@@ -11,7 +11,7 @@ namespace Application.Interfaces.Services
 {
     public interface IChatService
     {
-        public Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId);
+        public Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId,CancellationToken cancellationToken);
         public Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken);
         public Task<bool> ExistChatByUserIdsAsync(string userId1, string userId2, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId,string username, CancellationToken cancellationToken);

@@ -26,11 +26,16 @@ namespace Web.Controllers
             var chatIndexViewModels = listChatIndexDtos.Select(ChatMapper.MapToViewModel).ToList();
             return View(chatIndexViewModels);
         }
-        [HttpPost]
-
         [Authorize]
-
-
+        public async Task<IActionResult> GetLastMessage([FromQuery] string chatId,CancellationToken cancellationToken)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null) return Unauthorized();
+            var result = await _chatService.GetMessageIdOfLastMessageAsync(userId,chatId,cancellationToken);
+            return Ok(result);
+        }
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> UpdateLastMessage([FromBody] UpdateLastMessageViewModel viewModel, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

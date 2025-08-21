@@ -27,14 +27,30 @@ seenMessage.id = `h6OfSeenMessage_${latestAddedMessageId}`;
 seenMessage.innerText="Seen";
 col.appendChild(seenMessage);
 latestSeenMessageId = latestAddedMessageId;
+let chatId = document.getElementById('chatId').value;
+fetch('/Chat/UpdateLastMessage',{
+	method: 'POST',
+	headers:{'Content-Type':'application/json'},
+	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId})
+	});
 });
-connection.start()
-    .then(() => {
-        console.log("SignalR Connected.");
-        let userRecId = document.getElementById('userRecId').value;
-        let lastMessageId = document.getElementById('lastMessageId').value;
-		let chatId = document.getElementById('chatId').value;
-    });
+document.addEventListener('DOMContentLoaded',(e)=>{
+let chatId = document.getElementById('chatId').value;
+fetch(`/Chat/GetLastMessage?chatId=${chatId}`)
+  .then(response => response.text())
+  .then(data => {
+    latestSeenMessageId = data;
+	if(latestSeenMessageId != ""){
+	let col = document.getElementById(`colOfLastMessage_${latestSeenMessageId}`)
+	let seenMessage = document.createElement('h6');
+	seenMessage.id = `h6OfSeenMessage_${latestSeenMessageId}`;
+	seenMessage.innerText="Seen";
+	col.appendChild(seenMessage);
+
+	}
+  });
+});
+connection.start();
 function sendMessage(userRecipientId,message,messageId) 
 {
 	latestAddedMessageId = messageId;

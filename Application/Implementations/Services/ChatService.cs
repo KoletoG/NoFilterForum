@@ -74,9 +74,9 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId) 
+        public async Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId,CancellationToken cancellationToken) 
         {
-            return await _unitOfWork.Chats.GetAll().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser1.Id : x.LastMessageSeenByUser2.Id).FirstOrDefaultAsync();
+            return await _unitOfWork.Chats.GetAll().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser2.Id : x.LastMessageSeenByUser1.Id).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
         {
