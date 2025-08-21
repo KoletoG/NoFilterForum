@@ -116,6 +116,12 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 	{
 		createForm(divColSecondary,messageId,userRecipientId);
 	}
+	divRow.addEventListener("mouseover",()=>{
+		showButtonDelete(messageId);
+	});
+	divRow.addEventListener("mouseleave",()=>{
+		hideButtonDelete(messageId);
+	})
 	var divColMain = document.createElement('div');
 	divColMain.classList.add('col-6','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
@@ -126,6 +132,14 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 	divRow.appendChild(isFromSignalR ? divColSecondary : divColMain);
 	mainContainer.appendChild(divRow);
 	scrollToMessage(divColMain);
+}
+function showButtonDelete(messageId)
+{
+	document.getElementById(`btn_${messageId}`).hidden=false;
+}
+function hideButtonDelete(messageId)
+{
+	document.getElementById(`btn_${messageId}`).hidden=true;
 }
 function createForm(container, messageId,userRecipientId) {
     const form = document.createElement("form");
@@ -144,6 +158,7 @@ function createForm(container, messageId,userRecipientId) {
     button.type = "submit";
 	button.id = `btn_${messageId}`
     button.classList.add("delBtn");
+	button.hidden = true;
     form.appendChild(button);
     container.appendChild(form);
 }

@@ -15,12 +15,12 @@
 		{
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
-				<div class="row mb-3" id="row_{@i}">
+				<div class="row mb-3" id="row_{@i}" onmouseover="showButtonDelete(`@Model.Messages[i].Id`)" onmouseout="hideButtonDelete(`@Model.Messages[i].Id`)">
 					<div id="colOfLastMessage_@Model.Messages[i].Id" class="col-6 fst-italic fw-lighter text-end d-flex justify-content-end align-items-center gap-2">
 						@Model.CalculateTime(Model.Messages[i].DateTime)
 						<form onsubmit="deleteMessage('@Model.User2Id','@Model.Messages[i].Id',this); return false;" id="formDelete">
 							<input type="hidden" value="@Model.Messages[i].Id" name="MessageId" />
-							<button type="submit" id="btn_@Model.Messages[i].Id" class="delBtn"></button>
+							<button type="submit" hidden id="btn_@Model.Messages[i].Id" class="delBtn"></button>
 						</form>
 					</div>
 					<div class="col-6 border border-2 bg-body-secondary fst-italic text-break rounded-2" id="message_{@Model.Messages[i].Id}">
