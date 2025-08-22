@@ -76,8 +76,7 @@ namespace Application.Implementations.Services
                     .Where(x => x.Id == chatId)
                     .SelectMany(x => x.Messages)
                     .OrderByDescending(x => x.DateTime)
-                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId);
                 chat.ChangeLastMessageSeenByUser1(prevMes);
             }
             if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2.Id == message.Id)
@@ -86,8 +85,7 @@ namespace Application.Implementations.Services
                     .Where(x => x.Id == chatId)
                     .SelectMany(x => x.Messages)
                     .OrderByDescending(x => x.DateTime)
-                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId);
                 chat.ChangeLastMessageSeenByUser2(prevMes);
             }
             try
