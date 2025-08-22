@@ -11,7 +11,7 @@ namespace Application.Interfaces.Services
 {
     public interface IMessageService
     {
-        public Task<PostResult> DeleteAsync(string messageId, string userId, string chatId);
+        public Task<PostResult> DeleteAsync(DeleteMessageRequest request,CancellationToken cancellationToken);
         public Task<CreateMessageDTO> CreateMessageAsync(CreateMessageRequest createMessageRequest, CancellationToken cancellationToken);
     }
 }

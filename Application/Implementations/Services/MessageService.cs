@@ -57,40 +57,44 @@ namespace Application.Implementations.Services
                 return new(PostResult.UpdateFailed, null, null);
             }
         }
-        public async Task<PostResult> DeleteAsync(string messageId, string userId, string chatId)
+        public async Task<PostResult> DeleteAsync(DeleteMessageRequest request, CancellationToken cancellationToken)
         {
-            var message = await _unitOfWork.Message.GetByIdAsync(messageId);
+            var message = await _unitOfWork.Message.GetByIdAsync(request.MessageId);
             if (message is null)
             {
                 return PostResult.NotFound;
             }
-            if (message.UserId != userId)
+            if (message.UserId != request.UserId)
             {
                 return PostResult.Forbid;
             }
-            var chat = await _unitOfWork.Chats.GetAll().Where(x => x.Id == chatId).Include(x => x.LastMessageSeenByUser1).Include(x => x.LastMessageSeenByUser2).FirstOrDefaultAsync();
+            var chat = await _unitOfWork.Chats.GetAll()
+                .Where(x => x.Id == request.ChatId)
+                .Include(x => x.LastMessageSeenByUser1)
+                .Include(x => x.LastMessageSeenByUser2)
+                .FirstOrDefaultAsync(cancellationToken);
             if (chat is null) return PostResult.NotFound;
             if (chat.LastMessageSeenByUser1 != null && chat.LastMessageSeenByUser1.Id == message.Id)
             {
                 var prevMes = await _unitOfWork.Chats.GetAll()
-                    .Where(x => x.Id == chatId)
+                    .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
                     .OrderByDescending(x => x.DateTime)
-                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId);
+                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId,cancellationToken);
                 chat.ChangeLastMessageSeenByUser1(prevMes);
             }
             if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2.Id == message.Id)
             {
                 var prevMes = await _unitOfWork.Chats.GetAll()
-                    .Where(x => x.Id == chatId)
+                    .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
                     .OrderByDescending(x => x.DateTime)
-                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId);
+                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId, cancellationToken);
                 chat.ChangeLastMessageSeenByUser2(prevMes);
             }
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.Delete, message);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Message.Delete, message,cancellationToken);
                 return PostResult.Success;
             }
             catch (DbException ex)
