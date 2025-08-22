@@ -87,11 +87,11 @@ namespace Application.Implementations.Services
             if (message is null) return PostResult.NotFound;
             if (chat.User1.Id == request.UserId)
             {
-                chat.ChangeLastMessageSeenByUser1(message);
+                chat.SetLastMessageSeenByUser1(message);
             }
             else
             {
-                chat.ChangeLastMessageSeenByUser2(message);
+                chat.SetLastMessageSeenByUser2(message);
             }
             try
             {

@@ -82,7 +82,7 @@ namespace Application.Implementations.Services
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
                     .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
-                chat.ChangeLastMessageSeenByUser1(prevMes);
+                chat.SetLastMessageSeenByUser1(prevMes);
             }
             if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2.Id == message.Id)
             {
@@ -92,7 +92,7 @@ namespace Application.Implementations.Services
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
                     .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
-                chat.ChangeLastMessageSeenByUser2(prevMes);
+                chat.SetLastMessageSeenByUser2(prevMes);
             }
             try
             {
