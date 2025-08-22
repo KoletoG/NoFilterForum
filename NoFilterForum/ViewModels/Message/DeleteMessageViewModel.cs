@@ -6,5 +6,7 @@ namespace Web.ViewModels.Message
     {
         [Required]
         public string MessageId { get; set; }
+        [Required]
+        public string ChatId { get; set; }
     }
 }

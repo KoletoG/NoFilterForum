@@ -10,13 +10,15 @@ namespace Core.Models.DataModels
         public List<MessageDataModel> Messages { get; private set; }
         public UserDataModel User1 { get; private set; }
         public UserDataModel User2 {  get; private set; }
-        public MessageDataModel LastMessageSeenByUser1 { get; private set; } // Contains the last read message of user2
-        public MessageDataModel LastMessageSeenByUser2 { get; private set; } // Contains the last read message of user1
+        public MessageDataModel? LastMessageSeenByUser1 { get; private set; } // Contains the last read message of user2
+        public MessageDataModel? LastMessageSeenByUser2 { get; private set; } // Contains the last read message of user1
         public ChatDataModel()
         {
         }
         public void ChangeLastMessageSeenByUser2(MessageDataModel messageDataModel)=> LastMessageSeenByUser2 = messageDataModel;
         public void ChangeLastMessageSeenByUser1(MessageDataModel messageDataModel) => LastMessageSeenByUser1 = messageDataModel;
+        public void SetLastMessageSeenByUser1ToNull() => LastMessageSeenByUser1 = null; 
+        public void SetLastMessageSeenByUser2ToNull() => LastMessageSeenByUser2 = null;
         public ChatDataModel(UserDataModel user1, UserDataModel user2)
         {
             Id = Guid.NewGuid().ToString();

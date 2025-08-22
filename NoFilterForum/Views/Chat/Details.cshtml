@@ -20,6 +20,7 @@
 						@Model.CalculateTime(Model.Messages[i].DateTime)
 						<form onsubmit="deleteMessage('@Model.User2Id','@Model.Messages[i].Id',this); return false;" id="formDelete">
 							<input type="hidden" value="@Model.Messages[i].Id" name="MessageId" />
+							<input type="hidden" value="@Model.ChatId" name="ChatId" />
 							<button type="submit" hidden id="btn_@Model.Messages[i].Id" class="delBtn"></button>
 						</form>
 					</div>

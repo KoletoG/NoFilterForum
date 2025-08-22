@@ -41,7 +41,7 @@ namespace Web.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if(userId is null) return Unauthorized();
-            var result = await _messageService.DeleteAsync(deleteMessageViewModel.MessageId, userId);
+            var result = await _messageService.DeleteAsync(deleteMessageViewModel.MessageId, userId, deleteMessageViewModel.ChatId);
             return result switch
             {
                 PostResult.Success => NoContent(),

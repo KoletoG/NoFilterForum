@@ -135,11 +135,16 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 }
 function showButtonDelete(messageId)
 {
-	document.getElementById(`btn_${messageId}`).hidden=false;
+	var btn = document.getElementById(`btn_${messageId}`);
+	if(btn !=null){
+		btn.hidden=false;
+	}
 }
 function hideButtonDelete(messageId)
-{
-	document.getElementById(`btn_${messageId}`).hidden=true;
+{var btn = document.getElementById(`btn_${messageId}`);
+	if(btn !=null){
+		btn.hidden=true;
+	}
 }
 function createForm(container, messageId,userRecipientId) {
     const form = document.createElement("form");
@@ -148,12 +153,18 @@ function createForm(container, messageId,userRecipientId) {
 		e.preventDefault();
 		deleteMessage(userRecipientId,messageId,form);
 	});
+	var chatId = document.getElementById('chatId').value;
 	form.id=`form_${messageId}`;
 	const inputMessageId = document.createElement("input");
 	inputMessageId.type="hidden";
 	inputMessageId.name="MessageId";
 	inputMessageId.value=messageId;
+	const inputChatId = document.createElement("input");
+	inputChatId.type="hidden";
+	inputChatId.name="ChatId";
+	inputChatId.value=chatId;
 	form.appendChild(inputMessageId);
+	form.appendChild(inputChatId);
     const button = document.createElement("button");
     button.type = "submit";
 	button.id = `btn_${messageId}`
