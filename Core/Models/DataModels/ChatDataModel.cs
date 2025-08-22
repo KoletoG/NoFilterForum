@@ -17,8 +17,6 @@ namespace Core.Models.DataModels
         }
         public void ChangeLastMessageSeenByUser2(MessageDataModel messageDataModel)=> LastMessageSeenByUser2 = messageDataModel;
         public void ChangeLastMessageSeenByUser1(MessageDataModel messageDataModel) => LastMessageSeenByUser1 = messageDataModel;
-        public void SetLastMessageSeenByUser1ToNull() => LastMessageSeenByUser1 = null; 
-        public void SetLastMessageSeenByUser2ToNull() => LastMessageSeenByUser2 = null;
         public ChatDataModel(UserDataModel user1, UserDataModel user2)
         {
             Id = Guid.NewGuid().ToString();

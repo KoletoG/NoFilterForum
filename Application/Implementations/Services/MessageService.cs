@@ -72,11 +72,23 @@ namespace Application.Implementations.Services
             if (chat is null) return PostResult.NotFound;
             if (chat.LastMessageSeenByUser1 != null && chat.LastMessageSeenByUser1.Id == message.Id)
             {
-                chat.SetLastMessageSeenByUser1ToNull();
+                var prevMes = await _unitOfWork.Chats.GetAll()
+                    .Where(x => x.Id == chatId)
+                    .SelectMany(x => x.Messages)
+                    .OrderByDescending(x => x.DateTime)
+                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
+                    .FirstOrDefaultAsync();
+                chat.ChangeLastMessageSeenByUser1(prevMes);
             }
             if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2.Id == message.Id)
             {
-                chat.SetLastMessageSeenByUser2ToNull();
+                var prevMes = await _unitOfWork.Chats.GetAll()
+                    .Where(x => x.Id == chatId)
+                    .SelectMany(x => x.Messages)
+                    .OrderByDescending(x => x.DateTime)
+                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
+                    .FirstOrDefaultAsync();
+                chat.ChangeLastMessageSeenByUser2(prevMes);
             }
             try
             {
