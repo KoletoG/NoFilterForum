@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace NoFilterForum.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedPostSections : Migration
+    public partial class New : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

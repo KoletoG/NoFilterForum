@@ -9,11 +9,11 @@ using NoFilterForum.Infrastructure.Data;
 
 #nullable disable
 
-namespace NoFilterForum.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250509054908_ChanbgedRepot")]
-    partial class ChanbgedRepot
+    [Migration("20250822061249_New")]
+    partial class New
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,62 @@ namespace NoFilterForum.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Core.Models.DataModels.ChatDataModel", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastMessageSeenByUser1Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastMessageSeenByUser2Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("User1Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("User2Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LastMessageSeenByUser1Id");
+
+                    b.HasIndex("LastMessageSeenByUser2Id");
+
+                    b.HasIndex("User1Id");
+
+                    b.HasIndex("User2Id");
+
+                    b.ToTable("ChatDataModels");
+                });
+
+            modelBuilder.Entity("Core.Models.DataModels.MessageDataModel", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ChatDataModelId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatDataModelId");
+
+                    b.ToTable("MessageDataModels");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -162,7 +218,7 @@ namespace NoFilterForum.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.NotificationDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.NotificationDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -187,7 +243,7 @@ namespace NoFilterForum.Migrations
                     b.ToTable("NotificationDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.PostDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.PostDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -199,10 +255,14 @@ namespace NoFilterForum.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsPinned")
+                        .HasColumnType("bit");
+
                     b.Property<short>("Likes")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("SectionDataModelId")
+                    b.Property<string>("SectionId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -214,14 +274,14 @@ namespace NoFilterForum.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionDataModelId");
+                    b.HasIndex("SectionId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("PostDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.ReplyDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.ReplyDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -252,7 +312,7 @@ namespace NoFilterForum.Migrations
                     b.ToTable("ReplyDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.ReportDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.ReportDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -283,7 +343,7 @@ namespace NoFilterForum.Migrations
                     b.ToTable("ReportDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.SectionDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.SectionDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -301,7 +361,7 @@ namespace NoFilterForum.Migrations
                     b.ToTable("SectionDataModels");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.UserDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.UserDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -320,6 +380,10 @@ namespace NoFilterForum.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.PrimitiveCollection<string>("DislikesPostRepliesIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -327,6 +391,17 @@ namespace NoFilterForum.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
+
+                    b.PrimitiveCollection<string>("LikesPostRepliesIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -354,6 +429,9 @@ namespace NoFilterForum.Migrations
                     b.Property<int>("PostsCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
@@ -371,7 +449,9 @@ namespace NoFilterForum.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                        .IsUnique()
+                        .HasDatabaseName("EmailIndex")
+                        .HasFilter("[NormalizedEmail] IS NOT NULL");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
@@ -381,7 +461,7 @@ namespace NoFilterForum.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.WarningDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.WarningDataModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -406,6 +486,40 @@ namespace NoFilterForum.Migrations
                     b.ToTable("WarningDataModels");
                 });
 
+            modelBuilder.Entity("Core.Models.DataModels.ChatDataModel", b =>
+                {
+                    b.HasOne("Core.Models.DataModels.MessageDataModel", "LastMessageSeenByUser1")
+                        .WithMany()
+                        .HasForeignKey("LastMessageSeenByUser1Id");
+
+                    b.HasOne("Core.Models.DataModels.MessageDataModel", "LastMessageSeenByUser2")
+                        .WithMany()
+                        .HasForeignKey("LastMessageSeenByUser2Id");
+
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User1")
+                        .WithMany()
+                        .HasForeignKey("User1Id");
+
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User2")
+                        .WithMany()
+                        .HasForeignKey("User2Id");
+
+                    b.Navigation("LastMessageSeenByUser1");
+
+                    b.Navigation("LastMessageSeenByUser2");
+
+                    b.Navigation("User1");
+
+                    b.Navigation("User2");
+                });
+
+            modelBuilder.Entity("Core.Models.DataModels.MessageDataModel", b =>
+                {
+                    b.HasOne("Core.Models.DataModels.ChatDataModel", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatDataModelId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -417,7 +531,7 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", null)
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -426,7 +540,7 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", null)
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -441,7 +555,7 @@ namespace NoFilterForum.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", null)
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -450,24 +564,24 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", null)
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.NotificationDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.NotificationDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.ReplyDataModel", "Reply")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.ReplyDataModel", "Reply")
                         .WithMany()
                         .HasForeignKey("ReplyId");
 
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "UserFrom")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserFrom")
                         .WithMany()
                         .HasForeignKey("UserFromId");
 
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "UserTo")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserTo")
                         .WithMany()
                         .HasForeignKey("UserToId");
 
@@ -478,28 +592,32 @@ namespace NoFilterForum.Migrations
                     b.Navigation("UserTo");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.PostDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.PostDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.SectionDataModel", null)
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.SectionDataModel", "Section")
                         .WithMany("Posts")
-                        .HasForeignKey("SectionDataModelId");
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "User")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Section");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.ReplyDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.ReplyDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.PostDataModel", "Post")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.PostDataModel", "Post")
                         .WithMany("Replies")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "User")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -508,13 +626,13 @@ namespace NoFilterForum.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.ReportDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.ReportDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "UserFrom")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserFrom")
                         .WithMany()
                         .HasForeignKey("UserFromId");
 
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "UserTo")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserTo")
                         .WithMany()
                         .HasForeignKey("UserToId");
 
@@ -523,9 +641,9 @@ namespace NoFilterForum.Migrations
                     b.Navigation("UserTo");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.WarningDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.WarningDataModel", b =>
                 {
-                    b.HasOne("NoFilterForum.Models.DataModels.UserDataModel", "User")
+                    b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User")
                         .WithMany("Warnings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -534,17 +652,22 @@ namespace NoFilterForum.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.PostDataModel", b =>
+            modelBuilder.Entity("Core.Models.DataModels.ChatDataModel", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.PostDataModel", b =>
                 {
                     b.Navigation("Replies");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.SectionDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.SectionDataModel", b =>
                 {
                     b.Navigation("Posts");
                 });
 
-            modelBuilder.Entity("NoFilterForum.Models.DataModels.UserDataModel", b =>
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.UserDataModel", b =>
                 {
                     b.Navigation("Warnings");
                 });
