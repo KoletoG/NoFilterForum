@@ -79,8 +79,8 @@ namespace Application.Implementations.Services
                 var prevMes = await _unitOfWork.Chats.GetAll()
                     .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
-                    .OrderByDescending(x => x.DateTime)
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
+                    .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
                 chat.ChangeLastMessageSeenByUser1(prevMes);
             }
@@ -89,8 +89,8 @@ namespace Application.Implementations.Services
                 var prevMes = await _unitOfWork.Chats.GetAll()
                     .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
-                    .OrderByDescending(x => x.DateTime)
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
+                    .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
                 chat.ChangeLastMessageSeenByUser2(prevMes);
             }
