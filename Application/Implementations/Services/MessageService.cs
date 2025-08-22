@@ -80,7 +80,8 @@ namespace Application.Implementations.Services
                     .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
                     .OrderByDescending(x => x.DateTime)
-                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId,cancellationToken);
+                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
+                    .FirstOrDefaultAsync(cancellationToken);
                 chat.ChangeLastMessageSeenByUser1(prevMes);
             }
             if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2.Id == message.Id)
@@ -89,7 +90,8 @@ namespace Application.Implementations.Services
                     .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
                     .OrderByDescending(x => x.DateTime)
-                    .FirstOrDefaultAsync(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId, cancellationToken);
+                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
+                    .FirstOrDefaultAsync(cancellationToken);
                 chat.ChangeLastMessageSeenByUser2(prevMes);
             }
             try
