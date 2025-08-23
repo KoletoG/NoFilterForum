@@ -6,7 +6,6 @@ var form = document.getElementById('messageForm');
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
 });
-
 connection.on("ReceiveMessage",(message,messageId) => {
 	showMessages(true,message,messageId,null);
 	let userRecId = document.getElementById('userRecId').value;

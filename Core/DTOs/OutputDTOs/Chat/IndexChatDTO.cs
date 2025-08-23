@@ -8,5 +8,5 @@ using Core.Models.DataModels;
 
 namespace Core.DTOs.OutputDTOs.Chat
 {
-    public record IndexChatDTO(string ChatId, string Username, IReadOnlyCollection<MessageDataModel> Messages, UserRoles Role);
+    public record IndexChatDTO(string ChatId, string Username, IReadOnlyCollection<MessageDataModel> Messages, UserRoles Role, string UserId);
 }

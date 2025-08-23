@@ -15,7 +15,7 @@
 
 				@if (chat.LastMessage is not null)
 				{
-					<h5 class="text-center fst-italic text-black-50 text-truncate">@chat.LastMessage.Message</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate" id="message_@chat.Username">@chat.LastMessage.Message</h5>
 					<h5 class="text-center fst-italic text-black-50 text-truncate">@chat.LastMessage.DateTime.ToShortTimeString()</h5>
 				}
 				else

@@ -7,6 +7,7 @@ namespace Web.ViewModels.Chat
 {
     public class ChatIndexViewModel
     {
+        public required string UserId { get; set; }
         public required string ChatId { get; set; }
         public required string Username { get; set; }
         public string? ColorClass { get;private set; } // cannot be null but constructor doesn't understand for some reason

@@ -11,7 +11,8 @@ namespace Web.Mappers
         public static ChatIndexViewModel MapToViewModel(IndexChatDTO dto) => new(dto.Role,dto.Messages)
         {
             ChatId = dto.ChatId,
-            Username = dto.Username
+            Username = dto.Username,
+            UserId = dto.UserId
         };
         public static DetailsChatViewModel MapToViewModel(DetailsChatDTO dto,string userId) => new(dto.Messages)
         {
