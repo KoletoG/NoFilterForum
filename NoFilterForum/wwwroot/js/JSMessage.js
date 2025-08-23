@@ -124,7 +124,7 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 		hideButtonDelete(messageId);
 	})
 	var divColMain = document.createElement('div');
-	divColMain.classList.add('col-7','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'fst-italic', 'text-break','rounded-2');
+	divColMain.classList.add('col-7','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'text-break','rounded-2');
 	var h6message=document.createElement('h6');
 	h6message.innerText=messageText;
 	h6message.id=`message_${messageId}`;
