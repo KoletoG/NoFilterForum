@@ -1,8 +1,5 @@
 ﻿@using Web.ViewModels.Chat
 @model IReadOnlyCollection<ChatIndexViewModel>
-<head>
-	<script src="~/js/JSChat.js" asp-append-version="true"></script>
-</head>
 <body class="bg-body-secondary">
 	<div class="container bg-white shadow p-3">
 		@foreach (var chat in Model)
@@ -15,12 +12,12 @@
 
 				@if (chat.LastMessage is not null)
 				{
-					<h5 class="text-center fst-italic text-black-50 text-truncate" id="message_@chat.Username">@chat.LastMessage.Message</h5>
-					<h5 class="text-center fst-italic text-black-50 text-truncate">@chat.LastMessage.DateTime.ToShortTimeString()</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
+					<h5 class="text-center fst-italic text-black-50 text-truncate" id="messageDate_@chat.UserId">@chat.LastMessage.DateTime.ToShortTimeString()</h5>
 				}
 				else
 				{
-					<h5 class="text-center fst-italic text-black-50">Be the first to send a message!</h5>
+					<h5 class="text-center fst-italic text-black-50" id="message_@chat.UserId">Be the first to send a message!</h5>
 				}
 			</div>
 		}
@@ -28,5 +25,7 @@
 </body>
 
 @section Scripts {
+	<script src="~/js/signalr.min.js" asp-append-version="true"></script>
 	<partial name="_ValidationScriptsPartial" />
+	<script src="~/js/JSChat.js" asp-append-version="true" defer></script>
 }

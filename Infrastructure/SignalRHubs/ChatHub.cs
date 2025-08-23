@@ -24,16 +24,19 @@ namespace Infrastructure.SignalRHubs
             }
         }
         [Authorize]
-        [ValidateAntiForgeryToken]
         public async Task DeleteMessage(string userId, string messageId)
         {
             await Clients.User(userId).SendAsync("RemoveMessage", messageId);
         }
         [Authorize]
-        [ValidateAntiForgeryToken]
         public async Task FeedbackOfSeen(string userSenderId)
         {
             await Clients.User(userSenderId).SendAsync("WasSeen");
+        }
+        [Authorize]
+        public async Task ShowMessageIndex(string message, string userRecId,string userSenderId)
+        {
+            await Clients.User(userRecId).SendAsync("MessageIndexReceive", userSenderId, message);
         }
     }
 }

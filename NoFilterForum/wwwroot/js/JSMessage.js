@@ -61,6 +61,8 @@ function sendMessage(userRecipientId,message,messageId)
 	latestAddedMessageId = messageId; // Set the last added message from ourselves
     connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
+	var userSendId = document.getElementById('userSendId').value;
+	connection.invoke("ShowMessageIndex",message,userRecipientId,userSendId);
 }
 function removeMessage(userRecipientId,messageId)
 {
