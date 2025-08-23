@@ -2,11 +2,13 @@
 connection.on("MessageIndexReceive",(userRecId,message)=>{
 var mainText = document.getElementById(`message_${userRecId}`);
 mainText.innerText=message;
-mainText.classList.add('fw-bold');
+mainText.classList.remove('text-black-50');
+mainText.classList.add('fw-bold', 'text-dark');
 let date = new Date();
 var dateText = document.getElementById(`messageDate_${userRecId}`);
 dateText.innerText=showTime(date);
-dateText.classList.add('fw-bold');
+dateText.classList.remove('text-black-50');
+dateText.classList.add('fw-bold','text-dark');
 });
 document.addEventListener('DOMContentLoaded',(e)=>{
     
