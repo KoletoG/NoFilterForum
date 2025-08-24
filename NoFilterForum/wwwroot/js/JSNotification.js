@@ -1,5 +1,7 @@
 ﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 let countNots=0;
+let firstTime = true;
+let notification;
 connection.start();
 connection.on("ReceiveNotification",()=>{
     countNots++;
@@ -7,6 +9,7 @@ connection.on("ReceiveNotification",()=>{
 });
 
 document.addEventListener('DOMContentLoaded',(e)=>{
+    notification = document.getElementById('notificationLink');
     fetch('/Notifications/GetNotifications')
     .then(response => response.text())
     .then(data => {
@@ -16,9 +19,13 @@ document.addEventListener('DOMContentLoaded',(e)=>{
 });
 function setNotification(count){
     if(count>0){
-let notification = document.getElementById('notificationLink');
-notification.classList.remove('text-dark');
-notification.classList.add('text-danger');
-notification.innerText=`Notifications(${count})`;
+        if(firstTime)
+        {
+            notification.classList.remove('text-dark');
+            notification.classList.add('text-danger');
+            notification.classList.add('fw-bold');
+            firstTime = false;
+        }
+        notification.innerText=`Notifications(${count})`;
     }
 }
