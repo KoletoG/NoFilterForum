@@ -33,6 +33,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">AdminPanel</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a id="notificationLink" class="nav-link text-dark" asp-area="" asp-action="Index" asp-controller="Notifications">Notifications</a>
+                        </li>
                     </ul>
                         <partial name="_LoginPartial" />
                 </div>
@@ -45,9 +48,11 @@
         </main>
     </div>
 
+    <script src="~/js/signalr.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/JSNotification.js" asp-append-version="true" defer></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
