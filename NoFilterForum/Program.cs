@@ -2,6 +2,7 @@ using Application.Implementations.Services;
 using Application.Interfaces.Services;
 using Core.Implementations.Services;
 using Core.Interfaces.Factories;
+using Core.Interfaces.Hub;
 using Core.Interfaces.Repositories;
 using Ganss.Xss;
 using Infrastructure.Factories;
@@ -87,6 +88,7 @@ namespace Web
             builder.Services.AddScoped<IMessageRepository, MessageRepository>();
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<IMessageFactory, MessageFactory>();
+            builder.Services.AddScoped<INotificationHub,NotificationHubService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;

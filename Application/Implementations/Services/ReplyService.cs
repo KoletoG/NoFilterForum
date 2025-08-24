@@ -6,6 +6,7 @@ using Core.Enums;
 using Core.Implementations.Services;
 using Core.Interfaces.Business_Logic;
 using Core.Interfaces.Factories;
+using Core.Interfaces.Hub;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs;
 using Core.Models.DTOs.InputDTOs.Reply;
@@ -13,6 +14,7 @@ using Core.Models.DTOs.OutputDTOs.Reply;
 using Core.Utility;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -29,17 +31,20 @@ namespace Application.Implementations.Services
         private readonly ILogger<ReplyService> _logger;
         private readonly IReplyFactory _replyFactory;
         private readonly ICacheService _cacheService;
+        private readonly INotificationHub _notificationHub;
         public ReplyService(IUnitOfWork unitOfWork,
             IReplyFactory replyFactory,
             IUserService userService,
             ILogger<ReplyService> logger,
-            ICacheService cacheService)
+            ICacheService cacheService,
+            INotificationHub notificationHub)
         {
             _cacheService = cacheService;
             _unitOfWork = unitOfWork;
             _replyFactory = replyFactory;
             _logger = logger;
             _userService = userService;
+            _notificationHub = notificationHub;
         }
         // GET methods
         public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetListReplyIndexItemDto(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"replyIndexItemsDtoById_{getListReplyIndexItemRequest.PostId}_Page_{getListReplyIndexItemRequest.Page}", _unitOfWork.Replies.GetReplyIndexItemDtoListByPostIdAndPageAsync, getListReplyIndexItemRequest, cancellationToken) ?? [];
@@ -199,6 +204,7 @@ namespace Application.Implementations.Services
             {
                 notificationsList.Add(new(reply, user, taggedUser));
             }
+            await _notificationHub.SendNotificationAsync(listOfTaggedUsers.Select(x=>x.Id));
             return notificationsList;
         }
         public async Task<PostResult> CreateReplyAsync(CreateReplyRequest createReplyRequest, CancellationToken cancellationToken)
