@@ -18,5 +18,6 @@ function setNotification(count){
 let notification = document.getElementById('notificationLink');
 notification.classList.remove('text-dark');
 notification.classList.add('text-danger');
+notification.innerText=`Notifications(${count})`;
     }
 }
