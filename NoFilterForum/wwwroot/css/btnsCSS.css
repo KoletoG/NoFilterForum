@@ -6,3 +6,9 @@
     height: 25px;
     cursor: pointer;
 }
+.mainBG {
+    background: linear-gradient(90deg,#103783 0%,#2e3b92 33%,#133a94 66%,#310cae 100%);
+}
+.secondaryBG {
+    background: linear-gradient(90deg,#a7bdea 0%,#919bff 100%);
+}

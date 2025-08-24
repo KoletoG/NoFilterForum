@@ -1,7 +1,7 @@
 ﻿@using Web.ViewModels.Chat
 @model IReadOnlyCollection<ChatIndexViewModel>
-<body class="bg-body-secondary">
-	<div class="container bg-white shadow p-3">
+<body class="mainBG">
+	<div class="container secondaryBG shadow p-3">
 		@foreach (var chat in Model)
 		{
 			<div class="row mt-2">
@@ -25,6 +25,7 @@
 </body>
 
 @section Scripts {
+	<link rel="stylesheet" href="~/css/btnsCSS.css" asp-append-version="true"/>
 	<script src="~/js/signalr.min.js" asp-append-version="true"></script>
 	<partial name="_ValidationScriptsPartial" />
 	<script src="~/js/JSChat.js" asp-append-version="true" defer></script>
