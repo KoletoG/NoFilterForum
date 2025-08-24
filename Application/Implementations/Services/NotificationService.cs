@@ -4,6 +4,7 @@ using Application.Interfaces.Services;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.OutputDTOs.Notification;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NoFilterForum.Core.Interfaces.Services;
 using NoFilterForum.Core.Models.DataModels;
@@ -22,6 +23,10 @@ namespace NoFilterForum.Infrastructure.Services
             _cacheService = cacheService;
         }
         // GET methods
+        public async Task<int> GetNotificationsCountByUserIdAsync(string userId,CancellationToken cancellationToken)
+        {
+            return await _unitOfWork.Notifications.GetAll().Where(x=>x.UserTo.Id==userId).CountAsync(cancellationToken);
+        }
         public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId, cancellationToken) ?? [];
         // POST methods
         public async Task<PostResult> DeleteByUserIdAsync(string userId, CancellationToken cancellationToken)

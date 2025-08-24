@@ -5,6 +5,7 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface INotificationService
     {
+        public Task<int> GetNotificationsCountByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<PostResult> DeleteByUserIdAsync(string userId, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId, CancellationToken cancellationToken);
     }

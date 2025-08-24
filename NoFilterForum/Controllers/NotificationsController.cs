@@ -35,6 +35,18 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
+        public async Task<IActionResult> GetNotifications(CancellationToken cancellationToken)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId is null)
+            {
+                return Unauthorized();  
+            }
+            var result = await _notificationService.GetNotificationsCountByUserIdAsync(userId, cancellationToken);
+            return Ok(result);
+        }
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);

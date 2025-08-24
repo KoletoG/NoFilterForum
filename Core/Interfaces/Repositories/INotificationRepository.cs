@@ -6,6 +6,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface INotificationRepository
     {
+        public IQueryable<NotificationDataModel> GetAll();
         public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId, CancellationToken cancellationToken); 
         public Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds, CancellationToken cancellationToken);
         public Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications,CancellationToken cancellationToken); 

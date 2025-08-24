@@ -14,7 +14,10 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
-       
+        public IQueryable<NotificationDataModel> GetAll()
+        {
+            return _context.NotificationDataModels;
+        }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync(cancellationToken);
