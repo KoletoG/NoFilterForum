@@ -1,4 +1,4 @@
-﻿const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+﻿const connection = new signalR.HubConnectionBuilder().withUrl("/notificationHub").build();
 let countNots=0;
 let firstTime = true;
 let notification;

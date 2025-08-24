@@ -12,8 +12,8 @@ namespace Infrastructure.Services
 {
     public class NotificationHubService : INotificationHub
     {
-        private readonly IHubContext<ChatHub> _hubContext;
-        public NotificationHubService(IHubContext<ChatHub> hubContext)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public NotificationHubService(IHubContext<NotificationHub> hubContext)
         {
             _hubContext = hubContext;
         }
