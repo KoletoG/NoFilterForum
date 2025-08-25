@@ -15,7 +15,29 @@
     color: #B58B64;
     font-family: 'Merriweather',serif;
 }
-
+.mainBtn {
+    background-color: rgba(0, 0, 0, 0.0);
+    border-color: #B58B64;
+    border-width: 2px;
+    border-style: solid;
+    color: #B58B64;
+}
+    .mainBtn:hover {
+        background: linear-gradient(90deg,rgba(181, 139, 100, 1) 0%, rgba(158, 125, 98, 1) 100%);
+        color: #1a2766;
+    }
+.mainInput {
+    color: #B58B64 !important;
+}
+    .mainInput::placeholder {
+        color: #B58B64 !important;
+    }
+    .mainInput :focus {
+        color: #B58B64 !important;
+    }
+    /*
+        Change mainInput so it doesn't use important
+    */
 .borderMain {
     border-color: #B58B64;
     border-width: 2px;
