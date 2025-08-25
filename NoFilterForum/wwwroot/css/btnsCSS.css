@@ -12,8 +12,13 @@
 .secondaryBG {
     background-color: rgba(0, 0, 0, 0.0);
 }
+.secondaryText {
+    color: #B58B64;
+    font-family: 'Noto Sans Display',sans-serif;
+}
 .mainText {
     color: #B58B64;
+    font-family: 'Merriweather',serif;
 }
 .borderMain {
     border-color: #B58B64;
