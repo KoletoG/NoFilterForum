@@ -4,21 +4,24 @@
 	<div class="container secondaryBG shadow p-3">
 		@foreach (var chat in Model)
 		{
-			<div class="row mt-2">
+			<div class=" borderMain p-2">
 
-				<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" style="text-decoration:none" class="text-center fw-bold fs-5 @chat.ColorClass">@chat.Username</a>
-			</div>
-			<div class="row border-bottom border-2">
+				<div class="row mt-2">
 
-				@if (chat.LastMessage is not null)
-				{
-					<h5 class="text-center fst-italic text-black-50 text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
-					<h5 class="text-center fst-italic text-black-50 text-truncate" id="messageDate_@chat.UserId">@chat.LastMessage.DateTime.ToShortTimeString()</h5>
-				}
-				else
-				{
-					<h5 class="text-center fst-italic text-black-50" id="message_@chat.UserId">Be the first to send a message!</h5>
-				}
+					<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" style="text-decoration:none" class="text-center fw-bold fs-5 @chat.ColorClass">@chat.Username</a>
+				</div>
+				<div class="row">
+
+					@if (chat.LastMessage is not null)
+					{
+						<h5 class="text-center fst-italic mainText text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
+						<h5 class="text-center fst-italic mainText text-truncate" id="messageDate_@chat.UserId">@chat.LastMessage.DateTime.ToShortTimeString()</h5>
+					}
+					else
+					{
+						<h5 class="text-center fst-italic text-black-50" id="message_@chat.UserId">Be the first to send a message!</h5>
+					}
+				</div>
 			</div>
 		}
 	</div>

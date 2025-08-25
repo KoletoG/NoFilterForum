@@ -10,5 +10,13 @@
     background: linear-gradient(90deg,#1a2766 0%,#1a2766 25%,#1a2766 75%,#0F365E 100%);
 }
 .secondaryBG {
-    background: linear-gradient(90deg,#A18762 0%,#9E7D62 100%);
+    background-color: rgba(0, 0, 0, 0.0);
+}
+.mainText {
+    color: #B58B64;
+}
+.borderMain {
+    border-color: #B58B64;
+    border-width:2px;
+    border-style:solid;
 }
