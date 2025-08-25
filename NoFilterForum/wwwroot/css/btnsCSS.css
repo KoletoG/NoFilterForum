@@ -7,8 +7,8 @@
     cursor: pointer;
 }
 .mainBG {
-    background: linear-gradient(90deg,#103783 0%,#2e3b92 33%,#133a94 66%,#310cae 100%);
+    background: linear-gradient(90deg,#1a2766 0%,#1a2766 25%,#1a2766 75%,#0F365E 100%);
 }
 .secondaryBG {
-    background: linear-gradient(90deg,#a7bdea 0%,#919bff 100%);
+    background: linear-gradient(90deg,#A18762 0%,#9E7D62 100%);
 }
