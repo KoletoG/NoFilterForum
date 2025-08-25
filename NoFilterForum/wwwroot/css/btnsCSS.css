@@ -6,22 +6,3 @@
     height: 25px;
     cursor: pointer;
 }
-.mainBG {
-    background: linear-gradient(90deg,#1a2766 0%,#1a2766 25%,#1a2766 75%,#0F365E 100%);
-}
-.secondaryBG {
-    background-color: rgba(0, 0, 0, 0.0);
-}
-.secondaryText {
-    color: #B58B64;
-    font-family: 'Noto Sans Display',sans-serif;
-}
-.mainText {
-    color: #B58B64;
-    font-family: 'Merriweather',serif;
-}
-.borderMain {
-    border-color: #B58B64;
-    border-width:2px;
-    border-style:solid;
-}
