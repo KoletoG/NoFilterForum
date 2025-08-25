@@ -2,6 +2,11 @@
 @using NoFilterForum.Core.Models.ViewModels
 @using Web.ViewModels.Section
 @model IndexSectionViewModel
+<head>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
 <style>
 	.section-card {
 		text-decoration: none;
@@ -10,7 +15,6 @@
 
 		.section-card h2 {
 			transition: font-weight 0.5s ease;
-			color: black;
 		}
 
 		.section-card a {
@@ -24,11 +28,9 @@
 
 		.section-card h6 {
 			transition: text-align 0.5s ease;
-			color: gray;
 		}
 
 		.section-card:hover h2 {
-			color: white;
 			font-weight: bold;
 		}
 
@@ -37,9 +39,9 @@
 		}
 
 </style>
-<body class="bg-body-secondary">
+<body class="mainBG">
 	@{
-		<div class="container shadow section-card mb-3 mt-3 p-4" style="font-family:Verdana;">
+		<div class=" container shadow section-card mb-3 mt-3 p-4" style="font-family:Verdana;">
 		@if (Model.IsAdmin)
 		{ // MAKE THE TITLE IN THE LEFT, DESCRIPTION IN THE RIGHT
 			<partial name="_CreateSection" model="new CreateSectionViewModel()" />
@@ -47,12 +49,12 @@
 		@foreach (var section1 in Model.Sections)
 		{
 				<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
-					<div class="bg-dark-subtle pt-1 pb-1 row ps-1 pe-1 border border-2 border-dark">
-						<h2 class="fs-5  text-center" style="font-family:Century; font-weight:bold">@section1.Title</h2>
+					<div class="p-1 row mainText borderMain">
+						<h2 class="fs-5 text-start" style="font-weight:bold">@section1.Title</h2>
 					</div>
-					<div class="mb-2 row border border-2 pt-1 border-dark-subtle border-top-0">
-						<h6 class="fst-italic col" style="font-family:'Global Serif'">@section1.Description</h6>
-						<h6 class="fst-italic col text-end" style="font-family:'Global Serif'">Posts: @section1.PostsCount</h6>
+					<div class="mb-2 row secondaryText pt-1 borderMain">
+						<h6 class="fst-italic col">@section1.Description</h6>
+						<h6 class="fst-italic col text-end">Posts: @section1.PostsCount</h6>
 					</div>
 				</a>
 				@if (Model.IsAdmin)
@@ -64,5 +66,6 @@
 	}
 </body>
 @section Scripts {
+	<link rel="stylesheet" href="~/css/baseCSS.css" asp-append-version="true" />
 	<partial name="_ValidationScriptsPartial" />
 }
