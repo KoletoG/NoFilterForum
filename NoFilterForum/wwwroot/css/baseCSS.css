@@ -71,3 +71,11 @@
 .mainNav {
     background: #B58B64;
 }
+.truncate-multiline {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+}

@@ -33,8 +33,8 @@
 							<div class="col underlinehover fs-5 fw-bold mainText">
 								@post.Title
 							</div>
-							<div class="fs-6 fst-italic secondaryText text-truncate">
-							@post.Body
+							<div class="fs-6 fst-italic secondaryText truncate-multiline">
+							@Html.Raw(post.Body)
 							</div>
 						</a>
 					</div>
