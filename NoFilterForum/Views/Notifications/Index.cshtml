@@ -3,36 +3,43 @@
 
 
 @model NotificationViewModel
-@{
-	bool anyWarnings = Model.Warnings.Any();
-	@if (anyWarnings)
-	{
-		<h3 style="color:red; font-weight:bold">You have been given warnings with the following messages:</h3>
-	}
-	@for (int i = 0; i < Model.Warnings.Count; i++)
-	{
-		<h4 style="color:red">Warning @(i + 1): <br /> @Model.Warnings[i].Content</h4>
-	}
-	@if (anyWarnings)
-	{
-		<form asp-action="Accept" asp-controller="Warnings" method="post">
-			@Html.AntiForgeryToken()
-			<button type="submit">I understand</button>
-		</form>
-	}
-	foreach (var notification in Model.Notifications)
-	{
-		<h3>
-			@notification.UserFromUsername tagged you in <a asp-action="Index" asp-controller="Reply" asp-route-replyId="@notification.ReplyId" asp-route-postId="@notification.PostId">@notification.PostTitle</a>
-		</h3>
-		<h4><i>@notification.ReplyContent</i></h4>
-	}
-	if (Model.Notifications.Any())
-	{
-		<form asp-action="Delete" asp-controller="Notifications" method="post">
-			@Html.AntiForgeryToken()
-			<button type="submit">Delete notifications</button>
-		</form>
-	}
+<body class="mainBG">
 
-}
+	@{
+		bool anyWarnings = Model.Warnings.Any();
+		@if (anyWarnings)
+		{
+			<h3 style="color:red; font-weight:bold">You have been given warnings with the following messages:</h3>
+		}
+		@for (int i = 0; i < Model.Warnings.Count; i++)
+		{
+			<h4 style="color:red">Warning @(i + 1): <br /> @Model.Warnings[i].Content</h4>
+		}
+		@if (anyWarnings)
+		{
+			<form asp-action="Accept" asp-controller="Warnings" method="post">
+				@Html.AntiForgeryToken()
+				<button type="submit" class="mainBtn rounded-2 mb-2">I understand</button>
+			</form>
+		}
+		foreach (var notification in Model.Notifications)
+		{
+			<div class="borderMain rounded-2 p-2">
+				<h5 class="mainText text-truncate">
+					<a asp-action="Index" asp-controller="Reply" style="text-decoration:none" class="mainText text-truncate" asp-route-replyId="@notification.ReplyId" asp-route-postId="@notification.PostId">
+						<span class="fst-italic">@notification.UserFromUsername</span> tagged you in <span class="fst-italic fw-bold fs-4">@notification.PostTitle</span>
+					</a>
+				</h5>
+				<h5 class="secondaryText">Message: <i>@notification.ReplyContent</i></h5>
+			</div>
+		}
+		if (Model.Notifications.Any())
+		{
+			<form asp-action="Delete" asp-controller="Notifications" method="post">
+				@Html.AntiForgeryToken()
+				<button type="submit" class="mainBtn rounded-2 mt-2">Delete notifications</button>
+			</form>
+		}
+
+	}
+</body>
