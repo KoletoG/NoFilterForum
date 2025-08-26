@@ -51,6 +51,18 @@
     border-width: 2px;
     border-style: solid;
 }
+.borderStart {
+    border-left: 2px solid #B58B64;
+}
+.borderEnd {
+    border-right: 2px solid #B58B64;
+}
+.borderTop {
+    border-top: 2px solid #B58B64;
+}
+.borderBottom {
+    border-bottom: 2px solid #B58B64;
+}
 .mainNav {
     background: #B58B64;
 }
