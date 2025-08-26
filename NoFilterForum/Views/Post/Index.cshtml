@@ -19,8 +19,11 @@
 <body class="mainBG">
 	@{
 		<div class="container secondaryBG shadow p-3">
-			<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
 
+			<div class="text-end">
+				<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
+
+		</div>
 			@foreach (var post in Model.Posts)
 			{
 				// Add Description here
