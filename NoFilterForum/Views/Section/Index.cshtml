@@ -29,7 +29,6 @@
 		.section-card h6 {
 			transition: text-align 0.5s ease;
 		}
-
 		.section-card:hover h2 {
 			font-weight: bold;
 		}
@@ -41,7 +40,7 @@
 </style>
 <body class="mainBG">
 	@{
-		<div class=" container shadow section-card mb-3 mt-3 p-4" style="font-family:Verdana;">
+		<div class=" container shadow section-card mb-3 mt-3 p-4">
 			@if (Model.IsAdmin)
 			{ // MAKE THE TITLE IN THE LEFT, DESCRIPTION IN THE RIGHT
 				<partial name="_CreateSection" model="new CreateSectionViewModel()" />

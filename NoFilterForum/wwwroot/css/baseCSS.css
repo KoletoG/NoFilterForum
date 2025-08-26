@@ -5,7 +5,15 @@
 .secondaryBG {
     background-color: rgba(0, 0, 0, 0.0);
 }
-
+.transparentText{
+    color:rgba(0,0,0,0.0);
+}
+.navText {
+    color: #1a2766;
+    font-family: 'Merriweather',serif;
+    font-size:17px;
+    font-weight:bold;
+}
 .secondaryText {
     color: #236A96;
     font-family: 'Noto Sans Display',sans-serif;
@@ -42,4 +50,7 @@
     border-color: #B58B64;
     border-width: 2px;
     border-style: solid;
+}
+.mainNav {
+    background: #B58B64;
 }
