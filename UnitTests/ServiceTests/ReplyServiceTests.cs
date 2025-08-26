@@ -8,6 +8,7 @@ using Application.Interfaces.Services;
 using Core.Constants;
 using Core.Enums;
 using Core.Interfaces.Factories;
+using Core.Interfaces.Hub;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Reply;
 using Core.Models.DTOs.OutputDTOs.Reply;
@@ -22,6 +23,7 @@ namespace UnitTests.ServiceTests
 {
     public class ReplyServiceTests
     {
+        private readonly Mock<INotificationHub> _notificationHubMock = new Mock<INotificationHub>();
         [Fact]
         public async Task GetListReplyIndexItemDto_ShouldReturnListReplyIndexItemDto_WhenRequestIsValid()
         {
@@ -37,7 +39,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var getListReplyIndexItemRequest = new GetListReplyIndexItemRequest(Page: 1,PostId: "ExampleId",PostsCount: PostConstants.PostsPerSection);
             var result = await replyService.GetListReplyIndexItemDto(getListReplyIndexItemRequest, CancellationToken.None);
@@ -59,7 +62,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var userId = "ExampleUserId";
             var result = await replyService.GetListReplyItemDtoAsync(userId, CancellationToken.None);
@@ -81,7 +85,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId, CancellationToken.None);
@@ -101,7 +106,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId, CancellationToken.None);
@@ -122,7 +128,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var userId = "Example user Id";
             var result = await replyService.HasTimeoutByUserIdAsync(userId, CancellationToken.None);
@@ -142,7 +149,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
@@ -169,7 +177,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
@@ -197,7 +206,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);
@@ -224,7 +234,8 @@ namespace UnitTests.ServiceTests
                 replyFactoryMock.Object,
                 userServiceMock.Object,
                 loggerMock.Object,
-                cacheServiceMock.Object
+                cacheServiceMock.Object,
+                _notificationHubMock.Object
                 );
             var deleteReplyRequest = new DeleteReplyRequest(ReplyId: "ReplyIdExample", UserId: "UserIdExample");
             var result = await replyService.DeleteReplyAsync(deleteReplyRequest, CancellationToken.None);

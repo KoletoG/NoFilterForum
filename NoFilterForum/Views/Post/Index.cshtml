@@ -28,10 +28,13 @@
 			{
 				// Add Description here
 				<div class="row g-0 mt-2 borderTop borderBottom">
-					<div class="col-8 me-2 ms-4 align-self-center">
+					<div class="col-8 me-2 ms-4 mt-2 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
-							<div class="underlinehover col fs-5 fw-bold mainText">
+							<div class="col underlinehover fs-5 fw-bold mainText">
 								@post.Title
+							</div>
+							<div class="fs-6 fst-italic secondaryText text-truncate">
+							@post.Body
 							</div>
 						</a>
 					</div>

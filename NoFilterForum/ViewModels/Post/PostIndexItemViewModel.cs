@@ -7,6 +7,7 @@ namespace Web.ViewModels.Post
     {
         public required string Id { get; set; }
         public required string Username { get; set; }
+        public required string Body {  get; set; }
         public UserRoles Role { get; set; }
         public required string Title { get; set; }
         public bool IsPinned { get; set; }
