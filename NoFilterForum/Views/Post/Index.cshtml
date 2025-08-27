@@ -45,8 +45,9 @@
 					</div>
 					<div class="col-2 mt-4 ms-5 text-center rounded-2">
 						<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
-					</div>
-					<partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
+					
+						</div>
+					<h6 class="mainText text-start"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
 				</div>
 
 				// check admin

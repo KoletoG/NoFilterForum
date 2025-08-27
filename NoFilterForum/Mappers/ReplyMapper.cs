@@ -30,7 +30,8 @@ namespace Web.Mappers
             Role = dto.Role,
             UserId = dto.UserId,
             Username = dto.Username,
-            Bio = dto.Bio
+            Bio = dto.Bio,
+            PostCount = dto.PostCount
         };
         public static PostReplyIndexViewModel MapToViewModel(PostReplyIndexDto dto) => new()
         {

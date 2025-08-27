@@ -29,7 +29,7 @@ namespace NoFilterForum.Infrastructure.Repositories
             return await _context.ReplyDataModels.AsNoTracking()
                 .Where(x => x.Post.Id == getListReplyIndexItemRequest.PostId)
                 .OrderBy(x=>x.DateCreated)
-                .Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated,x.User.Bio))
+                .Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated,x.User.Bio,x.User.PostsCount))
                 .Skip((getListReplyIndexItemRequest.Page-1)*getListReplyIndexItemRequest.PostsCount)
                 .Take(getListReplyIndexItemRequest.PostsCount)
                 .ToListAsync(cancellationToken);

@@ -11,6 +11,7 @@ namespace Web.ViewModels.Reply
         public required string UserId { get; init; }
         public required string Id { get; init; }
         public required string Bio {  get; init; }
+        public required int PostCount { get; init; }
         public short Likes { get; init; }
         public DateTime DateCreated { get; init; }
     }
