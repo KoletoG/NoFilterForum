@@ -23,6 +23,20 @@
     color: #B58B64;
     font-family: 'Merriweather',serif;
 }
+.secondaryBtn {
+    background-color: rgba(0, 0, 0, 0.0);
+    border-color: #8C2F20;
+    border-width: 2px;
+    border-style: solid;
+    color: #B58B64;
+}
+    .secondaryBtn:hover {
+        background: linear-gradient(90deg,rgba(181, 139, 100, 1) 0%, rgba(158, 125, 98, 1) 100%);
+        color: #1a2766;
+        border-color: #8C2F20;
+        border-width: 2px;
+        border-style: solid;
+    }
 .mainBtn {
     background-color: rgba(0, 0, 0, 0.0);
     border-color: #B58B64;

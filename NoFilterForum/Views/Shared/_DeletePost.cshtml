@@ -3,5 +3,5 @@
 <form asp-action="Delete" asp-controller="Post" method="post">
 	@Html.AntiForgeryToken()
 	<input hidden asp-for="PostId" value="@Model.PostId" />
-	<button type="submit" class="btn-danger btn mt-3 mb-3">Delete Post</button>
+	<button type="submit" class="secondaryBtn btn mt-3 mb-3">Delete Post</button>
 </form>
