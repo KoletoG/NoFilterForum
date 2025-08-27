@@ -33,13 +33,13 @@
 					@if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,true)" />
-						<h6 class="mainText"  id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+						<h6 class="mainText" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
 					}
 					else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-						<h6 class="mainText"  id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+						<h6 class="mainText" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,true)" />
 					}
 					else
@@ -60,7 +60,7 @@
 			</div>
 			<div class="row">
 				<div class="col-10">
-					<partial name="_ShowTime" model="new ShowTimeViewModel(Model.Post.DateCreated)" />
+					<h6 class="text-end mainText"><partial name="_ShowTime" model="new ShowTimeViewModel(Model.Post.DateCreated)" /></h6>
 				</div>
 			</div>
 		}
@@ -81,7 +81,8 @@
 						<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true,reply.ImageUrl)" />
 
 					</div>
-					<div class="col-8 align-self-center pt-2 pb-2">
+
+					<div class="col-8 pt-2 pb-2">
 
 						@if (reply.Id == Model.ReplyId)
 						{
@@ -89,14 +90,14 @@
 						}
 						else
 						{
-							<h6 class="text-break secondaryText">@Html.Raw(reply.Content)</h6>
+							<h6 class="text-break secondaryText" style="min-height:75px">@Html.Raw(reply.Content)</h6>
 
 						}
-						<h6 class="text-center fst-italic mainText">#@(i+1)</h6>
-						<partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" />
-						<div class="d-flex borderTop justify-content-center pt-1">
+						<h6 class="mainText text-end"><partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" /></h6>
 
-							<div class="truncate-multiline">
+						<div class="row borderTop justify-content-center align-content-center pt-1">
+
+							<div class="text-break col" style="height:100px">
 								<h6 class="secondaryText fst-italic">@reply.Bio</h6>
 							</div>
 						</div>
@@ -104,33 +105,36 @@
 					@if (reply.Username != UserConstants.DefaultUser.UserName)
 					{
 						// refactor these likes dislikes type shi
-						<div class="col-2 borderStart pt-2 text-center align-content-center">
-							@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
-							{
-								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
-								<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
-								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
-							}
-							else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
-							{
-								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-								<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
-								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
-							}
-							else
-							{
-								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-								<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
-								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
-							}
-							@if (reply.Username == this.User!.Identity!.Name! || Model.IsAdmin)
-							{
-								<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
-							}
-							else
-							{
-								<partial name="_CreateReport" model="new CreateReportViewModel(false,reply.Id,reply.UserId)" />
-							}
+						<div class="col-2 borderStart pt-2 text-center flex-column d-flex">
+							<h6 class="text-center fst-italic secondaryText flex-grow-0">#@(i + 1)</h6>
+							<div class="flex-grow-1 align-content-center">
+								@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
+								{
+									<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
+									<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
+									<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+								}
+								else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
+								{
+									<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
+									<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
+									<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
+								}
+								else
+								{
+									<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
+									<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
+									<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+								}
+								@if (reply.Username == this.User!.Identity!.Name! || Model.IsAdmin)
+								{
+									<partial name="_DeleteReply" model="new DeleteReplyViewModel(){PostId=Model.Post.Id,ReplyId=reply.Id}" />
+								}
+								else
+								{
+									<partial name="_CreateReport" model="new CreateReportViewModel(false,reply.Id,reply.UserId)" />
+								}
+							</div>
 						</div>
 					}
 					else
@@ -147,7 +151,7 @@
 				</div>
 			}
 
-				<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.ReplyControllerName,Model.IndexName,string.Empty,Model.Post.Id)" />
+			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.ReplyControllerName,Model.IndexName,string.Empty,Model.Post.Id)" />
 		}
 
 
