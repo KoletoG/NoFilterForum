@@ -10,6 +10,7 @@ namespace Web.ViewModels.Reply
         public required string ImageUrl { get; init; }
         public required string UserId { get; init; }
         public required string Id { get; init; }
+        public required string Bio {  get; init; }
         public short Likes { get; init; }
         public DateTime DateCreated { get; init; }
     }

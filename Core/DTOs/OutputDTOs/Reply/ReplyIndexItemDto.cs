@@ -7,5 +7,5 @@ using Core.Enums;
 
 namespace Core.Models.DTOs.OutputDTOs.Reply
 {
-    public record ReplyIndexItemDto(string? Username, UserRoles Role, string ImageUrl, string UserId, string Id, string Content, short Likes, DateTime DateCreated);
+    public record ReplyIndexItemDto(string? Username, UserRoles Role, string ImageUrl, string UserId, string Id, string Content, short Likes, DateTime DateCreated,string Bio);
 }
