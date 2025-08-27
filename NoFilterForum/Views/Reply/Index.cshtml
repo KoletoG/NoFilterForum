@@ -9,24 +9,24 @@
 
 @model IndexReplyViewModel
 <script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
-<body class="bg-body-secondary">
-	<div class="container bg-white shadow p-3">
+<body class="mainBG">
+	<div class="container secondaryBG shadow p-3">
 		@if (Model.Post.Username != UserConstants.DefaultUser.UserName)
 		{
-			<div class="row border-bottom">
+			<div class="row borderBottom">
 
 				<div class="col-10 text-center align-content-center">
 
-					<h1 class="fw-bold">@Model.Post.Title</h1>
+					<h1 class="fw-bold mainText">@Model.Post.Title</h1>
 				</div>
-				<div class="col-2 border rounded-1 border-2 border-black text-center pt-2 mb-2">
+				<div class="col-2 borderMain rounded-2 text-center pt-2 mb-2">
 					<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true, Model.Post.ImageUrl)" />
 				</div>
 			</div>
 			<div class="row mt-3">
 				<div class="col-10">
 
-					<h5 class="fs-5 text-break">@Html.Raw(Model.Post.Content)</h5>
+					<h5 class="fs-5 text-break secondaryText">@Html.Raw(Model.Post.Content)</h5>
 				</div>
 				<div class="col-2 text-center">
 
@@ -69,15 +69,15 @@
 			<h5 style="text-decoration:line-through">@Model.Post.Username</h5>
 		}
 		@{
-			<div class="row mt-3 mb-3 border-top border-bottom">
+			<div class="row mt-3 mb-3 borderTop borderBottom">
 				<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 			</div>
 			int count = Model.Replies.Count;
 			@for (int i = 0; i < count; i++)
 			{
 				var reply = Model.Replies[i];
-				<div class="row border-top border-dark border-1 bg-secondary-subtle border-bottom">
-					<div class="col-2 align-content-center border-end border-1 border-black text-center">
+				<div class="row  secondaryBG borderMain">
+					<div class="col-2 align-content-center borderEnd text-center">
 						<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true,reply.ImageUrl)" />
 
 					</div>
@@ -89,7 +89,7 @@
 						}
 						else
 						{
-							<h6 class="text-break">@Html.Raw(reply.Content)</h6>
+							<h6 class="text-break secondaryText">@Html.Raw(reply.Content)</h6>
 
 						}
 						<h6 class="text-center fst-italic">#@(i+1)</h6>
@@ -98,7 +98,7 @@
 					@if (reply.Username != UserConstants.DefaultUser.UserName)
 					{
 						// refactor these likes dislikes type shi
-						<div class="col-2 border-black border-start pt-2 text-center">
+						<div class="col-2 borderStart pt-2 text-center">
 							@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 							{
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
