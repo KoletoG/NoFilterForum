@@ -37,6 +37,8 @@
 							@Html.Raw(post.Body)
 							</div>
 						</a>
+						<h6 class="mainText text-end mt-1"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
+
 					</div>
 					<div class="col-1 text-center align-self-center fs-6 borderStart borderEnd">
 						<div class="@post.ColorOfLikeDislike">
@@ -47,8 +49,7 @@
 						<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
 					
 						</div>
-					<h6 class="mainText text-start"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
-				</div>
+					</div>
 
 				// check admin
 				if (Model.IsAdmin)
