@@ -4,9 +4,9 @@
 <form asp-action="Create" asp-controller="Report" method="post">
 	@Html.AntiForgeryToken()
 	<span asp-validation-for="Content" class="text-danger"></span>
-	<input asp-for="Content" class="input-group mb-2 mt-2" placeholder="Reason for report..." />
+	<input asp-for="Content" class="ps-1 mainInput mb-2 mt-2" placeholder="Reason for report..." />
 	<input type="hidden" asp-for="IsPost" value="@Model.IsPost" />
 	<input asp-for="IdOfPostReply" type="hidden" value="@Model.IdOfPostReply" />
 	<input asp-for="UserIdTo" type="hidden" value="@Model.UserIdTo" />
-	<button type="submit" class="btn btn-danger mb-2">Send Report</button>
+	<button type="submit" class="btn secondaryBtn mb-2">Send Report</button>
 </form>
