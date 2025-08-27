@@ -19,7 +19,7 @@
 
 					<h1 class="fw-bold mainText">@Model.Post.Title</h1>
 				</div>
-				<div class="col-2 borderMain rounded-2 text-center pt-2 mb-2">
+				<div class="col-2 borderStart text-center pt-2 mb-2">
 					<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true, Model.Post.ImageUrl)" />
 				</div>
 			</div>
@@ -33,19 +33,19 @@
 					@if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,true)" />
-						<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+						<h6 class="mainText"  id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
 					}
 					else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-						<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+						<h6 class="mainText"  id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,true)" />
 					}
 					else
 					{
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-						<h6 class="text-black" style="font-family:'Book Antiqua'" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
+						<h6 class="mainText" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
 						<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
 					}
 					@if (Model.Post.Username == this.User!.Identity!.Name! || Model.IsAdmin)
@@ -76,7 +76,7 @@
 			@for (int i = 0; i < count; i++)
 			{
 				var reply = Model.Replies[i];
-				<div class="row  secondaryBG borderMain">
+				<div class="row  secondaryBG borderBottom borderTop">
 					<div class="col-2 align-content-center borderEnd text-center">
 						<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true,reply.ImageUrl)" />
 
@@ -102,19 +102,19 @@
 							@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 							{
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
-								<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+								<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
 							}
 							else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
 							{
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-								<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+								<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
 							}
 							else
 							{
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-								<h6 id="likesCount_id_@reply.Id">@reply.Likes</h6>
+								<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
 								<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
 							}
 							@if (reply.Username == this.User!.Identity!.Name! || Model.IsAdmin)
@@ -136,7 +136,7 @@
 			<br />
 			@if (Model.Replies.Any())
 			{
-				<div class="row border-top border-bottom mt-3 mb-3">
+				<div class="row borderBottom borderTop mt-3 mb-3">
 					<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 				</div>
 			}
