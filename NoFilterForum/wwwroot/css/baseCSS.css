@@ -5,6 +5,9 @@
 .secondaryBG {
     background-color: rgba(0, 0, 0, 0.0);
 }
+.thirdBG {
+    background-color: #B58B64;
+}
 .transparentText{
     color:rgba(0,0,0,0.0);
 }
