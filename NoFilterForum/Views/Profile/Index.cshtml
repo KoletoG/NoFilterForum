@@ -10,12 +10,12 @@
 @using Web.ViewModels.Warning
 
 @model ProfileViewModel
-<body class="bg-body-secondary">
-	<div class="container border-2 border p-3 shadow border-black bg-white">
+<body class="mainBG">
+	<div class="container borderMain p-3 shadow secondaryBG">
 		@{
-			<div class="row border-bottom border-2 border-black">
-				<div class="col-10 border-end border-1 border-dark-subtle mb-2">
-					<h4>Bio:</h4> <h3 class="fw-bold">@Html.Raw(Model.Profile.Bio)</h3>
+			<div class="row borderBottom">
+				<div class="col-10 borderEnd mb-2">
+					<h4 class="mainText">Bio:</h4> <h3 class="fw-bold secondaryText">@Html.Raw(Model.Profile.Bio)</h3>
 					<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
 				</div>
 				<div class="col-2 text-center align-self-center">
@@ -26,18 +26,18 @@
 			</div>
 			<div class="row">
 				<div class="col-10 align-content-center">
-					<h3 class="fs-4">@Model.Profile.Email</h3>
+					<h3 class="fs-4 mainText">@Model.Profile.Email</h3>
 				</div>
 				<div class="col-2">
-					<h6 class="fst-italic text-center">@Model.Profile.DateCreated.ToShortDateString()</h6>
+					<h6 class="fst-italic text-center mainText">@Model.Profile.DateCreated.ToShortDateString()</h6>
 					<h6 class="text-danger fw-bold fst-italic text-center">@Model.Profile.WarningsCount warning(s)</h6>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-8 text-start">
-					<h3 class="fs-4 fw-bold">
+					<h3 class="fs-4 fw-bold mainText">
 						@Model.Profile.UserName
-						<button class="btn btn-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsername" aria-expanded="false" aria-controls="collapseUsername">
+						<button class="btn mainBtn mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsername" aria-expanded="false" aria-controls="collapseUsername">
 							Change Username
 						</button>
 					</h3>
@@ -49,9 +49,9 @@
 
 			<div class="row">
 				<div class="col-8 text-start">
-					<h3 class="fs-4 fw-bold">
+					<h3 class="fs-4 fw-bold mainText">
 						@Model.Profile.Email
-						<button class="btn btn-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmail" aria-expanded="false" aria-controls="collapseEmail">
+						<button class="btn mainBtn mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmail" aria-expanded="false" aria-controls="collapseEmail">
 							Change Email
 						</button>
 					</h3>
@@ -82,9 +82,9 @@
 					<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 			}
 		}
-		<h5>Posts count: @Model.Profile.PostsCount</h5>
+		<h5 class="mainText">Posts count: <span class="secondaryText">@Model.Profile.PostsCount</span></h5>
 		@{
-			<div class="border p-2 m-2">
+			<div class="borderMain p-2 m-2">
 				@{
 					int count = 1;
 				}
@@ -95,34 +95,34 @@
 					if (Model.Posts.TryGetValue(key, out var post))
 					{
 						<div class="border-bottom @classBodyColor p-1">
-							<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@post.Id">
+							<a asp-action="Index" class="mainText text-center link-underline-opacity-10-hover" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@post.Id">
 								<div class="row">
 									<h5 class="text-center fw-bold fs-4">@post.Title</h5>
 								</div>
 							</a>
 							<div class="row">
-								<div class="text-center">
+								<div class="text-center mainText">
 									@post.Created.ToShortDateString()
 								</div>
 							</div>
 						</div>
 						Model.Posts.Remove(key);
-					}
+					} // ADD DATE FOR POSTS WHEN REPLIES SHOWN
 					else if (Model.Replies.TryGetValue(key, out var reply))
 					{
 						<div class="border-bottom @classBodyColor p-1">
-							<a asp-action="Index" class="text-black text-center link-underline-opacity-10-hover link-underline-danger" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
+							<a asp-action="Index" class=" text-center link-underline-opacity-10-hover" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
 								<div class="row">
-									<div class="col-6 border-end  border-1 border-black">
-										<h5 class="fst-italic text-truncate">@reply.Content</h5>
+									<div class="col-6 borderEnd align-content-center">
+										<h5 class="fst-italic secondaryText text-truncate">@reply.Content</h5>
 									</div>
-									<div class="col-6">
-										<h5 class="text-center fw-bold">@reply.PostTitle</h5>
+									<div class="col-6  align-content-center">
+										<h5 class="text-center mainText fw-bold">@reply.PostTitle</h5>
 									</div>
 								</div>
 							</a>
 							<div class="row">
-								<div class="col-6 border-end border-1 border-black text-center">
+								<div class="col-6 borderEnd text-center secondaryText">
 									@reply.Created.ToShortDateString()
 								</div>
 							</div>
