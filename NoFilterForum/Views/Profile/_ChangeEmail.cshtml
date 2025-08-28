@@ -4,6 +4,6 @@
 <form asp-action="ChangeEmail" class="collapse" id="collapseEmail" asp-controller="Profile" method="post">
 	@Html.AntiForgeryToken()
 	<span asp-validation-for="Email" class="text-danger"></span>
-	<input asp-for="Email" placeholder="Type your new email..." />
-	<button type="submit" class="btn btn-secondary">Change Email</button>
+	<input asp-for="Email" class="mainInput ps-1" placeholder="New email..." />
+	<button type="submit" class="btn mainBtn">Change Email</button>
 </form>

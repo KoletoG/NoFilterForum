@@ -1,12 +1,12 @@
 ﻿@using Web.ViewModels.Profile
 @model ChangeBioViewModel
 
-<button class="btn btn-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBio" aria-expanded="false" aria-controls="collapseBio">
+<button class="btn mainBtn mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBio" aria-expanded="false" aria-controls="collapseBio">
 	Change Bio
 </button>
 <form asp-action="ChangeBio" id="collapseBio" asp-controller="Profile" class="collapse" method="post">
 	@Html.AntiForgeryToken()
 	<span asp-validation-for="Bio" class="text-danger"></span>
-	<textarea asp-for="Bio" cols="50" rows="3" placeholder="Type your bio..."></textarea>
-		<button type="submit" class="btn btn-secondary mb-5">Save Bio</button>
+	<textarea asp-for="Bio" cols="50" rows="3" class="mainInput ps-1" placeholder="Type your bio..."></textarea>
+		<button type="submit" class="btn mainBtn mb-5">Save Bio</button>
 	</form>
