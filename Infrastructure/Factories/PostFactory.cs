@@ -16,12 +16,11 @@ namespace Infrastructure.Factories
         public PostFactory(IHtmlSanitizer htmlSanitizer)
         {
             _htmlSanitizer = htmlSanitizer;
-            _htmlSanitizer.AllowedTags.Clear();
-            _htmlSanitizer.AllowedTags.Add("a");
         }
         public PostDataModel Create(string title, string body, UserDataModel user)
         {
-            string sanitizedFormattedBody = TextFormatter.FormatBody(_htmlSanitizer.Sanitize(body));
+            _htmlSanitizer.AllowedTags.Add("b");
+            string sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
             string sanitizedTitle = _htmlSanitizer.Sanitize(title);
             return new(sanitizedTitle, sanitizedFormattedBody,user);
         }
