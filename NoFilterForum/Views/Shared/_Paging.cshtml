@@ -7,7 +7,7 @@
 			if (Model.HasPrevious)
 			{
 				<li class="page-item">
-					<a class="btn btn-secondary" asp-action="@Model.ActionName"
+					<a class="btn thirdBtn" asp-action="@Model.ActionName"
 					   asp-controller="@Model.ControllerName"
 					   asp-route-page="@Model.PreviousPage"
 					   asp-route-titleOfSection="@Model.TitleOfSection"
@@ -26,7 +26,7 @@
 				if (Model.Page > maximumPagesToNavigate + 1)
 				{
 					<li class="page-item">
-						<a class="btn btn-secondary" asp-action="@Model.ActionName"
+						<a class="btn thirdBtn" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="1"
 						   asp-route-titleOfSection="@Model.TitleOfSection"
@@ -46,7 +46,7 @@
 						break;
 					}
 					<li class="page-item">
-						<a class="btn btn-secondary" asp-action="@Model.ActionName"
+						<a class="btn thirdBtn" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="@i"
 						   asp-route-titleOfSection="@Model.TitleOfSection"
@@ -57,13 +57,7 @@
 					count++;
 				}
 				<li class="page-item">
-					<a class="btn btn-outline-secondary disabled" asp-action="@Model.ActionName"
-					   asp-controller="@Model.ControllerName"
-					   asp-route-page="@Model.Page"
-					   asp-route-titleOfSection="@Model.TitleOfSection"
-					   asp-route-userName="@Model.Username"
-					   asp-route-postId="@Model.Id"
-					   asp-route-userId="@Model.UserId">@Model.Page</a>
+					<button type="button" class="btn thirdBtn" disabled>@(count+1)</button>
 				</li>
 				count = 0;
 				for (int i = page + 1; i <= totalPages; i++)
@@ -75,7 +69,7 @@
 						break;
 					}
 					<li class="page-item">
-						<a class="btn btn-secondary" asp-action="@Model.ActionName"
+						<a class="btn thirdBtn" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="@i"
 						   asp-route-titleOfSection="@Model.TitleOfSection"
@@ -88,7 +82,7 @@
 				if (page < (totalPages - maximumPagesToNavigate))
 				{
 					<li class="page-item">
-						<a class="btn btn-secondary" asp-action="@Model.ActionName"
+						<a class="btn thirdBtn" asp-action="@Model.ActionName"
 						   asp-controller="@Model.ControllerName"
 						   asp-route-page="@totalPages"
 						   asp-route-titleOfSection="@Model.TitleOfSection"
@@ -101,7 +95,7 @@
 			if (Model.HasNext)
 			{
 				<li class="page-item">
-					<a class="btn btn-secondary" asp-action="@Model.ActionName"
+					<a class="btn thirdBtn" asp-action="@Model.ActionName"
 					   asp-controller="@Model.ControllerName"
 					   asp-route-page="@Model.NextPage"
 					   asp-route-titleOfSection="@Model.TitleOfSection"
