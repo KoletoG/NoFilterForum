@@ -7,5 +7,6 @@
         public required string Content { get; set; }
         public DateTime Created { get; set; }
         public required string PostTitle { get; set; }
+        public required DateTime DateCreatedPost { get; set; }
     }
 }

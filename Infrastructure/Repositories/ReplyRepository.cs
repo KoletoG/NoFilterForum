@@ -38,7 +38,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.ReplyDataModels.AsNoTracking()
                 .Where(x=>x.User.Id == userId)
-                .Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title))
+                .Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title,x.Post.DateCreated))
                 .ToDictionaryAsync(x=>x.Id,cancellationToken);
         }
         public async Task<ReplyDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken)

@@ -15,7 +15,8 @@ namespace Web.Mappers
             Created = dto.Created,
             Id = dto.Id,
             PostId = dto.PostId,
-            PostTitle = dto.PostTitle
+            PostTitle = dto.PostTitle,
+            DateCreatedPost = dto.DateCreatedPost
         };
         public static DeleteReplyRequest MapToRequest(DeleteReplyViewModel vm, string userId) => new(vm.ReplyId, userId);
         public static CreateReplyRequest MapToRequest(CreateReplyViewModel vm, string userId) => new(userId, vm.Content, vm.PostId);

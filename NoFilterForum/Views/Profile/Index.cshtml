@@ -126,6 +126,9 @@
 								<div class="col-6 borderEnd text-center @textColor">
 									@reply.Created.ToShortDateString()
 								</div>
+								<div class="col-6 text-center @textColor">
+									@reply.DateCreatedPost.ToShortDateString()
+								</div>
 							</div>
 						</div>
 						Model.Replies.Remove(key);
