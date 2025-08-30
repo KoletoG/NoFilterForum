@@ -18,3 +18,13 @@ function addBiggerText(){
     let textInput = document.getElementById('textInput');
     textInput.value+='<span class="biggerText">BIGGER TEXT</span>';
 }
+function addGreenText(){
+    
+    let textInput = document.getElementById('textInput');
+    textInput.value+='<span class="greenText">GREEN TEXT</span>';
+}
+function addRedText(){
+    
+    let textInput = document.getElementById('textInput');
+    textInput.value+='<span class="redText">RED TEXT</span>';
+}

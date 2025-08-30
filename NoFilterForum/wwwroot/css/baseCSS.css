@@ -22,10 +22,16 @@
     font-family: 'Noto Sans Display',sans-serif;
 }
 .biggerText{
-    font-size:20px;
+    font-size:25px;
 }
 .smallerText{
     font-size:12px;
+}
+.redText {
+    color:red;
+}
+.greenText{
+    color:green;
 }
 .mainText {
     color: #B58B64;
