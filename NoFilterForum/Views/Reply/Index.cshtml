@@ -17,7 +17,7 @@
 
 				<div class="col-10 text-center align-content-center">
 
-					<h1 class="fw-bold mainText">@Model.Post.Title</h1>
+					<h4 class="fw-bold mainText">@Model.Post.Title</h4>
 				</div>
 				<div class="col-2 borderStart text-center pt-2 mb-2">
 					<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true, Model.Post.ImageUrl)" />
@@ -26,7 +26,7 @@
 			<div class="row mt-3">
 				<div class="col-10 borderEnd">
 
-					<h5 class="fs-5 text-break secondaryText">@Html.Raw(Model.Post.Content)</h5>
+					<h6 class="fs-5 text-break secondaryText">@Html.Raw(Model.Post.Content)</h6>
 				</div>
 				<div class="col-2 text-center align-content-center">
 
