@@ -8,6 +8,11 @@
     let textInput = document.getElementById('textInput');
     textInput.innerHTML+='&bull;';
 }
+function addSmallerText(){
+    
+    let textInput = document.getElementById('textInput');
+    textInput.innerHTML+='<span class="smallerText">SMALLER TEXT</span>';
+}
 function addBiggerText(){
     
     let textInput = document.getElementById('textInput');

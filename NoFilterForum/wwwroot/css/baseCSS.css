@@ -24,6 +24,9 @@
 .biggerText{
     font-size:25px;
 }
+.smallerText{
+    font-size:12px;
+}
 .mainText {
     color: #B58B64;
     font-family: 'Merriweather',serif;
