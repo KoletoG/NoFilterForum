@@ -18,7 +18,6 @@ namespace Infrastructure.Factories
         {
             _htmlSanitizer = htmlSanitizer;
             _htmlSanitizer.AllowedTags.Clear();
-            _htmlSanitizer.AllowedTags.Add("a");
         }
         public ReplyDataModel Create(string body, UserDataModel user, PostDataModel post)
         {
