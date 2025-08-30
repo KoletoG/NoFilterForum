@@ -29,16 +29,17 @@
 		<div class="row mt-2">
 			<div class="col-1 text-start">
 				<div class="btn-group" role="group">
-					<button type="button" class="mainBtn rounded-1" id="btnBold"><b>B</b></button>
-					<button type="button" class="mainBtn rounded-1" id="btnItalic"><i>I</i></button>
-					<button type="button" class="mainBtn rounded-1" id="btnBulletPoint">&bull;</button>
+					<button type="button" class="mainBtn rounded-1" id="btnBold" onclick="addBoldText()"><b>B</b></button>
+					<button type="button" class="mainBtn rounded-1" id="btnItalic" onclick="addItalicText()"><i>I</i></button>
+					<button type="button" class="mainBtn rounded-1" id="btnBulletPoint" onclick="addBulletPoint()">&bull;</button>
 				</div>
 			</div>
 		</div>
-		<textarea asp-for="Body" class="mt-1 mainInput" rows="15" placeholder="Body of the post"></textarea>
+		<textarea asp-for="Body" class="mt-1 mainInput" rows="15" id="textInput" placeholder="Body of the post"></textarea>
 	</div>
 	@Html.AntiForgeryToken()
 	<div class="d-flex justify-content-center">
 		<button type="submit" class="btn btn-secondary mt-4">Create post</button>
 	</div>
 </form>
+<script src="~/js/JSInput.js" asp-append-version="true"></script>
