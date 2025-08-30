@@ -263,7 +263,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             string sanitizedFormattedBio = _htmlSanitizer.Sanitize(changeBioRequest.Bio);
-            sanitizedFormattedBio = TextFormatter.FormatBody(changeBioRequest.Bio); // Move that
+            sanitizedFormattedBio = TextFormatter.LinkCheckText(changeBioRequest.Bio); // Move that
             if (user.Bio == sanitizedFormattedBio)
             {
                 return PostResult.Success;

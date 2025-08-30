@@ -20,6 +20,8 @@ namespace Infrastructure.Factories
         public PostDataModel Create(string title, string body, UserDataModel user)
         {
             _htmlSanitizer.AllowedTags.Add("b");
+            _htmlSanitizer.AllowedTags.Add("i");
+            body = TextFormatter.LinkCheckText(body);
             string sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
             string sanitizedTitle = _htmlSanitizer.Sanitize(title);
             return new(sanitizedTitle, sanitizedFormattedBody,user);

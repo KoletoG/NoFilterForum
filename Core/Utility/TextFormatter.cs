@@ -20,15 +20,6 @@ namespace Core.Utility
         {
             return Regex.Replace(text, "<a[^>]*>(.*?)</a>", "$1", RegexOptions.IgnoreCase);
         }
-        public static string CheckForHashTags(string text)
-        {
-            text = Regex.Replace(text, @"#\.#", "&bull;");
-            text = Regex.Replace(text, @"###(.+?)###", "<h3><b>$1</b></h3>");
-            text = Regex.Replace(text, @"##(.+?)##", "<h3>$1</h3>");
-            text = Regex.Replace(text, @"#(.+?)#", "<b>$1</b>");
-
-            return text;
-        }
         public static string[] CheckForTags(string text)
         {
             if (Regex.IsMatch(text, @"@\w+"))
@@ -45,12 +36,6 @@ namespace Core.Utility
             {
                 return Array.Empty<string>();
             }
-        }
-        public static string FormatBody(string text)
-        {
-            text = LinkCheckText(text);
-            text = CheckForHashTags(text);
-            return text;
         }
     }
 }

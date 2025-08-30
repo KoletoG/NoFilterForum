@@ -24,41 +24,6 @@ namespace UnitTests.Utility
             Assert.Equal("https://www.randomlink.com/", result);
         }
         [Fact]
-        public void FormatBody_ShouldConvertLinksAndHashtags_WhenLinksAndHashtagsArePresent()
-        {
-            string text = "https://www.randomlink.com/ is #cool# tho";
-            var result = TextFormatter.FormatBody(text);
-            Assert.Equal("<a href=\"https://www.randomlink.com/\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">https://www.randomlink.com/</a> is <b>cool</b> tho", result);
-        }
-        [Fact]
-        public void CheckForHashTags_ShouldSwapHashTagsWithH3_WhenThereAreFourHashTags()
-        {
-            string text = "##example##";
-            var result = TextFormatter.CheckForHashTags(text);
-            Assert.Equal("<h3>example</h3>", result);
-        }
-        [Fact]
-        public void CheckForHashTags_ShouldSwapHashTagsWithBold_WhenThereAreTwoHashTags()
-        {
-            string text = "#example#";
-            var result = TextFormatter.CheckForHashTags(text);
-            Assert.Equal("<b>example</b>", result);
-        }
-        [Fact]
-        public void CheckForHashTags_ShouldSwapHashTagsAndDotWithBullpoint_WhenThereAreTwoHashTagsAndADott()
-        {
-            string text = "example #.#";
-            var result = TextFormatter.CheckForHashTags(text);
-            Assert.Equal("example &bull;", result);
-        }
-        [Fact]
-        public void CheckForHashTags_ShouldSwapHashTagsWithBoldAndH3_WhenThereAreSixHashTags()
-        {
-            string text = "###example###";
-            var result = TextFormatter.CheckForHashTags(text);
-            Assert.Equal("<h3><b>example</b></h3>", result);
-        }
-        [Fact]
         public void CheckForTags_ShouldReturnEmptyArray_WhenThereAreNoTags()
         {
             string text = "EXAMPLE NO TAGS TEXT";

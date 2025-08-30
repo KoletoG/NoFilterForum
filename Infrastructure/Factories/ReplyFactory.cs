@@ -22,7 +22,8 @@ namespace Infrastructure.Factories
         }
         public ReplyDataModel Create(string body, UserDataModel user, PostDataModel post)
         {
-            var sanitizedFormattedBody = TextFormatter.FormatBody(_htmlSanitizer.Sanitize(body));
+            body = TextFormatter.LinkCheckText(body);
+            var sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
             return new(sanitizedFormattedBody, user, post);
         }
     }
