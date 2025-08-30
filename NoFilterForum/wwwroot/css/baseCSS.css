@@ -21,7 +21,9 @@
     color: #236A96;
     font-family: 'Noto Sans Display',sans-serif;
 }
-
+.biggerText{
+    font-size:25px;
+}
 .mainText {
     color: #B58B64;
     font-family: 'Merriweather',serif;

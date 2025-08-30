@@ -8,3 +8,8 @@
     let textInput = document.getElementById('textInput');
     textInput.innerHTML+='&bull;';
 }
+function addBiggerText(){
+    
+    let textInput = document.getElementById('textInput');
+    textInput.innerHTML+='<span class="biggerText">BIGGER TEXT</span>';
+}
