@@ -5,19 +5,6 @@
 </button>
 <form asp-action="Create" id="collapsePost" class="collapse border p-4 border-2 border-dark-subtle rounded-2" asp-controller="Post" method="post">
 	<input type="hidden" asp-for="TitleOfSection" value="@Model.TitleOfSection" />
-	<button class="btn mainBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-		Legend
-	</button>
-	<div class="collapse" id="collapseExample">
-		<div class="card card-body mainBG secondaryText">
-			Type:
-			<br />
-			#.# (&bull;)
-			<h3>##example##</h3>
-			<b>#example#</b>
-			You can combine these however you want
-		</div>
-	</div>
 	<div class="row">
 		<span asp-validation-for="Title" class="text-danger"></span>
 		<label asp-for="Title" class="fs-4 text-center fw-bold mainText"></label>
@@ -43,7 +30,7 @@
 	</div>
 	@Html.AntiForgeryToken()
 	<div class="d-flex justify-content-center">
-		<button type="submit" class="btn btn-secondary mt-4">Create post</button>
+		<button type="submit" class="btn mainBtn mt-4">Create post</button>
 	</div>
 </form>
 <script src="~/js/JSInput.js" asp-append-version="true"></script>
