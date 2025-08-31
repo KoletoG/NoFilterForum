@@ -62,5 +62,9 @@ namespace Infrastructure.Services
             }
             return obj;
         }
+        public void Remove(string key)
+        {
+            _memoryCache.Remove(key);
+        }
     }
 }
