@@ -33,3 +33,9 @@ function addBlueText(){
     let textInput = document.getElementById('textInput');
     textInput.value+='<span class="blueText">BLUE TEXT</span>';
 }
+document.addEventListener('DOMContentLoaded',(e)=>{
+let colorWheel=document.getElementById('colorWheel');
+colorWheel.addEventListener('change',(e)=>{
+console.log(colorWheel.value);
+});
+});
