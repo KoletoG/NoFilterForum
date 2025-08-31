@@ -27,6 +27,7 @@ namespace Infrastructure.Factories
             _htmlSanitizer.AllowedClasses.Add("smallerText");
             _htmlSanitizer.AllowedClasses.Add("greenText");
             _htmlSanitizer.AllowedClasses.Add("redText");
+            _htmlSanitizer.AllowedClasses.Add("blueText");
             body = TextFormatter.LinkCheckText(body);
             string sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
             string sanitizedTitle = _htmlSanitizer.Sanitize(title);

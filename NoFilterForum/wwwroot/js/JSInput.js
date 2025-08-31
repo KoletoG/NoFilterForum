@@ -28,3 +28,8 @@ function addRedText(){
     let textInput = document.getElementById('textInput');
     textInput.value+='<span class="redText">RED TEXT</span>';
 }
+function addBlueText(){
+    
+    let textInput = document.getElementById('textInput');
+    textInput.value+='<span class="blueText">BLUE TEXT</span>';
+}
