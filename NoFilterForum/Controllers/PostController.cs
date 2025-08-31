@@ -17,6 +17,7 @@ using Web.ViewModels.Post;
 using System.Runtime.CompilerServices;
 using Core.DTOs.OutputDTOs.Reply;
 using Microsoft.AspNetCore.Identity;
+using Core.DTOs.InputDTOs.Post;
 
 namespace Web.Controllers
 {
@@ -131,9 +132,28 @@ namespace Web.Controllers
             var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel);
             
             var postIndexViewModel = PostMapper.MapToViewModel(postIndexItemsVMs, pageTotalPagesDTO, titleOfSection,isAdmin);
+
             return View(postIndexViewModel);
         }
         [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateSeenState([FromBody] string postId,CancellationToken cancellationToken)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId is null)
+            {
+                return Unauthorized();
+            }
+            var result = await _postService.UpdateSeenAsync(userId, postId, cancellationToken);
+            return result switch
+            {
+                PostResult.Success => NoContent(),
+                PostResult.UpdateFailed => Problem(),
+                PostResult.NotFound => NotFound(),
+                _ => Unauthorized()
+            };
+        }
+        [HttpPost] 
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(DeletePostViewModel deletePostViewModel, CancellationToken cancellationToken)

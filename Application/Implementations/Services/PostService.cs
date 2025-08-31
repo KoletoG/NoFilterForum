@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Runtime.CompilerServices;
 using System.Web;
 using Application.Interfaces.Services;
@@ -58,6 +59,30 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return false;
         }// POST methods
+        public async Task<PostResult> UpdateSeenAsync(string userId, string postId,CancellationToken cancellationToken)
+        {
+            var post = await _unitOfWork.Posts.GetByIdAsync(postId);
+            if (post is null)
+            {
+                return PostResult.NotFound;
+            }
+            if (!post.SeenByUserIds.Contains(userId))
+            {
+                post.SeenByUserIds.Add(userId);
+                try
+                {
+                    await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Posts.Update, post, cancellationToken);
+                    return PostResult.Success;
+                }
+                catch (DbException ex)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    _logger.LogError(ex, "Adding user with Id: {UserId} to seen ids of post with Id: {PostId} failed.", userId, postId);
+                    return PostResult.UpdateFailed;
+                }
+            }
+            return PostResult.Success;
+        }
         public async Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(likeDislikeRequest.UserId);

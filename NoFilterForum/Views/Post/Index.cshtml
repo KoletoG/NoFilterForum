@@ -32,7 +32,7 @@
 				// Add Description here
 				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom">
 					<div class="col-8 me-2 ms-4 mt-1 align-self-center">
-						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
+						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 							<div class="col underlinehover fs-5 fw-bold mainText">
 								@post.Title
 							</div>
@@ -70,4 +70,5 @@
 @section Scripts {
 	<link rel="stylesheet" href="~/css/baseCSS.css" asp-append-version="true"/>
 	<partial name="_ValidationScriptsPartial" />
+	<script src="~/js/JSPostSeen.js" asp-append-version="true"></script>
 }

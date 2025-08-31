@@ -40,7 +40,7 @@ namespace Web.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(string postId,CancellationToken cancellationToken, string? replyId = null, int page = 1)
+        public async Task<IActionResult> Index([FromQuery] string postId,CancellationToken cancellationToken, string? replyId = null, int page = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
@@ -59,7 +59,6 @@ namespace Web.Controllers
             {
                 return BadRequest();
             }
-
             var pageTotalPagesDto = await GetPageInfoAsync(postId, replyId, page, cancellationToken);
 
             var getListReplyIndexItemRequest = ReplyMapper.MapToRequest(pageTotalPagesDto.Page, postId);
@@ -69,7 +68,7 @@ namespace Web.Controllers
             var postVM = ReplyMapper.MapToViewModel(post);
             bool isAdmin = await _userService.IsAdminAsync(userId);
             MarkTags(replyIndexVMList, postVM);
-
+            // MARK POST AS SEEN 
             var currentUserVM = ReplyMapper.MapToViewModel(currentUserDto);
             var indexReplyVM = ReplyMapper.MapToViewModel(currentUserVM,
                 postVM,
