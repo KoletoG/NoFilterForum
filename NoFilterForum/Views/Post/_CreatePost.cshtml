@@ -3,7 +3,7 @@
 <button class="btn mainBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePost" aria-expanded="false" aria-controls="collapsePost">
 	Create Post
 </button>
-<form asp-action="Create" id="collapsePost" class="collapse border p-4 border-2 border-dark-subtle rounded-2" asp-controller="Post" method="post">
+<form asp-action="Create" id="collapsePost" class="collapse borderMain p-4 rounded-2" asp-controller="Post" method="post">
 	<input type="hidden" asp-for="TitleOfSection" value="@Model.TitleOfSection" />
 	<div class="row">
 		<span asp-validation-for="Title" class="text-danger"></span>

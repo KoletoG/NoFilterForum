@@ -20,21 +20,24 @@
 	@{
 		<div class="container secondaryBG shadow p-3">
 
-			<div class="text-end">
+			<div class="text-end mb-1">
 				<partial name="_CreatePost" model="new CreatePostViewModel(){TitleOfSection=Model.TitleOfSection}" />
 
-		</div>
+			</div>
+			@{
+				bool isFirst = true;
+			}
 			@foreach (var post in Model.Posts)
 			{
 				// Add Description here
-				<div class="row g-0 mt-2 borderTop borderBottom">
-					<div class="col-8 me-2 ms-4 mt-2 align-self-center">
+				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom">
+					<div class="col-8 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@HttpUtility.UrlEncode(post.Id)" asp-route-titleOfSection="@Model.TitleOfSection">
 							<div class="col underlinehover fs-5 fw-bold mainText">
 								@post.Title
 							</div>
 							<div class="fs-6 fst-italic secondaryText truncate-multiline">
-							@Html.Raw(post.Body)
+								@Html.Raw(post.Body)
 							</div>
 						</a>
 						<h6 class="mainText text-end mt-1"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
@@ -45,19 +48,19 @@
 							@post.PostLikes
 						</div>
 					</div>
-					<div class="col-2 mt-4 ms-5 text-center rounded-2">
+					<div class="col-2 mt-2 ms-5 text-center rounded-2">
 						<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
-					
-						</div>
+
 					</div>
+				</div>
 
 				// check admin
 				if (Model.IsAdmin)
 				{
 					<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)" />
 				}
-		<br />
-		}
+				isFirst = false;
+			}
 	</div>
 	string controllerName = "Post";
 	string actionName = "Index";
