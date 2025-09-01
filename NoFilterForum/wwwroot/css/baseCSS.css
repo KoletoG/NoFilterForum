@@ -104,6 +104,23 @@
     /*
         Change mainInput so it doesn't use important
     */
+.borderSecondary {
+    border-color: #236A96;
+    border-width: 2px;
+    border-style: solid;
+}
+.secondaryBorderStart {
+    border-left: 2px solid #236A96;
+}
+.secondaryBorderTop {
+    border-top: 2px solid #236A96;
+}
+.secondaryBorderEnd {
+    border-right: 2px solid #236A96;
+}
+.secondaryBorderBottom {
+    border-bottom: 2px solid #236A96;
+}
 .borderMain {
     border-color: #B58B64;
     border-width: 2px;

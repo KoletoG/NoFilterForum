@@ -30,7 +30,7 @@
 			@foreach (var post in Model.Posts)
 			{
 				// Add Description here
-				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom">	
+				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom ">	
 					<div class="col-8 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)">
 							<div class="col underlinehover fs-5 fw-bold @(post.IsSeen ? "secondaryText" : "mainText")">
