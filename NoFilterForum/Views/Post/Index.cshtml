@@ -16,6 +16,10 @@
 	color: gray;
 	}
 </style>
+<head>
+
+	<script src="~/js/JSMarkSeenPosts.js" asp-append-version="true"></script>
+</head>
 <body class="mainBG">
 	@{
 		<div class="container secondaryBG shadow p-3">
@@ -30,10 +34,10 @@
 			@foreach (var post in Model.Posts)
 			{
 				// Add Description here
-				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom ">	
+				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom" onload="markSeenPost('@post.Id')">	
 					<div class="col-8 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)">
-							<div class="col underlinehover fs-5 fw-bold mainText)">
+							<div class="col underlinehover fs-5 fw-bold mainText" id="@(post.Id)_title">
 								@post.Title
 							</div>
 							<div class="fs-6 fst-italic secondaryText truncate-multiline">
@@ -42,6 +46,9 @@
 						</a>
 						<h6 class="mainText text-end mt-1"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
 
+						<script>
+							markSeenPost(`@post.Id`);
+						</script>
 					</div>
 					<div class="col-1 text-center align-self-center fs-6 borderStart borderEnd">
 						<div class="@post.ColorOfLikeDislike">
