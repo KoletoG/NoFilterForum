@@ -33,7 +33,7 @@
 				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom ">	
 					<div class="col-8 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)">
-							<div class="col underlinehover fs-5 fw-bold @(post.IsSeen ? "secondaryText" : "mainText")">
+							<div class="col underlinehover fs-5 fw-bold mainText)">
 								@post.Title
 							</div>
 							<div class="fs-6 fst-italic secondaryText truncate-multiline">

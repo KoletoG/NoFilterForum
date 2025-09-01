@@ -35,8 +35,7 @@ namespace Web.Mappers
             Title = dto.Title,
             Role= dto.Role,
             Username= dto.Username,
-            UserImageUrl = dto.ImageUrl,
-            IsSeen= dto.IsSeen
+            UserImageUrl = dto.ImageUrl
         };
         public static GetIndexPostRequest MapToRequest(int page, string titleOfSection,string userId) => new(titleOfSection, page,PostConstants.PostsPerSection,userId);
         public static DeletePostRequest MapToRequest(DeletePostViewModel vm, string userId) => new(vm.PostId, userId);

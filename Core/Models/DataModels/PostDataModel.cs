@@ -17,7 +17,6 @@ namespace NoFilterForum.Core.Models.DataModels
         public ICollection<ReplyDataModel> Replies { get; private init; }
         public bool IsPinned { get; private set; }
         public SectionDataModel Section { get; private set; }
-        public ICollection<string> SeenByUserIds { get; private set; }
         public void TogglePin() => IsPinned = !IsPinned;
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public void IncrementLikes() => Likes++;
@@ -32,7 +31,6 @@ namespace NoFilterForum.Core.Models.DataModels
             Replies = new List<ReplyDataModel>();
             Likes = 0;
             IsPinned = false;
-            SeenByUserIds = new HashSet<string>();
         }
         private PostDataModel()
         {

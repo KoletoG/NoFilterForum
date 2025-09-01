@@ -16,7 +16,6 @@ namespace Web.ViewModels.Post
         public required string UserImageUrl { get; set; }
         public short PostLikes { get; init; }
         public string ColorOfLikeDislike { get; private set; }
-        public required bool IsSeen { get; init; }
         public PostIndexItemViewModel(short postLikes,string body)
         {
             PostLikes = postLikes;

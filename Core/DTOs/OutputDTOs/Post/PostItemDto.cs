@@ -7,5 +7,5 @@ using Core.Enums;
 
 namespace Core.Models.DTOs.OutputDTOs.Post
 {
-    public record PostItemDto(string Id, string Username, UserRoles Role, string Title, bool IsPinned, DateTime DateCreated, string ImageUrl, short PostLikes, string Body, bool IsSeen);
+    public record PostItemDto(string Id, string Username, UserRoles Role, string Title, bool IsPinned, DateTime DateCreated, string ImageUrl, short PostLikes, string Body);
 }

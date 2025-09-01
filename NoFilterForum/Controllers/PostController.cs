@@ -135,24 +135,6 @@ namespace Web.Controllers
 
             return View(postIndexViewModel);
         }
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UpdateSeenState([FromBody] string postId,CancellationToken cancellationToken)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId is null)
-            {
-                return Unauthorized();
-            }
-            var result = await _postService.UpdateSeenAsync(userId, postId, cancellationToken);
-            return result switch
-            {
-                PostResult.Success => NoContent(),
-                PostResult.UpdateFailed => Problem(),
-                PostResult.NotFound => NotFound(),
-                _ => Unauthorized()
-            };
-        }
         [HttpPost] 
         [Authorize]
         [ValidateAntiForgeryToken]
