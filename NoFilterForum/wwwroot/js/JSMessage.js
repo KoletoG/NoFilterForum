@@ -3,12 +3,26 @@ const deletedMessageText = "Deleted message";
 let latestSeenMessageId="";
 let latestAddedMessageId="";
 var form = document.getElementById('messageForm');
+let chatId="";
+let userRecId = "";
+let userSendId = "";
 form.addEventListener('submit',(event)=>{
 	event.preventDefault();
 });
+function setLatestAddedMessageId(latestMessageIdValue){
+	latestAddedMessageId = latestMessageIdValue;
+}
+function setChatId(chatIdValue){
+	chatId = chatIdValue;
+}
+function setUserRecipientId(userRecIdValue){
+	userRecId = userRecIdValue;
+}
+function setUserSendId(userSendIdValue){
+	userSendId = userSendIdValue;
+}
 connection.on("ReceiveMessage",(message,messageId) => {
 	showMessages(true,message,messageId,null);
-	let userRecId = document.getElementById('userRecId').value;
 	connection.invoke("FeedbackOfSeen",userRecId);
 	scrollToMessage(divCol1);
 });
@@ -16,19 +30,17 @@ connection.on("RemoveMessage",(messageId)=>{
 	replaceMessage(messageId);
 });
 connection.on("WasSeen",()=>{
-if(latestSeenMessageId!="")
-{
-	document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove(); // delete previously "Seen" message
-}
-addSeenMessage(latestAddedMessageId); // Add the new "seen" message in our current chat
-latestSeenMessageId = latestAddedMessageId;
-let chatId = document.getElementById('chatId').value;
-let userRecId = document.getElementById('userRecId').value;
-fetch('/Chat/UpdateLastMessage',{
-	method: 'POST',
-	headers:{'Content-Type':'application/json'},
-	body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userRecId})
-	}); // update the last seen message by the other user which in this case is latestAddedMessageId or latestSeenMessageId
+	if(latestSeenMessageId!="")
+	{
+		document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove(); // delete previously "Seen" message
+	}
+	addSeenMessage(latestAddedMessageId); // Add the new "seen" message in our current chat
+	latestSeenMessageId = latestAddedMessageId;
+	fetch('/Chat/UpdateLastMessage',{
+		method: 'POST',
+		headers:{'Content-Type':'application/json'},
+		body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userRecId})
+		}); // update the last seen message by the other user which in this case is latestAddedMessageId or latestSeenMessageId
 });
 function addSeenMessage(messageId)
 {
@@ -38,9 +50,7 @@ function addSeenMessage(messageId)
 	seenMessage.innerText="Seen";
 	col.appendChild(seenMessage);
 }
-document.addEventListener('DOMContentLoaded',(e)=>{
-latestAddedMessageId=document.getElementById('lastMessageCurrentId').value;
-let chatId = document.getElementById('chatId').value;
+function startAll(){
 fetch(`/Chat/GetLastMessage?chatId=${chatId}`) // When going to the chat, set "seen" to what message has been last seen
   .then(response => response.text())
   .then(data => {
@@ -52,16 +62,14 @@ fetch(`/Chat/GetLastMessage?chatId=${chatId}`) // When going to the chat, set "s
 	});
 
 connection.start().then(()=>{
-let userRecId = document.getElementById('userRecId').value;
 connection.invoke("FeedbackOfSeen",userRecId); // Send the other user's a response that we have seen his last message
 });
-});
+}
 function sendMessage(userRecipientId,message,messageId) 
 {
 	latestAddedMessageId = messageId; // Set the last added message from ourselves
     connection.invoke("SendMessage", userRecipientId,message,messageId)
         .catch(err => console.error(err));
-	var userSendId = document.getElementById('userSendId').value;
 	connection.invoke("ShowMessageIndex",message,userRecipientId,userSendId);
 }
 function removeMessage(userRecipientId,messageId)
@@ -154,7 +162,6 @@ function createForm(container, messageId,userRecipientId) {
 		e.preventDefault();
 		deleteMessage(userRecipientId,messageId,form);
 	});
-	var chatId = document.getElementById('chatId').value;
 	form.id=`form_${messageId}`;
 	const inputMessageId = document.createElement("input");
 	inputMessageId.type="hidden";

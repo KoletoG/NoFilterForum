@@ -6,11 +6,7 @@
 		@{
 			var messagesCount = Model.Messages.Count;
 		}
-		<input type="hidden" value="@Model.UserId" id="userSendId" />
-		<input type="hidden" value="@Model.User2Id" id="userRecId" />
-		<input type="hidden" value="@Model.ChatId" id="chatId" />
-		<input type="hidden" value="@Model.TakeLastMessageIdOfOtherUser()" id="lastMessageId" />
-		<input type="hidden" value="@Model.TakeLastMessageIdOfCurrentUser()" id="lastMessageCurrentId" />
+
 		@for (int i = 0; i < messagesCount; i++)
 		{
 			if (Model.Messages[i].UserId == Model.UserId)
@@ -64,6 +60,13 @@
 	<partial name="_ValidationScriptsPartial" />
 	<link rel="stylesheet" href="~/css/btnsCSS.css" asp-append-version="true" />
 	<script src="~/js/JSMessage.js" asp-append-version="true"></script>
+	<script>
+			 setLatestAddedMessageId(`@Model.TakeLastMessageIdOfCurrentUser()`);
+			 setChatId(`@Model.ChatId`);
+			 setUserRecipientId(`@Model.User2Id`);
+				 setUserSendId(`@Model.UserId`);
+				 startAll();
+		</script>
 	<script>
 		document.getElementById('row_{@(Model.Messages.Count - 1)}').scrollIntoView({behavior:"instant"});
 	</script>
