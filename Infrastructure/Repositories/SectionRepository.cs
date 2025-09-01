@@ -40,7 +40,7 @@ namespace NoFilterForum.Infrastructure.Repositories
                     .ThenByDescending(x => x.DateCreated)
                     .Skip((getIndexPostRequest.Page - 1) * getIndexPostRequest.PostsCount)
                     .Take(getIndexPostRequest.PostsCount)
-                    .Select(x => new PostItemDto(x.Id, x.User.UserName, x.User.Role, x.Title, x.IsPinned, x.DateCreated, x.User.ImageUrl, x.Likes,x.Content))
+                    .Select(x => new PostItemDto(x.Id, x.User.UserName, x.User.Role, x.Title, x.IsPinned, x.DateCreated, x.User.ImageUrl, x.Likes,x.Content,x.SeenByUserIds.Contains(getIndexPostRequest.UserId)))
                     .ToListAsync(cancellationToken);
         }
         public async Task CreateAsync(SectionDataModel section, CancellationToken cancellationToken)

@@ -10,6 +10,6 @@ namespace Core.DTOs.InputDTOs.Post
     public class UpdateSeenStateRequest
     {
         [Required]
-        public string PostId { get; set; }
+        public required string PostId { get; set; }
     }
 }

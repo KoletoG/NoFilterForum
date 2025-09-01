@@ -127,7 +127,7 @@ namespace Web.Controllers
             bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
             var pageTotalPagesDTO = await GetPagesTotalPagesDtoAsync(titleOfSection, page);
-            var getIndexPostRequest = PostMapper.MapToRequest(page, titleOfSection);
+            var getIndexPostRequest = PostMapper.MapToRequest(page, titleOfSection,user.Id);
             var postDtoList = await _postService.GetPostItemDtosByTitleAndPageAsync(getIndexPostRequest, cancellationToken);
             var postIndexItemsVMs = postDtoList.Select(PostMapper.MapToViewModel);
             
