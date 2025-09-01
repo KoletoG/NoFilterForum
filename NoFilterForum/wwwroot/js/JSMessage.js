@@ -2,6 +2,7 @@
 const deletedMessageText = "Deleted message";
 let latestSeenMessageId="";
 let latestAddedMessageId="";
+let latestAddedMessageByOtherUserId = "";
 var form = document.getElementById('messageForm');
 let chatId="";
 let userRecId = "";
@@ -20,6 +21,9 @@ function setUserRecipientId(userRecIdValue){
 }
 function setUserSendId(userSendIdValue){
 	userSendId = userSendIdValue;
+}
+function setLastOtherUserMessage(messageValue){
+	latestAddedMessageByOtherUserId = messageValue;
 }
 connection.on("ReceiveMessage",(message,messageId) => {
 	showMessages(true,message,messageId,null);
@@ -63,6 +67,11 @@ fetch(`/Chat/GetLastMessage?chatId=${chatId}`) // When going to the chat, set "s
 
 connection.start().then(()=>{
 connection.invoke("FeedbackOfSeen",userRecId); // Send the other user's a response that we have seen his last message
+fetch('/Chat/UpdateLastMessage',{
+		method: 'POST',
+		headers:{'Content-Type':'application/json'},
+		body:JSON.stringify({ChatId:chatId,MessageId:latestAddedMessageByOtherUserId,UserId:userSendId})
+		});
 });
 }
 function sendMessage(userRecipientId,message,messageId) 
