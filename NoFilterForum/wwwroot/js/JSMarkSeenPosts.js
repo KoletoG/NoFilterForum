@@ -3,9 +3,13 @@
     let wasSeen = localStorage.getItem(`${postId}_seen`);
     if(wasSeen == "1")
     {
-        let post = document.getElementById(`${postId}_title`);
-        post.classList.add('secondaryText');
-        post.style='font-style:italic';
-        post.classList.remove('mainText');
+        let title = document.getElementById(`${postId}_title`);
+        let body = document.getElementById(`${postId}_body`);
+        title.classList.add('secondaryText');
+        title.style='font-style:italic';
+        title.classList.remove('mainText');
+        body.classList.add('fst-italic');
+        body.classList.remove('mainText');
+        body.classList.add('secondaryText');
     }
 }

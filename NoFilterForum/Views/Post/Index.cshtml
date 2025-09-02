@@ -39,7 +39,7 @@
 							<div class="col underlinehover fs-5 fw-bold mainText" id="@(post.Id)_title">
 								@post.Title
 							</div>
-							<div class="fs-6 fst-italic secondaryText truncate-multiline">
+							<div class=" mainText truncate-multiline" style="font-size:15px" id="@(post.Id)_body">
 								@Html.Raw(post.Body)
 							</div>
 						</a>
