@@ -38,11 +38,14 @@ connection.on("WasSeen",()=>{
 	{
 		document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove(); // delete previously "Seen" message
 	}
+	let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 	addSeenMessage(latestAddedMessageId); // Add the new "seen" message in our current chat
 	latestSeenMessageId = latestAddedMessageId;
 	fetch('/Chat/UpdateLastMessage',{
 		method: 'POST',
-		headers:{'Content-Type':'application/json'},
+		headers:{'Content-Type':'application/json',
+			'RequestVerificationToken':token
+		},
 		body:JSON.stringify({ChatId:chatId,MessageId:latestSeenMessageId,UserId:userRecId})
 		}); // update the last seen message by the other user which in this case is latestAddedMessageId or latestSeenMessageId
 });
@@ -67,9 +70,12 @@ fetch(`/Chat/GetLastMessage?chatId=${chatId}`) // When going to the chat, set "s
 
 connection.start().then(()=>{
 connection.invoke("FeedbackOfSeen",userRecId); // Send the other user's a response that we have seen his last message
+let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 fetch('/Chat/UpdateLastMessage',{
 		method: 'POST',
-		headers:{'Content-Type':'application/json'},
+		headers:{'Content-Type':'application/json',
+			'RequestVerificationToken':token
+		},
 		body:JSON.stringify({ChatId:chatId,MessageId:latestAddedMessageByOtherUserId,UserId:userSendId})
 		});
 });

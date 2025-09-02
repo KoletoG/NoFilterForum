@@ -26,6 +26,7 @@ namespace Web.Controllers
             var chatIndexViewModels = listChatIndexDtos.Select(ChatMapper.MapToViewModel).ToList();
             return View(chatIndexViewModels);
         }
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetLastMessage([FromQuery] string chatId,CancellationToken cancellationToken)
         {
@@ -35,6 +36,7 @@ namespace Web.Controllers
             return Ok(result);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> UpdateLastMessage([FromBody] UpdateLastMessageViewModel viewModel, CancellationToken cancellationToken)
         {
