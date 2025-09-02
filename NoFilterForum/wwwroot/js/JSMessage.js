@@ -103,9 +103,13 @@ async function submitMessage(userRecipientId)
 }
 async function deleteMessage(userRecipientId, messageId,form)
 {
+	let afToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');;
 	let formData = new FormData(form);
 	let response = await fetch('/Message/Delete',{
 		method: 'POST',
+		headers:{
+			'RequestVerificationToken':afToken
+		},
 		body: formData
 		});
 	if(!response.ok){

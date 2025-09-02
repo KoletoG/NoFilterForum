@@ -35,6 +35,7 @@ namespace Web.Controllers
                 _ => Problem()
             };
         }
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Delete(DeleteMessageViewModel deleteMessageViewModel,CancellationToken cancellationToken)
