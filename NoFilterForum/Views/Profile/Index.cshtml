@@ -95,7 +95,7 @@
 					var textColor = count % 2 == 0 ? "secondaryText" : "mainText";
 					if (Model.Posts.TryGetValue(key, out var post))
 					{
-						<div class="border-bottom @classBodyColor p-1">
+						<div class="borderBottom @classBodyColor p-1">
 							<a asp-action="Index" class="@textColor text-center link-underline-opacity-10-hover" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@post.Id">
 								<div class="row">
 									<h5 class="text-center fw-bold fs-4">@post.Title</h5>
@@ -111,7 +111,7 @@
 					} // ADD DATE FOR POSTS WHEN REPLIES SHOWN
 					else if (Model.Replies.TryGetValue(key, out var reply))
 					{
-						<div class="border-bottom @classBodyColor p-1">
+						<div class="borderBottom @classBodyColor p-1">
 							<a asp-action="Index" class="text-center link-underline-opacity-10-hover" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
 								<div class="row">
 									<div class="col-6 borderEnd align-content-center">
