@@ -10,7 +10,7 @@ namespace Web.ViewModels
         public bool ColorRed { get; }
         public bool IsLiked { get; }
         public bool IsPost {  get; }
-        public string Style => ColorRed ? "color:red" : string.Empty;
+        public string Style => ColorRed ? "color:#236A96" : string.Empty;
         public string Label => IsLiked ? "Like" : "Dislike";
         public LikeDislikeViewModel(string id, bool isPost, bool isLike, bool isMarked)
         {
