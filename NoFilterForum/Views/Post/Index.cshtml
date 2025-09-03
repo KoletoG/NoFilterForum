@@ -44,11 +44,11 @@
 						isFirst = false;
 					}<div class="col-8 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)">
-							<div class="col underlinehover fs-5 fw-bold mainText" id="@(post.Id)_title">
-								@post.Title
+							<div class="col underlinehover fw-bold mainText" id="@(post.Id)_title">
+								<h5>@post.Title</h5>
 							</div>
 							<div class=" secondaryText truncate-multiline" style="font-size:15px" id="@(post.Id)_body">
-								@Html.Raw(post.Body)
+								<h6>@Html.Raw(post.Body)</h6>
 							</div>
 						</a>
 						<h6 class="mainText text-end mt-1"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>

@@ -1,7 +1,12 @@
 ﻿.mainBG {
     background: linear-gradient(90deg,#1a2766 0%,#1a2766 25%,#1a2766 75%,#0F365E 100%);
 }
-
+h6{
+    font-size:14px
+}
+h5{
+    font-size:18px;
+}
 .secondaryBG {
     background-color: rgba(0, 0, 0, 0.0);
 }
@@ -22,7 +27,7 @@
     font-family: 'Noto Sans Display',sans-serif;
 }
 .biggerText{
-    font-size:17px;
+    font-size:16px;
 }
 .smallerText{
     font-size:12px;
