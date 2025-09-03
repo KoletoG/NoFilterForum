@@ -78,7 +78,7 @@
 			}
 			if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 			{
-				<h6>The user has: @Model.Profile.WarningsCount warnings</h6>
+				<h6 class="mainText">The user has: <span style="color:red">@Model.Profile.WarningsCount</span> warnings</h6>
 					<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 			}
 		}

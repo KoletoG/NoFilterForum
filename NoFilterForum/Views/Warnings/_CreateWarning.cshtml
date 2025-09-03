@@ -5,6 +5,6 @@
 	@Html.AntiForgeryToken()
 	<input type="hidden" asp-for="UserId" />
 	<span asp-validation-for="Content" class="text-danger"></span>
-	<input asp-for="Content" />
-	<button type="submit">Give warning</button>
+	<input asp-for="Content" class="mainInput"/>
+	<button type="submit" class="mainBtn rounded-2">Give warning</button>
 </form>
