@@ -51,7 +51,7 @@
 								<h6>@Html.Raw(post.Body)</h6>
 							</div>
 						</a>
-						<h6 class="mainText text-end mt-1"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
+						<h6 class="mainText text-end mt-1" id="@(post.Id)_date"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
 
 						<script>
 							markSeenPost(`@post.Id`);
