@@ -33,6 +33,13 @@
 .blueText {
     color: deepskyblue;
 }
+.VIPText {
+    color: #FFDA61;
+    background-image: linear-gradient(45deg, #FFDA61 20%, #FFCD05 28%, #3780D4, #2729A8 );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .greenText{
     color:green;
 }
