@@ -172,6 +172,18 @@ h5{
 .mainNav {
     background: #B58B64;
 }
+.thirdInput {
+    border: 2px solid rgba(0, 0, 0, 0.0);
+    font-family: 'Merriweather',serif;
+    font-size: 17px;
+    font-weight: bold;
+}
+    .thirdInput:focus {
+        color: #1a2766;
+    }
+    .thirdInput:hover {
+        color: #1a2766;
+    }
 .truncate-multiline {
     display: -webkit-box;
     -webkit-box-orient: vertical;
