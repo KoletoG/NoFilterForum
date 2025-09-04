@@ -10,6 +10,7 @@ namespace Web.ViewModels.Post
         public required string Username { get; set; }
         public string Body {  get; init; }
         public UserRoles Role { get; set; }
+        public required int RepliesCount { get;init;}
         public required string Title { get; set; }
         public bool IsPinned { get; set; }
         public DateTime DateCreated { get; set; }

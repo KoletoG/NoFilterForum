@@ -42,7 +42,7 @@
 							<partial name="_PinPost" model="new PinPostPartialViewModel(post.IsPinned,post.Id)" />
 						}
 						isFirst = false;
-					}<div class="col-8 me-2 ms-4 mt-1 align-self-center">
+					}<div class="col-7 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)">
 							<div class="col underlinehover fw-bold mainText" id="@(post.Id)_title">
 								<h5>@post.Title</h5>
@@ -57,12 +57,17 @@
 							markSeenPost(`@post.Id`);
 						</script>
 					</div>
-					<div class="col-1 text-center align-self-center fs-6 borderStart borderEnd">
-						<div class="@post.ColorOfLikeDislike">
-							@post.PostLikes
-						</div>
+					<div class="col-1 ms-5 mt-2 text-center align-self-center borderStart borderEnd">
+						<h6 class="mainText mt-1">
+							Likes: <span class="@post.ColorOfLikeDislike">@post.PostLikes</span>
+						</h6>
 					</div>
-					<div class="col-2 mt-2 ms-5 text-center rounded-2">
+					<div class="col-1 mt-2 ms-5 text-center align-self-center borderStart borderEnd">
+						<h6 class="mainText mt-1">
+							Replies: <span class="secondaryText">@post.RepliesCount</span>
+						</h6>
+					</div>
+					<div class="col-1 mt-2 ms-5 text-center">
 						<partial name="_RoleColor" model="new RoleViewModel(post.Role,post.Id,post.Username,false, post.UserImageUrl)" />
 
 					</div>
