@@ -4,6 +4,6 @@
     if(wasSeen == "1")
     {
         let date = document.getElementById(`${postId}_date`);
-        date.innerHTML+=" / seen";
+        date.innerHTML+=' <span class="secondaryText">Seen</span> ';
     }
 }
