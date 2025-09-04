@@ -55,6 +55,18 @@ namespace Web.Controllers
                 _ => Problem("Invalid result")
             };
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Search( string text)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null)
+            {
+                return Unauthorized();
+            }
+            var result = await _postService.SearchByText(text);
+            return Ok(result);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]

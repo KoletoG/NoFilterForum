@@ -7,6 +7,8 @@ namespace NoFilterForum.Core.Interfaces.Repositories
 {
     public interface IPostRepository
     {
+        public Task<IReadOnlyCollection<PostDataModel>> GetBySearchText(string text);
+        public IQueryable<PostDataModel> GetAll();
         public Task<PostDataModel?> GetByIdAsync(string id);
         public Task<PostDataModel?> GetWithRepliesByIdAsync(string id, CancellationToken cancellationToken);
         public Task<PostDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken);

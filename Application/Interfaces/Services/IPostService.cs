@@ -11,6 +11,7 @@ namespace NoFilterForum.Core.Interfaces.Services
 {
     public interface IPostService
     {
+        public Task<IReadOnlyCollection<PostDataModel>> SearchByText(string text);
         public Task<PostResult> PinPostAsync(string postId, CancellationToken cancellationToken);
         public Task<bool> HasTimeoutAsync(string userId, CancellationToken cancellationToken);
         public Task<PostResult> LikeAsync(LikeDislikeRequest likeDislikeRequest, CancellationToken cancellationToken);

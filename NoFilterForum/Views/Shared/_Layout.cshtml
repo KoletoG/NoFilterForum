@@ -43,8 +43,11 @@
                             <a id="notificationLink" class="nav-link  navText" asp-area="" asp-action="Index" asp-controller="Notifications">Notifications</a>
                         </li>
                         <li class="nav-item">
-                            <input type="number" class="navText secondaryBG thirdInput nav-link" placeholder="Search..."/>
-                        </li>
+                            <form asp-action="Search" asp-controller="Post" method="get">
+                                <input type="text" class="navText secondaryBG thirdInput nav-link" name="text" placeholder="Search..." />
+                                <button type="submit">Search</button>
+                            </form>
+                             </li>
                     </ul>
                         <partial name="_LoginPartial" />
                 </div>
@@ -56,7 +59,11 @@
             @RenderBody()
         </main>
     </div>
-
+    <script>
+        function searchText(text){
+            fetch(`/Post/Search?text=${text}`);
+        }
+        </script>
     <script src="~/js/signalr.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

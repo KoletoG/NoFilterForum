@@ -16,6 +16,14 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             _context = context;
         }
+        public IQueryable<PostDataModel> GetAll()
+        {
+            return _context.PostDataModels;
+        }
+        public async Task<IReadOnlyCollection<PostDataModel>> GetBySearchText(string text)
+        {
+            return await _context.PostDataModels.FromSqlRaw("SELECT * FROM PostDataModels WHERE CONTAINS(Title,{0})",text).ToListAsync();
+        }
         public async Task<PostDataModel?> GetByIdAsync(string id)
         {
             return await _context.PostDataModels.FindAsync(id);

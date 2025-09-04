@@ -50,6 +50,10 @@ namespace NoFilterForum.Infrastructure.Services
         public async Task<string?> GetPostIdByReplyId(string replyId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<string?>($"postIdByReplyId_{replyId}",_unitOfWork.Replies.GetPostIdByIdAsync,replyId, cancellationToken);
         public async Task<PostReplyIndexDto?> GetPostReplyIndexDtoByIdAsync(string postId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<PostReplyIndexDto?>($"postReplyIndexById_{postId}", _unitOfWork.Posts.GetPostReplyIndexDtoByIdAsync,postId, cancellationToken);
         public async Task<IDictionary<string,ProfilePostDto>> GetListProfilePostDtoAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue($"profilePostDtoById_{userId}",_unitOfWork.Posts.GetListProfilePostDtoByUserIdAsync,userId,cancellationToken);
+        public async Task<IReadOnlyCollection<PostDataModel>> SearchByText(string text)
+        {
+            return await _unitOfWork.Posts.GetBySearchText(text);
+        }
         public async Task<bool> HasTimeoutAsync(string userId, CancellationToken cancellationToken)
         {
             var dateOfLastPost = await _unitOfWork.Posts.GetLastPostDateByUsernameAsync(userId, cancellationToken);
