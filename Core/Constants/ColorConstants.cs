@@ -14,8 +14,8 @@ namespace Core.Constants
         public static readonly string TextDinosaur = "text-primary";
         public static readonly string TextRegular = "text-success";
         public static readonly string TextDefault = "text-black-50";
-        public static readonly string TextLikeDislike = "secondaryText";
-        public static readonly string TextNoLikeDislike = "secondaryText";
+        public static readonly string TextNotNull = "secondaryText";
+        public static readonly string TextNull = "mainText fst-italic";
         public static readonly string BorderNewbie = "mainText";
         public static readonly string BorderAdmin = "border-danger";
         public static readonly string BorderVIP = "border-warning";
