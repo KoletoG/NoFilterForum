@@ -110,14 +110,30 @@ h5{
     .mainInput::placeholder {
         color: #B58B64 !important;
     }
+
     .mainInput :focus {
         color: #B58B64 !important;
+    }
+.secondaryInput {
+    color: cornflowerblue !important;
+    background: #1a2766;
+    border-color: #B58B64;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+}
+    .secondaryInput::placeholder {
+        color: cornflowerblue !important;
+    }
+
+    .secondaryInput :focus {
+        color: cornflowerblue !important;
     }
     /*
         Change mainInput so it doesn't use important
     */
 .borderSecondary {
-    border-color: #236A96;
+    border-color: cornflowerblue;
     border-width: 2px;
     border-style: solid;
 }
