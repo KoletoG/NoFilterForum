@@ -92,13 +92,14 @@
 				@foreach (var key in Model.UserIdDate.Keys)
 				{
 					var classBodyColor = count % 2 == 0 ? "thirdBG" : string.Empty;
-					var textColor = count % 2 == 0 ? "secondaryText" : "mainText";
+					var textColor = count % 2 == 0 ? "navText" : "mainText";
+					var borderColor = count % 2 == 0 ? "thirdBorderEnd" : "borderEnd";
 					if (Model.Posts.TryGetValue(key, out var post))
 					{
 						<div class="borderBottom @classBodyColor p-1">
 							<a asp-action="Index" class="@textColor text-center link-underline-opacity-10-hover" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@post.Id">
 								<div class="row">
-									<h5 class="text-center fw-bold fs-4">@post.Title</h5>
+									<h5 class="text-center fw-bold">@post.Title</h5>
 								</div>
 							</a>
 							<div class="row">
@@ -114,7 +115,7 @@
 						<div class="borderBottom @classBodyColor p-1">
 							<a asp-action="Index" class="text-center link-underline-opacity-10-hover" style="text-decoration:none" asp-controller="Reply" asp-route-postId="@reply.PostId" asp-route-replyId="@HttpUtility.UrlEncode(reply.Id)">
 								<div class="row">
-									<div class="col-6 borderEnd align-content-center">
+									<div class="col-6 @borderColor align-content-center">
 										<h5 class="fst-italic @textColor text-truncate">@reply.Content</h5>
 									</div>
 									<div class="col-6  align-content-center">
@@ -123,7 +124,7 @@
 								</div>
 							</a>
 							<div class="row">
-								<div class="col-6 borderEnd text-center @textColor">
+								<div class="col-6 @borderColor text-center @textColor">
 									@reply.Created.ToShortDateString()
 								</div>
 								<div class="col-6 text-center @textColor">

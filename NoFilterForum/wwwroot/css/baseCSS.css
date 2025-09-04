@@ -6,7 +6,6 @@ h6{
 }
 h5{
     font-size:18px;
-    border-top-
 }
 .secondaryBG {
     background-color: rgba(0, 0, 0, 0.0);
@@ -24,7 +23,7 @@ h5{
     font-weight:bold;
 }
 .secondaryText {
-    color: #236A96;
+    color: cornflowerblue;
     font-family: 'Noto Sans Display',sans-serif;
 }
 .biggerText{
@@ -144,6 +143,9 @@ h5{
 }
 .borderEnd {
     border-right: 2px solid #B58B64;
+}
+.thirdBorderEnd {
+    border-right: 2px solid #1a2766;
 }
 .borderTop {
     border-top: 2px solid #B58B64;
