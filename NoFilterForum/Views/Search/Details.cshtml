@@ -1,0 +1,7 @@
+﻿@using Web.ViewModels.Search
+@model IEnumerable<SearchViewModel>
+
+@foreach(var item in Model)
+{
+	<h6>@item.PostTitle</h6>
+}

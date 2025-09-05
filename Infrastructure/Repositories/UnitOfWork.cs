@@ -24,7 +24,8 @@ namespace Infrastructure.Repositories
                           ISectionRepository sectionRepository,
                           IReportRepository reportRepository, 
                           IChatRepository chatRepository,
-                          IMessageRepository messageRepository)
+                          IMessageRepository messageRepository,
+                          ISearchRepository searchRepository)
         {
             _context = context;
             Posts = postRepository;
@@ -36,6 +37,7 @@ namespace Infrastructure.Repositories
             Warnings = warningRepository;
             Chats = chatRepository;
             Message = messageRepository;
+            Search = searchRepository;
         }
 
         public IPostRepository Posts { get; }
@@ -47,6 +49,7 @@ namespace Infrastructure.Repositories
         public IWarningRepository Warnings { get; }
         public IChatRepository Chats { get; }
         public IMessageRepository Message { get; }
+        public ISearchRepository Search { get; }
         public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
         public async Task CommitAsync(CancellationToken token) => await _context.SaveChangesAsync(token);
         public async Task BeginTransactionAsync() => _transaction = await _context.Database.BeginTransactionAsync();

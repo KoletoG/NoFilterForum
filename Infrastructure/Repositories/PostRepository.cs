@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs.OutputDTOs.Profile;
+﻿using Core.DTOs.OutputDTOs.Search;
+using Core.Models.DTOs.OutputDTOs.Profile;
 using Core.Models.DTOs.OutputDTOs.Reply;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -19,10 +20,6 @@ namespace NoFilterForum.Infrastructure.Repositories
         public IQueryable<PostDataModel> GetAll()
         {
             return _context.PostDataModels;
-        }
-        public async Task<IReadOnlyCollection<PostDataModel>> GetBySearchText(string text)
-        {
-            return await _context.PostDataModels.FromSqlRaw("SELECT * FROM PostDataModels WHERE CONTAINS(Title,{0})",text).ToListAsync();
         }
         public async Task<PostDataModel?> GetByIdAsync(string id)
         {

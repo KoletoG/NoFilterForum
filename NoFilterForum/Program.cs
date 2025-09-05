@@ -90,6 +90,8 @@ namespace Web
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<IMessageFactory, MessageFactory>();
             builder.Services.AddScoped<INotificationHub,NotificationHubService>();
+            builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+            builder.Services.AddScoped<ISearchService, SearchService>();
             builder.Services.ConfigureApplicationCookie(c =>
             {
                 c.Cookie.HttpOnly = true;
