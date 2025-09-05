@@ -172,8 +172,11 @@ h5{
 .mainNav {
     background: #B58B64;
 }
+input[type="search"]:focus {
+    outline: none;
+    box-shadow: none;
+}
 .thirdInput {
-    border: 2px solid rgba(0, 0, 0, 0.0);
     font-family: 'Merriweather',serif;
     font-size: 17px;
     font-weight: bold;
