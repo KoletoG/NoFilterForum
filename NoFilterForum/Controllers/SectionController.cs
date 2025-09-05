@@ -20,7 +20,6 @@ namespace Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            // Add errors check 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
             {
