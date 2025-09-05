@@ -3,73 +3,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NoFilterForum</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/NoFilterForum.styles.css" asp-append-version="true" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+	<meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - NoFilterForum</title>
+	<script type="importmap"></script>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/NoFilterForum.styles.css" asp-append-version="true" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mainNav borderMain box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand navText" asp-area="" asp-controller="Section" asp-action="Index">NoFilterForum</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link  navText" asp-area="" asp-controller="Section" asp-action="Index">Sections</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  navText" asp-area="" asp-controller="Chat" asp-action="Index">Chat</a>
-                        </li>
-                        @if(UserConstants.adminNames.Contains(this.User.Identity.Name))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link navText" asp-area="" asp-controller="Admin" asp-action="Index">AdminPanel</a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a id="notificationLink" class="nav-link  navText" asp-area="" asp-action="Index" asp-controller="Notifications">Notifications</a>
-                        </li>
-                        <li class="nav-item">
-                            <form asp-action="Details" asp-controller="Search" method="get">
-                                <input type="text" class="navText secondaryBG thirdInput nav-link" name="text" placeholder="Search..." />
-                                <button type="submit">Search</button>
-                            </form>
-                             </li>
-                    </ul>
-                        <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    <script>
-        function searchText(text){
-            fetch(`/Post/Search?text=${text}`);
-        }
-        </script>
-    <script src="~/js/signalr.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/JSNotification.js" asp-append-version="true" defer></script>
-    <link rel="stylesheet" href="~/css/baseCSS.css" asp-append-version="true"/>
-    @await RenderSectionAsync("Scripts", required: false)
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mainNav borderMain box-shadow mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand navText" asp-area="" asp-controller="Section" asp-action="Index">NoFilterForum</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							<a class="nav-link  navText" asp-area="" asp-controller="Section" asp-action="Index">Sections</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link  navText" asp-area="" asp-controller="Chat" asp-action="Index">Chat</a>
+						</li>
+						@if (UserConstants.adminNames.Contains(this.User.Identity.Name))
+						{
+							<li class="nav-item">
+								<a class="nav-link navText" asp-area="" asp-controller="Admin" asp-action="Index">AdminPanel</a>
+							</li>
+						}
+						<li class="nav-item">
+							<a id="notificationLink" class="nav-link  navText" asp-area="" asp-action="Index" asp-controller="Notifications">Notifications</a>
+						</li>
+						<li class="nav-item">
+							<form asp-action="Details" asp-controller="Search" method="get">
+								<div class="row g-0">
+									<div class="col-11">
+										<input type="search" oninput="showSearch(event)" class="navText secondaryBG thirdInput nav-link" name="text" placeholder="Search..." />
+
+									</div>
+									<div class="col-1 align-content-center">
+
+										<button type="submit" id="searchBtn" style="background:none;border:none" hidden><img src="~/images/searchIcon.png" style="height:25px;width:25px" /></button>
+									</div>
+								</div>
+							</form>
+						</li>
+					</ul>
+					<partial name="_LoginPartial" />
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+	<script>
+		function showSearch(e){
+		let searchIcon = document.getElementById('searchBtn');
+		if(e.target.value==""){
+		searchIcon.hidden=true;
+		}
+		else{
+		searchIcon.hidden=false;
+		}
+		}
+	</script>
+	<script src="~/js/signalr.min.js" asp-append-version="true"></script>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/JSNotification.js" asp-append-version="true" defer></script>
+	<link rel="stylesheet" href="~/css/baseCSS.css" asp-append-version="true" />
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
