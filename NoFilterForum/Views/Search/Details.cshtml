@@ -1,7 +1,16 @@
 ﻿@using Web.ViewModels.Search
 @model IEnumerable<SearchViewModel>
 
-@foreach(var item in Model)
-{
-	<h6>@item.PostTitle</h6>
-}
+<body class="mainBG">
+	<div class="container secondaryBG borderMain shadow pb-2 pt-2">
+		@foreach (var item in Model)
+		{
+			<div class="row">
+				<a asp-action="Index" asp-controller="Reply" asp-route-postId="@item.PostId" style="text-decoration:none">
+					<h5 class="mainText">@item.PostTitle</h5>
+					<h6 class="secondaryText text-truncate secondaryBorderBottom pb-1">@Html.Raw(item.PostBody)</h6>
+				</a>
+			</div>
+		}
+	</div>
+</body>
