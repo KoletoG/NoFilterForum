@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
         private readonly ApplicationDbContext _context = context;
         public async Task<IReadOnlyCollection<SearchPostDto>> GetPostAsync(string text)
         {
-            return await _context.PostDataModels.FromSqlRaw("SELECT Id,Title,Content FROM PostDataModels WHERE CONTAINS (Title,{0})", text)
+            return await _context.PostDataModels.FromSqlInterpolated($"SELECT Id,Title,Content FROM PostDataModels WHERE CONTAINS (Title,{text})")
                 .Select(x=>new SearchPostDto(x.Id,x.Title,x.Content))
                 .ToListAsync();
         }
