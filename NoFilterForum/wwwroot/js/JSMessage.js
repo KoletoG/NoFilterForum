@@ -55,6 +55,7 @@ function addSeenMessage(messageId)
 	let seenMessage = document.createElement('h6');
 	seenMessage.id = `h6OfSeenMessage_${messageId}`;
 	seenMessage.innerText="Seen";
+	seenMessage.classList.add('mb-0');
 	col.appendChild(seenMessage);
 }
 function startAll(){
@@ -137,7 +138,7 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 	var divRow =document.createElement('div');
 	divRow.classList.add('row','mb-3');
 	var divColSecondary = document.createElement('div');
-	divColSecondary.classList.add('col-5','fst-italic','fw-lighter', isFromSignalR ? 'text-start' : 'text-end', 'd-flex' ,isFromSignalR ? 'justify-content-start' : 'justify-content-end' ,'align-items-center' ,'gap-2');
+	divColSecondary.classList.add('col-5','d-flex','align-items-center','fst-italic','fw-lighter','secondaryText', isFromSignalR ? 'text-start' : 'text-end', 'd-flex' ,isFromSignalR ? 'justify-content-start' : 'justify-content-end' ,'align-items-center' ,'gap-2');
 	divColSecondary.innerText = showTime(date);
 	divColSecondary.id=`colOfLastMessage_${messageId}`;
 	if(!isFromSignalR)
@@ -151,10 +152,11 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 		hideButtonDelete(messageId);
 	})
 	var divColMain = document.createElement('div');
-	divColMain.classList.add('col-7','border','border-2',isFromSignalR ? 'border-primary-subtle':null,isFromSignalR ? 'bg-primary-subtle' :'bg-body-secondary', 'text-break','rounded-2');
+	divColMain.classList.add('col-7',isFromSignalR ? null :'borderMain','d-flex','align-items-center',isFromSignalR ? 'thirdBG':'transparentBG','text-break','rounded-2');
 	var h6message=document.createElement('h6');
 	h6message.innerText=messageText;
 	h6message.id=`message_${messageId}`;
+	h6message.classList.add(isFromSignalR ? "chatText1" : "chatText2",'mb-0' );
 	divColMain.appendChild(h6message);
 	divRow.appendChild(isFromSignalR ? divColMain : divColSecondary);
 	divRow.appendChild(isFromSignalR ? divColSecondary : divColMain);

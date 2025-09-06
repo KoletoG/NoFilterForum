@@ -132,6 +132,16 @@ h5{
     /*
         Change mainInput so it doesn't use important
     */
+.chatText1 {
+    color: #1a2766;
+    font-family: 'Merriweather',serif;
+    font-size: 14px;
+}
+.chatText2 {
+    color: #B58B64;
+    font-family: 'Merriweather',serif;
+    font-size: 14px;
+}
 .borderSecondary {
     border-color: cornflowerblue;
     border-width: 2px;
