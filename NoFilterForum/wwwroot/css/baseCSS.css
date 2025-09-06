@@ -159,6 +159,9 @@ h5{
 .secondaryBorderBottom {
     border-bottom: 2px solid #236A96;
 }
+#sendMessageIcon:hover{
+    opacity:0.5
+}
 .borderMain {
     border-color: #B58B64;
     border-width: 2px;
