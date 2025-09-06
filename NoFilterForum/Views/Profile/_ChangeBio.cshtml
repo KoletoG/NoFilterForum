@@ -1,12 +1,19 @@
 ﻿@using Web.ViewModels.Profile
 @model ChangeBioViewModel
+<div class="row g-2 flex-grow-0">
+	<div class="col flex-grow-0">
 
-<button class="btn mainBtn mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBio" aria-expanded="false" aria-controls="collapseBio">
-	Change Bio
-</button>
-<form asp-action="ChangeBio" id="collapseBio" asp-controller="Profile" class="collapse" method="post">
-	@Html.AntiForgeryToken()
-	<span asp-validation-for="Bio" class="text-danger"></span>
-	<textarea asp-for="Bio" cols="50" rows="3" class="mainInput ps-1" placeholder="Type your bio..."></textarea>
-		<button type="submit" class="btn mainBtn mb-5">Save Bio</button>
-	</form>
+		<button class="btn mainBtn mb-2" type="button" style="font-size:13px" data-bs-toggle="collapse" data-bs-target="#collapseBio" aria-expanded="false" aria-controls="collapseBio">
+			Change Bio
+		</button>
+	</div>
+	<div class="col">
+
+		<form asp-action="ChangeBio" id="collapseBio" asp-controller="Profile" class="collapse align-items-center d-flex" method="post">
+			@Html.AntiForgeryToken()
+			<span asp-validation-for="Bio" class="text-danger"></span>
+			<textarea asp-for="Bio" cols="83" rows="2" style="font-size:13px" class="mainInput ps-1" placeholder="Type your bio..."></textarea>
+			<button type="submit" class="btn mainBtn ms-2" style="font-size:13px">Save Bio</button>
+		</form>
+	</div>
+</div>
