@@ -138,7 +138,7 @@ function showMessages(isFromSignalR,messageText,messageId,userRecipientId)
 	var divRow =document.createElement('div');
 	divRow.classList.add('row','mb-3');
 	var divColSecondary = document.createElement('div');
-	divColSecondary.classList.add('col-5','d-flex','align-items-center','fst-italic','fw-lighter','secondaryText', isFromSignalR ? 'text-start' : 'text-end', 'd-flex' ,isFromSignalR ? 'justify-content-start' : 'justify-content-end' ,'align-items-center' ,'gap-2');
+	divColSecondary.classList.add('col-5','d-flex','align-items-center','fst-italic','secondaryText', isFromSignalR ? 'text-start' : 'text-end', 'd-flex' ,isFromSignalR ? 'justify-content-start' : 'justify-content-end' ,'align-items-center' ,'gap-2');
 	divColSecondary.innerText = showTime(date);
 	divColSecondary.id=`colOfLastMessage_${messageId}`;
 	if(!isFromSignalR)

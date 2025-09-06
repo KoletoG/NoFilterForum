@@ -12,7 +12,7 @@
 			if (Model.Messages[i].UserId == Model.UserId)
 			{
 				<div class="row mb-3" id="row_{@i}" onmouseover="showButtonDelete(`@Model.Messages[i].Id`)" onmouseout="hideButtonDelete(`@Model.Messages[i].Id`)">
-					<div id="colOfLastMessage_@Model.Messages[i].Id" class="col-5 align-items-center d-flex fst-italic fw-lighter text-end d-flex secondaryText justify-content-end align-items-center gap-2">
+					<div id="colOfLastMessage_@Model.Messages[i].Id" class="col-5 align-items-center fst-italic text-end d-flex secondaryText justify-content-end gap-2">
 						@Model.CalculateTime(Model.Messages[i].DateTime)
 						<form onsubmit="deleteMessage('@Model.User2Id','@Model.Messages[i].Id',this); return false;" id="formDelete">
 							<input type="hidden" value="@Model.Messages[i].Id" name="MessageId" />
@@ -31,7 +31,7 @@
 					<div class="col-7 thirdBG  text-break rounded-2  d-flex align-items-center">
 						<h6 class="chatText1 mb-0" id="message_@Model.Messages[i].Id">@Model.Messages[i].Message</h6>
 					</div>
-					<div class="col-5 d-flex align-items-center fst-italic fw-lighter secondaryText text-start d-flex align-items-center" id="colOfLastMessage_@Model.Messages[i].Id">
+					<div class="col-5 d-flex align-items-center fst-italic secondaryText text-start d-flex align-items-center" id="colOfLastMessage_@Model.Messages[i].Id">
 						@Model.CalculateTime(Model.Messages[i].DateTime)
 					</div>
 				</div>
