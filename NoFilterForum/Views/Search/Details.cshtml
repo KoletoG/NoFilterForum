@@ -1,8 +1,15 @@
 ﻿@using Web.ViewModels.Search
-@model IEnumerable<SearchViewModel>
+@model IReadOnlyCollection<SearchViewModel>
 
 <body class="mainBG">
 	<div class="container secondaryBG borderMain shadow pb-2 pt-2">
+		@if (!Model.Any())
+		{
+
+			<div class="row">
+					<h5 class="mainText fst-italic">No posts found</h5>
+			</div>
+		}
 		@foreach (var item in Model)
 		{
 			<div class="row">

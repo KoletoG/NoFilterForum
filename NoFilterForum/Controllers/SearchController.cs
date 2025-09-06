@@ -15,7 +15,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Details(string text)
         {
             var dtos = await _searchService.GetPostsAsync(text);
-            var vm = dtos.Select(SearchMapper.MapToViewModel);
+            var vm = dtos.Select(SearchMapper.MapToViewModel).ToList();
             return View(vm);
         }
     }
