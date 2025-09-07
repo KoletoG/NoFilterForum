@@ -8,7 +8,15 @@
 <body class="mainBG">
 	<div class="container secondaryBG shadow p-3">
 		@{
-			bool isFirst = true;
+			bool isFirst;
+			if (Model.Count > 1)
+			{
+				 isFirst = true;
+			}
+			else
+			{
+				 isFirst = false;
+			}
 		}
 		@foreach (var chat in Model)
 		{
