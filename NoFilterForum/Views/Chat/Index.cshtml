@@ -11,23 +11,37 @@
 		{
 			<div class=" borderMain p-2">
 
-				<div class="row mt-2">
-
-					<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" style="text-decoration:none;" class="text-center mainText fw-bold fs-4 @chat.ColorClass">@chat.Username</a>
-				</div>
 				<div class="row">
+					<div class="col-2"></div>
+					<div class="col-8 justify-content-center text-center">
+						<div class="row">
+							<div class="col-12">
+								<a asp-action="Details" asp-controller="Chat" asp-route-id="@chat.ChatId" style="text-decoration:none;" class="text-center mainText fw-bold fs-4 @chat.ColorClass">@chat.Username</a>
 
-					@if (chat.LastMessage is not null)
-					{
-						<h5 class="text-center fst-italic secondaryText text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
-						<h6 class="text-center fst-italic mainText text-truncate" id="messageDate_@chat.UserId">@chat.LastMessage.DateTime.ToShortTimeString()</h6>
-					}
-					else
-					{
-						<h5 class="text-center fst-italic text-black-50" id="message_@chat.UserId">Be the first to send a message!</h5>
-					}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+
+								@if (chat.LastMessage is not null)
+								{
+									<h5 class="text-center fst-italic secondaryText text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
+									<h6 class="text-center fst-italic mainText text-truncate" id="messageDate_@chat.UserId">@chat.LastMessage.DateTime.ToShortTimeString()</h6>
+								}
+								else
+								{
+									<h5 class="text-center fst-italic text-black-50" id="message_@chat.UserId">Be the first to send a message!</h5>
+								}
+							</div>
+						</div>
+					</div>
+
+					<div class="col-2 d-flex align-items-center">
+						<img src="@chat.ImageUrl" style="height:75px;width:75px" class="@chat.BorderColor border-1 border" />
+					</div>
 				</div>
-			</div>
+
+				</div>
 		}
 	</div>
 </body>
