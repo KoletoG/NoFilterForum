@@ -10,6 +10,7 @@ namespace Core.Models.DataModels
         public List<MessageDataModel> Messages { get; private set; }
         public UserDataModel User1 { get; private set; }
         public UserDataModel User2 {  get; private set; }
+        public DateTime DateStarted { get; private set; }
         public MessageDataModel? LastMessageSeenByUser1 { get; private set; } // Contains the last read message of user2
         public MessageDataModel? LastMessageSeenByUser2 { get; private set; } // Contains the last read message of user1
         public ChatDataModel()
@@ -23,6 +24,7 @@ namespace Core.Models.DataModels
             User1 = user1;
             User2 = user2;
             Messages = new List<MessageDataModel>();
+            DateStarted = DateTime.UtcNow;
         }
     }
 }
