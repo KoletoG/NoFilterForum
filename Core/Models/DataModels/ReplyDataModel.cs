@@ -13,6 +13,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public PostDataModel Post { get; set; }
         public UserDataModel User { get; set; }
         public short Likes { get; set; }
+        public string PostId { get; set; }
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public void IncrementLikes() => Likes++;
         public void DecrementLikes() => Likes--;
@@ -24,6 +25,7 @@ namespace NoFilterForum.Core.Models.DataModels
             Post = post;
             User = user;
             Likes = 0;
+            PostId = post.Id;
         }
         public ReplyDataModel()
         {

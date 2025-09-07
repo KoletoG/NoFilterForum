@@ -15,9 +15,10 @@ namespace NoFilterForum.Infrastructure.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<WarningDataModel>().Property(x => x.IsAccepted).HasDefaultValue(false);
-            builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts).HasForeignKey(x=>x.SectionId);
+            builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts).HasForeignKey(x=>x.SectionId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedUserName).IsUnique();
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedEmail).IsUnique();
+            builder.Entity<PostDataModel>().HasMany(x => x.Replies).WithOne(x => x.Post).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ChatDataModel>().HasMany(x => x.Messages).WithOne(x=>x.Chat).HasForeignKey(x=>x.ChatId).OnDelete(DeleteBehavior.Cascade);
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }

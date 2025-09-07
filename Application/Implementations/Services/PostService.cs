@@ -188,9 +188,6 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest, CancellationToken cancellationToken)
         {
-            //
-            //  MAKE FOREIGN KEY SO WE DON'T INCLUDE REPLIES
-            //
             var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId, cancellationToken);
             if (post is null)
             {
@@ -211,7 +208,6 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
                 if (notifications.Any()) _unitOfWork.Notifications.DeleteRange(notifications);
-                if (repliesOfPost.Any()) _unitOfWork.Replies.DeleteRange(repliesOfPost);
                 await _userService.ApplyRoleAsync(post.User); // HERE TOO
                 _unitOfWork.Users.UpdateRange(usersSet.ToList());
                 _unitOfWork.Posts.Delete(post);
