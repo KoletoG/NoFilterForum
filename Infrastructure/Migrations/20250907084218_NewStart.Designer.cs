@@ -12,8 +12,8 @@ using NoFilterForum.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250831113317_SeenByUserIds")]
-    partial class SeenByUserIds
+    [Migration("20250907084218_NewStart")]
+    partial class NewStart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,9 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateStarted")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastMessageSeenByUser1Id")
                         .HasColumnType("nvarchar(450)");
@@ -264,10 +267,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("SectionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.PrimitiveCollection<string>("SeenByUserIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
