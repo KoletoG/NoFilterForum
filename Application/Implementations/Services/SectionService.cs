@@ -104,7 +104,6 @@ namespace Application.Implementations.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
                 _unitOfWork.Users.UpdateRange(usersSet);
-                _unitOfWork.Posts.DeleteRange(posts);
                 _unitOfWork.Replies.DeleteRange(replies);
                 _unitOfWork.Sections.Delete(section);
                 _unitOfWork.Notifications.DeleteRange(notifications);
