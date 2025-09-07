@@ -25,6 +25,10 @@ namespace Infrastructure.Repositories
         {
             await _context.ChatDataModels.AddAsync(chatDataModel,cancellationToken);
         }
+        public void Delete(ChatDataModel chatDataModel)
+        {
+            _context.ChatDataModels.Remove(chatDataModel);
+        }
         public void Update(ChatDataModel chatDataModel)
         {
             _context.ChatDataModels.Update(chatDataModel);

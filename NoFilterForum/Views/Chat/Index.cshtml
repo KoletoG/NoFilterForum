@@ -45,7 +45,8 @@
 										<div class="col-1 d-flex align-items-center">
 
 											<form asp-action="Delete" asp-controller="Chat" method="post">
-												<input type="hidden" name="Id" value="@chat.ChatId" />
+												@Html.AntiForgeryToken()
+												<input type="hidden" name="chatId" value="@chat.ChatId" />
 												<button type="submit" class="btn secondaryBtn" style="font-size:12px">Delete</button>
 											</form>
 										</div>
@@ -67,7 +68,8 @@
 										<div class="col-1 d-flex align-items-center">
 
 											<form asp-action="Delete" asp-controller="Chat" method="post">
-												<input type="hidden" name="Id" value="@chat.ChatId" />
+												@Html.AntiForgeryToken()
+												<input type="hidden" name="chatId" value="@chat.ChatId" />
 												<button type="submit" class="btn secondaryBtn" style="font-size:12px">Delete</button>
 											</form>
 										</div>

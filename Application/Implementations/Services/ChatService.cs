@@ -114,6 +114,42 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
+        public async Task<PostResult> DeleteByIdAsync(string id, string userId, CancellationToken cancellationToken)
+        {
+            var chat = await _unitOfWork.Chats.GetAll()
+                .Where(x => x.Id == id)
+                .Include(x => x.User1)
+                .Include(x => x.User2)
+                .Include(x => x.Messages)
+                .Include(x => x.LastMessageSeenByUser1)
+                .Include(x => x.LastMessageSeenByUser2)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (chat is null) return PostResult.NotFound;
+            if (chat.User1.Id != userId && chat.User2.Id != userId) return PostResult.Forbid;
+            try
+            {
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Chats.Delete, chat);
+                return PostResult.Success;
+            }
+            catch (DbException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "A problem with database occured when deleting chat with Id: {ChatId}", id);
+                return PostResult.UpdateFailed;
+            }
+            catch(OperationCanceledException ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Deleting chat with Id: {ChatId} was cancelled", id);
+                return PostResult.UpdateFailed;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "A problem with database occured when deleting chat with Id: {ChatId}", id);
+                return PostResult.UpdateFailed;
+            }
+        }
         public async Task<DetailsChatDTO?> GetChat(string id, string userId, CancellationToken cancellationToken)
         {
             try

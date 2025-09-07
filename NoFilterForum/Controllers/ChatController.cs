@@ -26,6 +26,23 @@ namespace Web.Controllers
             var chatIndexViewModels = listChatIndexDtos.Select(ChatMapper.MapToViewModel).ToList();
             return View(chatIndexViewModels);
         }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete([FromForm] string chatId,CancellationToken cancellationToken)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null) return Unauthorized();
+            var result = await _chatService.DeleteByIdAsync(chatId, userId,cancellationToken);
+            return result switch
+            {
+                PostResult.UpdateFailed => Problem(),
+                PostResult.NotFound => NotFound(),
+                PostResult.Forbid => Forbid(),
+                PostResult.Success => RedirectToAction(nameof(Index)),
+                _ => Problem()
+            };
+        }
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetLastMessage([FromQuery] string chatId,CancellationToken cancellationToken)
