@@ -12,6 +12,7 @@ namespace Web.ViewModels.Chat
         public required string ChatId { get; set; }
         public required string ImageUrl { get; set; }
         public required string Username { get; set; }
+        public required DateTime DateCreated { get; set; }
         public string BorderColor { get; private set; }
         public string? ColorClass { get;private set; } // cannot be null but constructor doesn't understand for some reason
         public MessageDataModel? LastMessage { get; private set; }
