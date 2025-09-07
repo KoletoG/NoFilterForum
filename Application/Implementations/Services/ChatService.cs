@@ -120,7 +120,6 @@ namespace Application.Implementations.Services
                 .Where(x => x.Id == id)
                 .Include(x => x.User1)
                 .Include(x => x.User2)
-                .Include(x => x.Messages)
                 .FirstOrDefaultAsync(cancellationToken);
             if (chat is null) return PostResult.NotFound;
             if (chat.User1.Id != userId && chat.User2.Id != userId) return PostResult.Forbid;
