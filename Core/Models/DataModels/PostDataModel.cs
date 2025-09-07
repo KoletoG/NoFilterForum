@@ -14,6 +14,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public string Title { get; init; }
         public UserDataModel User { get; private set; }
         public short Likes { get; private set; }
+        public string SectionId { get; private set; }
         public ICollection<ReplyDataModel> Replies { get; private init; }
         public bool IsPinned { get; private set; }
         public SectionDataModel Section { get; private set; }
@@ -21,7 +22,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public void IncrementLikes() => Likes++;
         public void DecrementLikes() => Likes--;
-        public PostDataModel(string title, string content, UserDataModel user)
+        public PostDataModel(string title, string content, UserDataModel user, SectionDataModel sectionDataModel)
         {
             Id = Guid.NewGuid().ToString();
             Content = content;
@@ -31,6 +32,8 @@ namespace NoFilterForum.Core.Models.DataModels
             Replies = new List<ReplyDataModel>();
             Likes = 0;
             IsPinned = false;
+            Section = sectionDataModel;
+            SectionId = Section.Id;
         }
         private PostDataModel()
         {

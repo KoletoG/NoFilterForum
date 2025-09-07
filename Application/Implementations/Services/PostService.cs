@@ -159,7 +159,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            var post = _postFactory.Create(createPost.Title, createPost.Body, user);
+            var post = _postFactory.Create(createPost.Title, createPost.Body, user,section);
             section.Posts.Add(post);
             user.IncrementPostCount();
             try
@@ -188,6 +188,9 @@ namespace NoFilterForum.Infrastructure.Services
         }
         public async Task<PostResult> DeletePostByIdAsync(DeletePostRequest deletePostRequest, CancellationToken cancellationToken)
         {
+            //
+            //  MAKE FOREIGN KEY SO WE DON'T INCLUDE REPLIES
+            //
             var post = await _unitOfWork.Posts.GetWithUserByIdAsync(deletePostRequest.PostId, cancellationToken);
             if (post is null)
             {

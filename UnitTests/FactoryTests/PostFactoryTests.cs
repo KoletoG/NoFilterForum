@@ -27,7 +27,8 @@ namespace UnitTests.FactoryTests
      .Returns((string input1, string input2, IMarkupFormatter formatter) => input1);
             var postFactory = new PostFactory(htmlSanitizerMock.Object);
             var user = new UserDataModel();
-            var post = postFactory.Create(title, content, user);
+            var section = new SectionDataModel() { Id = "Id"};
+            var post = postFactory.Create(title, content, user, section);
             Assert.NotNull(post);
             Assert.IsType<PostDataModel>(post);
             Assert.Equal(title, post.Title);

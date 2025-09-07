@@ -44,7 +44,8 @@ namespace UnitTests.DataModelsTests
         {
             string content = "Testing Content";
             var user = new UserDataModel();
-            var post = new PostDataModel("example title", "exampel content", new());
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel("example title", "exampel content", new(), section);
             var reply = new ReplyDataModel(content, user, post);
             Assert.False(string.IsNullOrEmpty(reply.Id));
             Assert.Equal(content, reply.Content);

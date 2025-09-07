@@ -17,7 +17,7 @@ namespace Infrastructure.Factories
         {
             _htmlSanitizer = htmlSanitizer;
         }
-        public PostDataModel Create(string title, string body, UserDataModel user)
+        public PostDataModel Create(string title, string body, UserDataModel user,SectionDataModel sectionDataModel)
         {
             _htmlSanitizer.AllowedTags.Add("b");
             _htmlSanitizer.AllowedTags.Add("i");
@@ -33,7 +33,7 @@ namespace Infrastructure.Factories
             body = TextFormatter.LinkCheckText(body);
             string sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
             string sanitizedTitle = _htmlSanitizer.Sanitize(title);
-            return new(sanitizedTitle, sanitizedFormattedBody,user);
+            return new(sanitizedTitle, sanitizedFormattedBody,user,sectionDataModel);
         }
     }
 }

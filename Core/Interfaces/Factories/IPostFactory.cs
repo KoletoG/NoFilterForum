@@ -9,6 +9,6 @@ namespace Core.Interfaces.Factories
 {
     public interface IPostFactory
     {
-        public PostDataModel Create(string title, string body, UserDataModel user);
+        public PostDataModel Create(string title, string body, UserDataModel user, SectionDataModel sectionDataModel);
     }
 }

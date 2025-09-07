@@ -19,7 +19,8 @@ namespace UnitTests.FactoryTests
         {
             string body = "Test body";
             var user = new UserDataModel();
-            var post = new PostDataModel("example title", "exampel content", new());
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel("example title", "exampel content", new(), section);
             var htmlSanitizerMock = new Mock<IHtmlSanitizer>();
             htmlSanitizerMock.SetupGet(x => x.AllowedTags).Returns(new HashSet<string>());
             htmlSanitizerMock.Setup(x => x.AllowedTags.Add(It.IsAny<string>())).Returns(true);

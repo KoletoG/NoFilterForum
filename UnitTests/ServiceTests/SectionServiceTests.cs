@@ -186,7 +186,7 @@ namespace UnitTests.ServiceTests
                 {
                     Posts = new List<PostDataModel>()
                     {
-                        new PostDataModel("example title","example content",new())
+                        new PostDataModel("example title","example content",new(),new SectionDataModel(){ Id="SectionId"})
                     }
                 });
             var sectionService = new SectionService(unitOfWorkMock.Object,
@@ -217,7 +217,7 @@ namespace UnitTests.ServiceTests
                 {
                     Posts = new List<PostDataModel>()
                     {
-                        new PostDataModel("example title","exampel content",new())
+                        new PostDataModel("example title","exampel content",new(),new(){ Id="Secasf"})
                     }
                 });
             var sectionService = new SectionService(unitOfWorkMock.Object,

@@ -16,7 +16,8 @@ namespace UnitTests.DataModelsTests
             var title = "Test Title";
             var content = "Test Content";
             var user = new UserDataModel("Test Username","Test Email");
-            var post = new PostDataModel(title, content, user);
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel(title, content, user,section);
             Assert.False(string.IsNullOrEmpty(post.Id));
             Assert.Equal(title, post.Title);
             Assert.Equal(content, post.Content);
@@ -29,8 +30,10 @@ namespace UnitTests.DataModelsTests
             Assert.Null(post.Section);
         }
         [Fact]
-        public void TogglePin_ShouldInvertIsPinned() {
-            var post = new PostDataModel("example title", "exampel content", new());
+        public void TogglePin_ShouldInvertIsPinned()
+        {
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel("example title", "exampel content", new(), section);
             Assert.False(post.IsPinned);
             post.TogglePin();
             Assert.True(post.IsPinned);
@@ -40,7 +43,8 @@ namespace UnitTests.DataModelsTests
         [Fact]
         public void IncrementLikes_ShouldIncrementLikesByOne()
         {
-            var post = new PostDataModel("example title", "exampel content", new());
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel("example title", "exampel content", new(),section);
             Assert.Equal(0,post.Likes);
             post.IncrementLikes();
             Assert.Equal(1,post.Likes);
@@ -50,7 +54,8 @@ namespace UnitTests.DataModelsTests
         [Fact]
         public void DecrementLikes_ShouldDecreaseLikesByOne()
         {
-            var post = new PostDataModel("example title", "exampel content", new());
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel("example title", "exampel content", new(), section);
             Assert.Equal(0,post.Likes);
             post.DecrementLikes();
             Assert.Equal(-1,post.Likes);
@@ -60,7 +65,8 @@ namespace UnitTests.DataModelsTests
         [Fact]
         public void SetDefaultUser_ShouldAssignDefaultUser()
         {
-            var post = new PostDataModel("example title", "exampel content", new());
+            var section = new SectionDataModel() { Id = "Id" };
+            var post = new PostDataModel("example title", "exampel content", new(), section);
             post.SetDefaultUser();
             Assert.Equal(UserConstants.DefaultUser, post.User);
         }
