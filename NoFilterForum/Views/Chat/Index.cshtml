@@ -35,13 +35,44 @@
 
 								@if (chat.LastMessage is not null)
 								{
-									<h5 class="text-center fst-italic secondaryText text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
+									<div class="row g-0">
+										<div class="col-1">
+										</div>
+										<div class="col-10 d-flex justify-content-center align-items-center">
+											<h5 class="text-center fst-italic secondaryText text-truncate" id="message_@chat.UserId">@chat.LastMessage.Message</h5>
+
+										</div>
+										<div class="col-1 d-flex align-items-center">
+
+											<form asp-action="Delete" asp-controller="Chat" method="post">
+												<input type="hidden" name="Id" value="@chat.ChatId" />
+												<button type="submit" class="btn secondaryBtn" style="font-size:12px">Delete</button>
+											</form>
+										</div>
+									</div>
+
 									<h6 class="text-center fst-italic mainText text-truncate" id="messageDate_@chat.UserId">@chat.LastMessage.DateTime.ToShortTimeString()</h6>
+
+
 								}
 								else
 								{
-									<h5 class="text-center fst-italic secondaryText" id="message_@chat.UserId">Be the first to send a message!</h5>
-								}
+									<div class="row g-0">
+										<div class="col-1">
+										</div>
+										<div class="col-10 d-flex justify-content-center align-items-start">
+											<h5 class="text-center fst-italic secondaryText" id="message_@chat.UserId">Be the first to send a message!</h5>
+
+										</div>
+										<div class="col-1 d-flex align-items-center">
+
+											<form asp-action="Delete" asp-controller="Chat" method="post">
+												<input type="hidden" name="Id" value="@chat.ChatId" />
+												<button type="submit" class="btn secondaryBtn" style="font-size:12px">Delete</button>
+											</form>
+										</div>
+									</div>
+									}
 							</div>
 						</div>
 					</div>
