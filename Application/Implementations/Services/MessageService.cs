@@ -37,7 +37,7 @@ namespace Application.Implementations.Services
             {
                 return new(PostResult.Forbid, null, null);
             }
-            var message = _messageFactory.Create(createMessageRequest.Message, createMessageRequest.UserId);
+            var message = _messageFactory.Create(createMessageRequest.Message, createMessageRequest.UserId, chat);
             chat.Messages.Add(message);
             try
             {
@@ -74,7 +74,7 @@ namespace Application.Implementations.Services
                 .Include(x => x.LastMessageSeenByUser2)
                 .FirstOrDefaultAsync(cancellationToken);
             if (chat is null) return PostResult.NotFound;
-            if (chat.LastMessageSeenByUser1 != null && chat.LastMessageSeenByUser1.Id == message.Id)
+            if (chat.LastMessageSeenByUser1 != null && chat.LastMessageSeenByUser1 == message.Id)
             {
                 var prevMes = await _unitOfWork.Chats.GetAll()
                     .Where(x => x.Id == request.ChatId)
@@ -82,9 +82,9 @@ namespace Application.Implementations.Services
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
                     .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
-                chat.SetLastMessageSeenByUser1(prevMes);
+                chat.SetLastMessageSeenByUser1(prevMes.Id);
             }
-            if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2.Id == message.Id)
+            if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2 == message.Id)
             {
                 var prevMes = await _unitOfWork.Chats.GetAll()
                     .Where(x => x.Id == request.ChatId)
@@ -92,7 +92,7 @@ namespace Application.Implementations.Services
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
                     .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
-                chat.SetLastMessageSeenByUser2(prevMes);
+                chat.SetLastMessageSeenByUser2(prevMes.Id);
             }
             try
             {

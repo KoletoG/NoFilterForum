@@ -12,9 +12,9 @@ namespace Infrastructure.Factories
     public class MessageFactory(IHtmlSanitizer htmlSanitizer) : IMessageFactory
     {
         private readonly IHtmlSanitizer _htmlSanitizer = htmlSanitizer;
-        public MessageDataModel Create(string message, string userId)
+        public MessageDataModel Create(string message, string userId,ChatDataModel chatDataModel)
         {
-            return new(_htmlSanitizer.Sanitize(message), userId);
+            return new(_htmlSanitizer.Sanitize(message), userId, chatDataModel);
         }
     }
 }

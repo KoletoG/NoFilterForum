@@ -79,7 +79,7 @@ namespace Application.Implementations.Services
         }
         public async Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId,CancellationToken cancellationToken) 
         {
-            return await _unitOfWork.Chats.GetAll().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser2.Id : x.LastMessageSeenByUser1.Id).FirstOrDefaultAsync(cancellationToken);
+            return await _unitOfWork.Chats.GetAll().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser2 : x.LastMessageSeenByUser1).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
         {
@@ -90,11 +90,11 @@ namespace Application.Implementations.Services
             if (message is null) return PostResult.NotFound;
             if (chat.User1.Id == request.UserId)
             {
-                chat.SetLastMessageSeenByUser1(message);
+                chat.SetLastMessageSeenByUser1(message.Id);
             }
             else
             {
-                chat.SetLastMessageSeenByUser2(message);
+                chat.SetLastMessageSeenByUser2(message.Id);
             }
             try
             {
@@ -121,8 +121,6 @@ namespace Application.Implementations.Services
                 .Include(x => x.User1)
                 .Include(x => x.User2)
                 .Include(x => x.Messages)
-                .Include(x => x.LastMessageSeenByUser1)
-                .Include(x => x.LastMessageSeenByUser2)
                 .FirstOrDefaultAsync(cancellationToken);
             if (chat is null) return PostResult.NotFound;
             if (chat.User1.Id != userId && chat.User2.Id != userId) return PostResult.Forbid;

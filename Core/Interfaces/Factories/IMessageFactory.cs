@@ -9,6 +9,6 @@ namespace Core.Interfaces.Factories
 {
     public interface IMessageFactory
     {
-        public MessageDataModel Create(string message, string userId);
+        public MessageDataModel Create(string message, string userId,ChatDataModel chatDataModel);
     }
 }
