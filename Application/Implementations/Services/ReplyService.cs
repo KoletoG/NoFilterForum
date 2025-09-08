@@ -163,7 +163,7 @@ namespace Application.Implementations.Services
             {
                 return PostResult.NotFound;
             }
-            bool shouldForbid = reply.User.Id != request.UserId && !await _userService.IsAdminAsync(request.UserId);
+            bool shouldForbid = reply.UserId != request.UserId && !await _userService.IsAdminAsync(request.UserId);
             if (shouldForbid) return PostResult.Forbid;
             if (reply.User != UserConstants.DefaultUser)
             {
@@ -196,14 +196,10 @@ namespace Application.Implementations.Services
         }
         private async Task<List<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user, CancellationToken cancellationToken)
         {
-            var notificationsList = new List<NotificationDataModel>();
             string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
             taggedUsernames = taggedUsernames.Where(x => x != defaultUsername).ToArray();
             var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernames, cancellationToken);
-            foreach (var taggedUser in listOfTaggedUsers)
-            {
-                notificationsList.Add(new(reply, user, taggedUser));
-            }
+            var notificationsList = new List<NotificationDataModel>(listOfTaggedUsers.Select(x=>new NotificationDataModel(reply,user,x))); 
             await _notificationHub.SendNotificationAsync(listOfTaggedUsers.Select(x=>x.Id));
             return notificationsList;
         }
@@ -221,9 +217,7 @@ namespace Application.Implementations.Services
             }
             var reply = _replyFactory.Create(createReplyRequest.Content, user, post);
             string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
-            user.IncrementPostCount();
             var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(taggedUsernames, reply, user, cancellationToken);
-            post.Replies.Add(reply);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();

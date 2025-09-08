@@ -23,6 +23,7 @@ namespace Infrastructure.Factories
         {
             body = TextFormatter.LinkCheckText(body);
             var sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
+            user.IncrementPostCount();
             return new(sanitizedFormattedBody, user, post);
         }
     }
