@@ -194,11 +194,11 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private async Task<IEnumerable<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(string[] taggedUsernames, ReplyDataModel reply, UserDataModel user, CancellationToken cancellationToken)
+        private async Task<IEnumerable<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(IEnumerable<string> taggedUsernames, ReplyDataModel reply, UserDataModel user, CancellationToken cancellationToken)
         {
             string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
-            taggedUsernames = taggedUsernames.Where(x => x != defaultUsername).ToArray();
-            var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernames, cancellationToken);
+            var taggedUsernamesList = taggedUsernames.Where(x => x != defaultUsername).ToList();
+            var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernamesList, cancellationToken);
             var notificationsList = listOfTaggedUsers.Select(x=>new NotificationDataModel(reply,user,x)); 
             await _notificationHub.SendNotificationAsync(listOfTaggedUsers.Select(x=>x.Id));
             return notificationsList;

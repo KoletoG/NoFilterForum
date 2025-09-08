@@ -15,7 +15,7 @@ namespace NoFilterForum.Core.Interfaces.Repositories
         public Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken);
         public Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync(CancellationToken cancellationToken);
-        public Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(string[] usernames, CancellationToken cancellationToken);
+        public Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(IReadOnlyCollection<string> usernames, CancellationToken cancellationToken);
         public void UpdateRange(IEnumerable<UserDataModel> users);
         public Task<bool> ExistNormalizedUsername(string normalizedUsername, CancellationToken cancellationToken);
         public Task<bool> ExistNormalizedEmailAsync(string normalizedEmail, CancellationToken cancellationToken);
