@@ -12,9 +12,9 @@ namespace NoFilterForum.Core.Models.DataModels
         public DateTime DateCreated { get; set; }
         public PostDataModel Post { get; set; }
         public UserDataModel User { get; set; }
-        public string? UserId { get; set; }
+        public string? UserId { get;private init; }
         public short Likes { get; set; }
-        public string PostId { get; set; }
+        public string PostId { get;private init; }
         public ICollection<NotificationDataModel> Notifications { get; init; }
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public void IncrementLikes() => Likes++;

@@ -15,10 +15,10 @@ namespace NoFilterForum.Core.Models.DataModels
         public UserDataModel User { get; private set; }
         public string? UserId { get; private set; }
         public short Likes { get; private set; }
-        public string SectionId { get; private set; }
         public ICollection<ReplyDataModel> Replies { get; private init; }
         public bool IsPinned { get; private set; }
         public SectionDataModel Section { get; private set; }
+        public string SectionId { get; private init; }
         public void TogglePin() => IsPinned = !IsPinned;
         public void SetDefaultUser() => User = UserConstants.DefaultUser;
         public void IncrementLikes() => Likes++;

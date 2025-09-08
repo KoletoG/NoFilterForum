@@ -26,8 +26,8 @@ namespace NoFilterForum.Core.Models.DataModels
         public List<string> LikesPostRepliesIds { get; private init; }
         public List<string> DislikesPostRepliesIds { get; private init; }
         public ICollection<WarningDataModel> Warnings { get; private init; }
-        public ICollection<ReplyDataModel> Replies { get; private set; }
-        public ICollection<PostDataModel> Posts { get; private set; }
+        public ICollection<ReplyDataModel> Replies { get; private init; }
+        public ICollection<PostDataModel> Posts { get; private init; }
         public DateTime DateCreated { get; private set; }
         public string? Reason { get; private set; }
         public string Bio { get; private set; }

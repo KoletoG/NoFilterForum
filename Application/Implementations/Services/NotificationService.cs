@@ -25,7 +25,7 @@ namespace NoFilterForum.Infrastructure.Services
         // GET methods
         public async Task<int> GetNotificationsCountByUserIdAsync(string userId,CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Notifications.GetAll().Where(x=>x.UserTo.Id==userId).CountAsync(cancellationToken);
+            return await _unitOfWork.Notifications.GetAll().Where(x=>x.UserToId==userId).CountAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsDtosByUserIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<NotificationsDto>>($"listNotificationsDtoById_{userId}", _unitOfWork.Notifications.GetNotificationsAsDtoByUserIdAsync, userId, cancellationToken) ?? [];
         // POST methods
