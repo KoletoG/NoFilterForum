@@ -68,14 +68,10 @@ namespace Application.Implementations.Services
             {
                 return PostResult.Forbid;
             }
-            var chat = await _unitOfWork.Chats.GetAll()
-                .Where(x => x.Id == request.ChatId)
-                .Include(x => x.LastMessageSeenByUser1)
-                .Include(x => x.LastMessageSeenByUser2)
-                .FirstOrDefaultAsync(cancellationToken);
+            var chat = await _unitOfWork.Chats.GetById(request.ChatId); 
             if (chat is null) return PostResult.NotFound;
 
-            if (chat.LastMessageSeenByUser1 is not null || chat.LastMessageSeenByUser2 is not null)
+            if (!string.IsNullOrEmpty(chat.LastMessageSeenByUser1) || !string.IsNullOrEmpty(chat.LastMessageSeenByUser2))
             {
                 var prevMes = await _unitOfWork.Chats.GetAll()
                     .AsNoTracking()

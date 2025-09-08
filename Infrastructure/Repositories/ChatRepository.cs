@@ -21,6 +21,10 @@ namespace Infrastructure.Repositories
         {
             return _context.ChatDataModels;
         }
+        public async Task<ChatDataModel?> GetById(string id)
+        {
+            return await _context.ChatDataModels.FindAsync(id);
+        }
         public async Task CreateAsync(ChatDataModel chatDataModel,CancellationToken cancellationToken)
         {
             await _context.ChatDataModels.AddAsync(chatDataModel,cancellationToken);

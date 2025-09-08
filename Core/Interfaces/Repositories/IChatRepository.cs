@@ -9,6 +9,7 @@ namespace Core.Interfaces.Repositories
 {
     public interface IChatRepository
     {
+        public Task<ChatDataModel?> GetById(string id);
         public void Delete(ChatDataModel chatDataModel);
         public IQueryable<ChatDataModel> GetAll();
         public void Update(ChatDataModel chatDataModel);
