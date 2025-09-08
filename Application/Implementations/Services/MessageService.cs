@@ -74,25 +74,18 @@ namespace Application.Implementations.Services
                 .Include(x => x.LastMessageSeenByUser2)
                 .FirstOrDefaultAsync(cancellationToken);
             if (chat is null) return PostResult.NotFound;
-            if (chat.LastMessageSeenByUser1 != null && chat.LastMessageSeenByUser1 == message.Id)
+
+            if (chat.LastMessageSeenByUser1 is not null || chat.LastMessageSeenByUser2 is not null)
             {
                 var prevMes = await _unitOfWork.Chats.GetAll()
+                    .AsNoTracking()
                     .Where(x => x.Id == request.ChatId)
                     .SelectMany(x => x.Messages)
                     .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
                     .OrderByDescending(x => x.DateTime)
                     .FirstOrDefaultAsync(cancellationToken);
-                chat.SetLastMessageSeenByUser1(prevMes.Id);
-            }
-            if (chat.LastMessageSeenByUser2 != null && chat.LastMessageSeenByUser2 == message.Id)
-            {
-                var prevMes = await _unitOfWork.Chats.GetAll()
-                    .Where(x => x.Id == request.ChatId)
-                    .SelectMany(x => x.Messages)
-                    .Where(x => (x.DateTime < message.DateTime) && x.UserId == message.UserId)
-                    .OrderByDescending(x => x.DateTime)
-                    .FirstOrDefaultAsync(cancellationToken);
-                chat.SetLastMessageSeenByUser2(prevMes.Id);
+                Action<string> setLastMessage = chat.LastMessageSeenByUser1 == message.Id ? chat.SetLastMessageSeenByUser1 : chat.SetLastMessageSeenByUser2;
+                setLastMessage.Invoke(prevMes?.Id ?? string.Empty);
             }
             try
             {
