@@ -20,7 +20,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => x.UserTo.Id == userId).ToListAsync(cancellationToken);
+            return await _context.NotificationDataModels.Where(x => x.UserToId == userId).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdsAsync(IEnumerable<string> repliesIds, CancellationToken cancellationToken)
         {
@@ -41,7 +41,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.NotificationDataModels.AsNoTracking()
-                .Where(x => x.UserTo.Id == userId)
+                .Where(x => x.UserToId == userId)
                 .Select(x => new NotificationsDto(x.ReplyId,x.Reply.PostId,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
                 .ToListAsync(cancellationToken);
         }
