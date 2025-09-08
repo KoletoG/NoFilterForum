@@ -22,12 +22,12 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IList<string>> GetIdsByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x=>x.Post.Id== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync(cancellationToken);
+            return await _context.ReplyDataModels.Where(x=>x.PostId== postId).OrderBy(x=>x.DateCreated).Select(x=>x.Id).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReplyIndexItemDto>> GetReplyIndexItemDtoListByPostIdAndPageAsync(GetListReplyIndexItemRequest getListReplyIndexItemRequest, CancellationToken cancellationToken)
         {
             return await _context.ReplyDataModels.AsNoTracking()
-                .Where(x => x.Post.Id == getListReplyIndexItemRequest.PostId)
+                .Where(x => x.PostId == getListReplyIndexItemRequest.PostId)
                 .OrderBy(x=>x.DateCreated)
                 .Select(x => new ReplyIndexItemDto(x.User.UserName,x.User.Role,x.User.ImageUrl,x.User.Id,x.Id,x.Content,x.Likes,x.DateCreated,x.User.Bio,x.User.PostsCount))
                 .Skip((getListReplyIndexItemRequest.Page-1)*getListReplyIndexItemRequest.PostsCount)
@@ -47,11 +47,11 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<string?> GetPostIdByIdAsync(string id, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.Post.Id).FirstOrDefaultAsync(cancellationToken);
+            return await _context.ReplyDataModels.Where(x => x.Id == id).Select(x => x.PostId).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllWithUserByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.Post.Id==postId).ToListAsync(cancellationToken);
+            return await _context.ReplyDataModels.Include(x => x.User).Where(x=>x.PostId==postId).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
@@ -63,7 +63,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<int> GetCountByPostIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x=>x.Post.Id==postId).CountAsync(cancellationToken);
+            return await _context.ReplyDataModels.Where(x=>x.PostId==postId).CountAsync(cancellationToken);
         }
         public void Update(ReplyDataModel reply)
         {
