@@ -12,8 +12,8 @@ using NoFilterForum.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250908063119_SetNull")]
-    partial class SetNull
+    [Migration("20250908063521_New")]
+    partial class New
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -595,8 +595,9 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Section");
 
@@ -664,6 +665,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.UserDataModel", b =>
                 {
+                    b.Navigation("Posts");
+
                     b.Navigation("Replies");
 
                     b.Navigation("Warnings");
