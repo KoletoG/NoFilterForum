@@ -12,8 +12,8 @@ using NoFilterForum.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250907085313_NEWWWSTART")]
-    partial class NEWWWSTART
+    [Migration("20250908062946_NewBeg")]
+    partial class NewBeg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastMessageSeenByUser2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User1Id")
@@ -611,7 +612,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User")
-                        .WithMany()
+                        .WithMany("Replies")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Post");
@@ -662,6 +663,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.UserDataModel", b =>
                 {
+                    b.Navigation("Replies");
+
                     b.Navigation("Warnings");
                 });
 #pragma warning restore 612, 618

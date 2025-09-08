@@ -609,8 +609,9 @@ namespace NoFilterForum.Migrations
                         .IsRequired();
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("Replies")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Post");
 
@@ -660,6 +661,8 @@ namespace NoFilterForum.Migrations
 
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.UserDataModel", b =>
                 {
+                    b.Navigation("Replies");
+
                     b.Navigation("Warnings");
                 });
 #pragma warning restore 612, 618
