@@ -194,8 +194,9 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private async Task<IEnumerable<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(IEnumerable<string> taggedUsernames, ReplyDataModel reply, UserDataModel user, CancellationToken cancellationToken)
+        private async Task<IEnumerable<NotificationDataModel>> CreateNotificationsByTaggedUsernamesAsync(ReplyDataModel reply, UserDataModel user, CancellationToken cancellationToken)
         {
+            string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
             string defaultUsername = UserConstants.DefaultUser.UserName ?? string.Empty;
             var taggedUsernamesList = taggedUsernames.Where(x => x != defaultUsername).ToList();
             var listOfTaggedUsers = await _unitOfWork.Users.GetListByUsernameArrayAsync(taggedUsernamesList, cancellationToken);
@@ -210,14 +211,13 @@ namespace Application.Implementations.Services
             {
                 return PostResult.NotFound;
             }
-            var post = await _unitOfWork.Posts.GetWithRepliesByIdAsync(createReplyRequest.PostId, cancellationToken);
+            var post = await _unitOfWork.Posts.GetByIdAsync(createReplyRequest.PostId);
             if (post is null)
             {
                 return PostResult.NotFound;
             }
             var reply = _replyFactory.Create(createReplyRequest.Content, user, post);
-            string[] taggedUsernames = TextFormatter.CheckForTags(reply.Content);
-            var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(taggedUsernames, reply, user, cancellationToken);
+            var notificationsList = await CreateNotificationsByTaggedUsernamesAsync(reply, user, cancellationToken);
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -226,7 +226,6 @@ namespace Application.Implementations.Services
                     await _unitOfWork.Notifications.CreateRangeAsync(notificationsList,cancellationToken);
                 }
                 await _unitOfWork.Replies.CreateAsync(reply, cancellationToken);
-                _unitOfWork.Posts.Update(post);
                 await _userService.ApplyRoleAsync(user); // CHANGE THAT
                 _unitOfWork.Users.Update(user);
                 await _unitOfWork.CommitAsync(cancellationToken);
