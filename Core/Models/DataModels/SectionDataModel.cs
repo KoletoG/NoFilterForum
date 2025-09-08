@@ -6,7 +6,7 @@ namespace NoFilterForum.Core.Models.DataModels
     {
         [Key]
         public string Id { get; init; }
-        public List<PostDataModel> Posts { get; init; }
+        public ICollection<PostDataModel> Posts { get; init; }
         [Required(AllowEmptyStrings =false,ErrorMessage ="Title cannot be empty.")]
         public string Title { get; init; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Title cannot be empty.")]

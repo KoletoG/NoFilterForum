@@ -64,7 +64,7 @@ namespace Application.Implementations.Services
                 return PostResult.UpdateFailed;
             }
         }
-        private static (HashSet<UserDataModel> users, List<ReplyDataModel> replies) ProcessPosts(IReadOnlyCollection<PostDataModel> posts)
+        private static (HashSet<UserDataModel> users, List<ReplyDataModel> replies) ProcessPosts(ICollection<PostDataModel> posts)
         {
             var users = new HashSet<UserDataModel>();
             var replies = posts.SelectMany(x => x.Replies).ToList();

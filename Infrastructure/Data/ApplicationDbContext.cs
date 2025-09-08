@@ -18,6 +18,7 @@ namespace NoFilterForum.Infrastructure.Data
             builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts).HasForeignKey(x=>x.SectionId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedUserName).IsUnique();
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedEmail).IsUnique();
+            builder.Entity<SectionDataModel>().HasMany(x => x.Posts).WithOne(x => x.Section).HasForeignKey(x => x.SectionId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<UserDataModel>().HasMany(x=>x.Posts).WithOne(x=>x.User).HasForeignKey(x=>x.UserId).OnDelete(DeleteBehavior.SetNull);
             builder.Entity<UserDataModel>().HasMany(x=>x.Replies).WithOne(x=>x.User).HasForeignKey(x=>x.UserId).OnDelete(DeleteBehavior.SetNull);
             builder.Entity<PostDataModel>().HasMany(x => x.Replies).WithOne(x => x.Post).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.Cascade);
