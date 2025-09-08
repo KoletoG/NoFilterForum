@@ -11,7 +11,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
         public PostDataModel Post { get; set; }
-        public UserDataModel? User { get; set; }
+        public UserDataModel User { get; set; }
         public string? UserId { get; set; }
         public short Likes { get; set; }
         public string PostId { get; set; }

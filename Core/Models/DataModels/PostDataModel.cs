@@ -12,7 +12,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public string Content { get; private init; }
         public DateTime DateCreated { get; private init; }
         public string Title { get; init; }
-        public UserDataModel? User { get; private set; }
+        public UserDataModel User { get; private set; }
         public string? UserId { get; private set; }
         public short Likes { get; private set; }
         public string SectionId { get; private set; }

@@ -160,8 +160,6 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.NotFound;
             }
             var post = _postFactory.Create(createPost.Title, createPost.Body, user,section);
-            section.Posts.Add(post);
-            user.IncrementPostCount();
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
@@ -193,7 +191,7 @@ namespace NoFilterForum.Infrastructure.Services
             {
                 return PostResult.NotFound;
             }
-            bool shouldForbid = post.User.Id != deletePostRequest.UserId && !await _userService.IsAdminAsync(deletePostRequest.UserId);
+            bool shouldForbid = post.UserId != deletePostRequest.UserId && !await _userService.IsAdminAsync(deletePostRequest.UserId);
             if (shouldForbid) return PostResult.Forbid;
             var repliesOfPost = await _unitOfWork.Replies.GetAllWithUserByPostIdAsync(deletePostRequest.PostId, cancellationToken);
             var usersSet = repliesOfPost.Select(x => x.User).ToHashSet();

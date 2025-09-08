@@ -33,6 +33,7 @@ namespace Infrastructure.Factories
             body = TextFormatter.LinkCheckText(body);
             string sanitizedFormattedBody = _htmlSanitizer.Sanitize(body);
             string sanitizedTitle = _htmlSanitizer.Sanitize(title);
+            user.IncrementPostCount();
             return new(sanitizedTitle, sanitizedFormattedBody,user,sectionDataModel);
         }
     }
