@@ -7,6 +7,7 @@ namespace NoFilterForum.Core.Models.DataModels
         [Key]
         public string Id { get; init; }
         public ReplyDataModel Reply { get; init; }
+        public string ReplyId { get; private init; }
         public UserDataModel UserFrom { get; init; }
         public UserDataModel UserTo { get; init; }
         public NotificationDataModel()
@@ -19,6 +20,7 @@ namespace NoFilterForum.Core.Models.DataModels
             Reply = reply;
             UserFrom = userFrom;
             UserTo = userTo;
+            ReplyId = reply.Id;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Application.Implementations.Services
             }
             return (users, replies);
         }
-        private static void DecrementAndCollect(HashSet<UserDataModel> users, UserDataModel user)
+        private static void DecrementAndCollect(ICollection<UserDataModel> users, UserDataModel user)
         {
             if (user != UserConstants.DefaultUser)
             {
@@ -97,8 +97,7 @@ namespace Application.Implementations.Services
             {
                 return PostResult.NotFound;
             }
-            var posts = section.Posts;
-            (var usersSet,var replies) = ProcessPosts(posts);
+            (var usersSet,var replies) = ProcessPosts(section.Posts);
             var notifications = await _unitOfWork.Notifications.GetAllByReplyIdsAsync(replies.Select(x=>x.Id), cancellationToken);
             try
             {

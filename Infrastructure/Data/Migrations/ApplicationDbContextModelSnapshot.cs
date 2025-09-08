@@ -223,6 +223,7 @@ namespace NoFilterForum.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReplyId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserFromId")
@@ -565,8 +566,10 @@ namespace NoFilterForum.Migrations
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.NotificationDataModel", b =>
                 {
                     b.HasOne("NoFilterForum.Core.Models.DataModels.ReplyDataModel", "Reply")
-                        .WithMany()
-                        .HasForeignKey("ReplyId");
+                        .WithMany("Notifications")
+                        .HasForeignKey("ReplyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserFrom")
                         .WithMany()
@@ -653,6 +656,11 @@ namespace NoFilterForum.Migrations
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.PostDataModel", b =>
                 {
                     b.Navigation("Replies");
+                });
+
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.ReplyDataModel", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.SectionDataModel", b =>

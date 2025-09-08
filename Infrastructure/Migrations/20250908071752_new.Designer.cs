@@ -12,8 +12,8 @@ using NoFilterForum.Infrastructure.Data;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250908063521_New")]
-    partial class New
+    [Migration("20250908071752_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,6 +226,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReplyId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserFromId")
@@ -568,8 +569,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.NotificationDataModel", b =>
                 {
                     b.HasOne("NoFilterForum.Core.Models.DataModels.ReplyDataModel", "Reply")
-                        .WithMany()
-                        .HasForeignKey("ReplyId");
+                        .WithMany("Notifications")
+                        .HasForeignKey("ReplyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserFrom")
                         .WithMany()
@@ -656,6 +659,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.PostDataModel", b =>
                 {
                     b.Navigation("Replies");
+                });
+
+            modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.ReplyDataModel", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("NoFilterForum.Core.Models.DataModels.SectionDataModel", b =>
