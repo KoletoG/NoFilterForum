@@ -48,13 +48,13 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<IDictionary<string,ProfilePostDto>> GetListProfilePostDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.PostDataModels.AsNoTracking()
-                .Where(x => x.User.Id == userId)
+                .Where(x => x.UserId == userId)
                 .Select(x => new ProfilePostDto(x.Id,x.Title,x.DateCreated))
                 .ToDictionaryAsync(x=>x.Id,cancellationToken);
         }
         public async Task<IReadOnlyCollection<PostDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.Where(x => x.User.Id == userId).ToListAsync(cancellationToken);
+            return await _context.PostDataModels.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
         }
         public async Task CreateAsync(PostDataModel post, CancellationToken cancellationToken)
         {
@@ -78,7 +78,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<DateTime> GetLastPostDateByUsernameAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.AsNoTracking().Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync(cancellationToken);
+            return await _context.PostDataModels.AsNoTracking().Where(x => x.UserId == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken)
         {

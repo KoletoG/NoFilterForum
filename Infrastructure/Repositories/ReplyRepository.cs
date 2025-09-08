@@ -37,7 +37,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<IDictionary<string,ReplyItemDto>> GetListReplyItemDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.ReplyDataModels.AsNoTracking()
-                .Where(x=>x.User.Id == userId)
+                .Where(x=>x.UserId == userId)
                 .Select(x => new ReplyItemDto(x.Id,x.Post.Id,x.Content,x.DateCreated,x.Post.Title,x.Post.DateCreated))
                 .ToDictionaryAsync(x=>x.Id,cancellationToken);
         }
@@ -55,7 +55,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<ReplyDataModel>> GetAllByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x => x.User.Id == userId).ToListAsync(cancellationToken);
+            return await _context.ReplyDataModels.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
         }
         public async Task CreateAsync(ReplyDataModel reply, CancellationToken cancellationToken)
         {
@@ -71,7 +71,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<DateTime> GetLastReplyDateTimeByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await _context.ReplyDataModels.Where(x => x.User.Id == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync(cancellationToken);
+            return await _context.ReplyDataModels.Where(x => x.UserId == userId).Select(x => x.DateCreated).OrderByDescending(x => x.Date).FirstOrDefaultAsync(cancellationToken);
         }
         public void UpdateRange(IReadOnlyCollection<ReplyDataModel> replies)
         {
