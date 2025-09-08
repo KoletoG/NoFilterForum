@@ -27,7 +27,9 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<string?> GetSectionTitleByIdAsync(string postId, CancellationToken cancellationToken)
         {
-            return await _context.PostDataModels.Where(x => x.Id == postId).Select(x => x.Section.Title).FirstOrDefaultAsync(cancellationToken);
+            return await _context.PostDataModels.Where(x => x.Id == postId)
+                .Select(x => x.Section.Title)
+                .FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostDataModel?> GetWithUserByIdAsync(string id, CancellationToken cancellationToken)
         {

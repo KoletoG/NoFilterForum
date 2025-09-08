@@ -31,6 +31,7 @@ namespace Application.Implementations.Services
         public async Task<IReadOnlyCollection<IndexChatDTO>> GetIndexChatDTOsAsync(string userId,string username, CancellationToken cancellationToken)
         {
             return await _unitOfWork.Chats.GetAll()
+                .AsNoTracking()
                 .Where(x=>x.User1.Id==userId || x.User2.Id==userId)
                 .Select(x => new IndexChatDTO(x.Id, x.User1.UserName! == username ? x.User2.UserName! : x.User1.UserName!, x.User1.UserName! == username ? x.User2.ImageUrl : x.User1.ImageUrl, x.Messages,userId == x.User1.Id ? x.User2.Role : x.User1.Role,userId==x.User1.Id ? x.User2.Id : x.User1.Id,x.DateStarted))
                 .ToListAsync(cancellationToken);
@@ -79,7 +80,7 @@ namespace Application.Implementations.Services
         }
         public async Task<string?> GetMessageIdOfLastMessageAsync(string userId, string chatId,CancellationToken cancellationToken) 
         {
-            return await _unitOfWork.Chats.GetAll().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser2 : x.LastMessageSeenByUser1).FirstOrDefaultAsync(cancellationToken);
+            return await _unitOfWork.Chats.GetAll().AsNoTracking().Where(x=>x.Id==chatId).Select(x=>x.User1.Id == userId ? x.LastMessageSeenByUser2 : x.LastMessageSeenByUser1).FirstOrDefaultAsync(cancellationToken);
         }
         public async Task<PostResult> UpdateLastMessageAsync(UpdateLastMessageRequest request, CancellationToken cancellationToken)
         {
@@ -152,6 +153,7 @@ namespace Application.Implementations.Services
             try
             {
                 var chat = await _unitOfWork.Chats.GetAll()
+                    .AsNoTracking()
                     .Where(x => x.Id == id)
                     .Select(x => new DetailsChatDTO(
                     x.User1.UserName!,
