@@ -227,9 +227,11 @@ namespace NoFilterForum.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserFromId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserToId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -573,11 +575,15 @@ namespace NoFilterForum.Migrations
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserFrom")
                         .WithMany()
-                        .HasForeignKey("UserFromId");
+                        .HasForeignKey("UserFromId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("NoFilterForum.Core.Models.DataModels.UserDataModel", "UserTo")
                         .WithMany()
-                        .HasForeignKey("UserToId");
+                        .HasForeignKey("UserToId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Reply");
 

@@ -24,7 +24,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdsAsync(IEnumerable<string> repliesIds, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => repliesIds.Contains(x.Reply.Id)).ToListAsync(cancellationToken);
+            return await _context.NotificationDataModels.Where(x => repliesIds.Contains(x.ReplyId)).ToListAsync(cancellationToken);
         }
         public async Task CreateRangeAsync(IEnumerable<NotificationDataModel> notifications,CancellationToken cancellationToken)
         {
@@ -32,17 +32,17 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(string replyId, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => x.Reply.Id == replyId).ToListAsync(cancellationToken);
+            return await _context.NotificationDataModels.Where(x => x.ReplyId == replyId).ToListAsync(cancellationToken);
         }
         public async Task<IReadOnlyCollection<NotificationDataModel>> GetAllByReplyIdAsync(HashSet<string> replyIds, CancellationToken cancellationToken)
         {
-            return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.Reply.Id)).ToListAsync();
+            return await _context.NotificationDataModels.Where(x => replyIds.Contains(x.ReplyId)).ToListAsync();
         }
         public async Task<IReadOnlyCollection<NotificationsDto>> GetNotificationsAsDtoByUserIdAsync(string userId, CancellationToken cancellationToken)
         {
             return await _context.NotificationDataModels.AsNoTracking()
                 .Where(x => x.UserTo.Id == userId)
-                .Select(x => new NotificationsDto(x.Reply.Id,x.Reply.Post.Id,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
+                .Select(x => new NotificationsDto(x.ReplyId,x.Reply.PostId,x.Reply.Post.Title,x.Reply.Content,x.UserFrom.UserName))
                 .ToListAsync(cancellationToken);
         }
         public void DeleteRange(IEnumerable<NotificationDataModel> notifications)

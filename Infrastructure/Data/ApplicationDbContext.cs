@@ -24,6 +24,8 @@ namespace NoFilterForum.Infrastructure.Data
             builder.Entity<PostDataModel>().HasMany(x => x.Replies).WithOne(x => x.Post).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ChatDataModel>().HasMany(x => x.Messages).WithOne(x=>x.Chat).HasForeignKey(x=>x.ChatId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<NotificationDataModel>().HasOne(x=>x.Reply).WithMany(x=>x.Notifications).HasForeignKey(x=>x.ReplyId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<NotificationDataModel>().HasOne(x => x.UserFrom).WithMany().HasForeignKey(x => x.UserFromId).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<NotificationDataModel>().HasOne(x => x.UserTo).WithMany().HasForeignKey(x => x.UserToId).OnDelete(DeleteBehavior.NoAction);
         }
         public DbSet<ReplyDataModel> ReplyDataModels { get; set; }
         public DbSet<PostDataModel> PostDataModels { get; set; }
