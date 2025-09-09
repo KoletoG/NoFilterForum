@@ -26,6 +26,6 @@ function setNotification(count){
             notification.classList.add('fw-bold');
             firstTime = false;
         }
-        notification.innerText=`Notifications(${count})`;
+        notification.innerHTML=`Notifications <span class="badge mainText fw-bold nav-link thirdBorder" style="background-color:rgba(var(--bs-danger-rgb),var(--bs-text-opacity));font-size:15px">${count}</span>`;
     }
 }
