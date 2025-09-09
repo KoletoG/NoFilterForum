@@ -73,10 +73,11 @@
 				<partial name="_CreateReply" model="new CreateReplyViewModel(){PostId=Model.Post.Id}" />
 			</div>
 			int count = Model.Replies.Count;
+			bool isFirst = true;
 			@for (int i = 0; i < count; i++)
 			{
 				var reply = Model.Replies[i];
-				<div class="row  secondaryBG borderBottom borderTop">
+				<div class="row  secondaryBG borderBottom @(isFirst ? "borderTop" : string.Empty)">
 					<div class="col-2 align-content-center borderEnd text-center">
 						<partial name="_RoleColor" model="new RoleViewModel(reply.Role,reply.UserId,reply.Username,true,reply.ImageUrl)" />
 						<h6 class="mainText">Posts count: <span class="fst-italic">@reply.PostCount</span></h6>
@@ -142,6 +143,7 @@
 						<h5 style="text-decoration:line-through">@reply.Username</h5>
 					}
 				</div>
+				isFirst = false;
 			}
 			<br />
 			@if (Model.Replies.Any())
