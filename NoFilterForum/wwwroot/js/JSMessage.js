@@ -51,12 +51,15 @@ connection.on("WasSeen",()=>{
 });
 function addSeenMessage(messageId)
 {
-	let col = document.getElementById(`colOfLastMessage_${messageId}`)
-	let seenMessage = document.createElement('h6');
-	seenMessage.id = `h6OfSeenMessage_${messageId}`;
-	seenMessage.innerText="Seen";
-	seenMessage.classList.add('mb-0');
-	col.appendChild(seenMessage);
+	if(messageId!=null && messageId!="")
+	{
+		let col = document.getElementById(`colOfLastMessage_${messageId}`)
+		let seenMessage = document.createElement('h6');
+		seenMessage.id = `h6OfSeenMessage_${messageId}`;
+		seenMessage.innerText="Seen";
+		seenMessage.classList.add('mb-0');
+		col.appendChild(seenMessage);
+	}
 }
 function startAll(){
 fetch(`/Chat/GetLastMessage?chatId=${chatId}`) // When going to the chat, set "seen" to what message has been last seen
