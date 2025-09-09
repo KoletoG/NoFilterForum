@@ -133,6 +133,7 @@ async function deleteMessage(userRecipientId, messageId,form)
 	{
 		document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove(); // delete previously "Seen" message
 	}
+	latestSeenMessageId=mes;
 }
 function replaceMessage(messageId)
 {
