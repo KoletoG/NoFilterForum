@@ -126,6 +126,13 @@ async function deleteMessage(userRecipientId, messageId,form)
 	form.removeChild(btnDelete);
 	removeMessage(userRecipientId,messageId);
 	replaceMessage(messageId);
+	let resultMes = await fetch(`/Chat/GetLastMessage?chatId=${chatId}`);
+	let mes = await resultMes.text();
+	addSeenMessage(mes);
+	if(latestSeenMessageId!="")
+	{
+		document.getElementById(`h6OfSeenMessage_${latestSeenMessageId}`).remove(); // delete previously "Seen" message
+	}
 }
 function replaceMessage(messageId)
 {
