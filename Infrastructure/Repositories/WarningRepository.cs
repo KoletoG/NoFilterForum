@@ -27,9 +27,9 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Select(x => new WarningsContentDto(x.Content))
                 .ToListAsync(cancellationToken);
         }
-        public async Task CreateAsync(WarningDataModel warning)
+        public async Task CreateAsync(WarningDataModel warning,CancellationToken cancellationToken)
         {
-            await _context.WarningDataModels.AddAsync(warning);
+            await _context.WarningDataModels.AddAsync(warning,cancellationToken);
         }
         public void UpdateRange(IEnumerable<WarningDataModel> warnings)
         {

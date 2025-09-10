@@ -35,16 +35,15 @@ namespace NoFilterForum.Infrastructure.Services
         // POST methods
         public async Task<PostResult> AddWarningAsync(CreateWarningRequest createWarningRequest, CancellationToken cancellationToken)
         {
-            var user = await _unitOfWork.Users.GetUserWithWarningsByIdAsync(createWarningRequest.UserId, cancellationToken);
+            var user = await _unitOfWork.Users.GetByIdAsync(createWarningRequest.UserId);
             if (user is null)
             {
                 return PostResult.NotFound;
             }
             var warning = _warningFactory.Create(createWarningRequest.Content, user);
-            user.Warnings.Add(warning);
             try
             {
-                await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user,cancellationToken);
+                await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Warnings.CreateAsync, warning,cancellationToken);
                 _cacheService.Remove($"listWarningContentsById_{createWarningRequest.UserId}");
                 return PostResult.Success;
             }

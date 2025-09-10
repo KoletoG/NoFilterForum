@@ -26,7 +26,6 @@ namespace NoFilterForum.Infrastructure.Repositories
         }
         public async Task<bool> ExistByIdAsync(string id, CancellationToken cancellationToken) => await _context.Users.AnyAsync(u => u.Id == id, cancellationToken);
         public async Task<UserDataModel?> GetByIdAsync(string id)=> await _context.Users.FindAsync(id);
-        public async Task<UserDataModel?> GetUserWithWarningsByIdAsync(string id, CancellationToken cancellationToken)=> await _context.Users.Include(x => x.Warnings).FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
         public async Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(IReadOnlyCollection<string> usernames, CancellationToken cancellationToken)=> await _context.Users.Where(x=>usernames.Contains(x.UserName)).ToListAsync(cancellationToken);
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken)=>await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto(x.LikesPostRepliesIds.ToHashSet(),x.DislikesPostRepliesIds.ToHashSet())).FirstOrDefaultAsync(cancellationToken);
         public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id, CancellationToken cancellationToken    )=> await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto(x.Id,x.Warnings.Count,x.UserName,x.Email,x.Bio,x.Role,x.PostsCount,x.ImageUrl,x.DateCreated)).FirstOrDefaultAsync(cancellationToken);
