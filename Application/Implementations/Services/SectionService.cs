@@ -49,6 +49,7 @@ namespace Application.Implementations.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Sections.CreateAsync, section, cancellationToken);
+                _cacheService.Remove("listSectionItemDto");
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)
@@ -111,6 +112,7 @@ namespace Application.Implementations.Services
                 }
                 await _unitOfWork.CommitAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                _cacheService.Remove("listSectionItemDto");
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)

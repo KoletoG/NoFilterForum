@@ -45,6 +45,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user,cancellationToken);
+                _cacheService.Remove($"listWarningContentsById_{createWarningRequest.UserId}");
                 return PostResult.Success;
             }
             catch (OperationCanceledException ex)
@@ -80,6 +81,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync<IReadOnlyCollection<WarningDataModel>>(_unitOfWork.Warnings.UpdateRange, warnings, token);
+                _cacheService.Remove($"listWarningContentsById_{userId}"); 
                 return PostResult.Success;
             }
             catch (OperationCanceledException ex)

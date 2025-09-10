@@ -39,6 +39,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Notifications.DeleteRange, notifications, cancellationToken);
+                _cacheService.Remove($"listNotificationsDtoById_{userId}");
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)

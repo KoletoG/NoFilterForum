@@ -40,6 +40,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.Delete, report,cancellationToken);
+                _cacheService.Remove("listReportItems");
                 return PostResult.Success;
             }
             catch(DBConcurrencyException ex)
@@ -84,6 +85,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync<ReportDataModel>(_unitOfWork.Reports.CreateAsync, report, cancellationToken);
+                _cacheService.Remove("listReportItems");
                 return PostResult.Success;
             }
             catch (DBConcurrencyException ex)
