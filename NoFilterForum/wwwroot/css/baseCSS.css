@@ -1,6 +1,6 @@
 ﻿:root {
     --main-text-color: #B58B64;
-    --secondary-text-color:cornflowerblue;
+    --secondary-text-color: cornflowerblue;
 }
 .mainBG {
     background: linear-gradient(90deg,#1a2766 0%,#1a2766 25%,#1a2766 75%,#0F365E 100%);
@@ -15,7 +15,7 @@ h5{
     background-color: rgba(0, 0, 0, 0.0);
 }
 .thirdBG {
-    background-color: #B58B64;
+    background-color: var(--main-text-color);
 }
 .transparentText{
     color:rgba(0,0,0,0.0);
@@ -61,7 +61,7 @@ h5{
     border-color: #8C2F20;
     border-width: 2px;
     border-style: solid;
-    color: #B58B64;
+    color: var(--main-text-color);
 }
     .secondaryBtn:hover {
         background: linear-gradient(90deg,rgba(181, 139, 100, 1) 0%, rgba(158, 125, 98, 1) 100%);
@@ -72,66 +72,66 @@ h5{
     }
 .thirdBtn {
     background-color: rgba(0, 0, 0, 0.0);
-    border-color: #B58B64;
+    border-color: var(--main-text-color);
     border-width: 2px;
     border-style: solid;
-    color: #B58B64;
+    color: var(--main-text-color);
 }
 
     .thirdBtn:hover {
         background: linear-gradient(90deg,rgba(181, 139, 100, 1) 0%, rgba(158, 125, 98, 1) 100%);
         color: #1a2766;
-        border-color: #B58B64;
+        border-color: var(--main-text-color);
         border-width: 2px;
         border-style: solid;
     }
     .thirdBtn:disabled {
         background-color: rgba(0, 0, 0, 0.0);
-        border-color: #B58B64;
+        border-color: var(--main-text-color);
         border-width: 2px;
         border-style: solid;
-        color: #B58B64;
+        color: var(--main-text-color);
     }
 .mainBtn {
     background-color: rgba(0, 0, 0, 0.0);
-    border-color: #B58B64;
+    border-color: var(--main-text-color);
     border-width: 2px;
     border-style: solid;
-    color: #B58B64;
+    color: var(--main-text-color);
 }
     .mainBtn:hover {
         background: linear-gradient(90deg,rgba(181, 139, 100, 1) 0%, rgba(158, 125, 98, 1) 100%);
         color: #1a2766;
     }
 .mainInput {
-    color: #B58B64 !important;
+    color: var(--main-text-color) !important;
     background: #1a2766;
-    border-color: #B58B64;
+    border-color: var(--main-text-color);
     border-width: 2px;
     border-style: solid;
     border-radius:5px;
 }
     .mainInput::placeholder {
-        color: #B58B64 !important;
+        color: var(--main-text-color) !important;
     }
 
     .mainInput :focus {
-        color: #B58B64 !important;
+        color: var(--main-text-color) !important;
     }
 .secondaryInput {
-    color: cornflowerblue !important;
+    color: var(--secondary-text-color) !important;
     background: #1a2766;
-    border-color: #B58B64;
+    border-color: var(--main-text-color);
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
 }
     .secondaryInput::placeholder {
-        color: cornflowerblue !important;
+        color: var(--secondary-text-color) !important;
     }
 
     .secondaryInput :focus {
-        color: cornflowerblue !important;
+        color: var(--secondary-text-color) !important;
     }
     /*
         Change mainInput so it doesn't use important
@@ -142,12 +142,12 @@ h5{
     font-size: 15px;
 }
 .chatText2 {
-    color: #B58B64;
+    color: var(--main-text-color);
     font-family: 'Merriweather',serif;
     font-size: 15px;
 }
 .borderSecondary {
-    border-color: cornflowerblue;
+    border-color: var(--secondary-text-color);
     border-width: 2px;
     border-style: solid;
 }
@@ -167,27 +167,27 @@ h5{
     opacity:0.5
 }
 .borderMain {
-    border-color: #B58B64;
+    border-color: var(--main-text-color);
     border-width: 2px;
     border-style: solid;
 }
 .borderStart {
-    border-left: 2px solid #B58B64;
+    border-left: 2px solid var(--main-text-color);
 }
 .borderEnd {
-    border-right: 2px solid #B58B64;
+    border-right: 2px solid var(--main-text-color);
 }
 .thirdBorderEnd {
     border-right: 2px solid #1a2766;
 }
 .borderTop {
-    border-top: 2px solid #B58B64;
+    border-top: 2px solid var(--main-text-color);
 }
 .borderBottom {
-    border-bottom: 2px solid #B58B64;
+    border-bottom: 2px solid var(--main-text-color);
 }
 .mainNav {
-    background: #B58B64;
+    background: var(--main-text-color);
 }
 input[type="search"]:focus {
     outline: none;
