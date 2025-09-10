@@ -63,8 +63,10 @@ namespace NoFilterForum.Infrastructure.Services
             imageFileName = new string([..imageFileName.Where(c => !invalidChars.Contains(c))]);
             return string.Concat(NanoidDotNet.Nanoid.Generate(size:12), "_", imageFileName);
         }
-        
-        // POST Methods
+        public async Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsByNotConfirmedAsync(cancellationToken);
+        public async Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistByIdAsync(userId, cancellationToken);
+        public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsUsernameAsync(username, cancellationToken);
+        public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken) => await _unitOfWork.Users.EmailExistsAsync(email, cancellationToken);
         public async Task<bool> IsAdminOrVIPAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -83,6 +85,8 @@ namespace NoFilterForum.Infrastructure.Services
             }
             return await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin));
         }
+        // POST Methods
+
         public async Task ApplyRoleAsync(UserDataModel user)
         {
             if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
@@ -127,6 +131,8 @@ namespace NoFilterForum.Infrastructure.Services
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                _cacheService.Remove($"currentUserReplyIndexDtoById_{changeUsernameRequest.UserId}");
+                _cacheService.Remove($"profileUserDtoById_{changeUsernameRequest.UserId}");
                 return PostResult.Success;
             }
             catch (OperationCanceledException ex)
@@ -142,9 +148,6 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistByIdAsync(userId, cancellationToken);
-        public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsUsernameAsync(username, cancellationToken);
-        public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken) => await _unitOfWork.Users.EmailExistsAsync(email, cancellationToken);
         public async Task<PostResult> ChangeEmailByIdAsync(ChangeEmailRequest changeEmailRequest, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -168,6 +171,7 @@ namespace NoFilterForum.Infrastructure.Services
                 await _userManager.UpdateSecurityStampAsync(user);
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                _cacheService.Remove($"profileUserDtoById_{changeEmailRequest.UserId}");
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)
@@ -183,7 +187,6 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-        public async Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsByNotConfirmedAsync(cancellationToken);
          public async Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -200,6 +203,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync<UserDataModel>(_unitOfWork.Users.Update, user, cancellationToken);
+                _cacheService.Remove("listUnconfirmedUserDtos");
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)
@@ -240,6 +244,7 @@ namespace NoFilterForum.Infrastructure.Services
                     _unitOfWork.Users.Delete, user,
                     cancellationToken
                     );
+                _cacheService.Remove("usersListNoDefault");
                 return PostResult.Success;
             }
             catch(OperationCanceledException ex)
@@ -272,6 +277,7 @@ namespace NoFilterForum.Infrastructure.Services
             try
             {
                 await _unitOfWork.RunPOSTOperationAsync(_unitOfWork.Users.Update, user, cancellationToken);
+                _cacheService.Remove($"profileUserDtoById_{changeBioRequest.UserId}");
                 return PostResult.Success;
             }
             catch (OperationCanceledException ex)
