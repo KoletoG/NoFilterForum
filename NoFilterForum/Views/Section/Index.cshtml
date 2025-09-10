@@ -50,7 +50,7 @@
 			@foreach (var section1 in Model.Sections)
 			{
 				<a asp-action="Index" asp-controller="Post" asp-route-titleOfSection="@section1.EncodedTitle">
-					<div class="p-1 row mainText borderTop borderBottom rounded-2">
+					<div class="p-1 row mainText borderTop borderBottom rounded-2" style="border-top-color:cornflowerblue">
 						<h5 class="text-center" style="font-weight:bold">@section1.Title</h5>
 					</div>
 					<div class="mb-2 row secondaryText pt-1">

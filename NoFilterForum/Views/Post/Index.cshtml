@@ -29,10 +29,10 @@
 			</div>
 			@{
 				bool isFirst = true;
+				int count = 1;
 			}
 			@foreach (var post in Model.Posts)
 			{
-				// Add Description here
 				<div class="row g-0 @(isFirst ? "borderTop" : string.Empty)  borderBottom" onload="markSeenPost('@post.Id')">
 
 					@{

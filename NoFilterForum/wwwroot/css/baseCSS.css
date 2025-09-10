@@ -1,4 +1,8 @@
-﻿.mainBG {
+﻿:root {
+    --main-text-color: #B58B64;
+    --secondary-text-color:cornflowerblue;
+}
+.mainBG {
     background: linear-gradient(90deg,#1a2766 0%,#1a2766 25%,#1a2766 75%,#0F365E 100%);
 }
 h6{
@@ -23,7 +27,7 @@ h5{
     font-weight:bold;
 }
 .secondaryText {
-    color: cornflowerblue;
+    color: var(--secondary-text-color);
     font-family: 'Noto Sans Display',sans-serif;
 }
 .biggerText{
@@ -49,7 +53,7 @@ h5{
     color:green;
 }
 .mainText {
-    color: #B58B64;
+    color: var(--main-text-color);
     font-family: 'Merriweather',serif;
 }
 .secondaryBtn {
