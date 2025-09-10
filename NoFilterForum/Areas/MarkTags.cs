@@ -9,7 +9,7 @@ namespace Web.Areas
         public void MarkTags(string currentUsername)
         {
             Content = string.Join(" ", Content.Split(' ')
-                .Select(x => Regex.Replace(x, $@"(@{currentUsername})", "<span style=\"background-color: #e0e0e0;\">$1</span>")));
+                .Select(x => Regex.Replace(x, $@"(@{currentUsername})", "<span class=\"rounded-1\" style=\"border-top: 1px solid cornflowerblue;border-bottom: 1px solid #B58B64;\">$1</span>")));
         }
     }
 }
