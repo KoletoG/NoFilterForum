@@ -15,6 +15,7 @@ namespace NoFilterForum.Infrastructure.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<WarningDataModel>().Property(x => x.IsAccepted).HasDefaultValue(false);
+            builder.Entity<WarningDataModel>().HasOne(x => x.User).WithMany(x => x.Warnings).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<PostDataModel>().HasOne(x => x.Section).WithMany(x => x.Posts).HasForeignKey(x=>x.SectionId).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedUserName).IsUnique();
             builder.Entity<UserDataModel>().HasIndex(x => x.NormalizedEmail).IsUnique();

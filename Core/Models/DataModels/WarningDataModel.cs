@@ -9,6 +9,7 @@ namespace NoFilterForum.Core.Models.DataModels
         public string Content { get; init; }
         public bool IsAccepted { get; private set; }
         public UserDataModel User { get; init; }
+        public string UserId { get; private init; }
         public void Accept() => IsAccepted = true;
         public WarningDataModel() { }
         public WarningDataModel(string content, UserDataModel user) 
@@ -17,6 +18,7 @@ namespace NoFilterForum.Core.Models.DataModels
             Content = content;
             User = user;
             IsAccepted = false;
+            UserId = User.Id;
         }
     }
 }
