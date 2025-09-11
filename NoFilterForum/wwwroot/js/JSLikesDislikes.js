@@ -1,5 +1,5 @@
-﻿let normalColor = "black";
-let updatedColor = "#236A96";
+﻿let normalColor = "#B58B64";
+let updatedColor = "cornflowerblue";
 function updateLike(id)
 {
     let btnLike = document.getElementById(`Like_${id}`);

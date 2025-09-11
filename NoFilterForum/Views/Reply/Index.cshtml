@@ -8,7 +8,9 @@
 
 
 @model IndexReplyViewModel
-<script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
+<head>
+	<script src="~/js/JSLikesDislikes.js" asp-append-version="true"> </script>
+</head>
 <body class="mainBG">
 	<div class="container secondaryBG shadow p-3">
 		@if (Model.Post.Username != UserConstants.DefaultUser.UserName)

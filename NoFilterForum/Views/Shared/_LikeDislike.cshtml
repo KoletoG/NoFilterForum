@@ -6,6 +6,6 @@
 	<form asp-action="@(Model.IsLiked ? "Like" : "Dislike")" class="mt-1 mb-1" asp-controller="@(Model.IsPost ? "Post" : "Reply")" method="post">
 		@Html.AntiForgeryToken()
 		<input type="hidden" name="Id" value="@Model.Id" />
-		<button type="submit" class="btn mainBtn" id="@($"{Model.Label}_id_{Model.Id}")" onclick="@($"update{Model.Label}(`id_{Model.Id}`)")" style="@Model.Style">@Model.Label</button>
+		<button type="submit" class="btn mainBtn" id="@($"{Model.FuncName}_id_{Model.Id}")" onclick="@($"update{Model.FuncName}(`id_{Model.Id}`)")" style="@Model.Style">@Model.Label</button>
 	</form>
 }
