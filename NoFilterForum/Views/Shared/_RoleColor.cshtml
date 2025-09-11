@@ -3,10 +3,16 @@
 @model RoleViewModel
 @if (Model.ShouldRoute)
 {
+	<div class="d-flex justify-content-center align-items-center">
+
 	<a asp-action="Index" asp-controller="Profile" asp-route-userId="@Model.UserId" class="text-break text-decoration-none fw-bold fs-5 @Model.RoleColor">
 		<img src="~/@Model.ImageUrl"  class="borderMain @Model.BorderColor" width="100" height="100" />
-		@Model.Username
-	</a>
+		<h5>
+			@Model.Username
+		</h5>
+		</a>
+
+	</div>
 }
 else
 {
