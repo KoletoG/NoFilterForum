@@ -9,12 +9,12 @@
 @model PostIndexViewModel
 <style>
 	.underlinehover {
-	color: black;
+		color: black;
 	}
 
-	.underlinehover:hover {
-	color: gray;
-	}
+		.underlinehover:hover {
+			color: gray;
+		}
 </style>
 <head>
 	<script src="~/js/JSMarkSeenPosts.js" asp-append-version="true"></script>
@@ -45,13 +45,20 @@
 					}<div class="col-7 me-2 ms-4 mt-1 align-self-center">
 						<a asp-action="Index" style="text-decoration:none" asp-controller="Reply" onclick="updateSeenState(event,'@post.Id')" asp-route-postId="@HttpUtility.UrlEncode(post.Id)">
 							<div class="col underlinehover fw-bold mainText" id="@(post.Id)_title">
-								<h5>@post.Title</h5>
+								<h5>
+									@post.Title
+									@if (post.IsPinned)
+									{
+										<span class="fst-italic text-end secondaryText"> Pinned</span>
+									}
+								</h5>
 							</div>
 							<div class=" secondaryText truncate-multiline" style="font-size:15px" id="@(post.Id)_body">
 								<h6>@Html.Raw(post.Body)</h6>
 							</div>
 						</a>
-						<h6 class="mainText text-end mt-1" id="@(post.Id)_date"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" /></h6>
+						<h6 class="mainText text-end mt-1" id="@(post.Id)_date"><partial name="_ShowTime" model="new ShowTimeViewModel(post.DateCreated)" />
+						</h6>
 
 						<script>
 							markSeenPost(`@post.Id`);
@@ -73,14 +80,14 @@
 					</div>
 				</div>
 			}
-	</div>
-	string controllerName = "Post";
-	string actionName = "Index";
-	<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)" />
-}
+		</div>
+		string controllerName = "Post";
+		string actionName = "Index";
+		<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,controllerName,actionName,Model.TitleOfSection)" />
+	}
 </body>
 @section Scripts {
-	<link rel="stylesheet" href="~/css/baseCSS.css" asp-append-version="true"/>
+	<link rel="stylesheet" href="~/css/baseCSS.css" asp-append-version="true" />
 	<partial name="_ValidationScriptsPartial" />
 	<script src="~/js/JSPostSeen.js" asp-append-version="true"></script>
 }
