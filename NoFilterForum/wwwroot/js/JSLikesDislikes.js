@@ -14,11 +14,15 @@ function updateLike(id)
     {
         btnLike.style.color=normalColor;
         likesCount.innerText=parseInt(likesCount.innerText)-1;
+        likesCount.classList.remove('secondaryText');
+        likesCount.classList.add('mainText');
     }
     else
     {
         btnLike.style.color=updatedColor;
         likesCount.innerText=parseInt(likesCount.innerText)+1;
+        likesCount.classList.add('secondaryText');
+        likesCount.classList.remove('mainText');
     }
 }
 function updateDislike(id)
@@ -35,10 +39,14 @@ function updateDislike(id)
     {
         btnDislike.style.color=normalColor;
         likesCount.innerText=parseInt(likesCount.innerText)+1;
+        likesCount.classList.remove('secondaryText');
+        likesCount.classList.add('mainText');
     }
     else
     {
         btnDislike.style.color=updatedColor;
         likesCount.innerText=parseInt(likesCount.innerText)-1;
+        likesCount.classList.add('secondaryText');
+        likesCount.classList.remove('mainText');
     }
 }

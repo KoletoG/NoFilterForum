@@ -17,6 +17,9 @@ h5{
 .thirdBG {
     background-color: var(--main-text-color);
 }
+.fourthBG{
+    background-color:var(--secondary-text-color);
+}
 .transparentText{
     color:rgba(0,0,0,0.0);
 }
@@ -25,6 +28,9 @@ h5{
     font-family: 'Merriweather',serif;
     font-size:17px;
     font-weight:bold;
+}
+.thirdText {
+    color: #1a2766;
 }
 .secondaryText {
     color: var(--secondary-text-color);
