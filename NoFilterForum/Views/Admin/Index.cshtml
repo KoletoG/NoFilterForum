@@ -3,28 +3,43 @@
 @using Web.ViewModels.Admin
 
 @model AdminPanelViewModel
-@{
-	if (Model.NotConfirmedExist)
-	{
-		<a asp-action="Reasons"><h2 style="color:red" class="font-monospace">You have non-confirmed users...</h2></a>
-	}
-	if (Model.HasReports)
-	{
-		<a asp-action="Index" asp-controller="Report"><h2 style="color:red" class="font-monospace">You have pending reports...</h2></a>
-	}
-	foreach(var user in Model.Users)
-	{
-		<a asp-action="Index" asp-controller="Profile" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4>@user.Username</h4></a>
-		@if (user.WarningsCount >= 3)
-		{
-			<p style="color:red"><a asp-action="Details" asp-controller="Warnings" asp-route-id="@HttpUtility.UrlEncode(user.Id)">@user.Username has more than 2 warnings {@user.WarningsCount} (Click to view them)</a></p>			
+<body class="mainBG">
+	<div class="container secondaryBG shadow">
+		@{
+			if (Model.NotConfirmedExist)
+			{
+				<a asp-action="Reasons"><h2 style="color:red" class="font-monospace">You have non-confirmed users...</h2></a>
+			}
+			if (Model.HasReports)
+			{
+				<a asp-action="Index" asp-controller="Report" style="text-decoration:none" class="mainText"><h2>You have pending reports...</h2></a>
+			}
+			bool isFirst = true;
+			foreach (var user in Model.Users)
+			{
+				<div class="@(isFirst ? string.Empty : "borderTop" ) pb-2 pt-2">
+					<a asp-action="Index" asp-controller="Profile" style="text-decoration:none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4 class="mainText">@user.Username</h4></a>
+					@if (user.WarningsCount >= 3)
+					{
+						<h5 class="mainText">
+							@user.Username
+							has more than 2 warnings {
+							@user.WarningsCount
+							}
+							<a asp-action="Details" asp-controller="Warnings" asp-route-id="@HttpUtility.UrlEncode(user.Id)" style="text-decoration:none" class="secondaryText">(Click here to view them)</a>
+
+						</h5>
+					}
+					<h5 class="secondaryText">@user.Email</h5>
+					<h5 class="secondaryText">@user.Role</h5>
+					<form asp-controller="Admin" asp-action="BanUser" method="post">
+						@Html.AntiForgeryToken()
+						<input hidden name="Id" value="@user.Id" />
+						<button type="submit" class="secondaryBtn rounded-2">Ban user</button>
+					</form>
+				</div>
+				isFirst = false;
+			}
 		}
-		<h5>@user.Email</h5>
-		<h5>@user.Role</h5>
-		<form asp-controller="Admin" asp-action="BanUser" method="post">
-		@Html.AntiForgeryToken()
-		<input hidden name="Id" value="@user.Id"/>
-		<button type="submit">Ban user</button>
-		</form>
-	}
-}
+	</div>
+</body>
