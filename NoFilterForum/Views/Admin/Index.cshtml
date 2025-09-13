@@ -3,6 +3,16 @@
 @using Web.ViewModels.Admin
 
 @model AdminPanelViewModel
+<style>
+	#reports:hover{
+		color:var(--secondary-text-color);
+	}
+
+	a .mainText:hover {
+		color: var(--secondary-text-color);
+		text-decoration:underline;
+	}
+</style>
 <body class="mainBG">
 	<div class="container secondaryBG shadow">
 		@{
@@ -12,31 +22,42 @@
 			}
 			if (Model.HasReports)
 			{
-				<a asp-action="Index" asp-controller="Report" style="text-decoration:none" class="mainText"><h2>You have pending reports...</h2></a>
+				<a asp-action="Index" id="reports" asp-controller="Report" class="mainText"><h2>You have pending reports...</h2></a>
 			}
 			bool isFirst = true;
 			foreach (var user in Model.Users)
 			{
-				<div class="@(isFirst ? string.Empty : "borderTop" ) pb-2 pt-2">
-					<a asp-action="Index" asp-controller="Profile" style="text-decoration:none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4 class="mainText">@user.Username</h4></a>
-					@if (user.WarningsCount >= 3)
-					{
-						<h5 class="mainText">
-							@user.Username
-							has more than 2 warnings {
-							@user.WarningsCount
-							}
-							<a asp-action="Details" asp-controller="Warnings" asp-route-id="@HttpUtility.UrlEncode(user.Id)" style="text-decoration:none" class="secondaryText">(Click here to view them)</a>
 
-						</h5>
-					}
-					<h5 class="secondaryText">@user.Email</h5>
-					<h5 class="secondaryText">@user.Role</h5>
-					<form asp-controller="Admin" asp-action="BanUser" method="post">
-						@Html.AntiForgeryToken()
-						<input hidden name="Id" value="@user.Id" />
-						<button type="submit" class="secondaryBtn rounded-2">Ban user</button>
-					</form>
+				<div class="@(isFirst ? string.Empty : "borderTop" ) pb-2 pt-2">
+				<div class="row text-center">
+					<a asp-action="Index" asp-controller="Profile" style="text-decoration:none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4 class="mainText">@user.Username</h4></a>
+						@if (user.WarningsCount >= 3)
+						{
+							<h5 class="mainText">
+								@user.Username
+								has more than 2 warnings {
+								@user.WarningsCount
+								}
+								<a asp-action="Details" asp-controller="Warnings" asp-route-id="@HttpUtility.UrlEncode(user.Id)" style="text-decoration:none" class="secondaryText">(Click here to view them)</a>
+
+							</h5>
+						}
+					</div>
+					<div class="row">
+						<div class="col align-content-center flex-column borderEnd">
+
+							<h5 class="secondaryText text-center">Email: @user.Email</h5>
+							<h5 class="secondaryText text-center">Role: @user.Role</h5>
+						</div>
+						<div class="col d-flex align-items-center justify-content-center">
+							<form asp-controller="Admin" asp-action="BanUser" method="post">
+								@Html.AntiForgeryToken()
+								<input hidden name="Id" value="@user.Id" />
+								<button type="submit" class="secondaryBtn rounded-2" style="height:50px;width:150px">Ban user</button>
+							</form>
+
+						</div>
+					</div>
 				</div>
 				isFirst = false;
 			}
