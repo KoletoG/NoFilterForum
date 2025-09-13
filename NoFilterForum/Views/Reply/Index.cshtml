@@ -19,7 +19,7 @@
 
 				<div class="col-10 text-center align-content-center">
 
-					<h4 class="fw-bold mainText">@Model.Post.Title</h4>
+					<h4 class="fw-bold mainText text-start ps-2">@Model.Post.Title</h4>
 				</div>
 				<div class="col-2 borderStart text-center pt-2 mb-2">
 					<partial name="_RoleColor" model="new RoleViewModel(Model.Post.Role,Model.Post.UserId,Model.Post.Username,true, Model.Post.ImageUrl)" />
@@ -118,7 +118,7 @@
 							<h6 class="mainText"><partial name="_ShowTime" model="new ShowTimeViewModel(reply.DateCreated)" /></h6>
 
 						</div>
-						<div class="d-flex borderTop justify-content-start align-items-center pt-1" style="min-height:60px">
+						<div class="d-flex justify-content-start align-items-center pt-1" style="min-height:60px">
 
 							<h6 class="mainText fst-italic text-break">@reply.Bio</h6>
 						</div>
