@@ -30,7 +30,7 @@
 
 				<div class="@(isFirst ? string.Empty : "borderTop" ) pb-2 pt-2">
 				<div class="row text-center">
-					<a asp-action="Index" asp-controller="Profile" style="text-decoration:none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4 class="mainText">@user.Username</h4></a>
+					<a asp-action="Index" asp-controller="Profile" style="text-decoration:none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><h4 class="mainText @user.TextColorRole">@user.Username</h4></a>
 						@if (user.WarningsCount >= 3)
 						{
 							<h5 class="mainText">
@@ -47,7 +47,7 @@
 						<div class="col align-content-center flex-column borderEnd">
 
 							<h5 class="mainText text-center">Email: <span class="secondaryText">@user.Email</span></h5>
-							<h5 class="mainText text-center">Role: <span class="secondaryText">@user.Role</span></h5>
+							<h5 class="mainText text-center">Role: <span class="@user.TextColorRole">@user.Role</span></h5>
 						</div>
 						<div class="col d-flex align-items-center justify-content-center">
 							<form asp-controller="Admin" asp-action="BanUser" method="post">
