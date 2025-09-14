@@ -11,5 +11,6 @@ namespace Web.ViewModels.Admin
         public required int WarningsCount { get; set; }
         public string TextColorRole => RoleColorHelper.SetRoleColor(Role);
         public required UserRoles Role { get; set; }
+        public required int PostsCount { get; set; }
     }
 }

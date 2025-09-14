@@ -33,7 +33,7 @@ namespace NoFilterForum.Infrastructure.Repositories
         {
             return await _context.Users.AsNoTracking()
                 .Where(x => x.UserName != UserConstants.DefaultUser.UserName)
-                .Select(x => new UserForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role))
+                .Select(x => new UserForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role,x.PostsCount))
                 .ToListAsync(cancellationToken);
         }
         public async Task<bool> ExistNormalizedUsername(string normalizedUsername, CancellationToken cancellationToken)

@@ -12,7 +12,8 @@ namespace Web.Mappers
             Id = dto.Id,
             Role = dto.Role,
             Username = dto.Username,
-            WarningsCount = dto.WarningsCount
+            WarningsCount = dto.WarningsCount,
+            PostsCount = dto.PostsCount
         };
         public static AdminPanelViewModel MapToViewModel(IEnumerable<UserItemsAdminViewModel> users, bool hasReports, bool notConfirmedExist) => new()
         {
