@@ -46,14 +46,14 @@
 					<div class="row">
 						<div class="col align-content-center flex-column borderEnd">
 
-							<h5 class="secondaryText text-center">Email: @user.Email</h5>
-							<h5 class="secondaryText text-center">Role: @user.Role</h5>
+							<h5 class="mainText text-center">Email: <span class="secondaryText">@user.Email</span></h5>
+							<h5 class="mainText text-center">Role: <span class="secondaryText">@user.Role</span></h5>
 						</div>
 						<div class="col d-flex align-items-center justify-content-center">
 							<form asp-controller="Admin" asp-action="BanUser" method="post">
 								@Html.AntiForgeryToken()
 								<input hidden name="Id" value="@user.Id" />
-								<button type="submit" class="secondaryBtn rounded-2" style="height:50px;width:150px">Ban user</button>
+								<button type="submit" class="secondaryBtn rounded-2 fs-4" style="height:50px;width:150px">Ban user</button>
 							</form>
 
 						</div>
