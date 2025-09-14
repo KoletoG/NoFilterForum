@@ -18,11 +18,11 @@
 		@{
 			if (Model.NotConfirmedExist)
 			{
-				<a asp-action="Reasons"><h2 style="color:red" class="font-monospace">You have non-confirmed users...</h2></a>
+				<a asp-action="Reasons" class="text-decoration-none"><h2 style="color:red" class="mainText">You have non-confirmed users...</h2></a>
 			}
 			if (Model.HasReports)
 			{
-				<a asp-action="Index" id="reports" asp-controller="Report" class="mainText"><h2>You have pending reports...</h2></a>
+				<a asp-action="Index" id="reports" asp-controller="Report" class="text-decoration-none "><h2 class="mainText" style="color:red">You have pending reports...</h2></a>
 			}
 			bool isFirst = true;
 			foreach (var user in Model.Users)

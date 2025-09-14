@@ -2,18 +2,25 @@
 @using Web.ViewModels.Admin
 
 @model ReasonsViewModel
+<body class="mainBG">
+	<div action="secondaryBG container shadow">
 
-@{
-	foreach(var user in Model.Users)
-	{
-		<h4>@user.Email</h4>
-		<h3>@user.Username</h3>
-		<h6>@user.Reason</h6>
-		<form asp-action="ConfirmUser" method="post">
-		@Html.AntiForgeryToken()
-		<input hidden name="UserId" value="@user.Id"/>
-		<button type="submit">Confirm User</button>
-		</form>
-	}
-
-}
+		@foreach (var user in Model.Users)
+		{
+			<div class="borderBottom pb-2 row">
+				<div class="col borderEnd">
+					<h5 class="mainText">Email: <span class="secondaryText">@user.Email</span> </h5>
+					<h5 class="mainText">Username: <span class="secondaryText">@user.Username</span></h5>
+					<form asp-action="ConfirmUser" method="post" class="text-center">
+						@Html.AntiForgeryToken()
+						<input hidden name="UserId" value="@user.Id" />
+						<button type="submit" class="secondaryBtn rounded-2">Confirm User</button>
+					</form>
+				</div>
+				<div class="col ">
+					<h6 class="mainText">Reason: <span class="secondaryText">@user.Reason</span></h6>
+				</div>
+			</div>
+		}
+	</div>
+</body>
