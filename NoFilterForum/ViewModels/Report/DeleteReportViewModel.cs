@@ -4,11 +4,9 @@ namespace Web.ViewModels.Report
 {
     public class DeleteReportViewModel
     {
-        [Required]
-        public string Id { get; set; }
-        public DeleteReportViewModel(string id)
+        public required string Id { get; init; }
+        public DeleteReportViewModel()
         {
-            Id = id;
         }
     }
 }

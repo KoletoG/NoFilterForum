@@ -3,12 +3,24 @@
 @using Web.ViewModels.Report
 
 @model IEnumerable<ReportItemViewModel>
+<body class="mainBG">
+	<div class="container shadow secondaryBG">
 
-@foreach(var report in Model)
-{
-	<h4>@report.IdOfPostReply</h4>
-	<h5>@report.UserToUsername</h5>
-	<h5>@report.UserFromUsername</h5>
-	<h3>@report.Content</h3>
-	<partial name="_DeleteReport" model="new DeleteReportViewModel(report.Id)"/>
-}
+		@foreach (var report in Model)
+		{
+			<div class="row borderBottom pb-2 pt-2">
+				<div class="col borderEnd">
+
+				<h6 class="mainText">Id: <span class="secondaryText">@report.IdOfPostReply</span></h6>
+				<h5 class="mainText">To: <span class="secondaryText">@report.UserToUsername</span></h5>
+					<h5 class="mainText">From: <span class="secondaryText">@report.UserFromUsername</span></h5>
+				</div>
+				<div class="col">
+
+				<h5 class="mainText">Content: <span class="secondaryText">@report.Content</span></h5>
+					<partial name="_DeleteReport" model="new DeleteReportViewModel(){Id = report.Id}" />
+				</div>
+			</div>
+		}
+	</div>
+</body>
