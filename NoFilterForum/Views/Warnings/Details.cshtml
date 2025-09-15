@@ -1,10 +1,16 @@
 ﻿@using Web.ViewModels
 @using Web.ViewModels.Warning
 
-@model IReadOnlyList<WarningItemViewModel>
-
-@for(int i =0;i<Model.Count;i++)
-{
-	<h3>Warning @(i+1): @Model[i].Content</h3>
-	<br />
-}
+@model IEnumerable<WarningItemViewModel>
+<body class="mainBG">
+	<div class="container shadow secondaryBG">
+		@{
+			int count = 1;
+		}
+		@foreach(var warning in Model)
+		{
+			<h3>Warning @count: @warning.Content</h3>
+			<br />
+		}
+	</div>
+</body>
