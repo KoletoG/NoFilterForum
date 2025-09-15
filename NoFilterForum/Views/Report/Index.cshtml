@@ -2,9 +2,9 @@
 @using Web.ViewModels.Admin
 @using Web.ViewModels.Report
 
-@model ReportsViewModel
+@model IEnumerable<ReportItemViewModel>
 
-@foreach(var report in Model.Reports)
+@foreach(var report in Model)
 {
 	<h4>@report.IdOfPostReply</h4>
 	<h5>@report.UserToUsername</h5>

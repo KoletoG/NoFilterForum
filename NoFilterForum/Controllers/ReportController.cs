@@ -26,8 +26,7 @@ namespace Web.Controllers
         {
             var reportDtos = await _reportService.GetAllDtosAsync(cancellationToken);
             var reportVMs = reportDtos.Select(ReportMapper.MapToViewModel);
-            var reportIndexVM = ReportMapper.MapToViewModel(reportVMs);
-            return View(reportIndexVM);
+            return View(reportVMs);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
