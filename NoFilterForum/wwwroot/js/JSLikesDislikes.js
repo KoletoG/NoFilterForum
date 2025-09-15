@@ -1,5 +1,5 @@
 ﻿let normalColor = "#B58B64";
-let updatedColor = "cornflowerblue";
+let updatedColor = "var(--secondary-text-color)";
 function updateLike(id)
 {
     let btnLike = document.getElementById(`Like_${id}`);
@@ -24,6 +24,23 @@ function updateLike(id)
         likesCount.classList.add('secondaryText');
         likesCount.classList.remove('mainText');
     }
+}
+function likeDislike(id,controller,action){
+    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+fetch(`/${controller}/${action}`,{
+    method:'POST',
+    headers:{
+       'RequestVerificationToken' : token,
+       'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({Id:id})
+});
+if(action=="Like"){
+    updateLike(id);
+}
+else{
+    updateDislike(id);
+}
 }
 function updateDislike(id)
 {

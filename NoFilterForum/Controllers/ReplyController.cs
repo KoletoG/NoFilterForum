@@ -81,7 +81,7 @@ namespace Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Like(LikeDislikeReplyViewModel likeDislikeReplyViewModel, CancellationToken cancellationToken)
+        public async Task<IActionResult> Like([FromBody] LikeDislikeReplyViewModel likeDislikeReplyViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {

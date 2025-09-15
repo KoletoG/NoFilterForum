@@ -35,30 +35,27 @@
 					@if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<div class="d-flex align-items-center justify-content-around g-2">
-
-							<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,true)" />
-							<h6 class="mainText" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
-							<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
+							<button type="button" class="mainBtn" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')" style="color:var(--secondary-text-color)">+</button>
+							<h6 class="mainText" id="likesCount_@Model.Post.Id">@Model.Post.Likes</h6>
+							<button type="button" class="mainBtn" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')">-</button>
 						</div>
 					}
 					else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<div class="d-flex align-items-center justify-content-around g-2">
+							<button type="button" class="mainBtn" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')">+</button>
+							<h6 class="mainText" id="likesCount_@Model.Post.Id">@Model.Post.Likes</h6>
+							<button type="button" class="mainBtn" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')" style="color:var(--secondary-text-color)">-</button>
 
-							<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-							<h6 class="mainText" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
-							<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,true)" />
 						</div>
 					}
 					else
 					{
 						<div class="d-flex align-items-center justify-content-around g-2">
+							<button type="button" class="mainBtn" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')">+</button>
+							<h6 class="mainText" id="likesCount_@Model.Post.Id">@Model.Post.Likes</h6>
+							<button type="button" class="mainBtn" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')">-</button>
 
-							<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,true,false)" />
-
-							<h6 class="mainText" id="likesCount_id_@Model.Post.Id">@Model.Post.Likes</h6>
-
-							<partial name="_LikeDislike" model="new LikeDislikeViewModel(Model.Post.Id,true,false,false)" />
 
 						</div>
 					}
@@ -132,27 +129,27 @@
 								@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 								{
 									<div class="d-flex justify-content-around align-items-center">
-										<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,true)" />
-										<h6 id="likesCount_id_@reply.Id" class="secondaryText">@reply.Likes</h6>
-										<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+										<button type="button" class="mainBtn" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')" style="color:var(--secondary-text-color)">+</button>
+										<h6 id="likesCount_@reply.Id" class="secondaryText">@reply.Likes</h6>
+										<button type="button" class="mainBtn" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')">-</button>
 
 									</div>
 								}
 								else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
 								{
 									<div class="d-flex justify-content-around align-items-center">
-										<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-										<h6 id="likesCount_id_@reply.Id" class="secondaryText">@reply.Likes</h6>
-										<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,true)" />
+										<button type="button" class="mainBtn" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')">+</button>
+										<h6 id="likesCount_@reply.Id" class="secondaryText">@reply.Likes</h6>
+										<button type="button" class="mainBtn" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')" style="color:var(--secondary-text-color)">-</button>
 
 									</div>
 								}
 								else
 								{
 									<div class="d-flex justify-content-around align-items-center">
-										<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,true,false)" />
-										<h6 id="likesCount_id_@reply.Id" class="mainText">@reply.Likes</h6>
-										<partial name="_LikeDislike" model="new LikeDislikeViewModel(reply.Id,false,false,false)" />
+										<button type="button" class="mainBtn" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')">+</button>
+										<h6 id="likesCount_@reply.Id" class="secondaryText">@reply.Likes</h6>
+										<button type="button" class="mainBtn" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')">-</button>
 
 									</div>
 								}
