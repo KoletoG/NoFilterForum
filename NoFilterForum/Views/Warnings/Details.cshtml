@@ -9,8 +9,9 @@
 		}
 		@foreach(var warning in Model)
 		{
-			<h3>Warning @count: @warning.Content</h3>
-			<br />
+			<div class="row borderBottom">
+				<h5 class="mainText">Warning @count: <span class="secondaryText">@warning.Content</span></h5>
+			</div>
 		}
 	</div>
 </body>
