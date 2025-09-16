@@ -1,19 +1,25 @@
 ﻿@using Web.ViewModels.Profile
 @model ChangeBioViewModel
+<script>
+	function showBioBtn(){
+		if(document.getElementById('bioText').value!=""){
+
+		document.getElementById('bioBtn').hidden=false;
+		}
+		else{
+
+		document.getElementById('bioBtn').hidden=true;
+		}
+	}
+</script>
 <div class="row g-2 flex-grow-0">
-	<div class="col-2 d-flex align-items-center justify-content-start">
+	<div class="col">
 
-		<button class="btn mainBtn" type="button" style="font-size:13px" data-bs-toggle="collapse" data-bs-target="#collapseBio" aria-expanded="false" aria-controls="collapseBio">
-			Change Bio
-		</button>
-	</div>
-	<div class="col-10">
-
-		<form asp-action="ChangeBio" id="collapseBio" asp-controller="Profile" class=" align-items-center justify-content-end d-flex collapse" method="post">
+		<form asp-action="ChangeBio" id="collapseBio" asp-controller="Profile" class=" align-items-center justify-content-start d-flex collapse" method="post">
 			@Html.AntiForgeryToken()
 			<span asp-validation-for="Bio" class="text-danger"></span>
-			<textarea asp-for="Bio" cols="83" rows="2" style="font-size:13px" class="mainInput ps-1" placeholder="Type your bio..."></textarea>
-			<button type="submit" class="btn mainBtn ms-2" style="font-size:13px">Save Bio</button>
+			<textarea asp-for="Bio" id="bioText" oninput="showBioBtn()" cols="83" rows="2" style="font-size:13px" class="mainInput ps-1" placeholder="Type your bio..."></textarea>
+			<button type="submit" class="btn mainBtn ms-2" hidden id="bioBtn" style="font-size:13px">Save Bio</button>
 		</form>
 	</div>
 </div>
