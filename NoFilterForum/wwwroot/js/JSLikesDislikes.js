@@ -5,6 +5,12 @@ function updateLike(id)
     let btnLike = document.getElementById(`Like_${id}`);
     let likesCount = document.getElementById(`likesCount_${id}`);
     let btnDislike = document.getElementById(`Dislike_${id}`);
+        btnDislike.disabled=true;
+        btnLike.disabled=true;
+    setTimeout(()=>{
+        btnDislike.disabled=false;
+        btnLike.disabled=false;
+    },3000);
     if(btnDislike.style.color==updatedColor)
     {
         btnDislike.style.color=normalColor;
@@ -53,6 +59,12 @@ function updateDislike(id)
     let btnLike = document.getElementById(`Like_${id}`);
     let likesCount = document.getElementById(`likesCount_${id}`);
     let btnDislike = document.getElementById(`Dislike_${id}`);
+        btnDislike.disabled=true;
+        btnLike.disabled=true;
+    setTimeout(()=>{
+        btnDislike.disabled=false;
+        btnLike.disabled=false;
+    },3000);
     if(btnLike.style.color==updatedColor)
     {
         btnLike.style.color=normalColor;
