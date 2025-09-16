@@ -8,6 +8,8 @@ function updateLike(id)
     if(btnDislike.style.color==updatedColor)
     {
         btnDislike.style.color=normalColor;
+        btnDislike.classList.add('borderMain');
+        btnDislike.classList.remove('borderSecondary');
         likesCount.innerText=parseInt(likesCount.innerText)+1;
     }
     if(btnLike.style.color==updatedColor)
@@ -16,6 +18,8 @@ function updateLike(id)
         likesCount.innerText=parseInt(likesCount.innerText)-1;
         likesCount.classList.remove('secondaryText');
         likesCount.classList.add('mainText');
+        btnLike.classList.add('borderMain');
+        btnLike.classList.remove('borderSecondary');
     }
     else
     {
@@ -23,6 +27,8 @@ function updateLike(id)
         likesCount.innerText=parseInt(likesCount.innerText)+1;
         likesCount.classList.add('secondaryText');
         likesCount.classList.remove('mainText');
+        btnLike.classList.remove('borderMain');
+        btnLike.classList.add('borderSecondary');
     }
 }
 function likeDislike(id,controller,action){
@@ -50,6 +56,8 @@ function updateDislike(id)
     if(btnLike.style.color==updatedColor)
     {
         btnLike.style.color=normalColor;
+        btnLike.classList.add('borderMain');
+        btnLike.classList.remove('borderSecondary');
         likesCount.innerText=parseInt(likesCount.innerText)-1;
     }
     if(btnDislike.style.color==updatedColor)
@@ -58,6 +66,8 @@ function updateDislike(id)
         likesCount.innerText=parseInt(likesCount.innerText)+1;
         likesCount.classList.remove('secondaryText');
         likesCount.classList.add('mainText');
+        btnDislike.classList.add('borderMain');
+        btnDislike.classList.remove('borderSecondary');
     }
     else
     {
@@ -65,5 +75,7 @@ function updateDislike(id)
         likesCount.innerText=parseInt(likesCount.innerText)-1;
         likesCount.classList.add('secondaryText');
         likesCount.classList.remove('mainText');
+        btnDislike.classList.remove('borderMain');
+        btnDislike.classList.add('borderSecondary');
     }
 }
