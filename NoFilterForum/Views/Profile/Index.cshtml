@@ -18,56 +18,81 @@
 					<div class="row">
 						<div class="col-12" style="height:100px">
 							<h5 class="mainText"></h5> <h5 class="fw-bold secondaryText  truncate-multiline">@Html.Raw(Model.Profile.Bio)</h5>
-					</div>
-					<div class="col-12">
-
-							<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
 						</div>
-				</div>
+						@if (Model.IsSameUser)
+						{
+
+							<div class="col-12">
+
+								<partial name="_ChangeBio" model="new ChangeBioViewModel()" />
+							</div>
+						}
+					</div>
 				</div>
 				<div class="col-2 text-center align-self-center">
 					<a href="@Model.Profile.ImageUrl" style="text-decoration:none">
 						<partial name="_RoleColor" model="new RoleViewModel(Model.Profile.Role,Model.Profile.Id,Model.Profile.UserName,false,Model.Profile.ImageUrl)" />
 					</a>
-					<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
+					@if (Model.IsSameUser)
+					{
+						<partial name="_UpdateImage" model="new UpdateImageViewModel()" />
+					}
 				</div>
 			</div>
-			<div class="row">
+			<div class="row d-flex justify-content-end">
 				<div class="col-10 align-content-center">
-					<h5 class="secondaryText">@Model.Profile.Email</h5>
+					@if (Model.IsSameUser)
+					{
+						<div class="col-10 mt-1 text-start">
+							<h5 class="fw-bold secondaryText">
+
+								@Model.Profile.UserName
+								<button class="btn mainBtn mb-2" style="font-size:13px" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsername" aria-expanded="false" aria-controls="collapseUsername">
+									Change Username
+								</button>
+
+							</h5>
+						</div>
+					}
+					else
+					{
+
+						<h5 class="secondaryText">@Model.Profile.UserName</h5>
+					}
 				</div>
-				<div class="col-2">
+				<div class="col-2 ">
 					<h6 class="fst-italic text-center secondaryText">@Model.Profile.DateCreated.ToShortDateString()</h6>
 					<h6 class="text-danger fw-bold fst-italic text-center">@Model.Profile.WarningsCount warning(s)</h6>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-8 text-start">
-					<h5 class="fw-bold secondaryText">
-						@Model.Profile.UserName
-						<button class="btn mainBtn mb-2" style="font-size:13px" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsername" aria-expanded="false" aria-controls="collapseUsername">
-							Change Username
-						</button>
-					</h5>
-				</div>
-				<div class="col-4 text-end">
-					<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
-				</div>
-			</div>
+			@if (Model.IsSameUser)
+			{
+				<div class="row">
+					<div class="col-4 text-end">
+						<partial name="_ChangeUsername" model="new ChangeUsernameViewModel()" />
 
-			<div class="row">
-				<div class="col-8 text-start">
-					<h5 class="fw-bold secondaryText">
-						@Model.Profile.Email
-						<button class="btn mainBtn mb-2" style="font-size:13px" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmail" aria-expanded="false" aria-controls="collapseEmail">
-							Change Email
-						</button>
-					</h5>
+					</div>
 				</div>
-				<div class="col-4 text-end">
-					<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
+
+			}
+			@if (Model.IsSameUser)
+			{
+				<div class="row">
+					<div class="col-8 text-start">
+						<h5 class="fw-bold secondaryText">
+							@Model.Profile.Email
+							<button class="btn mainBtn mb-2" style="font-size:13px" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmail" aria-expanded="false" aria-controls="collapseEmail">
+								Change Email
+							</button>
+
+						</h5>
+					</div>
+
+					<div class="col-4 text-end">
+						<partial name="_ChangeEmail" model="new ChangeEmailViewModel()" />
+					</div>
 				</div>
-			</div>
+			}
 			if (Model.IsSameUser)
 			{
 				if (!string.IsNullOrEmpty(ViewBag.Error))
@@ -77,17 +102,18 @@
 			}
 			else
 			{
-				<form asp-action="Create" asp-controller="Chat" method="post">
-					@Html.AntiForgeryToken()
-					<input hidden name="UserId" value="@Model.Profile.Id" />
-					<button type="submit">Start chat</button>
-				</form>
-				<h3>@Model.Profile.UserName's bio: @Html.Raw(Model.Profile.Bio)</h3>
+				<div class="mb-2">
+					<form asp-action="Create" asp-controller="Chat" method="post">
+						@Html.AntiForgeryToken()
+						<input hidden name="UserId" value="@Model.Profile.Id" />
+						<button type="submit" class="secondaryBtn rounded-2">Start chat</button>
+					</form>
+				</div>
 			}
 			if (UserConstants.adminNames.Contains(this.User.Identity.Name))
 			{
 				<h6 class="mainText">The user has: <span style="color:red">@Model.Profile.WarningsCount</span> warnings</h6>
-					<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
+				<partial name="~/Views/Warnings/_CreateWarning.cshtml" model="new CreateWarningViewModel(){UserId=Model.Profile.Id}"></partial>
 			}
 		}
 		<h5 class="mainText">Posts count: <span class="secondaryText">@Model.Profile.PostsCount</span></h5>
