@@ -35,26 +35,26 @@
 					@if (Model.CurrentUser.LikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<div class="d-flex align-items-center justify-content-around g-2">
-							<button type="button" class="mainBtn borderSecondary rounded-2" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')" style="color:var(--secondary-text-color)">+</button>
+							<button type="button" class="mainBtn borderSecondary rounded-start-2" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')" style="color:var(--secondary-text-color)">+</button>
 							<h6 class="mainText" id="likesCount_@Model.Post.Id">@Model.Post.Likes</h6>
-							<button type="button" class="mainBtn rounded-2" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')">-</button>
+							<button type="button" class="mainBtn rounded-end-2" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')">-</button>
 						</div>
 					}
 					else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(Model.Post.Id))
 					{
 						<div class="d-flex align-items-center justify-content-around g-2">
-							<button type="button" class="mainBtn rounded-2" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')">+</button>
+							<button type="button" class="mainBtn rounded-start-2" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')">+</button>
 							<h6 class="mainText" id="likesCount_@Model.Post.Id">@Model.Post.Likes</h6>
-							<button type="button" class="mainBtn borderSecondary rounded-2" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')" style="color:var(--secondary-text-color)">-</button>
+							<button type="button" class="mainBtn borderSecondary rounded-end-2" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')" style="color:var(--secondary-text-color)">-</button>
 
 						</div>
 					}
 					else
 					{
 						<div class="d-flex align-items-center justify-content-around g-2">
-							<button type="button" class="mainBtn rounded-2" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')">+</button>
+							<button type="button" class="mainBtn rounded-start-2" id="Like_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Like')">+</button>
 							<h6 class="mainText" id="likesCount_@Model.Post.Id">@Model.Post.Likes</h6>
-							<button type="button" class="mainBtn rounded-2" id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')">-</button>
+							<button type="button" class="mainBtn rounded-end-2 " id="Dislike_@Model.Post.Id" onclick="likeDislike('@Model.Post.Id','Post','Dislike')">-</button>
 
 
 						</div>
@@ -129,27 +129,27 @@
 								@if (Model.CurrentUser.LikesPostRepliesIds.Contains(reply.Id))
 								{
 									<div class="d-flex justify-content-around align-items-center">
-										<button type="button" class="mainBtn rounded-2 borderSecondary" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')" style="color:var(--secondary-text-color)">+</button>
+										<button type="button" class="mainBtn rounded-start-2 borderSecondary" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')" style="color:var(--secondary-text-color)">+</button>
 										<h6 id="likesCount_@reply.Id" class="secondaryText">@reply.Likes</h6>
-										<button type="button" class="mainBtn rounded-2" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')">-</button>
+										<button type="button" class="mainBtn rounded-end-2" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')">-</button>
 
 									</div>
 								}
 								else if (Model.CurrentUser.DislikesPostRepliesIds.Contains(reply.Id))
 								{
 									<div class="d-flex justify-content-around align-items-center">
-										<button type="button" class="mainBtn rounded-2" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')">+</button>
+										<button type="button" class="mainBtn rounded-start-2" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')">+</button>
 										<h6 id="likesCount_@reply.Id" class="secondaryText">@reply.Likes</h6>
-										<button type="button" class="mainBtn rounded-2 borderSecondary" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')" style="color:var(--secondary-text-color)">-</button>
+										<button type="button" class="mainBtn rounded-end-2 borderSecondary" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')" style="color:var(--secondary-text-color)">-</button>
 
 									</div>
 								}
 								else
 								{
 									<div class="d-flex justify-content-around align-items-center">
-										<button type="button" class="mainBtn rounded-2" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')">+</button>
+										<button type="button" class="mainBtn rounded-start-2" id="Like_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Like')">+</button>
 										<h6 id="likesCount_@reply.Id" class="secondaryText">@reply.Likes</h6>
-										<button type="button" class="mainBtn rounded-2" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')">-</button>
+										<button type="button" class="mainBtn rounded-end-2" id="Dislike_@reply.Id" onclick="likeDislike('@reply.Id','Reply','Dislike')">-</button>
 
 									</div>
 								}
