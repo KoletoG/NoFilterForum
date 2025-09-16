@@ -24,11 +24,10 @@
 			{
 				<a asp-action="Index" id="reports" asp-controller="Report" class="text-decoration-none "><h2 class="mainText" style="color:red">You have pending reports...</h2></a>
 			}
-			bool isFirst = true;
 			foreach (var user in Model.Users)
 			{
 
-				<div class="@(isFirst ? string.Empty : "borderTop" ) pb-2 pt-2">
+				<div class="borderBottom pb-2 pt-2">
 				<div class="row text-center">
 						<h4><a asp-action="Index" asp-controller="Profile" class="text-decoration-none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><span class="mainText @user.TextColorRole">@user.Username</span></a></h4>
 						@if (user.WarningsCount >= 3)
@@ -60,7 +59,6 @@
 						</div>
 					</div>
 				</div>
-				isFirst = false;
 			}
 		}
 	</div>
