@@ -29,6 +29,7 @@ using Core.Enums;
 using System.Security.Claims;
 using Web.ViewModels.Report;
 using Application.Interfaces.Services;
+using Web.ViewModels.VIP;
 namespace Web.Controllers
 {
     public class VIPController(IUserService userService) : Controller
@@ -40,7 +41,7 @@ namespace Web.Controllers
             if (userId is null) return Unauthorized();
             bool isVIP = await _userService.IsVIPById(userId);
 
-            return View();
+            return View(new VIPIndexViewModel() { isVIP =isVIP});
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -3,6 +3,24 @@
 
 <body class="mainBG">
 	<div class="container shadow secondaryBG">
-
+		@if (!Model.isVIP)
+		{
+			<div class="row">
+				<div class="col">
+					<h3 class="mainText text-center">Buy <span class="fst-italic"><span style="color:cornflowerblue">V</span><span style="color:orange">I</span><span style="color:yellow">P</span></span></h3>
+					<h5 class="secondaryText text-center">For 5$ per month, you unlock the following:</h5>
+					<ul>
+						@foreach(var trait in Model.Traits)
+						{
+							<li>
+								<h6 class="text-center">
+									@trait
+								</h6>
+							</li>
+						}
+					</ul>
+				</div>
+			</div>
+		}
 	</div>
 </body>
