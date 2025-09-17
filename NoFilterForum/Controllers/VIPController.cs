@@ -30,11 +30,11 @@ using System.Security.Claims;
 using Web.ViewModels.Report;
 namespace Web.Controllers
 {
-    public class HomeController : Controller
+    public class VIPController() : Controller
     {
-        public HomeController()
+        public async Task<IActionResult> Index()
         {
-
+            return View();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
