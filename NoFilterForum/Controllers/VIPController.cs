@@ -28,14 +28,18 @@ using NoFilterForum.Infrastructure.Data;
 using Core.Enums;
 using System.Security.Claims;
 using Web.ViewModels.Report;
+using Application.Interfaces.Services;
 namespace Web.Controllers
 {
-    public class VIPController() : Controller
+    public class VIPController(IUserService userService) : Controller
     {
+        private readonly IUserService _userService = userService;
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) return Unauthorized();
+            if (userId is null) return Unauthorized();
+            bool isVIP = await _userService.IsVIPById(userId);
+
             return View();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

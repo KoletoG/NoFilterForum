@@ -11,6 +11,7 @@ namespace Application.Interfaces.Services
 {
     public interface IUserService
     {
+        public Task<bool> IsVIPById(string id);
         public Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken);
         public Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken);
         public Task ApplyRoleAsync(UserDataModel user);
