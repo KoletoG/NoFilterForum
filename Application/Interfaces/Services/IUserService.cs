@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.OutputDTOs.Chat;
+using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Profile;
@@ -11,6 +12,7 @@ namespace Application.Interfaces.Services
 {
     public interface IUserService
     {
+        public Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOAsync(int page, CancellationToken cancellationToken);
         public Task<bool> IsVIPById(string id);
         public Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken);
         public Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken);

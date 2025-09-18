@@ -1,4 +1,5 @@
-﻿using Core.Models.DTOs;
+﻿using Core.DTOs.OutputDTOs.Reply;
+using Core.Models.DTOs;
 using Core.Models.DTOs.OutputDTOs.Admin;
 using Web.ViewModels.Admin;
 
@@ -15,11 +16,13 @@ namespace Web.Mappers
             WarningsCount = dto.WarningsCount,
             PostsCount = dto.PostsCount
         };
-        public static AdminPanelViewModel MapToViewModel(IEnumerable<UserItemsAdminViewModel> users, bool hasReports, bool notConfirmedExist) => new()
+        public static AdminPanelViewModel MapToViewModel(IEnumerable<UserItemsAdminViewModel> users, bool hasReports, bool notConfirmedExist, PageTotalPagesDTO pageDto) => new()
         {
             Users = users,
             HasReports = hasReports,
-            NotConfirmedExist = notConfirmedExist
+            NotConfirmedExist = notConfirmedExist,
+            Page = pageDto.Page,
+            TotalPages = pageDto.TotalPages
         };
         public static UserReasonViewModel MapToViewModel(UsersReasonsDto dto) => new()
         {

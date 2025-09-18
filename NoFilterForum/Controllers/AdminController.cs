@@ -77,11 +77,12 @@ namespace Web.Controllers
         [Route("Adminpanel")]
         public async Task<IActionResult> Index(CancellationToken cancellationToken, int page=1)
         {
-            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync(page,cancellationToken);
+            var pageTotalsDto = await _userService.GetPageAndTotalPagesDTOAsync(page, cancellationToken);
+            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync(pageTotalsDto.Page, cancellationToken);
             var userViewModel = usersDto.Select(AdminMapper.MapToViewModel);
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync(cancellationToken);
             bool hasReports = await _reportService.AnyReportsAsync(cancellationToken);
-            var adminPanelVM = AdminMapper.MapToViewModel(userViewModel, hasReports, notConfirmedExist);
+            var adminPanelVM = AdminMapper.MapToViewModel(userViewModel, hasReports, notConfirmedExist,pageTotalsDto);
             return View(adminPanelVM);
         }
         [Authorize(Roles = "Admin")]

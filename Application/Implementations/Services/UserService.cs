@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.Marshalling;
 using Application.Interfaces.Services;
 using Core.Constants;
 using Core.DTOs.OutputDTOs.Chat;
+using Core.DTOs.OutputDTOs.Reply;
 using Core.Enums;
 using Core.Interfaces.Repositories;
 using Core.Models.DTOs.InputDTOs.Profile;
@@ -51,7 +52,24 @@ namespace NoFilterForum.Infrastructure.Services
             if (user is null) return false;
             return await _userManager.IsInRoleAsync(user, "VIP");
         }
-        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(int page, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync,page, cancellationToken) ?? [];
+        public async Task<PageTotalPagesDTO> GetPageAndTotalPagesDTOAsync(int page, CancellationToken cancellationToken)
+        {
+            int totalPages = await GetTotalPagesAsync(cancellationToken);
+            if (totalPages == 1) return new(1, 1);
+            page = PageUtility.ValidatePageNumber(page, totalPages);
+            return new(page, totalPages);
+        }
+        private async Task<int> GetTotalPagesAsync(CancellationToken cancellationToken)
+        {
+            var userCount = await _unitOfWork.Users.GetCountWithoutDefault(cancellationToken);
+            if (userCount == 0) return 1;
+            int totalPages = PageUtility.GetTotalPagesCount(userCount, PostConstants.PostsPerSection);
+            return totalPages;
+        }
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(int page, CancellationToken cancellationToken) 
+        {
+            return await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, page, cancellationToken) ?? [];
+        }
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
         {

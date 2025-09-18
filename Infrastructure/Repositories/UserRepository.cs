@@ -38,6 +38,10 @@ namespace NoFilterForum.Infrastructure.Repositories
                 .Take(PostConstants.PostsPerSection)
                 .ToListAsync(cancellationToken);
         }
+        public async Task<int> GetCountWithoutDefault(CancellationToken cancellationToken)
+        {
+            return await _context.Users.CountAsync(x => x != UserConstants.DefaultUser,cancellationToken);
+        }
         public async Task<bool> ExistNormalizedUsername(string normalizedUsername, CancellationToken cancellationToken)
         {
             return await _context.Users.AnyAsync(x=>x.NormalizedUserName == normalizedUsername);

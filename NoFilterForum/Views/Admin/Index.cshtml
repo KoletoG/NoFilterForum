@@ -1,16 +1,18 @@
 ﻿@using System.Web
 @using NoFilterForum.Core.Models.ViewModels
+@using Web.Controllers
+@using Web.ViewModels
 @using Web.ViewModels.Admin
 
 @model AdminPanelViewModel
 <style>
 	#reports:hover{
-		color:var(--secondary-text-color);
+	color:var(--secondary-text-color);
 	}
 
 	a .mainText:hover {
-		color: var(--secondary-text-color);
-		text-decoration:underline;
+	color: var(--secondary-text-color);
+	text-decoration:underline;
 	}
 </style>
 <body class="mainBG">
@@ -28,7 +30,7 @@
 			{
 
 				<div class="borderBottom pb-2 pt-2">
-				<div class="row text-center">
+					<div class="row text-center">
 						<h4><a asp-action="Index" asp-controller="Profile" class="text-decoration-none" asp-route-userId="@HttpUtility.UrlEncode(user.Id)"><span class="mainText @user.TextColorRole">@user.Username</span></a></h4>
 						@if (user.WarningsCount >= 3)
 						{
@@ -60,6 +62,9 @@
 					</div>
 				</div>
 			}
+			string action = "Index";
+			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.AdminControllerName,action)" />
+
 		}
-	</div>
+		</div>
 </body>
