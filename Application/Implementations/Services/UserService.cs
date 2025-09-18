@@ -51,7 +51,7 @@ namespace NoFilterForum.Infrastructure.Services
             if (user is null) return false;
             return await _userManager.IsInRoleAsync(user, "VIP");
         }
-         public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
         {
@@ -66,8 +66,8 @@ namespace NoFilterForum.Infrastructure.Services
             imageFileName = Path.GetFileName(_htmlSanitizer.Sanitize(imageFileName))
                                 .Replace(' ', '_')
                                 .ToLower();
-            imageFileName = new string([..imageFileName.Where(c => !invalidChars.Contains(c))]);
-            return string.Concat(NanoidDotNet.Nanoid.Generate(size:12), "_", imageFileName);
+            imageFileName = new string([.. imageFileName.Where(c => !invalidChars.Contains(c))]);
+            return string.Concat(NanoidDotNet.Nanoid.Generate(size: 12), "_", imageFileName);
         }
         public async Task<bool> AnyNotConfirmedUsersAsync(CancellationToken cancellationToken) => await _unitOfWork.Users.ExistsByNotConfirmedAsync(cancellationToken);
         public async Task<bool> ExistUserByIdAsync(string userId, CancellationToken cancellationToken) => await _unitOfWork.Users.ExistByIdAsync(userId, cancellationToken);
@@ -95,7 +95,8 @@ namespace NoFilterForum.Infrastructure.Services
 
         public async Task ApplyRoleAsync(UserDataModel user)
         {
-            if (!await _userManager.IsInRoleAsync(user, nameof(UserRoles.VIP)) && !await _userManager.IsInRoleAsync(user, nameof(UserRoles.Admin)))
+            var roles = await _userManager.GetRolesAsync(user);
+            if (!roles.Contains(nameof(UserRoles.VIP)) && !roles.Contains(nameof(UserRoles.Admin)))
             {
                 var role = user.PostsCount switch
                 {
@@ -113,7 +114,7 @@ namespace NoFilterForum.Infrastructure.Services
                 user.ChangeRole(role);
             }
         }
-        
+
         public async Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -165,7 +166,7 @@ namespace NoFilterForum.Infrastructure.Services
                     return PostResult.NotFound;
                 }
                 var normalizedEmail = _userManager.NormalizeEmail(changeEmailRequest.Email);
-                if(await _unitOfWork.Users.ExistNormalizedEmailAsync(normalizedEmail, cancellationToken))
+                if (await _unitOfWork.Users.ExistNormalizedEmailAsync(normalizedEmail, cancellationToken))
                 {
                     return PostResult.Conflict;
                 }
@@ -180,7 +181,7 @@ namespace NoFilterForum.Infrastructure.Services
                 _cacheService.Remove($"profileUserDtoById_{changeEmailRequest.UserId}");
                 return PostResult.Success;
             }
-            catch(OperationCanceledException ex)
+            catch (OperationCanceledException ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Updating email for user with Id: {UserId} was cancelled", changeEmailRequest.UserId);
@@ -193,7 +194,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-         public async Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken)
+        public async Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user is null)
@@ -212,7 +213,7 @@ namespace NoFilterForum.Infrastructure.Services
                 _cacheService.Remove("listUnconfirmedUserDtos");
                 return PostResult.Success;
             }
-            catch(OperationCanceledException ex)
+            catch (OperationCanceledException ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Confirming user with Id: {UserId} was cancelled", userId);
@@ -253,7 +254,7 @@ namespace NoFilterForum.Infrastructure.Services
                 _cacheService.Remove("usersListNoDefault");
                 return PostResult.Success;
             }
-            catch(OperationCanceledException ex)
+            catch (OperationCanceledException ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Banning user with Id: {UserId} was cancelled", userId);
@@ -299,7 +300,7 @@ namespace NoFilterForum.Infrastructure.Services
                 return PostResult.UpdateFailed;
             }
         }
-       public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken)
+        public async Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken)
         {
             var currentUser = await _unitOfWork.Users.GetByIdAsync(updateImageRequest.UserId);
             if (currentUser is null)
@@ -311,22 +312,22 @@ namespace NoFilterForum.Infrastructure.Services
             var newImageUrl = ImageUtility.GetRelativeUrl(imageName);
             currentUser.ChangeImageUrl(newImageUrl);
             try
-            { 
+            {
                 await _unitOfWork.BeginTransactionAsync();
-                using (var stream = new FileStream(ImageUtility.GetAbsoluteUrl(_webHostEnvironment,newImageUrl), FileMode.Create))
+                using (var stream = new FileStream(ImageUtility.GetAbsoluteUrl(_webHostEnvironment, newImageUrl), FileMode.Create))
                 {
-                    await updateImageRequest.Image.CopyToAsync(stream,cancellationToken);
+                    await updateImageRequest.Image.CopyToAsync(stream, cancellationToken);
                 }
                 _unitOfWork.Users.Update(currentUser);
                 await _unitOfWork.CommitAsync(cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
                 if (currentUserImageUrl != ImageUtility.GetDefautImageUrl(_webHostEnvironment))
                 {
-                    System.IO.File.Delete(ImageUtility.GetAbsoluteUrl(_webHostEnvironment,currentUserImageUrl));
+                    System.IO.File.Delete(ImageUtility.GetAbsoluteUrl(_webHostEnvironment, currentUserImageUrl));
                 }
                 return PostResult.Success;
             }
-            catch(OperationCanceledException ex)
+            catch (OperationCanceledException ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Changing of image of user with Id: {UserId} was cancelled", updateImageRequest.UserId);
