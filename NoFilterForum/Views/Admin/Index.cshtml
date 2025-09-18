@@ -62,8 +62,7 @@
 					</div>
 				</div>
 			}
-			string action = "Index";
-			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.AdminControllerName,action)" />
+			<partial name="_Paging" model="new PagingViewModel(Model.Page,Model.TotalPages,Model.AdminControllerName,Model.ActionName)" />
 
 		}
 		</div>

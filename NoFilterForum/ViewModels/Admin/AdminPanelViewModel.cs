@@ -11,6 +11,7 @@ namespace Web.ViewModels.Admin
         public bool NotConfirmedExist { get; set; }
         public int Page {  get; set; }
         public int TotalPages { get; set; }
-        public string AdminControllerName = ControllerNames.AdminControllerName; 
+        public string AdminControllerName => ControllerNames.AdminControllerName;
+        public string ActionName => nameof(AdminController.Index);
     }
 }
