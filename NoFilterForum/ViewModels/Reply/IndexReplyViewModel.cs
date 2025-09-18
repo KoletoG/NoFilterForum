@@ -12,7 +12,7 @@ namespace Web.ViewModels.Reply
         string controllerName = "Reply";
         string actionName = "Index";
         public string ReplyControllerName = ControllerNames.ReplyControllerName;
-        public string IndexName = nameof(ReplyController.Index)[..^5];
+        public string IndexName = nameof(ReplyController.Index);
         public required IList<ReplyIndexItemViewModel> Replies { get; set; }
         public required PostReplyIndexViewModel Post {  get; set; }
         public required CurrentUserReplyIndexViewModel CurrentUser { get; set; }
