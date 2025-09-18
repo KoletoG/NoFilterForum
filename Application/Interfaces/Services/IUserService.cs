@@ -21,7 +21,7 @@ namespace Application.Interfaces.Services
         public Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken);
         public Task<PostResult> ChangeBioAsync(ChangeBioRequest changeBioRequest, CancellationToken cancellationToken);
         public Task<PostResult> UpdateImageAsync(UpdateImageRequest updateImageRequest, CancellationToken cancellationToken);
-        public Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken);
+        public Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(int page, CancellationToken cancellationToken);
         public Task<IReadOnlyCollection<UsersReasonsDto>> GetAllUnconfirmedUsersAsync(CancellationToken cancellationToken);
         public Task<PostResult> ChangeUsernameByIdAsync(ChangeUsernameRequest changeUsernameRequest, CancellationToken cancellationToken);
         public Task<PostResult> ConfirmUserAsync(string userId, CancellationToken cancellationToken);

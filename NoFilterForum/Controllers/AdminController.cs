@@ -75,9 +75,9 @@ namespace Web.Controllers
         [Authorize(Roles ="Admin")]
         [HttpGet]
         [Route("Adminpanel")]
-        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken, int page=1)
         {
-            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync(cancellationToken);
+            var usersDto = await _userService.GetAllUsersWithoutDefaultAsync(page,cancellationToken);
             var userViewModel = usersDto.Select(AdminMapper.MapToViewModel);
             bool notConfirmedExist = await _userService.AnyNotConfirmedUsersAsync(cancellationToken);
             bool hasReports = await _reportService.AnyReportsAsync(cancellationToken);

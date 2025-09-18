@@ -51,7 +51,7 @@ namespace NoFilterForum.Infrastructure.Services
             if (user is null) return false;
             return await _userManager.IsInRoleAsync(user, "VIP");
         }
-        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync, cancellationToken) ?? [];
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetAllUsersWithoutDefaultAsync(int page, CancellationToken cancellationToken) => await _cacheService.TryGetValue<IReadOnlyCollection<UserForAdminPanelDto>>("usersListNoDefault", _unitOfWork.Users.GetUserItemsForAdminDtoAsync,page, cancellationToken) ?? [];
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string userId, CancellationToken cancellationToken) => await _cacheService.TryGetValue<CurrentUserReplyIndexDto?>($"currentUserReplyIndexDtoById_{userId}", _unitOfWork.Users.GetCurrentUserReplyIndexDtoByIdAsync, userId, cancellationToken);
         public async Task<ProfileDto> GetProfileDtoByUserIdAsync(GetProfileDtoRequest getProfileDtoRequest, CancellationToken cancellationToken)
         {

@@ -29,11 +29,13 @@ namespace NoFilterForum.Infrastructure.Repositories
         public async Task<IReadOnlyCollection<UserDataModel>> GetListByUsernameArrayAsync(IReadOnlyCollection<string> usernames, CancellationToken cancellationToken)=> await _context.Users.Where(x=>usernames.Contains(x.UserName)).ToListAsync(cancellationToken);
         public async Task<CurrentUserReplyIndexDto?> GetCurrentUserReplyIndexDtoByIdAsync(string id, CancellationToken cancellationToken)=>await _context.Users.Where(x => x.Id == id).Select(x => new CurrentUserReplyIndexDto(x.LikesPostRepliesIds.ToHashSet(),x.DislikesPostRepliesIds.ToHashSet())).FirstOrDefaultAsync(cancellationToken);
         public async Task<ProfileUserDto?> GetProfileUserDtoByIdAsync(string id, CancellationToken cancellationToken    )=> await _context.Users.Where(x => x.Id == id).Select(x => new ProfileUserDto(x.Id,x.Warnings.Count,x.UserName,x.Email,x.Bio,x.Role,x.PostsCount,x.ImageUrl,x.DateCreated)).FirstOrDefaultAsync(cancellationToken);
-        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<UserForAdminPanelDto>> GetUserItemsForAdminDtoAsync(int page, CancellationToken cancellationToken)
         {
             return await _context.Users.AsNoTracking()
                 .Where(x => x.UserName != UserConstants.DefaultUser.UserName)
                 .Select(x => new UserForAdminPanelDto(x.Email,x.Id,x.UserName,x.Warnings.Count,x.Role,x.PostsCount))
+                .Skip((page-1)*PostConstants.PostsPerSection)
+                .Take(PostConstants.PostsPerSection)
                 .ToListAsync(cancellationToken);
         }
         public async Task<bool> ExistNormalizedUsername(string normalizedUsername, CancellationToken cancellationToken)
