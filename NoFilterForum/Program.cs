@@ -83,7 +83,7 @@ namespace Web
             builder.Services.AddScoped<IReportFactory, ReportFactory>();
             builder.Services.AddScoped<IReplyFactory, ReplyFactory>();
             builder.Services.AddScoped<IWarningFactory, WarningFactory>();
-            builder.Services.AddSingleton<ICacheService, CacheService>();
+            builder.Services.AddScoped<ICacheService, CacheService>();
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IMessageRepository, MessageRepository>();
